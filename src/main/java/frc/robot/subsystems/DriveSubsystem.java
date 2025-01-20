@@ -103,6 +103,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
+   * @param speed         How much of the right trigger is pressed.
    * @param xSpeed        Speed of the robot in the x direction (forward).
    * @param ySpeed        Speed of the robot in the y direction (sideways).
    * @param rot           Angular rate of the robot.
@@ -115,8 +116,10 @@ public class DriveSubsystem extends SubsystemBase {
         speed = 0;
     }
 
-    // Convert the commanded speeds into the correct units for the drivetrain
+    // Convert the commanded speeds into the correct units(angle) for the drivetrain
     double joystickAngle = Math.atan2(ySpeed, xSpeed);
+
+    // allows trigger to apply speed and converts an angle into x and y speeds.
     double vy = speed * Math.sin(joystickAngle);
     double vx = speed * Math.cos(joystickAngle);
 
