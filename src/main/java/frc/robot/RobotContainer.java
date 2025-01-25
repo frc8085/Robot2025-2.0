@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -36,9 +37,11 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
 
   public void adjustJoystickValues() {
     double rawX = m_driverController.getLeftX();
@@ -84,7 +87,13 @@ public class RobotContainer {
 
 
   private void configureButtonBindings(){
-    
+    new JoystickButton(m_driverController, Button.kX.value)
+    .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
+    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
+    new JoystickButton(m_driverController, Button.kY.value)
+    .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
+    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
+}
   }
 
   /**
