@@ -135,7 +135,8 @@ public static final class CoralConstants {
 }
 
 public static final class AlgaeConstants {
-
+  public static final int algaeCurrentLimit = 20;
+  public static final double speed = 1;
 }
 public static final class ClimberConstants {
 
