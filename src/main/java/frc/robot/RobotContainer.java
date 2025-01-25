@@ -87,14 +87,13 @@ public class RobotContainer {
 
 
   private void configureButtonBindings(){
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_operatorController, Button.kX.value)
     .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
-    new JoystickButton(m_driverController, Button.kY.value)
+    new JoystickButton(m_operatorController, Button.kY.value)
     .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
 }
-  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
