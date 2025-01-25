@@ -53,4 +53,16 @@ public final class Configs {
                     .positionWrappingInputRange(0, turningFactor);
         }
     }
+
+    public static final class CoralManipulator {
+        public static final SparkMaxConfig coralConfig = new SparkMaxConfig();
+  
+        static {
+
+            coralConfig
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(20);
+        }
+    }
+
 }
