@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.CanIdConstants;
-import frc.robot.Constants.CoralManipulatorConstants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -23,7 +23,7 @@ public class CoralSubsystem extends SubsystemBase {
     // import motor id
     private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
  
-    private double kSpeed = CoralManipulatorConstants.speed;
+    private double kSpeed = CoralConstants.speed;
 
     public CoralSubsystem () {
     
