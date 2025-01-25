@@ -130,7 +130,7 @@ public static final class PivotArmConstants {
 
 public static final class CoralConstants {
   public static final int coralCurrentLimit = 20;
-  public static final double speed = .5;
+  public static final double speed = 1;
 
 }
 
