@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -22,6 +23,14 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class CanIdConstants {
+    public static final int kGyroCanId = 15;
+    public static final int kCoralCanId = 21;
+    public static final int kAlgaeCanId = 22;
+    public static final int kElevatorCanId = 23;
+    public static final int kClimberCanId = 24;
+    public static final int kPivotArmCanId = 25;
+  }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -78,6 +87,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperaterControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
   }
 
@@ -99,4 +109,36 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+  //all values with the value 8085 are placeholder as idk what im doing -Frank
+  //THIS IS FROM LAST YEARS CODE MAY NEED UPDATING
+  public static final class MotorDefaultsConstants {
+    public static final int NeoCurrentLimit = 40;
+    public static final int NeoVortexCurrentLimit = 60;
+    public static final int Neo550CurrentLimit = 20;
+    public static final MotorType NeoMotorType = MotorType.kBrushless;
+    public static final MotorType Neo550MotorType = MotorType.kBrushless;
+    public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
+}
+
+public static final class ElevatorConstants {
+
+}
+
+public static final class PivotArmConstants {
+
+}
+
+public static final class CoralConstants {
+  public static final int coralCurrentLimit = 20;
+  public static final double speed = .5;
+
+}
+
+public static final class AlgaeConstants {
+
+}
+public static final class ClimberConstants {
+
+}
+
 }
