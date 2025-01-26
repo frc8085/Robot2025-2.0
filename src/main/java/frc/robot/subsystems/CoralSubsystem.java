@@ -24,7 +24,6 @@ public class CoralSubsystem extends SubsystemBase {
  
     // import motor id
     private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
-        
     SparkMaxConfig config = new SparkMaxConfig();
  
     public CoralSubsystem () {
@@ -42,14 +41,13 @@ public class CoralSubsystem extends SubsystemBase {
                 .positionConversionFactor(CoralConstants.kCoralPositionConversionFactor)
                 .velocityConversionFactor(CoralConstants.kCoralVelocityConversionFactor);
             config.closedLoop
+                .outputRange(CoralConstants.kCoralMinOutput, CoralConstants.kCoralMaxOutput)
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pid(CoralConstants.kCoralP, CoralConstants.kCoarlI, CoralConstants.kCoralD);
-                
+                .pidf(CoralConstants.kCoralP, CoralConstants.kCoarlI, CoralConstants.kCoralD, CoralConstants.kCoralFF);
+
                 m_coralMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
-
-public double kSpeed = CoralConstants.kCoralSpeed;
 
   public void pickup() {
     m_coralMotor.set(CoralConstants.kCoralSpeed);

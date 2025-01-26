@@ -18,9 +18,7 @@ public class AlgaeSubsystem extends SubsystemBase{
     
     // import motor id
     private final SparkMax m_algaeMotor = new SparkMax(CanIdConstants.kAlgaeCanId, MotorDefaultsConstants.Neo550MotorType);
-
     SparkMaxConfig config = new SparkMaxConfig();
-
 
     public AlgaeSubsystem () {
 
@@ -37,8 +35,9 @@ public class AlgaeSubsystem extends SubsystemBase{
                 .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
                 .velocityConversionFactor(AlgaeConstants.kAlgaeVelocityConversionFactor);
             config.closedLoop
+                .outputRange(AlgaeConstants.kAlgaeMinOutput, AlgaeConstants.kAlgaeMaxOutput)
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pid(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD);
+                .pidf(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD, AlgaeConstants.kAlgaeFF);
                 
                 m_algaeMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
