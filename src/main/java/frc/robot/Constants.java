@@ -109,6 +109,7 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
   //all values with the value 8085 are placeholder as idk what im doing -Frank
   //THIS IS FROM LAST YEARS CODE MAY NEED UPDATING
   public static final class MotorDefaultsConstants {
@@ -118,28 +119,48 @@ public final class Constants {
     public static final MotorType NeoMotorType = MotorType.kBrushless;
     public static final MotorType Neo550MotorType = MotorType.kBrushless;
     public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
-}
+  }
 
-public static final class ElevatorConstants {
+  public static final class ElevatorConstants {
 
-}
+  }
 
-public static final class PivotArmConstants {
+  public static final class PivotArmConstants {
 
-}
+  }
 
-public static final class CoralConstants {
-  public static final int coralCurrentLimit = 20;
-  public static final double speed = 1;
+  public static final class CoralConstants {
+    public static final int coralCurrentLimit = 20;
+    public static final double kCoralSpeed = 1;
 
-}
+    //TEMPORARY VALUES - CHANGE
+    public static boolean kCoralInverted = true;
+    //TEMPORARY VALUES - CHANGE
+    public static int kCoralPositionConversionFactor = 1000;
+    public static int kCoralVelocityConversionFactor = 1000;
+    //TEMPORARY VALUES - CHANGE
+    public static double kCoralP = 0.5;
+    public static double kCoarlI = 0.0;
+    public static double kCoralD = 0.0;
+  }
 
-public static final class AlgaeConstants {
-  public static final int algaeCurrentLimit = 20;
-  public static final double speed = 1;
-}
-public static final class ClimberConstants {
+  public static final class AlgaeConstants {
+    public static final int algaeCurrentLimit = 20;
+    public static final double kAlgaeSpeed = 1;
 
-}
+    //TEMPORARY VALUES - CHANGE
+    public static boolean kAlgaeInverted = true;
+    //TEMPORARY VALUES - CHANGE
+    public static int kAlgaePositionConversionFactor = 1000;
+    public static int kAlgaeVelocityConversionFactor = 1000;
+    //TEMPORARY VALUES - CHANGE
+    public static double kAlgaeP = 0.5;
+    public static double kAlgaeI = 0.0;
+    public static double kAlgaeD = 0.0;
+  }
+
+  public static final class ClimberConstants {
+
+  }
 
 }

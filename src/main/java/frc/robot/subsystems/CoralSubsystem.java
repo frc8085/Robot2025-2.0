@@ -13,7 +13,9 @@ import frc.robot.Constants.MotorDefaultsConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -22,18 +24,8 @@ public class CoralSubsystem extends SubsystemBase {
  
     // import motor id
     private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
+        
     SparkMaxConfig config = new SparkMaxConfig();
-    config
-      .inverted(true)
-      .idleMode(IdleMode.kBrake);
-    config.encoder
-      .positionConversionFactor(1000)
-      .velocityConversionFactor(1000);
-    config.closedLoop
-      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      .pid(1.0, 0.0, 0.0);
-    
-max.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
  
     public CoralSubsystem () {
     
@@ -43,10 +35,24 @@ max.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParame
         m_coralMotor.configure(Configs.CoralManipulator.coralConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
+            config
+                .inverted(CoralConstants.kCoralInverted)
+                .idleMode(IdleMode.kBrake);
+            config.encoder
+                .positionConversionFactor(CoralConstants.kCoralPositionConversionFactor)
+                .velocityConversionFactor(CoralConstants.kCoralVelocityConversionFactor);
+            config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(CoralConstants.kCoralP, CoralConstants.kCoarlI, CoralConstants.kCoralD);
+                
+                m_coralMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
   }
 
+public double kSpeed = CoralConstants.kCoralSpeed;
+
   public void pickup() {
-    m_coralMotor.set(CoralConstants.speed);
+    m_coralMotor.set(CoralConstants.kCoralSpeed);
   }
 
   public void stop() {
@@ -54,7 +60,7 @@ max.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParame
   }
 
   public void eject() {
-    m_coralMotor.set(-CoralConstants.speed);
+    m_coralMotor.set(-CoralConstants.kCoralSpeed);
   }
 
 }

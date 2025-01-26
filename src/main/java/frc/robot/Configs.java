@@ -65,4 +65,15 @@ public final class Configs {
         }
     }
 
+    public static final class AlgaeManipulator {
+        public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
+  
+        static {
+
+            algaeConfig
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(20);
+        }
+    }
+
 }
