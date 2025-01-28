@@ -120,9 +120,9 @@ public final class Constants {
     public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
 }
 
-public static final class ElevatorConstants {
+  public static final class ElevatorConstants {
 
-}
+  }
 
 public static final class PivotArmConstants {
 
@@ -141,4 +141,15 @@ public static final class ClimberConstants {
 
 }
 
+  public static final class TuningModeConstants {
+    public static final boolean kPracticeMode = false;
+    public static final boolean kTuning = false;
+    public static final boolean kDriveTuning = false;
+    public static final boolean kElevatorTuning = false;
+    public static final boolean kClimberTuning = false;
+    public static final boolean kIntakeTuning = false;
+    public static final boolean kLimelightTuning = false;
+    public static final boolean kAlgaeTuning = false;
+    public static final boolean kCoralTuning = false;
+}
 }
