@@ -7,9 +7,14 @@ import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -19,17 +24,27 @@ public class AlgaeSubsystem extends SubsystemBase{
     // import motor id
     private final SparkMax m_algaeMotor = new SparkMax(CanIdConstants.kAlgaeCanId, MotorDefaultsConstants.Neo550MotorType);
     SparkMaxConfig config = new SparkMaxConfig();
+  private RelativeEncoder m_algaeEncoder;
+  private SparkClosedLoopController m_algaePIDController;
 
-    public AlgaeSubsystem () {
+    // Determine current intake encoder position
+        public double CurrentAlgaeEncoderPosition() {
+          return m_algaeEncoder.getPosition();
+        }     
+ 
+        public AlgaeSubsystem () {
 
         // Apply the respective configurations to the SPARKS. Reset parameters before
         // applying the configuration to bring the SPARK to a known good state. Persist
         // the settings to the SPARK to avoid losing them on a power cycle.
+        m_algaeEncoder = m_algaeMotor.getEncoder();
+        m_algaePIDController = m_algaeMotor.getClosedLoopController();
         m_algaeMotor.configure(Configs.AlgaeManipulator.algaeConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-
   }
+
+
 
   public void pickup() {
     m_algaeMotor.set(AlgaeConstants.kAlgaeSpeed);
@@ -42,5 +57,15 @@ public class AlgaeSubsystem extends SubsystemBase{
   public void eject() {
     m_algaeMotor.set(-AlgaeConstants.kAlgaeSpeed);
   }
+
+    /** Resets the Intake encoder to currently read a position of 0. */
+  public void reset() {
+    m_algaeEncoder.setPosition(0);
+  }
+
+  public void holdAlgae() {
+    m_algaePIDController.setReference(CurrentAlgaeEncoderPosition(), ControlType.kPosition);
+  }
+
 
 }
