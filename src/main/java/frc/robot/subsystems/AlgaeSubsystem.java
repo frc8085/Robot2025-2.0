@@ -28,18 +28,6 @@ public class AlgaeSubsystem extends SubsystemBase{
         m_algaeMotor.configure(Configs.AlgaeManipulator.algaeConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-            config
-                .inverted(AlgaeConstants.kAlgaeInverted)
-                .idleMode(IdleMode.kBrake);
-            config.encoder
-                .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
-                .velocityConversionFactor(AlgaeConstants.kAlgaeVelocityConversionFactor);
-            config.closedLoop
-                .outputRange(AlgaeConstants.kAlgaeMinOutput, AlgaeConstants.kAlgaeMaxOutput)
-                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pidf(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD, AlgaeConstants.kAlgaeFF);
-                
-                m_algaeMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 

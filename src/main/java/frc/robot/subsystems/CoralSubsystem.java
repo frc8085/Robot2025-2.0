@@ -31,21 +31,10 @@ public class CoralSubsystem extends SubsystemBase {
         // Apply the respective configurations to the SPARKS. Reset parameters before
         // applying the configuration to bring the SPARK to a known good state. Persist
         // the settings to the SPARK to avoid losing them on a power cycle.
+
+        // Set the parameters in the Configs.java file
         m_coralMotor.configure(Configs.CoralManipulator.coralConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
-
-            config
-                .inverted(CoralConstants.kCoralInverted)
-                .idleMode(IdleMode.kBrake);
-            config.encoder
-                .positionConversionFactor(CoralConstants.kCoralPositionConversionFactor)
-                .velocityConversionFactor(CoralConstants.kCoralVelocityConversionFactor);
-            config.closedLoop
-                .outputRange(CoralConstants.kCoralMinOutput, CoralConstants.kCoralMaxOutput)
-                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pidf(CoralConstants.kCoralP, CoralConstants.kCoarlI, CoralConstants.kCoralD, CoralConstants.kCoralFF);
-
-                m_coralMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
