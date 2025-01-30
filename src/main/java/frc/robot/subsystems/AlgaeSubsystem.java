@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
+import frc.robot.Constants.TuningModeConstants;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -20,6 +22,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class AlgaeSubsystem extends SubsystemBase{
+
+  private boolean TUNING_MODE = TuningModeConstants.kAlgaeTuning;
     
     // import motor id
     private final SparkMax m_algaeMotor = new SparkMax(CanIdConstants.kAlgaeCanId, MotorDefaultsConstants.Neo550MotorType);
@@ -67,5 +71,63 @@ public class AlgaeSubsystem extends SubsystemBase{
     m_algaePIDController.setReference(CurrentAlgaeEncoderPosition(), ControlType.kPosition);
   }
 
+   public void addPIDToDashboard() {
+    SmartDashboard.putNumber("AlgaeP", AlgaeConstants.kAlgaeP);
+    SmartDashboard.putNumber("AlgaeI", AlgaeConstants.kAlgaeI);
+    SmartDashboard.putNumber("AlgaeD", AlgaeConstants.kAlgaeD);
+    SmartDashboard.putNumber("AlgaeMaxOutput", AlgaeConstants.kAlgaeMaxOutput);
+    SmartDashboard.putNumber("AlgaeMinOutput", AlgaeConstants.kAlgaeMinOutput);
+    SmartDashboard.putNumber("AlgaeFF", AlgaeConstants.kAlgaeFF);
+  }
+
+  public void readPIDFromDashboard() {
+    double p = SmartDashboard.getNumber("AlgaeP", 0);
+    double i = SmartDashboard.getNumber("AlgaeI", 0);
+    double d = SmartDashboard.getNumber("AlgaeD", 0);
+    double max = SmartDashboard.getNumber("AlgaeMaxOutput", 0);
+    double min = SmartDashboard.getNumber("AlgaeMinOutput", 0);
+    double ff = SmartDashboard.getNumber("AlgaeFF", 0);
+
+    boolean valueChanged = false;
+
+    if (p != AlgaeConstants.kAlgaeP) {
+      AlgaeConstants.kAlgaeP = p;
+      valueChanged = true;
+    }
+    if (i != AlgaeConstants.kAlgaeI) {
+      AlgaeConstants.kAlgaeI = i;
+      valueChanged = true;
+    }
+    if (d != AlgaeConstants.kAlgaeD) {
+      AlgaeConstants.kAlgaeD = d;
+      valueChanged = true;
+    }
+    if (max != AlgaeConstants.kAlgaeMaxOutput) {
+      AlgaeConstants.kAlgaeMaxOutput = max;
+      valueChanged = true;
+    }
+    if (min != AlgaeConstants.kAlgaeMinOutput) {
+      AlgaeConstants.kAlgaeMinOutput = min;
+      valueChanged = true;
+    }
+    if (ff != AlgaeConstants.kAlgaeFF) {
+      AlgaeConstants.kAlgaeFF = ff;
+      valueChanged = true;
+    }
+
+    if (valueChanged) {
+      m_algaeMotor.configure(Configs.AlgaeManipulator.algaeConfig, ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
+    }
+  }
+
+  @Override
+  public void periodic() {
+    if (TUNING_MODE) {
+      addPIDToDashboard();
+      readPIDFromDashboard();
+      SmartDashboard.putNumber("Algae Encoder Position", m_algaeEncoder.getPosition());
+    }
+  }
 
 }

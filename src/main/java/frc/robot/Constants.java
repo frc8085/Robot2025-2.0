@@ -26,6 +26,7 @@ public final class Constants {
   public static final class CanIdConstants {
     public static final int kGyroCanId = 15;
     public static final int kCoralCanId = 21;
+
     public static final int kAlgaeCanId = 22;
     public static final int kElevatorCanId = 23;
     public static final int kClimberCanId = 24;
@@ -163,7 +164,7 @@ public final class Constants {
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
     //TEMPORARY VALUES
-    public static double kAlgaeP = 0.5;
+    public static double kAlgaeP = 0.0;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
     public static double kAlgaeFF = 0.0;
