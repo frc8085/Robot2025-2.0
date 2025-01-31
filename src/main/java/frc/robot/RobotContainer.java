@@ -22,6 +22,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -41,6 +42,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
   private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
+  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -102,6 +104,12 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kB.value)
     .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
     .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+    .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsytem))
+    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+    new JoystickButton(m_operatorController, Button.kRightBumper.value)
+    .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsytem))
+    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
 }
 
   /**
