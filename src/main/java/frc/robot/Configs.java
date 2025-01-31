@@ -3,6 +3,7 @@ package frc.robot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.ModuleConstants;
 
@@ -67,24 +68,23 @@ public final class Configs {
 
     public static final class AlgaeManipulator {
         public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
-
+  
         static {
-                algaeConfig
-                        .idleMode(IdleMode.kBrake)
-                        .smartCurrentLimit(20);
-                
+
+            algaeConfig
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(20);
         }
     }
 
-    public static final class Climb {
-        public static final SparkMaxConfig climbConfig = new SparkMaxConfig();
-
+    public static final class Climber {
+        public static final SparkFlexConfig climberConfig = new SparkFlexConfig();
+  
         static {
-                
-                climbConfig
-                        .idleMode(IdleMode.kBrake)
-                        .smartCurrentLimit(20);
+
+            climberConfig
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(40);
         }
     }
-
 }
