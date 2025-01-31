@@ -171,7 +171,12 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
+    public static double kClimberSpeed = 0.3;
+  }
 
+  public static final class TuningModeConstants {
+    public static boolean kAlgaeTuning = true;
+    public static boolean kCoralTuning = true;
   }
 
 }
