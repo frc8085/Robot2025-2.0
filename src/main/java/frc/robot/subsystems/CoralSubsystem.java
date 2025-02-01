@@ -4,12 +4,24 @@
 
 package frc.robot.subsystems;
 
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
+=======
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
+import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.CanIdConstants;
+import frc.robot.Constants.CoralConstants;
+import frc.robot.Constants.MotorDefaultsConstants;
+import frc.robot.Constants.TuningModeConstants;
+>>>>>>> Stashed changes
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -21,6 +33,10 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 
 public class CoralSubsystem extends SubsystemBase {
+<<<<<<< Updated upstream
+=======
+    private boolean TUNING_MODE = TuningModeConstants.kCoralTuning;
+>>>>>>> Stashed changes
  
     // import motor id
     private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
@@ -50,4 +66,61 @@ public class CoralSubsystem extends SubsystemBase {
     m_coralMotor.set(-CoralConstants.kCoralSpeed);
   }
 
+<<<<<<< Updated upstream
+=======
+  public void addPIDToDashboard() {
+    SmartDashboard.putNumber("CoralP", CoralConstants.kCoralP);
+    SmartDashboard.putNumber("CoralI", CoralConstants.kCoralI);
+    SmartDashboard.putNumber("CoralD", CoralConstants.kCoralD);
+    SmartDashboard.putNumber("CoralMaxOutput", CoralConstants.kCoralMaxOutput);
+    SmartDashboard.putNumber("CoralMaxOutput", CoralConstants.kCoralMinOutput);
+    SmartDashboard.putNumber("CoralFF", CoralConstants.kCoralFF);
+  }
+
+  public void readPIDFromDashboard() {
+    double p = SmartDashboard.getNumber("CoralP", 0);
+    double i = SmartDashboard.getNumber("CoralI", 0);
+    double d = SmartDashboard.getNumber("CoralD", 0);
+    double max = SmartDashboard.getNumber("CoralMaxOutput", 0);
+    double min = SmartDashboard.getNumber("CoralMinOutput", 0);
+
+    boolean valueChanged = false;
+
+    if (p != CoralConstants.kCoralP) {
+      CoralConstants.kCoralP = p;
+      valueChanged = true;
+    }
+    if (i != CoralConstants.kCoralI) {
+      CoralConstants.kCoralI = i;
+      valueChanged = true;
+    }
+    if (d != CoralConstants.kCoralD) {
+      CoralConstants.kCoralD = d;
+      valueChanged = true;
+    }
+    if (max != CoralConstants.kCoralMaxOutput) {
+      CoralConstants.kCoralMaxOutput = max;
+      valueChanged = true;
+    }
+    if (min != CoralConstants.kCoralMinOutput) {
+      CoralConstants.kCoralMinOutput = min;
+      valueChanged = true;
+    }
+
+    if (valueChanged) {
+      m_coralMotor.configure(Configs.CoralManipulator.coralConfig, ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
+    }
+  }
+
+  @Override
+  public void periodic() {
+    if (TUNING_MODE) {
+      addPIDToDashboard();
+      readPIDFromDashboard();
+    }
+  }
+
+
+>>>>>>> Stashed changes
 }
