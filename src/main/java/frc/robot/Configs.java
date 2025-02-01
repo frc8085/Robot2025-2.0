@@ -5,6 +5,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -73,7 +74,18 @@ public final class Configs {
 
             algaeConfig
                     .idleMode(IdleMode.kBrake)
-                    .smartCurrentLimit(20);
+                    .smartCurrentLimit(20)
+                    .inverted(AlgaeConstants.kAlgaeInverted);
+            algaeConfig.encoder
+                .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
+                .velocityConversionFactor(AlgaeConstants.kAlgaeVelocityConversionFactor);
+            algaeConfig.closedLoop
+                .outputRange(AlgaeConstants.kAlgaeMinOutput, AlgaeConstants.kAlgaeMaxOutput)
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pidf(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD, AlgaeConstants.kAlgaeFF);
+
+
+
         }
     }
 
