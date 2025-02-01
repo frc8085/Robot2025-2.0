@@ -90,7 +90,7 @@ public class RobotContainer {
    */
 
 
-
+   
   private void configureButtonBindings(){
     new JoystickButton(m_operatorController, Button.kX.value)
     .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
@@ -105,8 +105,11 @@ public class RobotContainer {
     // .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
     // .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
     new JoystickButton(m_operatorController, Button.kA.value)
-    .onTrue(new RunCommand(()->m_ClimberSubsystem.start()))
-    .onFalse(new RunCommand(()-> m_ClimberSubsystem.stop()));
+    .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
+    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+    new JoystickButton(m_operatorController, Button.kB.value)
+    .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
+    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
     // new JoystickButton(m_operatorController, Button.kLeftBumper.value)
     // .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
     // .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
