@@ -32,6 +32,7 @@ public final class Constants {
     public static final int kClimberCanId = 24;
     public static final int kPivotArmCanId = 25;
   }
+  
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -167,7 +168,7 @@ public final class Constants {
     public static double kAlgaeP = 0.0;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
-    public static double kAlgaeFF = 0.0;
+    public static double kAlgaeFF = 0.2;
   }
 
   public static final class ClimberConstants {

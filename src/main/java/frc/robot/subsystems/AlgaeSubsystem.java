@@ -9,6 +9,7 @@ import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
 import frc.robot.Constants.TuningModeConstants;
 
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -24,8 +25,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class AlgaeSubsystem extends SubsystemBase{
 
   private boolean TUNING_MODE = TuningModeConstants.kAlgaeTuning;
-    
-    // import motor id
+      
+  
+  // import motor id
     private final SparkMax m_algaeMotor = new SparkMax(CanIdConstants.kAlgaeCanId, MotorDefaultsConstants.Neo550MotorType);
     SparkMaxConfig config = new SparkMaxConfig();
   private RelativeEncoder m_algaeEncoder;
@@ -46,9 +48,9 @@ public class AlgaeSubsystem extends SubsystemBase{
         m_algaeMotor.configure(Configs.AlgaeManipulator.algaeConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-  }
+  }  
 
-
+  
 
   public void pickup() {
     m_algaeMotor.set(AlgaeConstants.kAlgaeSpeed);
@@ -69,6 +71,7 @@ public class AlgaeSubsystem extends SubsystemBase{
 
   public void holdAlgae() {
     m_algaePIDController.setReference(CurrentAlgaeEncoderPosition(), ControlType.kPosition);
+    SmartDashboard.putNumber("Algae Hold Position", CurrentAlgaeEncoderPosition());
   }
 
    public void addPIDToDashboard() {
