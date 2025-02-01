@@ -165,10 +165,10 @@ public final class Constants {
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
     //TEMPORARY VALUES
-    public static double kAlgaeP = 0.0;
+    public static double kAlgaeP = 2.5;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
-    public static double kAlgaeFF = 0.2;
+    public static double kAlgaeFF = 0.0;
   }
 
   public static final class ClimberConstants {

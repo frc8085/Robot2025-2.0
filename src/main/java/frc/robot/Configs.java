@@ -74,8 +74,7 @@ public final class Configs {
 
             algaeConfig
                     .idleMode(IdleMode.kBrake)
-                    .smartCurrentLimit(20)
-                    .inverted(AlgaeConstants.kAlgaeInverted);
+                    .smartCurrentLimit(20);
             algaeConfig.encoder
                 .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
                 .velocityConversionFactor(AlgaeConstants.kAlgaeVelocityConversionFactor);

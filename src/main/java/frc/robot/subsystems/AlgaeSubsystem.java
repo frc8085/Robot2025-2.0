@@ -35,6 +35,8 @@ public class AlgaeSubsystem extends SubsystemBase{
           return m_algaeEncoder.getPosition();
         }     
  
+        public double currentAlgaePosition;
+
         public AlgaeSubsystem () {
 
         // Apply the respective configurations to the SPARKS. Reset parameters before
@@ -67,9 +69,9 @@ public class AlgaeSubsystem extends SubsystemBase{
   }
 
   public void holdAlgae() {
-    m_algaePIDController.setReference(CurrentAlgaeEncoderPosition(), ControlType.kPosition);
-    double currentAlgaePosition=CurrentAlgaeEncoderPosition();
-    SmartDashboard.putNumber("Algae Hold Position", currentAlgaePosition);
+    double targetPosition = CurrentAlgaeEncoderPosition();
+    m_algaePIDController.setReference(targetPosition, ControlType.kPosition);
+
   }
 
    public void addPIDToDashboard() {
@@ -128,6 +130,7 @@ public class AlgaeSubsystem extends SubsystemBase{
       addPIDToDashboard();
       readPIDFromDashboard();
       SmartDashboard.putNumber("Algae Encoder Position", m_algaeEncoder.getPosition());
+      SmartDashboard.putNumber("Algae Hold Position", currentAlgaePosition);
     }
   }
 

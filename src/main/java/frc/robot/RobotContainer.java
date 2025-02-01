@@ -25,10 +25,13 @@ import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import java.util.List;
 
 /*
@@ -99,17 +102,17 @@ public class RobotContainer {
     .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
     new JoystickButton(m_operatorController, Button.kA.value)
-    .onTrue(new SequentialCommandGroup(new RunCommand(()->m_AlgaeSubsystem.pickup(),m_AlgaeSubsystem),new RunCommand(()->m_AlgaeSubsystem.holdAlgae(),m_AlgaeSubsystem)))
-    .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+    .whileTrue(new RunCommand(()->m_AlgaeSubsystem.pickup(),m_AlgaeSubsystem))
+    .onFalse(new InstantCommand(()->m_AlgaeSubsystem.holdAlgae(), m_AlgaeSubsystem));
     new JoystickButton(m_operatorController, Button.kB.value)
     .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
     .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
-    // new JoystickButton(m_operatorController, Button.kA.value)
-    // .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
-    // .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-    // new JoystickButton(m_operatorController, Button.kB.value)
-    // .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
-    // .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+    new JoystickButton(m_operatorController, POVButton.up.value)
+    .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
+    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+    new JoystickButton(m_operatorController, Button.kB.value)
+    .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
+    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
     // new JoystickButton(m_operatorController, Button.kLeftBumper.value)
     // .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
     // .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
