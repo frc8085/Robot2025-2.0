@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,26 +15,22 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-
-import java.util.List;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -64,7 +62,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+
+    //Configure button bindings
     configureButtonBindings();
 
     // Configure default commands
@@ -95,6 +94,9 @@ public class RobotContainer {
 
    
   private void configureButtonBindings(){
+
+    // final Trigger climb = m_operatorController.povDown();
+
     new JoystickButton(m_operatorController, Button.kX.value)
     .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
@@ -107,18 +109,20 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kB.value)
     .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
     .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
-    new JoystickButton(m_operatorController, POVButton.up.value)
+
+    /* Dpad Controls
+     * Angle 0 = UP
+     * Angle 90 = RIGHT
+     * Angle 180 = DOWN
+     * Angle 270 = LEFT
+     */
+    
+    new POVButton(m_operatorController, 0) 
     .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
     .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-    new JoystickButton(m_operatorController, Button.kB.value)
+    new POVButton(m_operatorController, 180)
     .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
     .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-    // new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-    // .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
-    // .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-    // new JoystickButton(m_operatorController, Button.kRightBumper.value)
-    // .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
-    // .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
 }
 
   /**

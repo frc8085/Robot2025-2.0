@@ -52,6 +52,7 @@ public class AlgaeSubsystem extends SubsystemBase{
 
 
   public void pickup() {
+    m_algaeEncoder.setPosition(0);
     m_algaeMotor.set(AlgaeConstants.kAlgaeSpeed);
   }
 
