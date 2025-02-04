@@ -118,27 +118,37 @@ public final class Constants {
     public static final MotorType NeoMotorType = MotorType.kBrushless;
     public static final MotorType Neo550MotorType = MotorType.kBrushless;
     public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
-}
+  }
 
-public static final class ElevatorConstants {
+  public static final class ElevatorConstants {
 
-}
+  }
 
-public static final class PivotArmConstants {
+  public static final class PivotArmConstants {
 
-}
+  }
 
-public static final class CoralConstants {
-  public static final int coralCurrentLimit = 20;
-  public static final double speed = 1;
+  public static final class CoralConstants {
+    public static final int coralCurrentLimit = 20;
+    public static final double kCoralSpeed = 1;
 
-}
+  }
 
-public static final class AlgaeConstants {
+  public static final class AlgaeConstants {
 
-}
-public static final class ClimberConstants {
+  }
 
-}
+  //ALL TEMP VALUES
+  public static final class ClimberConstants {
+    public static final double kWinchSpeed = 0.0;
+    
+    public static final double kWinchP = 0.0;
+    public static final double kWinchI = 0.0;
+    public static final double kWinchD = 0.0;
+    public static final double kWinchFF = 0.0;
+
+    public static final double kWinchMinOutput = 0.0;
+    public static final double kWinchMaxOutput = 0.0;
+  }
 
 }
