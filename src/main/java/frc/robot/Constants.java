@@ -32,7 +32,7 @@ public final class Constants {
     public static final int kClimberCanId = 24;
     public static final int kPivotArmCanId = 25;
   }
-  
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -112,8 +112,8 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  //all values with the value 8085 are placeholder as idk what im doing -Frank
-  //THIS IS FROM LAST YEARS CODE MAY NEED UPDATING
+  // all values with the value 8085 are placeholder as idk what im doing -Frank
+  // THIS IS FROM LAST YEARS CODE MAY NEED UPDATING
   public static final class MotorDefaultsConstants {
     public static final int NeoCurrentLimit = 40;
     public static final int NeoVortexCurrentLimit = 60;
@@ -135,16 +135,16 @@ public final class Constants {
     public static final int coralCurrentLimit = 20;
     public static final double kCoralSpeed = 1;
 
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static double kCoralMinOutput = -0.25;
     public static double kCoralMaxOutput = 0.25;
 
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static boolean kCoralInverted = true;
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static int kCoralPositionConversionFactor = 1000;
     public static int kCoralVelocityConversionFactor = 1000;
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static double kCoralP = 0.5;
     public static double kCoarlI = 0.0;
     public static double kCoralD = 0.0;
@@ -155,16 +155,16 @@ public final class Constants {
     public static final int algaeCurrentLimit = 20;
     public static final double kAlgaeSpeed = 1;
 
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static double kAlgaeMinOutput = -0.25;
     public static double kAlgaeMaxOutput = 0.25;
 
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static boolean kAlgaeInverted = true;
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
-    //TEMPORARY VALUES
+    // TEMPORARY VALUES
     public static double kAlgaeP = 2.5;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
@@ -176,7 +176,7 @@ public final class Constants {
   }
 
   public static final class TuningModeConstants {
-    public static boolean kAlgaeTuning = true;
+    public static boolean kAlgaeTuning = false;
     public static boolean kCoralTuning = true;
   }
 

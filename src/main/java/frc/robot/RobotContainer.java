@@ -44,7 +44,7 @@ public class RobotContainer {
   private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
   private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
@@ -53,17 +53,14 @@ public class RobotContainer {
     double rawX = m_driverController.getLeftX();
     double rawY = m_driverController.getLeftY();
 
-
   }
 
-    
-    
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-    //Configure button bindings
+    // Configure button bindings
     configureButtonBindings();
 
     // Configure default commands
@@ -91,39 +88,38 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
 
-
-   
-  private void configureButtonBindings(){
+  private void configureButtonBindings() {
 
     // final Trigger climb = m_operatorController.povDown();
 
     new JoystickButton(m_operatorController, Button.kX.value)
-    .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
-    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
+        .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
+        .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
     new JoystickButton(m_operatorController, Button.kY.value)
-    .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
-    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
+        .onTrue(new RunCommand(() -> m_CoralSubsystem.eject(), m_CoralSubsystem))
+        .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
     new JoystickButton(m_operatorController, Button.kA.value)
-    .whileTrue(new RunCommand(()->m_AlgaeSubsystem.pickup(),m_AlgaeSubsystem))
-    .onFalse(new InstantCommand(()->m_AlgaeSubsystem.holdAlgae(), m_AlgaeSubsystem));
+        .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
+        .onFalse(new InstantCommand(() -> m_AlgaeSubsystem.holdAlgae(), m_AlgaeSubsystem));
     new JoystickButton(m_operatorController, Button.kB.value)
-    .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
-    .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+        .onTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
+        .onFalse(new RunCommand(() -> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
 
-    /* Dpad Controls
+    /*
+     * Dpad Controls
      * Angle 0 = UP
      * Angle 90 = RIGHT
      * Angle 180 = DOWN
      * Angle 270 = LEFT
      */
-    
-    new POVButton(m_operatorController, 0) 
-    .onTrue(new RunCommand(()->m_ClimberSubsystem.start(), m_ClimberSubsystem))
-    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+
+    new POVButton(m_operatorController, 0)
+        .onTrue(new RunCommand(() -> m_ClimberSubsystem.start(), m_ClimberSubsystem))
+        .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
     new POVButton(m_operatorController, 180)
-    .onTrue(new RunCommand(()->m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
-    .onFalse(new RunCommand(()->m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-}
+        .onTrue(new RunCommand(() -> m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
+        .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
