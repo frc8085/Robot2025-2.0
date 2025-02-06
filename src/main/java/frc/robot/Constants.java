@@ -120,8 +120,14 @@ public final class Constants {
     public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
   }
 
+  //ALL TEMP VALUES
   public static final class ElevatorConstants {
+    public static final double kElevatoPreset1 = 0;
+    public static final double kElevatorSpeed = 1.0;
 
+    public static final double kElevatorP = 0.0;
+    public static final double kElevatorI = 0.0;
+    public static final double kElevatorD = 0.0;
   }
 
   public static final class PivotArmConstants {
@@ -130,7 +136,7 @@ public final class Constants {
 
   public static final class CoralConstants {
     public static final int coralCurrentLimit = 20;
-    public static final double kCoralSpeed = 1;
+    public static final double kCoralSpeed = 1.0;
 
   }
 
