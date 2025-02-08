@@ -15,6 +15,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     // Add configurations to Configs.java
+    // https://pbs.twimg.com/media/F1Zwg4HacAEepQn.jpg:large
     m_elevatorMotor.getConfigurator().apply(config);
     config.Slot0.kP = ElevatorConstants.kElevatorP;
     config.Slot0.kI = ElevatorConstants.kElevatorI;
