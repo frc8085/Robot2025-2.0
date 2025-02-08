@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.LimelightHelpers;
 
-public class LimelightSubsystem extends SubsystemBase {
+public class LimelightReefSubsystem extends SubsystemBase {
   private boolean TUNING_MODE = TuningModeConstants.kLimelightTuning;
   private boolean PRACTICE_MODE = TuningModeConstants.kPracticeMode;
 
@@ -26,7 +27,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   private boolean m_visionMode;
 
-  public LimelightSubsystem(
+  public LimelightReefSubsystem(
       DriveSubsystem drive) {
     m_drive = drive;
 
@@ -36,81 +37,90 @@ public class LimelightSubsystem extends SubsystemBase {
 
     CameraServer.addCamera(m_limelight);
 
+    // Change the camera pose relative to robot center (x forward, y left, z up,
+    // degrees)
+    LimelightHelpers.setCameraPose_RobotSpace("LL",
+        0.5, // Forward offset (meters)
+        0.0, // Side offset (meters)
+        0.5, // Height offset (meters)
+        0.0, // Roll (degrees)
+        30.0, // Pitch (degrees)
+        0.0 // Yaw (degrees)
+    );
+
   }
 
   public static double getAprilTagID() {
-    // The computer fought with us :( thats why it looks so weird
-    double[] id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid")
-        .getDoubleArray(new double[6]);
-    return id[0];
+    // double[] id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid")
+    //     .getDoubleArray(new double[6]);
+    // return id[0];
   };
 
   public static double[] getRobotLocation() {
     // gets robot position realtive to AprilTag
-    double[] location = NetworkTableInstance.getDefault().getTable("limelight")
-        .getEntry("botpose_targetspace")
-        .getDoubleArray(new double[6]);
-    return location;
+    // double[] location = NetworkTableInstance.getDefault().getTable("limelight")
+    //     .getEntry("botpose_targetspace")
+    //     .getDoubleArray(new double[6]);
+    // return location;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    // read values periodically
-    // SmartDashboard.putData(SendableCameraWrapper.wrap(m_limelight));
-    // SmartDashboard.putData(SendableCameraWrapper.wrap(m_limelightRight));
     if (TUNING_MODE) {
       SmartDashboard.putNumber("April tag ID", getAprilTagID());
       SmartDashboard.putNumberArray("LL Bot Location", getRobotLocation());
       SmartDashboard.putBoolean("Target", hasTarget());
       SmartDashboard.putNumber("LL ID", getID());
 
-      SmartDashboard.putNumber("LL X", getX());
-      SmartDashboard.putNumber("LL Y", getY());
+      SmartDashboard.putNumber("LL Reef X", getXRobotRelative());
+      SmartDashboard.putNumber("LL Reef Y", getYRobotRelative());
 
     }
 
   }
 
-  public double getX() {
-    return table.getEntry("tx").getDouble(0.0);
+  public double[] getPose3d() {
+    return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_RobotSpace("LL")); 
+    //CameraSpace: Gets the target's 3D pose with respect to the camera's coordinate system.
+    //RobotSpace: Gets the target's 3D pose with respect to the robot's coordinate system.
+    
+    //ARRAY FORMAT: [x, y, z, roll, pitch, yaw].
   }
 
-  // Account for the Robot's current heading when returning the X value
-  public double getXfromRobotPerspective() {
-    // Heading from -180 to 180
-    double robotHeading = m_drive.getHeading();
-    double degreesToTarget = -getX();
-    double degreesFromRobotPerspective = robotHeading + degreesToTarget;
-    return degreesFromRobotPerspective;
+  public double getXRobotRelative() {
+    //return table.getEntry("tx").getDouble(0.0);
+    return getPose3d()[1];
   }
 
-  public double getY() {
-    return table.getEntry("ty").getDouble(0.0);
+  public double getYRobotRelative() {
+    //return table.getEntry("ty").getDouble(0.0);
+    return getPose3d()[2];
   }
 
   public double getArea() {
-    return table.getEntry("ta").getDouble(0.0);
+    //return table.getEntry("ta").getDouble(0.0);
+    return LimelightHelpers.getTA("LL");
   }
 
   public boolean hasTarget() {
-    return table.getEntry("tv").getDouble(0.0) == 1;
+    //return table.getEntry("tv").getDouble(0.0) == 1;
+    return LimelightHelpers.getTV("LL");
   }
 
   public int getID() {
-    return (int) table.getEntry("tid").getDouble(0.0);
+    //return (int) table.getEntry("tid").getDouble(0.0);
   }
 
   public double getLatPip() {
-    return table.getEntry("tl").getDouble(0.0) / 1000.0;
+    // return table.getEntry("tl").getDouble(0.0) / 1000.0;
   }
 
   public double getLatCap() {
-    return table.getEntry("cl").getDouble(0.0) / 1000.0;
+    // return table.getEntry("cl").getDouble(0.0) / 1000.0;
   }
 
   public double getLastEntryTimeStamp() {
-    return Timer.getFPGATimestamp() - getLatCap() - getLatPip();
+    // return Timer.getFPGATimestamp() - getLatCap() - getLatPip();
   }
 
   /**
