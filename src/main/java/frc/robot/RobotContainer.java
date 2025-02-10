@@ -99,7 +99,7 @@ public class RobotContainer {
 
     //elevator subsystem
     new JoystickButton(m_operatorController, Button.kA.value)
-    .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem))
+    .onTrue(new RunCommand(()->m_ElevatorSubsystem.start(), m_ElevatorSubsystem))
     .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
     new JoystickButton(m_operatorController, Button.kB.value)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))

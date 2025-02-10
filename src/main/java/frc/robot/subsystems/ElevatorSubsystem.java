@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  private final TalonFX m_elevatorMotor = new TalonFX(24, "rio"); // change deviceID and canbus
+  private final TalonFX m_elevatorMotor = new TalonFX(23, "rio"); // change deviceID and canbus
   TalonFXConfiguration config = new TalonFXConfiguration();
 
   private double kSpeed = ElevatorConstants.kElevatorSpeed;
@@ -37,5 +37,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void moveDown() {
     m_elevatorMotor.set(-kSpeed);
+  }
+
+  public void start() {
+    m_elevatorMotor.set(kSpeed);
   }
 }
