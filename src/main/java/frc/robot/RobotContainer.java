@@ -94,13 +94,13 @@ public class RobotContainer {
     .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
     new JoystickButton(m_operatorController, Button.kY.value)
+    
     .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
 
     //elevator subsystem
     new JoystickButton(m_operatorController, Button.kA.value)
-    .onTrue(new RunCommand(()->m_ElevatorSubsystem.start(), m_ElevatorSubsystem))
-    .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
+    .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem));
     new JoystickButton(m_operatorController, Button.kB.value)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
     .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));

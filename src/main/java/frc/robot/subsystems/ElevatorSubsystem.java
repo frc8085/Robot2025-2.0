@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
@@ -17,11 +19,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Add configurations to Configs.java
     // https://pbs.twimg.com/media/F1Zwg4HacAEepQn.jpg:large
     m_elevatorMotor.getConfigurator().apply(config);
-    config.Slot0.kP = ElevatorConstants.kElevatorP;
-    config.Slot0.kI = ElevatorConstants.kElevatorI;
-    config.Slot0.kD = ElevatorConstants.kElevatorD;
+    var slot0Configs = new Slot0Configs();
+    slot0Configs.kP = ElevatorConstants.kElevatorP;
+    slot0Configs.kI = ElevatorConstants.kElevatorI;
+    slot0Configs.kD = ElevatorConstants.kElevatorD;
     
+    m_elevatorMotor.getConfigurator().apply(slot0Configs);
 
+  }
+
+  public void periodic(){
+    SmartDashboard.getNumber("elePostion", kSpeed);
   }
 
   public void moveUp() {
@@ -29,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
 
     // set position to 10 rotations
-    m_elevatorMotor.setControl(m_request.withPosition(1));
+    m_elevatorMotor.setControl(m_request.withPosition(3));
 
   }
 
