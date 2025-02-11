@@ -124,10 +124,11 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static double kElevatorSpeed = .5;
+    public static double kElevatorSpeed = .8;
     public static double kElevatorP = 0;
     public static double kElevatorI = 0;
     public static double kElevatorD = 0;
+    public boolean inverted = true;
   }
 
   public static final class PivotArmConstants {
