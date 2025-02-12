@@ -1,11 +1,13 @@
 package frc.robot;
 
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -87,14 +89,21 @@ public final class Configs {
                 }
         }
 
-        public static final class Climber {
-                public static final SparkFlexConfig climberConfig = new SparkFlexConfig();
+    public static final class ClimberManipulator {
+        public static final SparkFlexConfig climberConfig = new SparkFlexConfig();
+  
+        static {
 
-                static {
-
-                        climberConfig
-                                        .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(40);
-                }
+                climberConfig
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(20);
+                climberConfig.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // These are example gains you may need to them for your own robot!
+                    .pid(ClimberConstants.kWinchP, ClimberConstants.kWinchI, ClimberConstants.kWinchD)
+                    .velocityFF(ClimberConstants.kWinchFF)
+                    .outputRange(ClimberConstants.kWinchMinOutput, ClimberConstants.kWinchMaxOutput);
         }
+    }
+
 }

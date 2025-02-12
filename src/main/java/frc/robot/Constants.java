@@ -29,13 +29,13 @@ public final class Constants {
 
     public static final int kAlgaeCanId = 22;
     public static final int kElevatorCanId = 23;
+
     public static final int kClimberCanId = 24;
     public static final int kPivotArmCanId = 25;
   }
 
   public static final class DriveConstants {
-    // Driving Parameters - Note that these are not the maximum capable speeds of
-    // the robot, rather the allowed maximum speeds
+     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
@@ -125,6 +125,10 @@ public final class Constants {
 
   public static final class ElevatorConstants {
 
+    public static double kElevatorSpeed = .5;
+    public static double kElevatorP = 0.1;
+    public static double kElevatorI = 0;
+    public static double kElevatorD = 0;
   }
 
   public static final class PivotArmConstants {
@@ -173,6 +177,13 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static double kClimberSpeed = 0.3;
+    public static double kWinchSpeed = 0.3;
+    public static double kWinchP = 0;
+    public static double kWinchI = 0;
+    public static double kWinchD = 0;
+    public static double kWinchFF = 0;
+    public static double kWinchMinOutput = 0;
+    public static double kWinchMaxOutput = 1;
   }
 
   public static final class TuningModeConstants {

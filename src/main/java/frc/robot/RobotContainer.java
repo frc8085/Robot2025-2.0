@@ -17,6 +17,12 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,6 +50,7 @@ public class RobotContainer {
   private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
   private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -92,6 +99,8 @@ public class RobotContainer {
 
     // final Trigger climb = m_operatorController.povDown();
 
+  private void configureButtonBindings(){
+      //coral subsystem
     new JoystickButton(m_operatorController, Button.kX.value)
         .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
         .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
@@ -120,6 +129,17 @@ public class RobotContainer {
         .onTrue(new RunCommand(() -> m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
         .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
   }
+    
+    .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
+    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
+
+    //elevator subsystem
+    new JoystickButton(m_operatorController, Button.kA.value)
+    .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem));
+    new JoystickButton(m_operatorController, Button.kB.value)
+    .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
+    .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
+}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

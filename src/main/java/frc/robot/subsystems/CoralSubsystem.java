@@ -26,6 +26,8 @@ public class CoralSubsystem extends SubsystemBase {
     private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
     SparkMaxConfig config = new SparkMaxConfig();
  
+    private double kSpeed = CoralConstants.kCoralSpeed;
+
     public CoralSubsystem () {
     
         // Apply the respective configurations to the SPARKS. Reset parameters before
