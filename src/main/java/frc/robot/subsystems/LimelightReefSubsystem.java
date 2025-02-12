@@ -51,9 +51,9 @@ public class LimelightReefSubsystem extends SubsystemBase {
   }
 
   public static double getAprilTagID() {
-    // double[] id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid")
-    //     .getDoubleArray(new double[6]);
-    // return id[0];
+    double[] id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid")
+        .getDoubleArray(new double[6]);
+    return id[0];
   };
 
   public static double[] getRobotLocation() {
@@ -62,7 +62,8 @@ public class LimelightReefSubsystem extends SubsystemBase {
     //     .getEntry("botpose_targetspace")
     //     .getDoubleArray(new double[6]);
     // return location;
-  }
+    return LimelightHelpers.getBotPose_TargetSpace("LL");
+}
 
   @Override
   public void periodic() {
@@ -70,7 +71,7 @@ public class LimelightReefSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("April tag ID", getAprilTagID());
       SmartDashboard.putNumberArray("LL Bot Location", getRobotLocation());
       SmartDashboard.putBoolean("Target", hasTarget());
-      SmartDashboard.putNumber("LL ID", getID());
+      // SmartDashboard.putNumber("LL ID", getID());
 
       SmartDashboard.putNumber("LL Reef X", getXRobotRelative());
       SmartDashboard.putNumber("LL Reef Y", getYRobotRelative());
@@ -107,21 +108,13 @@ public class LimelightReefSubsystem extends SubsystemBase {
     return LimelightHelpers.getTV("LL");
   }
 
-  public int getID() {
-    //return (int) table.getEntry("tid").getDouble(0.0);
+  public void alignToTarget() {
+    
   }
 
-  public double getLatPip() {
-    // return table.getEntry("tl").getDouble(0.0) / 1000.0;
-  }
-
-  public double getLatCap() {
-    // return table.getEntry("cl").getDouble(0.0) / 1000.0;
-  }
-
-  public double getLastEntryTimeStamp() {
-    // return Timer.getFPGATimestamp() - getLatCap() - getLatPip();
-  }
+  // public int getID() {
+  //   //return (int) table.getEntry("tid").getDouble(0.0);
+  // }
 
   /**
    * @param piplineNumber driver = 0, aprilTags = 1, retroreflective = 2
