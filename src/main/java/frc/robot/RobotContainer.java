@@ -49,8 +49,11 @@ public class RobotContainer {
     double rawX = m_driverController.getLeftX();
     double rawY = m_driverController.getLeftY();
 
+
   }
 
+    
+    
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -83,23 +86,25 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
 
-  private void configureButtonBindings() {
-    // coral subsystem
+
+
+  private void configureButtonBindings(){
+      //coral subsystem
     new JoystickButton(m_operatorController, Button.kX.value)
-        .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
-        .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
+    .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
+    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
     new JoystickButton(m_operatorController, Button.kY.value)
+    
+    .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
+    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
 
-        .onTrue(new RunCommand(() -> m_CoralSubsystem.eject(), m_CoralSubsystem))
-        .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
-
-    // elevator subsystem
+    //elevator subsystem
     new JoystickButton(m_operatorController, Button.kA.value)
-        .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem));
+    .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem));
     new JoystickButton(m_operatorController, Button.kB.value)
-        .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
-        .onFalse(new RunCommand(() -> m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
-  }
+    .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
+    .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
+}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

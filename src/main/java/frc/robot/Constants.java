@@ -8,11 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 /**
@@ -40,7 +35,7 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
-    // the robot, rather the allowed maximum speeds
+     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
@@ -129,74 +124,10 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-
-    // Open-loop speed
     public static double kElevatorSpeed = .5;
-
-    // Figure out what this stuff means, copied from 3467
-    public static final double tolerance = 0.5;
-    public static final double homingCurrent = 0.5;
-
-    public static TalonFXConfiguration motorConfig() {
-      TalonFXConfiguration m_configuration = new TalonFXConfiguration();
-
-      m_configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-      m_configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-      m_configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-      m_configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 33.5;
-      m_configuration.Voltage.PeakForwardVoltage = 12.0;
-      m_configuration.Voltage.PeakReverseVoltage = -12.0;
-      m_configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-      m_configuration.Feedback.SensorToMechanismRatio = 1;
-
-      m_configuration.Slot0.kP = 0;
-      m_configuration.Slot0.kI = 0;
-      m_configuration.Slot0.kD = 0;
-
-      m_configuration.Slot1.kG = 0; // gravity
-      m_configuration.Slot1.kS = 0; // static friction
-      m_configuration.Slot1.kV = 0;
-      m_configuration.Slot1.kP = 0;
-      m_configuration.Slot1.kI = 0;
-      m_configuration.Slot1.kD = 0;
-
-      m_configuration.MotionMagic.MotionMagicCruiseVelocity = 1000;
-      m_configuration.MotionMagic.MotionMagicAcceleration = 1000;
-      m_configuration.MotionMagic.MotionMagicJerk = 0.0;
-
-      m_configuration.CurrentLimits.SupplyCurrentLimit = 20;
-      // m_configuration.CurrentLimits.SupplyCurrentThreshold = 40;
-      // m_configuration.CurrentLimits.SupplyTimeThreshold = 0.1;
-      m_configuration.CurrentLimits.SupplyCurrentLimitEnable = false;
-      m_configuration.CurrentLimits.StatorCurrentLimit = 70;
-      m_configuration.CurrentLimits.StatorCurrentLimitEnable = false;
-
-      return m_configuration;
-    }
-
-  }
-
-  public static final class ScoringPositions {
-    // Elevator and Pivot Positions
-    public enum ElevatorPosition {
-      HOME("Home", 0, 25),
-      CORAL1("Coral Level 1", 40, 25),
-      CORAL2("Coral Level 2", 60, 25),
-      CORAL3("Coral Level 3", 80, 25),
-      CORAL4("Coral Level 4", 100, 25),
-      CORALPICKUP("Coral Pickup", 50, 25),
-      ALGAENET("Algae Net", 200, 50);
-
-      public final String label;
-      public final double elevatorPosition;
-      public final double pivotPosition;
-
-      private ElevatorPosition(String label, double elevatorPosition, double pivotPosition) {
-        this.label = label;
-        this.elevatorPosition = elevatorPosition;
-        this.pivotPosition = pivotPosition;
-      }
-    }
+    public static double kElevatorP = 0.1;
+    public static double kElevatorI = 0;
+    public static double kElevatorD = 0;
   }
 
   public static final class PivotArmConstants {
