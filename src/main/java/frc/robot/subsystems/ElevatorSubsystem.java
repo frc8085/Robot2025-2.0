@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,6 +41,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // set position to 10 rotations
     m_elevatorMotor.setControl(m_request.withPosition(10));
+  }
+
+  // Maintain Position Inches
+  public void keepPositionInches(double positionInches) {
+    // set position in inches, convert to encoder value
+    double position;
+    position = positionInches * ElevatorConstants.kElevatorRevolutionsPerInch + 1;
+
+    m_elevatorPIDController.setReference(position, ControlType.kPosition);
   }
 
   public void stop() {

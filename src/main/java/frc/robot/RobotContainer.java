@@ -95,7 +95,6 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
 
-  private void configureButtonBindings() {
 
     // final Trigger climb = m_operatorController.povDown();
 
@@ -128,17 +127,14 @@ public class RobotContainer {
     new POVButton(m_operatorController, 180)
         .onTrue(new RunCommand(() -> m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
         .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-  }
-    
-    .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
-    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
 
-    //elevator subsystem
-    new JoystickButton(m_operatorController, Button.kA.value)
+      //elevator subsystem
+  /*new JoystickButton(m_operatorController, Button.kA.value)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem));
     new JoystickButton(m_operatorController, Button.kB.value)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
     .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
+  */
 }
 
   /**
