@@ -2,36 +2,37 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  //up is negative acording to this motor
-  private final TalonFX m_elevatorMotor = new TalonFX(23, "rio"); // change deviceID and canbus
-  TalonFXConfiguration config = new TalonFXConfiguration();
+
+  private final TalonFX m_elevatorMotor = new TalonFX(CanIdConstants.kElevatorCanId);
+  // private final MotionMagicVoltage m_magic = new MotionMagicVoltage();
+  private final DutyCycleOut m_duty = new DutyCycleOut(0.0);
+  private final NeutralOut m_neutral = new NeutralOut();
+
+  public boolean hasHomed = false;
 
   private double kSpeed = ElevatorConstants.kElevatorSpeed;
 
   public ElevatorSubsystem() {
-    // Add configurations to Configs.java
-    // https://pbs.twimg.com/media/F1Zwg4HacAEepQn.jpg:large
-    //m_elevatorMotor.getConfigurator().apply(config);
-    var slot0Configs = new Slot0Configs();
-    slot0Configs.kP = ElevatorConstants.kElevatorP;
-    slot0Configs.kI = ElevatorConstants.kElevatorI;
-    slot0Configs.kD = ElevatorConstants.kElevatorD;
-    
-    m_elevatorMotor.getConfigurator().apply(slot0Configs);
+
+    m_elevatorMotor.getConfigurator().apply(ElevatorConstants.motorConfig());
+    m_elevatorMotor.setPosition(0.0);
 
   }
 
-  public void periodic(){
-    //SmartDashboard.getNumber("elePostion", m_elevatorMotor.getPosition());
-    
+  public void periodic() {
+
   }
 
   public void moveUp() {
@@ -42,15 +43,189 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setControl(m_request.withPosition(10));
   }
 
+  public void moveDown() {
+
+  }
+
   public void stop() {
     m_elevatorMotor.set(0);
   }
 
-  public void moveDown() {
+  public void down() {
     m_elevatorMotor.set(-kSpeed);
   }
 
-  public void start() {
+  public void up() {
     m_elevatorMotor.set(kSpeed);
   }
 }
+
+/**
+ * package frc.robot.subsystems;
+ * 
+ * import com.ctre.phoenix.motorcontrol.ControlMode;
+ * import com.ctre.phoenix.motorcontrol.NeutralMode;
+ * import com.ctre.phoenix.motorcontrol.StatusFrame;
+ * import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+ * import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+ * import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+ * import com.ctre.phoenix.motorcontrol.can.TalonFX;
+ * import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+ * 
+ * import edu.wpi.first.math.controller.PIDController;
+ * import edu.wpi.first.math.controller.ProfiledPIDController;
+ * import edu.wpi.first.wpilibj.DigitalInput;
+ * import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+ * import edu.wpi.first.wpilibj2.command.PIDCommand;
+ * import edu.wpi.first.wpilibj2.command.SubsystemBase;
+ * import frc.robot.Constants;
+ * import frc.robot.Constants.ElevatorConstants;
+ * 
+ * public class Elevator extends SubsystemBase {
+ * private WPI_TalonFX elevatorMotor;
+ * 
+ * private DigitalInput topLimit;
+ * private DigitalInput bottomLimit;
+ * 
+ * 
+ * private double holdPosValue;
+ * 
+ * /** Creates a new Elevator.
+ * public Elevator() {
+ * elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
+ * topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
+ * bottomLimit = new DigitalInput(ElevatorConstants.bottomLimitPort);
+ * 
+ * elevatorMotor.configFactoryDefault();
+ * elevatorMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+ * 0, 20);
+ * elevatorMotor.setSensorPhase(true);
+ * elevatorMotor.configNominalOutputForward(0, 20);
+ * elevatorMotor.configNominalOutputReverse(0, 20);
+ * elevatorMotor.configPeakOutputForward(1, 20);
+ * elevatorMotor.configPeakOutputReverse(-1, 20);//TODO: needs to be changes for
+ * comp
+ * elevatorMotor.configAllowableClosedloopError(0, 0, 20);
+ * elevatorMotor.config_kF(0, 0, 20);
+ * elevatorMotor.config_kP(0, 0.25, 20);
+ * elevatorMotor.config_kI(0, 0, 20);
+ * elevatorMotor.config_kD(0, 0, 20);
+ * elevatorMotor.setInverted(false); // used to be true but we flipped motor
+ * direction 2/25/23
+ * elevatorMotor.setNeutralMode(NeutralMode.Brake);
+ * elevatorMotor.configNeutralDeadband(0.001, 20);
+ * elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0,
+ * 10, 20);
+ * elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic,
+ * 10, 20);
+ * elevatorMotor.configAllowableClosedloopError(0, 400, 20);
+ * 
+ * 
+ * // motion magic trapezoid configuration
+ * //elevatorMotor.configAllowableClosedloopError()
+ * elevatorMotor.configMotionCruiseVelocity(8000, 20); //needs to be tuned to
+ * robot
+ * elevatorMotor.configMotionAcceleration(4000, 20);
+ * 
+ * holdPosValue = elevatorMotor.getSelectedSensorPosition();
+ * }
+ * 
+ * public void elevate(double speed) {
+ * elevatorMotor.set(ControlMode.PercentOutput, speed);
+ * }
+ * public double getSpeed(){
+ * return elevatorMotor.getSelectedSensorVelocity();
+ * }
+ * public boolean getStopped(){
+ * return getSpeed() == 0;
+ * }
+ * public void holdPosition() {
+ * elevatorMotor.set(ControlMode.Position, holdPosValue);
+ * }
+ * 
+ * public void holdPosition(double pos) {
+ * elevatorMotor.set(ControlMode.Position, pos);
+ * }
+ * 
+ * public double getPIDError(){
+ * return elevatorMotor.getClosedLoopError();
+ * }
+ * 
+ * public void setHoldPos() {
+ * holdPosValue = elevatorMotor.getSelectedSensorPosition();
+ * }
+ * 
+ * public void resetEncoderPos() {
+ * elevatorMotor.setSelectedSensorPosition(0);
+ * }
+ * 
+ * public boolean isAtSetpoint() {
+ * return elevatorMotor.isMotionProfileFinished();
+ * }
+ * 
+ * // public boolean getTopLimits() {
+ * // return !topLimit.get();
+ * // }
+ * 
+ * public boolean getBottomLimits() {
+ * return !bottomLimit.get();
+ * }
+ * public double getEncoderPos() {
+ * return elevatorMotor.getSelectedSensorPosition();
+ * }
+ * 
+ * public boolean topLimitSwitch() {
+ * return !topLimit.get();
+ * }
+ * 
+ * public void setState(int state) {
+ * if (state == 0) {
+ * elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
+ * holdPosValue = ElevatorConstants.pos0;
+ * holdPosition();
+ * SmartDashboard.putString("elevator error", "State: " + state + ", Error: " +
+ * getPIDError());
+ * } else if (state == 1) {
+ * elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
+ * holdPosValue = ElevatorConstants.pos1;
+ * holdPosition();
+ * SmartDashboard.putString("elevator error", "State: " + state + ", Error: " +
+ * getPIDError());
+ * } else if (state == 2) {
+ * elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
+ * holdPosValue = ElevatorConstants.pos2;
+ * holdPosition();
+ * SmartDashboard.putString("elevator error", "State: " + state + ", Error: " +
+ * getPIDError());
+ * }
+ * }
+ * 
+ * public int getState() {
+ * double pos = elevatorMotor.getSelectedSensorPosition();
+ * if (pos <= 256) pos = 0;
+ * return (int) Math.ceil(pos/4096);
+ * }
+ * 
+ * public double getEncoder() {
+ * return elevatorMotor.getSelectedSensorPosition();
+ * }
+ * 
+ * public boolean isAtCurrentLimit() {
+ * return elevatorMotor.getStatorCurrent() >= 50.0;
+ * }
+ * 
+ * public void resetEncoderPosTop() {
+ * elevatorMotor.setSelectedSensorPosition(-236710);
+ * }
+ * 
+ * @Override
+ *           public void periodic() {
+ *           if (getBottomLimits()){
+ *           resetEncoderPos();
+ *           holdPosValue = 0;
+ *           elevatorMotor.set(ControlMode.PercentOutput, 0);
+ *           }
+ *           // This method will be called once per scheduler run
+ *           }
+ *           }
+ */
