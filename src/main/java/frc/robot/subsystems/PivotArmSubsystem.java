@@ -10,7 +10,7 @@ import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.PivotArmConstants;
 
 public class PivotArmSubsystem extends SubsystemBase {
-  private final TalonFX m_elevatorMotor = new TalonFX(CanIdConstants.kPivotArmCanId, "rio"); // change deviceID and canbus
+  private final TalonFX m_pivotArmMotor = new TalonFX(CanIdConstants.kPivotArmCanId, "rio"); // change deviceID and canbus
   TalonFXConfiguration config = new TalonFXConfiguration();
 
   private double kSpeed = PivotArmConstants.kPivotArmSpeed;
@@ -18,12 +18,12 @@ public class PivotArmSubsystem extends SubsystemBase {
   public PivotArmSubsystem() {
     // Add configurations to Configs.java
     // https://pbs.twimg.com/media/F1Zwg4HacAEepQn.jpg:large
-    m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_pivotArmMotor.setNeutralMode(NeutralModeValue.Brake);
     config.Slot0.kP = PivotArmConstants.kPivotArmP;
     config.Slot0.kI = PivotArmConstants.kPivotArmI;
     config.Slot0.kD = PivotArmConstants.kPivotArmD;
     
-    m_elevatorMotor.getConfigurator().apply(config);
+    m_pivotArmMotor.getConfigurator().apply(config);
 
   }
 
@@ -32,18 +32,18 @@ public class PivotArmSubsystem extends SubsystemBase {
     final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
 
     // set position to 10 rotations
-    m_elevatorMotor.setControl(m_request.withPosition(10));
+    m_pivotArmMotor.setControl(m_request.withPosition(10));
   }
 
   public void stop() {
-    m_elevatorMotor.set(0);
+    m_pivotArmMotor.set(0);
   }
 
   public void moveDown() {
-    m_elevatorMotor.set(-kSpeed);
+    m_pivotArmMotor.set(-kSpeed);
   }
 
   public void start() {
-    m_elevatorMotor.set(kSpeed);
+    m_pivotArmMotor.set(kSpeed);
   }
 }

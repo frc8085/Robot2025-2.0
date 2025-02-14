@@ -21,12 +21,16 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PivotArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import java.util.List;
 
 /*
@@ -40,6 +44,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final PivotArmSubsystem m_PivotArmSubsystem = new PivotArmSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -97,14 +102,39 @@ public class RobotContainer {
     .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
     .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
 
+      //algae subsystem
+      new JoystickButton(m_operatorController, Button.kA.value)
+      .onTrue(new RunCommand(()->m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
+      .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+      new JoystickButton(m_operatorController, Button.kB.value)
+      .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
+      .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+  
     //elevator subsystem
-    new JoystickButton(m_operatorController, Button.kA.value)
+    new POVButton(m_operatorController, 180)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.start(), m_ElevatorSubsystem))
     .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
-    new JoystickButton(m_operatorController, Button.kB.value)
+    new POVButton(m_operatorController, 0)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
     .onFalse(new RunCommand(()->m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
-}
+
+
+    /*
+     * Dpad Controls
+     * Angle 0 = UP
+     * Angle 90 = RIGHT
+     * Angle 180 = DOWN
+     * Angle 270 = LEFT
+     */
+
+     //Pivot Arm Subsystem
+     new POVButton(m_operatorController, 90)
+     .onTrue(new RunCommand(() -> m_PivotArmSubsystem.start(), m_PivotArmSubsystem))
+     .onFalse(new RunCommand(() -> m_PivotArmSubsystem.stop(), m_PivotArmSubsystem));
+ new POVButton(m_operatorController, 270)
+     .onTrue(new RunCommand(() -> m_PivotArmSubsystem.moveDown(), m_PivotArmSubsystem))
+     .onFalse(new RunCommand(() -> m_PivotArmSubsystem.stop(), m_PivotArmSubsystem));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
