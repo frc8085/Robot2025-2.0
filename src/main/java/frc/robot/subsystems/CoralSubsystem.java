@@ -23,7 +23,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class CoralSubsystem extends SubsystemBase {
  
     // import motor id
-    private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
+    private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.NeoMotorType);
     SparkMaxConfig config = new SparkMaxConfig();
  
     public CoralSubsystem () {
@@ -39,7 +39,7 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void pickup() {
-    m_coralMotor.set(CoralConstants.kCoralSpeed);
+    m_coralMotor.set(-CoralConstants.kCoralSpeed);
   }
 
   public void stop() {
@@ -47,7 +47,7 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void eject() {
-    m_coralMotor.set(-CoralConstants.kCoralSpeed);
+    m_coralMotor.set(CoralConstants.kCoralSpeed);
   }
 
 }

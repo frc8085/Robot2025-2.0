@@ -64,14 +64,14 @@ public final class Constants {
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 4;
+    public static final int kRearLeftDrivingCanId = 3;
     public static final int kFrontRightDrivingCanId = 2;
-    public static final int kRearRightDrivingCanId = 3;
+    public static final int kRearRightDrivingCanId = 4;
 
     public static final int kFrontLeftTurningCanId = 11;
-    public static final int kRearLeftTurningCanId = 14;
+    public static final int kRearLeftTurningCanId = 13;
     public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 13;
+    public static final int kRearRightTurningCanId = 14;
 
     public static final boolean kGyroReversed = false;
   }
@@ -144,7 +144,7 @@ public static final class PivotArmConstants {
 }
 
 public static final class CoralConstants {
-  public static final int coralCurrentLimit = 20;
+  public static final int coralCurrentLimit = 40;
   public static final double kCoralSpeed = 1;
 
 }

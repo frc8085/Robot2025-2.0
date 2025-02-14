@@ -52,8 +52,8 @@ public class RobotContainer {
   XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
 
   public void adjustJoystickValues() {
-    double rawX = m_operatorController.getLeftX();
-    double rawY = m_operatorController.getLeftY();
+    double rawX = m_driverController.getLeftX();
+    double rawY = m_driverController.getLeftY();
 
   }
 
@@ -72,10 +72,10 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                MathUtil.applyDeadband(m_operatorController.getRightTriggerAxis(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_operatorController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_operatorController.getRightX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getRightTriggerAxis(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }

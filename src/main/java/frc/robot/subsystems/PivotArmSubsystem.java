@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanIdConstants;
@@ -26,6 +27,12 @@ public class PivotArmSubsystem extends SubsystemBase {
     m_pivotArmMotor.getConfigurator().apply(config);
 
   }
+
+  //   public void holdPivotArm() {
+  //   double targetPosition = CurrentPivotArmEncoderPosition();
+  //   m_pivotArmPIDController.setReference(targetPosition, ControlType.kPosition);
+
+  // }
 
   public void moveUp() {
     // create a position closed-loop request, voltage output, slot 0 configs

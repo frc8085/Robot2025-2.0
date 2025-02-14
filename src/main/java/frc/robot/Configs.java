@@ -65,7 +65,7 @@ public final class Configs {
 
                         coralConfig
                                         .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(20);
+                                        .smartCurrentLimit(40);
                 }
         }
         public static final class AlgaeManipulator {
