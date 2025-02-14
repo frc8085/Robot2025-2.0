@@ -32,6 +32,7 @@ public final class Constants {
 
     public static final int kClimberCanId = 24;
     public static final int kPivotArmCanId = 25;
+    public static final int kElevatorCancoder = 33;
   }
 
   public static final class DriveConstants {
@@ -124,7 +125,7 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static double kElevatorSpeed = .8;
+    public static double kElevatorSpeed = .25;
     public static double kElevatorP = 0;
     public static double kElevatorI = 0;
     public static double kElevatorD = 0;
@@ -132,9 +133,12 @@ public final class Constants {
   }
 
   public static final class PivotArmConstants {
-
+public static double kPivotArmSpeed = .25;
+    public static double kPivotArmP = 0;
+    public static double kPivotArmI = 0;
+    public static double kPivotArmD = 0;
+    public boolean inverted = true;
   }
-
   public static final class CoralConstants {
     public static final int coralCurrentLimit = 20;
     public static final double kCoralSpeed = 1;
