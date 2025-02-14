@@ -150,7 +150,23 @@ public static final class CoralConstants {
 }
 
 public static final class AlgaeConstants {
-  
+  public static final int algaeCurrentLimit = 20;
+  public static final double kAlgaeSpeed = 1;
+
+  // TEMPORARY VALUES
+  public static double kAlgaeMinOutput = -0.25;
+  public static double kAlgaeMaxOutput = 0.25;
+
+  // TEMPORARY VALUES
+  public static boolean kAlgaeInverted = true;
+  // TEMPORARY VALUES
+  public static int kAlgaePositionConversionFactor = 1000;
+  public static int kAlgaeVelocityConversionFactor = 1000;
+  // TEMPORARY VALUES
+  public static double kAlgaeP = 2.5;
+  public static double kAlgaeI = 0.0;
+  public static double kAlgaeD = 0.0;
+  public static double kAlgaeFF = 0.0;
 
 }
 public static final class ClimberConstants {
