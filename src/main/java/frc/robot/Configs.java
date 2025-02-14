@@ -68,5 +68,34 @@ public final class Configs {
                                         .smartCurrentLimit(20);
                 }
         }
+        public static final class AlgaeManipulator {
+                public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
 
+                static {
+
+                        algaeConfig
+                                        .idleMode(IdleMode.kBrake)
+                                        .smartCurrentLimit(20);
+                        algaeConfig.encoder
+                                        .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
+                                        .velocityConversionFactor(AlgaeConstants.kAlgaeVelocityConversionFactor);
+                        algaeConfig.closedLoop
+                                        .outputRange(AlgaeConstants.kAlgaeMinOutput, AlgaeConstants.kAlgaeMaxOutput)
+                                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                                        .pidf(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD,
+                                                        AlgaeConstants.kAlgaeFF);
+
+                }
+        }
+
+        public static final class Climber {
+                public static final SparkFlexConfig climberConfig = new SparkFlexConfig();
+
+                static {
+
+                        climberConfig
+                                        .idleMode(IdleMode.kBrake)
+                                        .smartCurrentLimit(40);
+                }
+        }
 }
