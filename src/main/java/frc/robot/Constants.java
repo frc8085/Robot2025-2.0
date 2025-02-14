@@ -35,6 +35,11 @@ public final class Constants {
     public static final int kElevatorCancoder = 33;
   }
 
+  public static final class TuningModeConstants {
+    public static boolean kAlgaeTuning = false;
+    public static boolean kCoralTuning = true;
+  }
+
   public static final class DriveConstants {
      // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -124,74 +129,32 @@ public final class Constants {
     public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
   }
 
-  public static final class ElevatorConstants {
-    public static double kElevatorSpeed = .15;
-    public static double kElevatorP = 0;
-    public static double kElevatorI = 0;
-    public static double kElevatorD = 0;
-    public boolean inverted = true;
-  }
+public static final class ElevatorConstants {
+  public static double kElevatorSpeed = .15;
+  public static double kElevatorP = 0;
+  public static double kElevatorI = 0;
+  public static double kElevatorD = 0;
+}
 
-  public static final class PivotArmConstants {
-public static double kPivotArmSpeed = .10;
-    public static double kPivotArmP = 0;
-    public static double kPivotArmI = 0;
-    public static double kPivotArmD = 0;
-    public boolean inverted = true;
-  }
-  public static final class CoralConstants {
-    public static final int coralCurrentLimit = 20;
-    public static final double kCoralSpeed = 1;
+public static final class PivotArmConstants {
+  public static double kPivotArmSpeed = .10;
+  public static double kPivotArmP = 0;
+  public static double kPivotArmI = 0;
+  public static double kPivotArmD = 0;
+}
 
-    // TEMPORARY VALUES
-    public static double kCoralMinOutput = -0.25;
-    public static double kCoralMaxOutput = 0.25;
+public static final class CoralConstants {
+  public static final int coralCurrentLimit = 20;
+  public static final double kCoralSpeed = 1;
 
-    // TEMPORARY VALUES
-    public static boolean kCoralInverted = true;
-    // TEMPORARY VALUES
-    public static int kCoralPositionConversionFactor = 1000;
-    public static int kCoralVelocityConversionFactor = 1000;
-    // TEMPORARY VALUES
-    public static double kCoralP = 0.5;
-    public static double kCoralI = 0.0;
-    public static double kCoralD = 0.0;
-    public static double kCoralFF = 0.0;
-  }
+}
 
-  public static final class AlgaeConstants {
-    public static final int algaeCurrentLimit = 20;
-    public static final double kAlgaeSpeed = 1;
+public static final class AlgaeConstants {
+  
 
-    // TEMPORARY VALUES
-    public static double kAlgaeMinOutput = -0.25;
-    public static double kAlgaeMaxOutput = 0.25;
-
-    // TEMPORARY VALUES
-    public static boolean kAlgaeInverted = true;
-    // TEMPORARY VALUES
-    public static int kAlgaePositionConversionFactor = 1000;
-    public static int kAlgaeVelocityConversionFactor = 1000;
-    // TEMPORARY VALUES
-    public static double kAlgaeP = 2.5;
-    public static double kAlgaeI = 0.0;
-    public static double kAlgaeD = 0.0;
-    public static double kAlgaeFF = 0.0;
-  }
-
-  public static final class ClimberConstants {
-    public static double kWinchSpeed = 0.3;
-    public static double kWinchP = 0;
-    public static double kWinchI = 0;
-    public static double kWinchD = 0;
-    public static double kWinchFF = 0;
-    public static double kWinchMinOutput = 0;
-    public static double kWinchMaxOutput = 1;
-  }
-
-  public static final class TuningModeConstants {
-    public static boolean kAlgaeTuning = false;
-    public static boolean kCoralTuning = true;
-  }
+}
+public static final class ClimberConstants {
+public static final double kClimberSpeed = 1;
+}
 
 }
