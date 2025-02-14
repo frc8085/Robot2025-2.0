@@ -26,6 +26,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -51,8 +52,8 @@ public class RobotContainer {
   XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
 
   public void adjustJoystickValues() {
-    double rawX = m_driverController.getLeftX();
-    double rawY = m_driverController.getLeftY();
+    double rawX = m_operatorController.getLeftX();
+    double rawY = m_operatorController.getLeftY();
 
   }
 
@@ -71,10 +72,10 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                MathUtil.applyDeadband(m_driverController.getRightTriggerAxis(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_operatorController.getRightTriggerAxis(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_operatorController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_operatorController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }
@@ -100,12 +101,12 @@ public class RobotContainer {
 
       //algae subsystem
       new JoystickButton(m_operatorController, Button.kA.value)
-      .onTrue(new RunCommand(()->m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
-      .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
-      new JoystickButton(m_operatorController, Button.kB.value)
-      .onTrue(new RunCommand(()->m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
-      .onFalse(new RunCommand(()->m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
-  
+      .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
+      .onFalse(new InstantCommand(() -> m_AlgaeSubsystem.holdAlgae(), m_AlgaeSubsystem));
+  new JoystickButton(m_operatorController, Button.kB.value)
+      .onTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
+      .onFalse(new RunCommand(() -> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+
     //elevator subsystem
     new POVButton(m_operatorController, 180)
     .onTrue(new RunCommand(()->m_ElevatorSubsystem.start(), m_ElevatorSubsystem))
