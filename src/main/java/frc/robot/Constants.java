@@ -132,11 +132,11 @@ public final class Constants {
 
   public static final class PivotArmConstants {
 
-    public static final double kPivotArmP = 0.7;
-    public static final double kPivotArmI = 0;
-    public static final double kPivotArmD = 0.1;
-    public static final double kPivotArmV = 0.12;
-    public static final double kPivotArmA = 0.01;
+    public static final double kPivotArmP = 0; // 0.7
+    public static final double kPivotArmI = 0; // 0.0
+    public static final double kPivotArmD = 0; // 0.1
+    public static final double kPivotArmV = 0; // 0.12
+    public static final double kPivotArmA = 0; // 0.01
 
   }
 

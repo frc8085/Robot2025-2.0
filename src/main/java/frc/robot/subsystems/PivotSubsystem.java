@@ -57,7 +57,9 @@ public class PivotSubsystem extends SubsystemBase {
     public void periodic() {
         // Get motor readings
         SmartDashboard.putNumber("currentPosition", getCurrentPosition());
+        // get a number to
         double target = SmartDashboard.getNumber("Pivot Target", 0);
+
         setPos(Rotation2d.fromRotations(target));
 
     }
