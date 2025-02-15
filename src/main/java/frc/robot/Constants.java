@@ -35,7 +35,7 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
-     // the robot, rather the allowed maximum speeds
+    // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
@@ -131,6 +131,12 @@ public final class Constants {
   }
 
   public static final class PivotArmConstants {
+
+    public static final double kPivotArmP = 0.7;
+    public static final double kPivotArmI = 0;
+    public static final double kPivotArmD = 0.1;
+    public static final double kPivotArmV = 0.12;
+    public static final double kPivotArmA = 0.01;
 
   }
 
