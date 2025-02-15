@@ -172,7 +172,7 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
-    public static double kClimberSpeed = 0.3;
+    public static double kClimberSpeed = 0.8;
   }
 
   public static final class TuningModeConstants {
