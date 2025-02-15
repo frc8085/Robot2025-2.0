@@ -59,11 +59,11 @@ public class LimelightReefSubsystem extends SubsystemBase {
   public static double[] getRobotLocation() {
     // gets robot position realtive to AprilTag
     // double[] location = NetworkTableInstance.getDefault().getTable("limelight")
-    //     .getEntry("botpose_targetspace")
-    //     .getDoubleArray(new double[6]);
+    // .getEntry("botpose_targetspace")
+    // .getDoubleArray(new double[6]);
     // return location;
     return LimelightHelpers.getBotPose_TargetSpace("LL");
-}
+  }
 
   @Override
   public void periodic() {
@@ -81,39 +81,41 @@ public class LimelightReefSubsystem extends SubsystemBase {
   }
 
   public double[] getPose3d() {
-    return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_RobotSpace("LL")); 
-    //CameraSpace: Gets the target's 3D pose with respect to the camera's coordinate system.
-    //RobotSpace: Gets the target's 3D pose with respect to the robot's coordinate system.
-    
-    //ARRAY FORMAT: [x, y, z, roll, pitch, yaw].
+    return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_RobotSpace("LL"));
+    // CameraSpace: Gets the target's 3D pose with respect to the camera's
+    // coordinate system.
+    // RobotSpace: Gets the target's 3D pose with respect to the robot's coordinate
+    // system.
+
+    // ARRAY FORMAT: [x, y, z, roll, pitch, yaw].
   }
 
   public double getXRobotRelative() {
-    //return table.getEntry("tx").getDouble(0.0);
+    // return table.getEntry("tx").getDouble(0.0);
     return getPose3d()[1];
   }
 
   public double getYRobotRelative() {
-    //return table.getEntry("ty").getDouble(0.0);
+    // return table.getEntry("ty").getDouble(0.0);
     return getPose3d()[2];
   }
 
   public double getArea() {
-    //return table.getEntry("ta").getDouble(0.0);
+    // return table.getEntry("ta").getDouble(0.0);
     return LimelightHelpers.getTA("LL");
   }
 
   public boolean hasTarget() {
-    //return table.getEntry("tv").getDouble(0.0) == 1;
+    // return table.getEntry("tv").getDouble(0.0) == 1;
     return LimelightHelpers.getTV("LL");
   }
 
   public void alignToTarget() {
-    
+
   }
 
   // public int getID() {
-  //   //return (int) table.getEntry("tid").getDouble(0.0);
+  // //return (int) table.getEntry("tid").getDouble(0.0);
   // }
 
   /**

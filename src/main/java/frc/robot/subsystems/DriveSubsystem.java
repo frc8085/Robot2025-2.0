@@ -113,9 +113,9 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double speed, double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    
-    if(xSpeed == 0 && ySpeed == 0) {
-        speed = 0;
+
+    if (xSpeed == 0 && ySpeed == 0) {
+      speed = 0;
     }
 
     // Convert the commanded speeds into the correct units(angle) for the drivetrain
@@ -199,10 +199,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Rotation2d getYaw() {
     return (DriveConstants.kGyroReversed) ? Rotation2d.fromDegrees((360 - m_gyro.getYaw().getValueAsDouble()))
-            : Rotation2d.fromDegrees(m_gyro.getYawAxis());
-}
+        : Rotation2d.fromDegrees(m_gyro.getYawAxis());
+  }
 
   public double getHeadingWrappedDegrees() {
-        return MathUtil.inputModulus(getYaw().getDegrees(), -180, 180);
-    }
+    return MathUtil.inputModulus(getYaw().getDegrees(), -180, 180);
+  }
 }
