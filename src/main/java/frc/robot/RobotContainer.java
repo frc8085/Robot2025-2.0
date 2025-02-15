@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -23,48 +22,29 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightReefSubsystem;
+import frc.robot.commands.AutoAlignToAprilTagCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
-/*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
+  private final LimelightReefSubsystem m_limelightReefSubsystem = new LimelightReefSubsystem();
 
-  // The driver's controller
+  // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
 
-  public void adjustJoystickValues() {
-    double rawX = m_driverController.getLeftX();
-    double rawY = m_driverController.getLeftY();
-
-
-  }
-
-    
-    
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
-    // Configure default commands
+    // Configure default drive command for the drive subsystem.
     m_robotDrive.setDefaultCommand(
-        // The right trigger controls the speed of the robot.
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
                 MathUtil.applyDeadband(m_driverController.getRightTriggerAxis(), OIConstants.kDriveDeadband),
@@ -76,27 +56,19 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
+   * Use this method to define your button->command mappings.
    */
-
-
-
-  private void configureButtonBindings(){
+  private void configureButtonBindings() {
+    // CoralSubsystem commands
     new JoystickButton(m_operatorController, Button.kX.value)
-    .onTrue(new RunCommand(()->m_CoralSubsystem.pickup(), m_CoralSubsystem))
-    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
+        .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
+        .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
     new JoystickButton(m_operatorController, Button.kY.value)
-    .onTrue(new RunCommand(()->m_CoralSubsystem.eject(), m_CoralSubsystem))
-    .onFalse(new RunCommand(()->m_CoralSubsystem.stop(), m_CoralSubsystem));
-    // new JoystickButton(m_driverController, Button.kRightBumper)
-    // .onTrue(new RunCommand(()->, null)))
-}
+        .onTrue(new RunCommand(() -> m_CoralSubsystem.eject(), m_CoralSubsystem))
+        .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
+    new JoystickButton(m_operatorController, Button.kB.value)
+        .onTrue(new AutoAlignToAprilTagCommand(m_robotDrive, m_limelightReefSubsystem));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -108,8 +80,8 @@ public class RobotContainer {
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DriveConstants.kDriveKinematics);
 
     // An example trajectory to follow. All units in meters.
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -129,7 +101,6 @@ public class RobotContainer {
         exampleTrajectory,
         m_robotDrive::getPose, // Functional interface to feed supplier
         DriveConstants.kDriveKinematics,
-
         // Position controllers
         new PIDController(AutoConstants.kPXController, 0, 0),
         new PIDController(AutoConstants.kPYController, 0, 0),

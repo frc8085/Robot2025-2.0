@@ -82,16 +82,16 @@ public RawFiducial getFiducialWithId(int id, boolean verbose) {
   }
 
   public double getTX(){
-    return LimelightHelpers.getTX(VisionConstants.LIMELIGHT_NAME);
+    return LimelightHelpers.getTX(VisionConstants.REEFLIMELIGHT_NAME);
   }
   public double getTY(){
-    return LimelightHelpers.getTY(VisionConstants.LIMELIGHT_NAME);
+    return LimelightHelpers.getTY(VisionConstants.REEFLIMELIGHT_NAME);
   }
   public double getTA(){
-    return LimelightHelpers.getTA(VisionConstants.LIMELIGHT_NAME);
+    return LimelightHelpers.getTA(VisionConstants.REEFLIMELIGHT_NAME);
   }
   public boolean getTV(){
-    return LimelightHelpers.getTV(VisionConstants.LIMELIGHT_NAME);
+    return LimelightHelpers.getTV(VisionConstants.REEFLIMELIGHT_NAME);
   }
 
   public double getClosestTX(){

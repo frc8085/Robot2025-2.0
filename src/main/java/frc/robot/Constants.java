@@ -152,4 +152,8 @@ public static final class ClimberConstants {
     public static final boolean kAlgaeTuning = false;
     public static final boolean kCoralTuning = false;
 }
+
+public static class VisionConstants {
+  public static final String REEFLIMELIGHT_NAME = "REEFLL";
+}
 }

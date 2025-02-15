@@ -197,12 +197,7 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public Rotation2d getYaw() {
-    return (DriveConstants.kGyroReversed) ? Rotation2d.fromDegrees((360 - m_gyro.getYaw().getValueAsDouble()))
-        : Rotation2d.fromDegrees(m_gyro.getYawAxis());
-  }
-
   public double getHeadingWrappedDegrees() {
-    return MathUtil.inputModulus(getYaw().getDegrees(), -180, 180);
+    return MathUtil.inputModulus(getHeading(), -180, 180);
   }
 }
