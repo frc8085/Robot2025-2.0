@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -103,6 +104,21 @@ public class RobotContainer {
                 new JoystickButton(m_operatorController, Button.kY.value)
                                 .onTrue(new RunCommand(() -> m_PivotArm.setPos(Rotation2d.fromRotations(0)),
                                                 m_PivotArm));
+
+                /*
+                 * Dpad Controls
+                 * Angle 0 = UP
+                 * Angle 90 = RIGHT
+                 * Angle 180 = DOWN
+                 * Angle 270 = LEFT
+                 */
+
+                new POVButton(m_operatorController, 90)
+                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.start(), m_ClimberSubsystem))
+                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+                new POVButton(m_operatorController, 270)
+                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
+                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
 
                 // elevator subsystem
                 new JoystickButton(m_operatorController, Button.kA.value)

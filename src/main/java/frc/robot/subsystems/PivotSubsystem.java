@@ -63,4 +63,16 @@ public class PivotSubsystem extends SubsystemBase {
         setPos(Rotation2d.fromRotations(target));
 
     }
+
+    public void start() {
+
+    }
+
+    public void reverse() {
+
+    }
+
+    public void stop() {
+
+    }
 }
