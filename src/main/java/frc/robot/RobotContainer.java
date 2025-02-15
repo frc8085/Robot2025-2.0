@@ -114,11 +114,11 @@ public class RobotContainer {
                  */
 
                 new POVButton(m_operatorController, 90)
-                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.start(), m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+                                .onTrue(new RunCommand(() -> m_PivotArm.start(), m_PivotArm))
+                                .onFalse(new RunCommand(() -> m_PivotArm.stop(), m_PivotArm));
                 new POVButton(m_operatorController, 270)
-                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.reverse(), m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+                                .onTrue(new RunCommand(() -> m_PivotArm.reverse(), m_PivotArm))
+                                .onFalse(new RunCommand(() -> m_PivotArm.stop(), m_PivotArm));
 
                 // elevator subsystem
                 new JoystickButton(m_operatorController, Button.kA.value)
