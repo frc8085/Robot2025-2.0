@@ -53,6 +53,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   }
 
+  private double inchesToMotorPosition(double inches) {
+    return inches * Constants.ElevatorConstants.kElevatorMotorGearRatio;
+  }
+
+  private double motorPositionToInches(double motorPosition) {
+    return motorPosition / Constants.ElevatorConstants.kElevatorMotorGearRatio;
+  }
+
   // Setting the height of the elevator
   public void setPos(double inches) {
 
@@ -75,7 +83,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       ff = ElevatorConstants.kElevatorStage2FF;
     }
 
-    motionMagicControl.Position = inches * Constants.ElevatorConstants.kElevatorMotorGearRatio;
+    motionMagicControl.Position = inchesToMotorPosition(inches);
     motionMagicControl.FeedForward = ff;
     m_elevatorMotor.setControl(motionMagicControl);
     SmartDashboard.putNumber("height value", inches);
@@ -95,7 +103,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // translate the current elevator encoder position into elevator height
   public double getCurrentHeight() {
-    return (getCurrentMotorPosition() / Constants.ElevatorConstants.kElevatorMotorGearRatio);
+    return (motorPositionToInches(getCurrentMotorPosition()));
+  }
+
+  public boolean targetInDangerZone(double target_height) {
+    return target_height < Constants.ElevatorConstants.kElevatorSafeHeight;
+  }
+
+  public boolean inDangerZone() {
+    return targetInDangerZone(getCurrentHeight());
+  }
+
+  public boolean atTarget(double tolerance_inches) {
+    return Math.abs(getCurrentHeight() - motorPositionToInches(motionMagicControl.Position)) < tolerance_inches;
   }
 
   public void periodic() {

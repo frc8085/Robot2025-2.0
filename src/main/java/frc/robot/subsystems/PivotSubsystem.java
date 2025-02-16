@@ -111,14 +111,40 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotor.set(0);
     }
 
-    // checks whether the pivot arm is in the danger zone
-    public boolean inDangerZone() {
-        return getCurrentRotation().getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                || getCurrentRotation().getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax
-                        .getDegrees();
+    // checks whether the pivot arm is in the danger zone for the elevator at target
+    // angle
+    public boolean targetInDangerZone(Rotation2d targetAngle) {
+        return targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                || targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees();
     }
 
-    public boolean EndInDangerZone
+    public boolean inDangerZone() {
+        return targetInDangerZone(getCurrentRotation());
+    }
+
+    public boolean willPivotThroughDangerZone(Rotation2d targetAngle) {
+        var result = false;
+
+        // check if the start and/or end position is in the danger zone
+        if (targetInDangerZone(targetAngle) || inDangerZone()) {
+            result = true;
+        }
+
+        // check if the pivot will pass through the danger zone
+        // AKA: if the current position is between the target and the danger zone
+
+        // check if the current position is on one side of the danger zone, and the
+        // target is on the other
+        if ((getCurrentRotation().getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                && targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()) ||
+                (getCurrentRotation().getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
+                        && targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMin
+                                .getDegrees())) {
+            result = true;
+        }
+
+        return result;
+    }
 
     public void holdPivotArm() {
         Rotation2d targetAngle = getCurrentRotation();
