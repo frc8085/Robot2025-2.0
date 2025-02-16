@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -141,6 +142,9 @@ public final class Constants {
     public static final double kPivotArmD = 0.1; // 0.1
     public static final double kPivotArmV = 0.12; // 0.12
     public static final double kPivotArmA = 0.01; // 0.01
+
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-120);
+    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
 
   }
 

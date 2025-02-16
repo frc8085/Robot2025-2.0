@@ -81,7 +81,11 @@ public class RobotContainer {
                                                                                 OIConstants.kDriveDeadband),
                                                                 true),
                                                 m_robotDrive));
-                SmartDashboard.putData(new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
+                SmartDashboard.putData("Zero Pivot Arm",
+                                new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
+                SmartDashboard.putData("Start Tuning Pivot", new InstantCommand(() -> m_PivotArm.StartTuning()));
+                SmartDashboard.putData("Read Tuning", new InstantCommand(() -> m_PivotArm.readTuningFromDashboard()));
+
         }
 
         /**
