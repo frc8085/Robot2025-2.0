@@ -83,9 +83,14 @@ public class RobotContainer {
                                                 m_robotDrive));
                 SmartDashboard.putData("Zero Pivot Arm",
                                 new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
-                SmartDashboard.putData("Start Tuning Pivot", new InstantCommand(() -> m_PivotArm.StartTuning()));
-                SmartDashboard.putData("Read Tuning", new InstantCommand(() -> m_PivotArm.readTuningFromDashboard()));
-
+                SmartDashboard.putData("Set Arm 30",
+                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(30))));
+                SmartDashboard.putData("Set Arm 0",
+                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(0))));
+                SmartDashboard.putData("Set Arm -60",
+                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(-60))));
+                SmartDashboard.putData("Set Arm -120",
+                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(-120))));
         }
 
         /**
