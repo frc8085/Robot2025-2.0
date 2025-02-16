@@ -65,7 +65,7 @@ class Windmill extends SequentialCommandGroup {
                     new ParallelCommandGroup(
                             new Elevator(elevatorSubsystem, targetHeight),
                             new SequentialCommandGroup(
-                                    new WaitUntilCommand(
+                                    new WaitUntilCommand(() -> !pivotSubsystem.inDangerZone()),
                                     new Pivot(pivotSubsystem, targetAngle))));
             return;
         }
