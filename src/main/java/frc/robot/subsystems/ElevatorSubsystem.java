@@ -124,17 +124,17 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget(double tolerance_rotations) {
-    return Math.abs(getCurrentHeight() - motorPositionToInches(motionMagicControl.Position)) < tolerance_rotations;
+    return Math.abs(getCurrentMotorPosition() - motionMagicControl.Position) < tolerance_rotations;
   }
 
-  public void periodic() {
+  public void periodi2c() {
     // display encoder readings on dashboard
     SmartDashboard.putNumber("current Motor Position", getCurrentMotorPosition());
     // SmartDashboard.putNumber("current Height", getCurrentHeight());
 
   }
 
-  // turn off elevator
+  // turn off elevator (stops motor all together)
   public void stop() {
     m_elevatorMotor.set(0);
   }

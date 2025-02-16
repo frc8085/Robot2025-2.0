@@ -178,6 +178,52 @@ public final class Constants {
 
   }
 
+  public static final class Windmill {
+
+    public static enum WindmillState {
+
+      Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-90)),
+      CoralPickup(20, Rotation2d.fromDegrees(-90)),
+      // coral dropoff happens on both sides
+      CoralDropOff1(20, Rotation2d.fromDegrees(-90), true),
+      CoralDropOff2(20, Rotation2d.fromDegrees(-90), true),
+      CoralDropOff3(20, Rotation2d.fromDegrees(-90), true),
+      CoralDropOff4(20, Rotation2d.fromDegrees(-90), true),
+      AlgaePickUpFloor(5, Rotation2d.fromDegrees(-120)),
+      AlgaePickUpReef2(10, Rotation2d.fromDegrees(-120)),
+      AlgaePickUpReef3(20, Rotation2d.fromDegrees(-120)),
+      AlgaeNet(40, Rotation2d.fromDegrees(-120));
+
+      private double kElevatorHeight;
+      private Rotation2d kPivotArmAngle;
+      private boolean canMirror = false;
+
+      private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle) {
+        this.kElevatorHeight = kElevatorHeight;
+        this.kPivotArmAngle = kPivotArmAngle;
+      }
+
+      private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle, boolean canMirror) {
+        this.kElevatorHeight = kElevatorHeight;
+        this.kPivotArmAngle = kPivotArmAngle;
+        this.canMirror = canMirror;
+      }
+
+      public double getElevatorHeight() {
+        return kElevatorHeight;
+      }
+
+      public Rotation2d getPivotArmAngle() {
+        return kPivotArmAngle;
+      }
+
+      public boolean canMirror() {
+        return canMirror;
+      }
+
+    }
+  }
+
   public static final class CoralConstants {
     public static final int coralCurrentLimit = 20;
     public static final double kCoralSpeed = 1;

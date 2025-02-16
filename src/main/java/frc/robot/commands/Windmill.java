@@ -4,17 +4,19 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-// import frc.robot.commands.Pivot;
+import frc.robot.commands.Pivot;
 import frc.robot.commands.Elevator;
 
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
+import frc.robot.Constants.Windmill.WindmillState;
 
 class Windmill extends SequentialCommandGroup {
 
-    public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, double targetHeight,
+    private void constructWindmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
+            double targetHeight,
             Rotation2d targetAngle) {
         // check to see if the elevator and pivot are going to clash with each other
         boolean pivotThroughDangerZone = pivotSubsystem.willPivotThroughDangerZone(targetAngle);
@@ -69,7 +71,19 @@ class Windmill extends SequentialCommandGroup {
                                     new Pivot(pivotSubsystem, targetAngle))));
             return;
         }
+    }
 
+    public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, double targetHeight,
+            Rotation2d targetAngle) {
+        constructWindmill(elevatorSubsystem, pivotSubsystem, targetHeight, targetAngle);
+    }
+
+    public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, WindmillState windmillState,
+            boolean mirrored) {
+        if (mirrored && windmillState.canMirror()) {
+
+        }
+        constructWindmill(elevatorSubsystem, pivotSubsystem, windmillState.getElevatorHeight(), windmillState.getPivotArmAngle());
     }
 
     private Command ParallelCommandGroup(Elevator elevator, Pivot pivot) {
