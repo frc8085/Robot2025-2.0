@@ -53,46 +53,54 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   }
 
-  private double inchesToMotorPosition(double inches) {
-    return inches * Constants.ElevatorConstants.kElevatorMotorGearRatio;
-  }
+  // private double rotationsToMotorPosition(double rotations) {
+  // return rotations * Constants.ElevatorConstants.kElevatorMotorGearRatio;
+  // }
 
-  private double motorPositionToInches(double motorPosition) {
-    return motorPosition / Constants.ElevatorConstants.kElevatorMotorGearRatio;
-  }
+  // private double motorPositionToInches(double motorPosition) {
+  // return motorPosition / Constants.ElevatorConstants.kElevatorMotorGearRatio;
+  // }
 
   // Setting the height of the elevator
-  public void setPos(double inches) {
+  // public void setPos(double rotations) {
+  public void setPos(double rotations) {
 
     // Checks to see if the elevator height is below the minimum, and if it is, set
     // it to the minimum and
     // check to see if the elevator height is above the maximum, and if it is, set
     // it to the maximum
 
-    if (inches < Constants.ElevatorConstants.kElevatorMin) {
-      inches = Constants.ElevatorConstants.kElevatorMin;
-    } else if (inches > Constants.ElevatorConstants.kElevatorMax) {
-      inches = Constants.ElevatorConstants.kElevatorMax;
+    if (rotations < Constants.ElevatorConstants.kElevatorMin) {
+      rotations = Constants.ElevatorConstants.kElevatorMin;
+    } else if (rotations > Constants.ElevatorConstants.kElevatorMax) {
+      rotations = Constants.ElevatorConstants.kElevatorMax;
     }
 
     // set the feedforward value based on the elevator height
     double ff = 0;
-    if (inches > ElevatorConstants.kElevatorStage2Height) {
+    if (rotations > ElevatorConstants.kElevatorStage2Height) {
       ff = ElevatorConstants.kElevatorStage3FF;
-    } else if (inches > Constants.ElevatorConstants.kElevatorStage1Height) {
+    } else if (rotations > Constants.ElevatorConstants.kElevatorStage1Height) {
       ff = ElevatorConstants.kElevatorStage2FF;
     }
 
-    motionMagicControl.Position = inchesToMotorPosition(inches);
+    // motionMagicControl.Position = rotationsToMotorPosition(rotations);
+    motionMagicControl.Position = rotations;
     motionMagicControl.FeedForward = ff;
     m_elevatorMotor.setControl(motionMagicControl);
-    SmartDashboard.putNumber("height value", inches);
+    // SmartDashboard.putNumber("height value", rotations);
+    // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
   }
 
   // set the zero value of the motor encoder
-  public void zero(double inches) {
+  // public void zero(double rotations) {
+  // m_elevatorMotor.setPosition(
+  // rotations * Constants.ElevatorConstants.kElevatorMotorGearRatio);
+  // }
+
+  public void zero(double rotations) {
     m_elevatorMotor.setPosition(
-        inches * Constants.ElevatorConstants.kElevatorMotorGearRatio);
+        rotations);
   }
 
   // read the current elevator encoder position
@@ -101,27 +109,28 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorPosition.getValueAsDouble();
   }
 
-  // translate the current elevator encoder position into elevator height
-  public double getCurrentHeight() {
-    return (motorPositionToInches(getCurrentMotorPosition()));
-  }
+  // // translate the current elevator encoder position into elevator height
+  // public double getCurrentHeight() {
+  // // return (motorPositionToInches(getCurrentMotorPosition()));
+  // return getCurrentMotorPosition();
+  // }
 
-  public boolean targetInDangerZone(double target_height) {
-    return target_height < Constants.ElevatorConstants.kElevatorSafeHeight;
+  public boolean targetInDangerZone(double target_position) {
+    return target_position < Constants.ElevatorConstants.kElevatorSafeHeight;
   }
 
   public boolean inDangerZone() {
-    return targetInDangerZone(getCurrentHeight());
+    return targetInDangerZone(getCurrentMotorPosition());
   }
 
-  public boolean atTarget(double tolerance_inches) {
-    return Math.abs(getCurrentHeight() - motorPositionToInches(motionMagicControl.Position)) < tolerance_inches;
+  public boolean atTarget(double tolerance_rotations) {
+    return Math.abs(getCurrentHeight() - motorPositionToInches(motionMagicControl.Position)) < tolerance_rotations;
   }
 
   public void periodic() {
     // display encoder readings on dashboard
     SmartDashboard.putNumber("current Motor Position", getCurrentMotorPosition());
-    SmartDashboard.putNumber("current Height", getCurrentHeight());
+    // SmartDashboard.putNumber("current Height", getCurrentHeight());
 
   }
 
@@ -140,7 +149,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void holdHeight() {
-    double targetPosition = getCurrentHeight();
+    // double targetPosition = getCurrentHeight();
+    double targetPosition = getCurrentMotorPosition();
     setPos(targetPosition);
   }
 }

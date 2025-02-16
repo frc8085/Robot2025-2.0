@@ -84,7 +84,8 @@ public class RobotContainer {
                                                                 true),
                                                 m_robotDrive));
                 SmartDashboard.putData("Zero Elevator",
-                                new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
+                                new InstantCommand(() -> m_ElevatorSubsystem
+                                                .zero(Constants.ElevatorConstants.kElevatorStage1Height)));
                 SmartDashboard.putData("Zero Pivot Arm",
                                 new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
                 SmartDashboard.putData("Set Arm 30",

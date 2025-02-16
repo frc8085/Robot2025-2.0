@@ -128,7 +128,7 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final double kElevatorMotorGearRatio = 28 / 31;
+    public static final double kElevatorMotorGearRatio = 5;
     public static double kElevatorSpeed = .25;
     public static double kElevatorP = 4;
     public static double kElevatorI = 0;
@@ -139,14 +139,15 @@ public final class Constants {
     public static double kElevatorStage3FF = 0.38;
 
     public static double kElevatorMMVelo = 75;
-    public static double kElevatorMMAcc = 120;
+    public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
     // Determine what actual height values these are and/or what encoder readings
+    // Stage Height refers to top of stage value
     public static final double kElevatorMin = 6;
-    public static final double kElevatorStage1Height = 31;
-    public static final double kElevatorStage2Height = 60;
-    public static final double kElevatorMax = 72;
+    public static final double kElevatorStage1Height = 26; // zero position value
+    public static final double kElevatorStage2Height = 26 + 35;
+    public static final double kElevatorMax = 26 + 55;
 
     /// The minimum height of the elevator that the pivot arm can swing through
     public static final double kElevatorSafeHeight = 29; // TODO setup real values
