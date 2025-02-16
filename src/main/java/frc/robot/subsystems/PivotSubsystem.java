@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotArmConstants;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -49,6 +50,14 @@ public class PivotSubsystem extends SubsystemBase {
 
     }
 
+    private Rotation2d motorPosToAngle(double pos) {
+        return Rotation2d.fromRotations(pos / Constants.PivotArmConstants.kPivotMotorGearRatio);
+    }
+
+    private double angleToMotorPos(Rotation2d angle) {
+        return angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio;
+    }
+
     public void setPos(Rotation2d angle) {
 
         if (angle.getRotations() < Constants.PivotArmConstants.kPivotArmMin.getRotations()) {
@@ -57,7 +66,9 @@ public class PivotSubsystem extends SubsystemBase {
             angle = Constants.PivotArmConstants.kPivotArmMax;
         }
 
-        motionMagicControl.Position = angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio;
+        // motionMagicControl.Position = angle.getRotations() *
+        // Constants.PivotArmConstants.kPivotMotorGearRatio;
+        motionMagicControl.Position = angleToMotorPos(angle);
         m_pivotMotor.setControl(motionMagicControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
     }
@@ -71,8 +82,14 @@ public class PivotSubsystem extends SubsystemBase {
         return pivotArmPosition.getValueAsDouble();
     }
 
+    public boolean isAtTarget(Rotation2d tolerance) {
+        return Math.abs(getCurrentRotation().getRotations()
+                - motorPosToAngle(motionMagicControl.Position).getRotations()) < tolerance.getRotations();
+
+    }
+
     public Rotation2d getCurrentRotation() {
-        return Rotation2d.fromRotations(getCurrentPosition() / Constants.PivotArmConstants.kPivotMotorGearRatio);
+        return motorPosToAngle(getCurrentPosition());
     }
 
     public void periodic() {
@@ -83,14 +100,29 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void start() {
-
+        m_pivotMotor.set(PivotArmConstants.kPivotArmSpeed);
     }
 
     public void reverse() {
-
+        m_pivotMotor.set(-PivotArmConstants.kPivotArmSpeed);
     }
 
     public void stop() {
-
+        m_pivotMotor.set(0);
     }
+
+    // checks whether the pivot arm is in the danger zone
+    public boolean inDangerZone() {
+        return getCurrentRotation().getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                || getCurrentRotation().getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax
+                        .getDegrees();
+    }
+
+    public boolean EndInDangerZone
+
+    public void holdPivotArm() {
+        Rotation2d targetAngle = getCurrentRotation();
+        setPos(targetAngle);
+    }
+
 }
