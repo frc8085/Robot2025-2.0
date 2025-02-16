@@ -25,13 +25,16 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public final class Constants {
   public static final class CanIdConstants {
     public static final int kGyroCanId = 15;
+
     public static final int kCoralCanId = 21;
-
     public static final int kAlgaeCanId = 22;
-    public static final int kElevatorCanId = 23;
-
     public static final int kClimberCanId = 24;
+
+    public static final int kElevatorCanId = 23;
     public static final int kPivotArmCanId = 25;
+
+    public static final int kElevatorCancoderCanID = 33;
+    public static final int kPivotArmCancoderCanID = 35;
   }
 
   public static final class DriveConstants {
@@ -132,6 +135,7 @@ public final class Constants {
 
   public static final class PivotArmConstants {
 
+    public static final double kPivotMotorGearRatio = 27;
     public static final double kPivotArmP = 0.7; // 0.7
     public static final double kPivotArmI = 0; // 0.0
     public static final double kPivotArmD = 0.1; // 0.1

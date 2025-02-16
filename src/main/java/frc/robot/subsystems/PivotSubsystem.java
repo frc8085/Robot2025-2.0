@@ -10,18 +10,18 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.PivotArmConstants;
 
 public class PivotSubsystem extends SubsystemBase {
-    private final TalonFX m_pivotMotor = new TalonFX(25, "rio");
+    private final TalonFX m_pivotMotor = new TalonFX(Constants.CanIdConstants.kPivotArmCanId, "rio");
     TalonFXConfiguration config = new TalonFXConfiguration();
-    private final CANcoder m_pivotEncoder = new CANcoder(35);
+    private final CANcoder m_pivotEncoder = new CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanID);
 
     private MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
 
     public PivotSubsystem() {
 
-        m_pivotMotor.getConfigurator().apply(config);
         var slot0Configs = new Slot0Configs();
         slot0Configs.kP = PivotArmConstants.kPivotArmP;
         slot0Configs.kI = PivotArmConstants.kPivotArmI;
@@ -36,12 +36,13 @@ public class PivotSubsystem extends SubsystemBase {
         // expirementing with encoder
         // config.Feedback.
 
+        m_pivotMotor.getConfigurator().apply(config);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
 
     }
 
     public void setPos(Rotation2d angle) {
-        motionMagicControl.Position = angle.getRotations();
+        motionMagicControl.Position = angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio;
         m_pivotMotor.setControl(motionMagicControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
     }
@@ -57,11 +58,10 @@ public class PivotSubsystem extends SubsystemBase {
     public void periodic() {
         // Get motor readings
         SmartDashboard.putNumber("currentPosition", getCurrentPosition());
+        SmartDashboard.putNumber("currentAngle",
+                getCurrentPosition() / Constants.PivotArmConstants.kPivotMotorGearRatio);
         // get a number to
         double target = SmartDashboard.getNumber("Pivot Target", 0);
-
-        setPos(Rotation2d.fromRotations(target));
-
     }
 
     public void start() {
