@@ -7,12 +7,12 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
-import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
 import frc.robot.Constants;
 import frc.robot.Constants.PivotArmConstants;
 
@@ -34,9 +34,12 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.MotionMagic.MotionMagicCruiseVelocity = 25;
-        config.MotionMagic.MotionMagicAcceleration = 60;
-        config.MotionMagic.MotionMagicJerk = 1600;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        config.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
+        config.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
+        config.MotionMagic.MotionMagicJerk = Constants.PivotArmConstants.kPivotArmMMJerk;
+
         // expirementing with encoder
         // config.Feedback.
         pivotArmPosition = m_pivotMotor.getPosition();
@@ -72,22 +75,11 @@ public class PivotSubsystem extends SubsystemBase {
         return Rotation2d.fromRotations(getCurrentPosition() / Constants.PivotArmConstants.kPivotMotorGearRatio);
     }
 
-    public void StartTuning() {
-        SmartDashboard.putNumber("Coral Position", 0);
-    }
-
-    public void readTuningFromDashboard() {
-        double CoralPosition = SmartDashboard.getNumber("Coral Position", 0);
-        setPos(Rotation2d.fromDegrees(CoralPosition));
-
-    }
-
     public void periodic() {
         // Get motor readings
         SmartDashboard.putNumber("currentPosition", getCurrentPosition());
         SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
-        // get a number to
-        double target = SmartDashboard.getNumber("Pivot Target", 0);
+
     }
 
     public void start() {

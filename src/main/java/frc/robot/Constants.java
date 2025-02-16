@@ -128,10 +128,24 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static double kElevatorSpeed = .5;
-    public static double kElevatorP = 0.1;
+    public static final double kElevatorMotorGearRatio = 28 / 31;
+    public static double kElevatorSpeed = .25;
+    public static double kElevatorP = 4;
     public static double kElevatorI = 0;
     public static double kElevatorD = 0;
+    public static double kElevatorV = .12;
+    public static double kElevatorA = .01;
+    public static double kElevatorStage2FF = 0.19;
+    public static double kElevatorStage3FF = 0.38;
+
+    public static double kElevatorMMVelo = 75;
+    public static double kElevatorMMAcc = 120;
+    public static double kElevatorMMJerk = 1600;
+
+    public static final double kElevatorMin = 6;
+    public static final double kElevatorStage1Height = 31;
+    public static final double kElevatorStage2Height = 60;
+    public static final double kElevatorMax = 72;
   }
 
   public static final class PivotArmConstants {
@@ -142,6 +156,10 @@ public final class Constants {
     public static final double kPivotArmD = 0.1; // 0.1
     public static final double kPivotArmV = 0.12; // 0.12
     public static final double kPivotArmA = 0.01; // 0.01
+
+    public static double kPivotArmMMVelo = 25;
+    public static double kPivotArmMMAcc = 60;
+    public static double kPivotArmMMJerk = 1600;
 
     public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-120);
     public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);

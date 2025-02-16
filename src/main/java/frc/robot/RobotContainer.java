@@ -81,6 +81,8 @@ public class RobotContainer {
                                                                                 OIConstants.kDriveDeadband),
                                                                 true),
                                                 m_robotDrive));
+                SmartDashboard.putData("Zero Elevator",
+                                new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
                 SmartDashboard.putData("Zero Pivot Arm",
                                 new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
                 SmartDashboard.putData("Set Arm 30",
@@ -130,11 +132,14 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> m_PivotArm.stop(), m_PivotArm));
 
                 // elevator subsystem
-                new JoystickButton(m_operatorController, Button.kA.value)
-                                .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveUp(), m_ElevatorSubsystem));
-                new JoystickButton(m_operatorController, Button.kB.value)
-                                .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveDown(), m_ElevatorSubsystem))
-                                .onFalse(new RunCommand(() -> m_ElevatorSubsystem.stop(), m_ElevatorSubsystem));
+                // new POVButton(m_operatorController, 0)
+                // .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveUp(),
+                // m_ElevatorSubsystem));
+                // new POVButton(m_operatorController, 180)
+                // .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveDown(),
+                // m_ElevatorSubsystem))
+                // .onFalse(new RunCommand(() -> m_ElevatorSubsystem.stop(),
+                // m_ElevatorSubsystem));
 
         }
 
