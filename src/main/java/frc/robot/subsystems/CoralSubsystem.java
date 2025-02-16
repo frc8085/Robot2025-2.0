@@ -21,7 +21,7 @@ public class CoralSubsystem extends SubsystemBase {
 
   // import motor id
   private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId,
-      MotorDefaultsConstants.Neo550MotorType);
+      MotorDefaultsConstants.NeoMotorType);
 
   private double kSpeed = CoralConstants.kCoralSpeed;
 

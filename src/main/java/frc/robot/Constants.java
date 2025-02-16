@@ -62,14 +62,14 @@ public final class Constants {
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 4;
+    public static final int kRearLeftDrivingCanId = 3;
     public static final int kFrontRightDrivingCanId = 2;
-    public static final int kRearRightDrivingCanId = 3;
+    public static final int kRearRightDrivingCanId = 4;
 
     public static final int kFrontLeftTurningCanId = 11;
-    public static final int kRearLeftTurningCanId = 14;
+    public static final int kRearLeftTurningCanId = 13;
     public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 13;
+    public static final int kRearRightTurningCanId = 14;
 
     public static final boolean kGyroReversed = false;
   }
@@ -142,15 +142,21 @@ public final class Constants {
     public static double kElevatorMMAcc = 120;
     public static double kElevatorMMJerk = 1600;
 
+    // Determine what actual height values these are and/or what encoder readings
     public static final double kElevatorMin = 6;
     public static final double kElevatorStage1Height = 31;
     public static final double kElevatorStage2Height = 60;
     public static final double kElevatorMax = 72;
+
+    /// The minimum height of the elevator that the pivot arm can swing through
+    public static final double kElevatorSafeHeight = 29; // TODO setup real values
   }
 
   public static final class PivotArmConstants {
 
     public static final double kPivotMotorGearRatio = 27;
+    public static double kPivotArmSpeed = .25;
+
     public static final double kPivotArmP = 0.7; // 0.7
     public static final double kPivotArmI = 0; // 0.0
     public static final double kPivotArmD = 0.1; // 0.1
@@ -163,6 +169,11 @@ public final class Constants {
 
     public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-120);
     public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
+
+    /// The min/max angle of the pivot that will be rotating through the path of the
+    /// elevator
+    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-20); // TODO setup real values
+    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(-120); // TODO setup real values
 
   }
 

@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -44,6 +45,7 @@ public class RobotContainer {
         private final DriveSubsystem m_robotDrive = new DriveSubsystem();
         private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
         private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+        private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
 
         // The driver's controller
         XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -116,6 +118,13 @@ public class RobotContainer {
                                 .onTrue(new RunCommand(() -> m_PivotArm.setPos(Rotation2d.fromRotations(0)),
                                                 m_PivotArm));
 
+                new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(), m_ClimberSubsystem))
+                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+
+                new JoystickButton(m_operatorController, Button.kRightBumper.value)
+                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(), m_ClimberSubsystem))
+                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
                 /*
                  * Dpad Controls
                  * Angle 0 = UP
@@ -125,22 +134,23 @@ public class RobotContainer {
                  */
 
                 new POVButton(m_operatorController, 90)
-                                .onTrue(new RunCommand(() -> m_PivotArm.start(), m_PivotArm))
-                                .onFalse(new RunCommand(() -> m_PivotArm.stop(), m_PivotArm));
+                                .whileTrue(new RunCommand(() -> m_PivotArm.start(), m_PivotArm))
+                                .onFalse(new RunCommand(() -> m_PivotArm.holdPivotArm(), m_PivotArm));
                 new POVButton(m_operatorController, 270)
-                                .onTrue(new RunCommand(() -> m_PivotArm.reverse(), m_PivotArm))
-                                .onFalse(new RunCommand(() -> m_PivotArm.stop(), m_PivotArm));
+                                .whileTrue(new RunCommand(() -> m_PivotArm.reverse(), m_PivotArm))
+                                .onFalse(new RunCommand(() -> m_PivotArm.holdPivotArm(), m_PivotArm));
 
                 // elevator subsystem
-                // new POVButton(m_operatorController, 0)
-                // .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveUp(),
-                // m_ElevatorSubsystem));
-                // new POVButton(m_operatorController, 180)
-                // .onTrue(new RunCommand(() -> m_ElevatorSubsystem.moveDown(),
-                // m_ElevatorSubsystem))
-                // .onFalse(new RunCommand(() -> m_ElevatorSubsystem.stop(),
-                // m_ElevatorSubsystem));
-
+                new POVButton(m_operatorController, 0)
+                                .whileTrue(new RunCommand(() -> m_ElevatorSubsystem.moveUp(),
+                                                m_ElevatorSubsystem))
+                                .onFalse(new InstantCommand(() -> m_ElevatorSubsystem.holdHeight(),
+                                                m_ElevatorSubsystem));
+                new POVButton(m_operatorController, 180)
+                                .whileTrue(new RunCommand(() -> m_ElevatorSubsystem.moveDown(),
+                                                m_ElevatorSubsystem))
+                                .onFalse(new InstantCommand(() -> m_ElevatorSubsystem.holdHeight(),
+                                                m_ElevatorSubsystem));
         }
 
         /**

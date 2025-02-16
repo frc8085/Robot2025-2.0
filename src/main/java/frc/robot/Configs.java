@@ -64,7 +64,7 @@ public final class Configs {
 
                         coralConfig
                                         .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(20);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoCurrentLimit);
                 }
         }
 
@@ -73,7 +73,7 @@ public final class Configs {
 
                 static {
                         algaeConfig.idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(20);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.Neo550CurrentLimit);
 
                         algaeConfig.encoder
                                         .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
@@ -87,14 +87,14 @@ public final class Configs {
                 }
         }
 
-        public static final class ClimberManipulator {
+        public static final class Climber {
                 public static final SparkFlexConfig climberConfig = new SparkFlexConfig();
 
                 static {
 
                         climberConfig
                                         .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(20);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoVortexCurrentLimit);
                         climberConfig.closedLoop
                                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                                         // These are example gains you may need to them for your own robot!
