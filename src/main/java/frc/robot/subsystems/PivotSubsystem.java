@@ -4,26 +4,29 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configs;
 import frc.robot.Constants;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotArmConstants;
 
 public class PivotSubsystem extends SubsystemBase {
     private final TalonFX m_pivotMotor = new TalonFX(Constants.CanIdConstants.kPivotArmCanId, "rio");
     private StatusSignal<Angle> pivotArmPosition;
+    private StatusSignal<AngularVelocity> pivotArmVelocity;
     TalonFXConfiguration config = new TalonFXConfiguration();
     private final CANcoder m_pivotEncoder = new CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanID);
 
-    private MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
+    private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
+
+    private MotionMagicVelocityVoltage motionMagicVeloctiyControl = new MotionMagicVelocityVoltage(0);
 
     public PivotSubsystem() {
 
@@ -44,6 +47,7 @@ public class PivotSubsystem extends SubsystemBase {
         // expirementing with encoder
         // config.Feedback.
         pivotArmPosition = m_pivotMotor.getPosition();
+        pivotArmVelocity = m_pivotMotor.getVelocity();
 
         m_pivotMotor.getConfigurator().apply(config);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
@@ -68,8 +72,8 @@ public class PivotSubsystem extends SubsystemBase {
 
         // motionMagicControl.Position = angle.getRotations() *
         // Constants.PivotArmConstants.kPivotMotorGearRatio;
-        motionMagicControl.Position = angleToMotorPos(angle);
-        m_pivotMotor.setControl(motionMagicControl);
+        motionMagicPositionControl.Position = angleToMotorPos(angle);
+        m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
     }
 
@@ -82,9 +86,14 @@ public class PivotSubsystem extends SubsystemBase {
         return pivotArmPosition.getValueAsDouble();
     }
 
+    public double getCurrentVelocity() {
+        pivotArmVelocity.refresh();
+        return pivotArmVelocity.getValueAsDouble();
+    }
+
     public boolean isAtTarget(Rotation2d tolerance) {
         return Math.abs(getCurrentRotation().getRotations()
-                - motorPosToAngle(motionMagicControl.Position).getRotations()) < tolerance.getRotations();
+                - motorPosToAngle(motionMagicPositionControl.Position).getRotations()) < tolerance.getRotations();
 
     }
 
@@ -100,11 +109,15 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void start() {
-        m_pivotMotor.set(PivotArmConstants.kPivotArmSpeed);
+        // m_pivotMotor.set(PivotArmConstants.kPivotArmSpeed);
+        motionMagicVeloctiyControl.Velocity = PivotArmConstants.kPivotArmSpeed;
+        m_pivotMotor.setControl(motionMagicVeloctiyControl);
     }
 
     public void reverse() {
-        m_pivotMotor.set(-PivotArmConstants.kPivotArmSpeed);
+        // m_pivotMotor.set(-PivotArmConstants.kPivotArmSpeed);
+        motionMagicVeloctiyControl.Velocity = -PivotArmConstants.kPivotArmSpeed;
+        m_pivotMotor.setControl(motionMagicVeloctiyControl);
     }
 
     public void stop() {

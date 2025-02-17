@@ -4,6 +4,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -11,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,8 +24,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   TalonFXConfiguration config = new TalonFXConfiguration();
   private final CANcoder m_elevatorEncoder = new CANcoder(Constants.CanIdConstants.kElevatorCancoderCanID);
   private StatusSignal<Angle> elevatorPosition;
+  private StatusSignal<AngularVelocity> elevatorVelocity;
 
-  private MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
+  private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
+
+  private MotionMagicVelocityVoltage motionMagicVelocityControl = new MotionMagicVelocityVoltage(0);
 
   public ElevatorSubsystem() {
 
@@ -46,6 +51,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // get sensor readings
     elevatorPosition = m_elevatorMotor.getPosition();
+    elevatorVelocity = m_elevatorEncoder.getVelocity();
 
     // Apply Configs
     m_elevatorMotor.getConfigurator().apply(config);
@@ -85,9 +91,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     // motionMagicControl.Position = rotationsToMotorPosition(rotations);
-    motionMagicControl.Position = rotations;
-    motionMagicControl.FeedForward = ff;
-    m_elevatorMotor.setControl(motionMagicControl);
+    motionMagicPositionControl.Position = rotations;
+    motionMagicVelocityControl.FeedForward = ff;
+    m_elevatorMotor.setControl(motionMagicPositionControl);
     // SmartDashboard.putNumber("height value", rotations);
     // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
   }
@@ -109,6 +115,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorPosition.getValueAsDouble();
   }
 
+  // read the current elevator encoder velocity
+  public double getCurrentMotorVelocity() {
+    elevatorVelocity.refresh();
+    return elevatorVelocity.getValueAsDouble();
+  }
+
   // // translate the current elevator encoder position into elevator height
   // public double getCurrentHeight() {
   // // return (motorPositionToInches(getCurrentMotorPosition()));
@@ -124,7 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget(double tolerance_rotations) {
-    return Math.abs(getCurrentMotorPosition() - motionMagicControl.Position) < tolerance_rotations;
+    return Math.abs(getCurrentMotorPosition() - motionMagicPositionControl.Position) < tolerance_rotations;
   }
 
   public void periodic() {
@@ -141,11 +153,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // open loop move elevator up & down
   public void moveDown() {
-    m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+    motionMagicVelocityControl.Velocity = -ElevatorConstants.kElevatorSpeed;
+    m_elevatorMotor.setControl(motionMagicVelocityControl);
   }
 
   public void moveUp() {
-    m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+    // m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+    motionMagicVelocityControl.Velocity = ElevatorConstants.kElevatorSpeed;
+    m_elevatorMotor.setControl(motionMagicVelocityControl);
   }
 
   public void holdHeight() {
