@@ -134,9 +134,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double minConflictHeight(Rotation2d target_angle) {
     var deg = Math.abs(target_angle.getRadians());
-    var diff = Constants.ElevatorConstants.kElevatorSafeHeightMax
-        - Constants.ElevatorConstants.kElevatorSafeHeightMin;
-    var minHeight = 0.004 * deg + diff;
+    var minHeight = 0.004 * deg + Constants.ElevatorConstants.kElevatorSafeHeightMin;
     if (minHeight < Constants.ElevatorConstants.kElevatorSafeHeightMin) {
       minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMin;
     } else if (minHeight > Constants.ElevatorConstants.kElevatorSafeHeightMax) {
