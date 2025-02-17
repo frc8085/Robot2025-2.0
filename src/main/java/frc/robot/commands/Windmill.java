@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -26,6 +27,7 @@ public class Windmill extends SequentialCommandGroup {
         if (elevatorEndInDangerZone && pivotEndInDangerZone) {
             // this means that the elevator and pivot are going to clash with each other
             // return nothing
+            addCommands(new PrintCommand("Elevator and Pivot will clash, Doing nothing"));
             return;
         }
 
@@ -33,6 +35,7 @@ public class Windmill extends SequentialCommandGroup {
         if (!pivotThroughDangerZone) {
             // we can move the elevator and pivot at the same time
             addCommands(
+                    new PrintCommand("Elevator and Pivot will not clash, Running in parallel"),
                     new ParallelCommandGroup(
                             new Elevator(elevatorSubsystem, targetHeight),
                             new Pivot(pivotSubsystem, targetAngle)));
@@ -47,25 +50,31 @@ public class Windmill extends SequentialCommandGroup {
                 // cannot move the elevator and pivot at the same time
                 // move elevator to safe height, then move pivot
                 addCommands(
+                        new PrintCommand("Elevator and Pivot will clash, Running Elevator then Pivot"),
                         new Elevator(elevatorSubsystem, Constants.ElevatorConstants.kElevatorSafeHeight),
                         new Pivot(pivotSubsystem, targetAngle));
             } else {
                 addCommands(
                         new ParallelCommandGroup(
+                                new PrintCommand(
+                                        "Elevator and Pivot will clash, Running Elevator and Pivot in parallel"),
                                 new Elevator(elevatorSubsystem, Constants.ElevatorConstants.kElevatorSafeHeight),
                                 new Pivot(pivotSubsystem, targetAngle)));
             }
             // then move elevator to target height
             addCommands(
+                    new PrintCommand("Moving Elevator to target height"),
                     new Elevator(elevatorSubsystem, targetHeight));
             return;
         } else {
             // elevator does not end in danger zone, but it starts in the danger zone
             addCommands(
                     new ParallelCommandGroup(
+                            new PrintCommand("Elevator and Pivot will clash, Running Elevator then Pivot in parallel"),
                             new Elevator(elevatorSubsystem, targetHeight),
                             new SequentialCommandGroup(
                                     new WaitUntilCommand(() -> !pivotSubsystem.inDangerZone()),
+                                    new PrintCommand("Pivot is out of danger zone, moving to target angle"),
                                     new Pivot(pivotSubsystem, targetAngle))));
             return;
         }

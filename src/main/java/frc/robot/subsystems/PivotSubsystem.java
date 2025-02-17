@@ -126,7 +126,7 @@ public class PivotSubsystem extends SubsystemBase {
     // angle
     public boolean targetInDangerZone(Rotation2d targetAngle) {
         return targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                || targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees();
+                && targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees();
     }
 
     public boolean inDangerZone() {
