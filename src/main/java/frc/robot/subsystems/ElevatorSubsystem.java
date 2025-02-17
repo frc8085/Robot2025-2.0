@@ -136,7 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     var deg = Math.abs(target_angle.getRadians());
     var diff = Constants.ElevatorConstants.kElevatorSafeHeightMax
         - Constants.ElevatorConstants.kElevatorSafeHeightMin;
-    return target_position < diff * deg + Constants.ElevatorConstants.kElevatorSafeHeightMin;
+    return target_position < diff * Math.sin(deg) + Constants.ElevatorConstants.kElevatorSafeHeightMin;
   }
 
   public boolean inDangerZone() {

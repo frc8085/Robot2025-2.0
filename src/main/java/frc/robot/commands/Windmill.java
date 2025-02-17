@@ -44,6 +44,8 @@ public class Windmill extends SequentialCommandGroup {
             return;
         }
 
+        // for the rest of this code, it means that the rotation needs to pivot through
+        // the danger zone
         // check if the elevator ends in the danger range
         if (elevatorEndInDangerZone) {
             // we can't move the elevator and pivot at the same time
