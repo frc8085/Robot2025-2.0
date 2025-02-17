@@ -182,8 +182,8 @@ public final class Constants {
 
     public static enum WindmillState {
 
-      Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-90)),
-      CoralPickup(20, Rotation2d.fromDegrees(-90)),
+      Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
+      CoralPickup(15, Rotation2d.fromDegrees(30)),
       // coral dropoff happens on both sides
       CoralDropOff1(20, Rotation2d.fromDegrees(-90), true),
       CoralDropOff2(20, Rotation2d.fromDegrees(-90), true),

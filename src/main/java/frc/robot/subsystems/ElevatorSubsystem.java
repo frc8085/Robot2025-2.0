@@ -153,14 +153,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // open loop move elevator up & down
   public void moveDown() {
-    motionMagicVelocityControl.Velocity = -ElevatorConstants.kElevatorSpeed;
-    m_elevatorMotor.setControl(motionMagicVelocityControl);
+    m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
   }
 
   public void moveUp() {
-    // m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
-    motionMagicVelocityControl.Velocity = ElevatorConstants.kElevatorSpeed;
-    m_elevatorMotor.setControl(motionMagicVelocityControl);
+    m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
   }
 
   public void holdHeight() {
