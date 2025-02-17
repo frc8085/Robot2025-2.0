@@ -132,11 +132,21 @@ public class ElevatorSubsystem extends SubsystemBase {
     return target_position < Constants.ElevatorConstants.kElevatorSafeHeightMax;
   }
 
-  public boolean targetInConflictZone(double target_position, Rotation2d target_angle) {
+  public double minConflictHeight(Rotation2d target_angle) {
     var deg = Math.abs(target_angle.getRadians());
     var diff = Constants.ElevatorConstants.kElevatorSafeHeightMax
         - Constants.ElevatorConstants.kElevatorSafeHeightMin;
-    return target_position < diff * Math.sin(deg) + Constants.ElevatorConstants.kElevatorSafeHeightMin;
+    var minHeight = 0.004 * deg + diff;
+    if (minHeight < Constants.ElevatorConstants.kElevatorSafeHeightMin) {
+      minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMin;
+    } else if (minHeight > Constants.ElevatorConstants.kElevatorSafeHeightMax) {
+      minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMax;
+    }
+    return minHeight;
+  }
+
+  public boolean targetInConflictZone(double target_position, Rotation2d target_angle) {
+    return target_position < minConflictHeight(target_angle);
   }
 
   public boolean inDangerZone() {

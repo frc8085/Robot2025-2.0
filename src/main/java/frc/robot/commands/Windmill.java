@@ -29,8 +29,11 @@ public class Windmill extends SequentialCommandGroup {
             // this means that the elevator and pivot are going to clash with each other or
             // the robot
             // return nothing
-            addCommands(new PrintCommand("Elevator and Pivot will clash, Doing nothing"));
-            return;
+            addCommands(new PrintCommand(
+                    "Elevator and Pivot will clash, Setting minimum height that angle will not crash at"));
+
+            // set elevator target height to minimum value
+            targetHeight = elevatorSubsystem.minConflictHeight(targetAngle);
         }
 
         // check if we can run the elevator and pivot at the same time
