@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class Pivot extends Command {
     private final Rotation2d m_targetAngle;
     private final PivotSubsystem m_pivot;
-    private final Rotation2d tolerance = Rotation2d.fromDegrees(2);
+    private final Rotation2d tolerance = Rotation2d.fromDegrees(5);
 
     public Pivot(PivotSubsystem pivot, Rotation2d targetAngle) {
         m_targetAngle = targetAngle;

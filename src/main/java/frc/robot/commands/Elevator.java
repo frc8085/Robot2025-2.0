@@ -8,7 +8,7 @@ public class Elevator extends Command {
     private final ElevatorSubsystem m_elevatorSubsystem;
     // private double m_speed;
     private double m_targetHeight;
-    private double m_tolerance = 0.5; // inches
+    private double m_tolerance = 1;
 
     public Elevator(ElevatorSubsystem elevatorSubsystem, double target_height) {
         m_elevatorSubsystem = elevatorSubsystem;
