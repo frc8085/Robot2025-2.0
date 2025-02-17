@@ -46,7 +46,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   public void pickup() {
     m_algaeEncoder.setPosition(0);
-    m_algaeMotor.set(AlgaeConstants.kAlgaeSpeed);
+    m_algaeMotor.set(-AlgaeConstants.kAlgaeSpeed);
   }
 
   public void stop() {
@@ -54,7 +54,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public void eject() {
-    m_algaeMotor.set(-AlgaeConstants.kAlgaeSpeed);
+    m_algaeMotor.set(AlgaeConstants.kAlgaeSpeed);
   }
 
   /** Resets the Intake encoder to currently read a position of 0. */
