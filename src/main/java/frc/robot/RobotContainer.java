@@ -24,12 +24,14 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Elevator;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Windmill;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -49,6 +51,7 @@ public class RobotContainer {
         private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
         private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
         private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+        private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
 
         // The driver's controller
         XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -133,12 +136,21 @@ public class RobotContainer {
                                 .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
                                 .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
 
-                // Pivot Positions.
                 new JoystickButton(m_operatorController, Button.kY.value)
                                 .onTrue(new RunCommand(() -> m_PivotArm.setPos(Rotation2d.fromRotations(0)),
                                                 m_PivotArm));
 
-                new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+                // algae subsystem
+                new JoystickButton(m_operatorController, Button.kA.value)
+                                .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
+                                .onFalse(new InstantCommand(() -> m_AlgaeSubsystem.holdAlgae(),
+                                                m_AlgaeSubsystem));
+
+                new JoystickButton(m_operatorController, Button.kB.value)
+                .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
+                .onFalse(new RunCommand(()-> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+
+                                                new JoystickButton(m_operatorController, Button.kLeftBumper.value)
                                 .onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(), m_ClimberSubsystem))
                                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
 
