@@ -63,6 +63,7 @@ class Windmill extends SequentialCommandGroup {
                     new Elevator(elevatorSubsystem, targetHeight));
             return;
         } else {
+            // elevator does not end in danger zone, but it starts in the danger zone
             addCommands(
                     new ParallelCommandGroup(
                             new Elevator(elevatorSubsystem, targetHeight),

@@ -145,12 +145,12 @@ public final class Constants {
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 6;
-    public static final double kElevatorStage1Height = 26; // zero position value
-    public static final double kElevatorStage2Height = 71;
-    public static final double kElevatorMax = 100; // 110 hard max
+    public static final double kElevatorStage1Height = 41; // zero position value
+    public static final double kElevatorStage2Height = 85;
+    public static final double kElevatorMax = 115; // 110 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeight = 35;
+    public static final double kElevatorSafeHeight = 50;
   }
 
   public static final class PivotArmConstants {
@@ -183,7 +183,7 @@ public final class Constants {
     public static enum WindmillState {
 
       Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
-      CoralPickup(15, Rotation2d.fromDegrees(30)),
+      CoralPickup(15, Rotation2d.fromDegrees(20)),
       // coral dropoff happens on both sides
       CoralDropOff1(20, Rotation2d.fromDegrees(-90), true),
       CoralDropOff2(20, Rotation2d.fromDegrees(-90), true),
