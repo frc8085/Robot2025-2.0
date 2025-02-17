@@ -183,13 +183,13 @@ public final class Constants {
     public static enum WindmillState {
 
       Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
-      CoralPickup(15, Rotation2d.fromDegrees(20)),
+      CoralPickup(25, Rotation2d.fromDegrees(20)),
       // coral dropoff happens on both sides
       CoralDropOff1(20, Rotation2d.fromDegrees(-90), true),
       CoralDropOff2(20, Rotation2d.fromDegrees(-90), true),
       CoralDropOff3(20, Rotation2d.fromDegrees(-90), true),
       CoralDropOff4(20, Rotation2d.fromDegrees(-90), true),
-      AlgaePickUpFloor(5, Rotation2d.fromDegrees(-120)),
+      AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
       AlgaePickUpReef2(10, Rotation2d.fromDegrees(-120)),
       AlgaePickUpReef3(20, Rotation2d.fromDegrees(-120)),
       AlgaeNet(40, Rotation2d.fromDegrees(-120));

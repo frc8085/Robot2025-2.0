@@ -1,11 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.commands.Pivot;
-import frc.robot.commands.Elevator;
 
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -13,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 
-class Windmill extends SequentialCommandGroup {
+public class Windmill extends SequentialCommandGroup {
 
     private void constructWindmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
             double targetHeight,

@@ -29,6 +29,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Elevator;
 import frc.robot.commands.Pivot;
+import frc.robot.commands.Windmill;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -108,6 +109,12 @@ public class RobotContainer {
                                 new Elevator(m_ElevatorSubsystem, 100));
                 SmartDashboard.putData("Elevator to 35",
                                 new Elevator(m_ElevatorSubsystem, 35));
+                SmartDashboard.putData("Windmill Home",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.Home, false));
+                SmartDashboard.putData("Windmill Algae ground",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
         }
 
         /**
