@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.Elevator;
+import frc.robot.commands.Pivot;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -89,13 +91,23 @@ public class RobotContainer {
                 SmartDashboard.putData("Zero Pivot Arm",
                                 new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
                 SmartDashboard.putData("Set Arm 30",
-                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(30))));
+                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(30)));
                 SmartDashboard.putData("Set Arm 0",
-                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(0))));
+                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(0)));
                 SmartDashboard.putData("Set Arm -60",
-                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(-60))));
+                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(-60)));
                 SmartDashboard.putData("Set Arm -120",
-                                new InstantCommand(() -> m_PivotArm.setPos(Rotation2d.fromDegrees(-120))));
+                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(-120)));
+                SmartDashboard.putData("Elevator to 6",
+                                new Elevator(m_ElevatorSubsystem, 6));
+                SmartDashboard.putData("Elevator to 26",
+                                new Elevator(m_ElevatorSubsystem, 26));
+                SmartDashboard.putData("Elevator to 71",
+                                new Elevator(m_ElevatorSubsystem, 71));
+                SmartDashboard.putData("Elevator to 100",
+                                new Elevator(m_ElevatorSubsystem, 100));
+                SmartDashboard.putData("Elevator to 35",
+                                new Elevator(m_ElevatorSubsystem, 35));
         }
 
         /**

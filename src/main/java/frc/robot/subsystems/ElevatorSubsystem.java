@@ -127,9 +127,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Math.abs(getCurrentMotorPosition() - motionMagicControl.Position) < tolerance_rotations;
   }
 
-  public void periodi2c() {
+  public void periodic() {
     // display encoder readings on dashboard
-    SmartDashboard.putNumber("current Motor Position", getCurrentMotorPosition());
+    SmartDashboard.putNumber("current Elevator Motor Position", getCurrentMotorPosition());
     // SmartDashboard.putNumber("current Height", getCurrentHeight());
 
   }

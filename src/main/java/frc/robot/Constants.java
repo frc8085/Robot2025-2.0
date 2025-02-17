@@ -146,11 +146,11 @@ public final class Constants {
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 6;
     public static final double kElevatorStage1Height = 26; // zero position value
-    public static final double kElevatorStage2Height = 26 + 35;
-    public static final double kElevatorMax = 26 + 55;
+    public static final double kElevatorStage2Height = 71;
+    public static final double kElevatorMax = 100; // 110 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeight = 29; // TODO setup real values
+    public static final double kElevatorSafeHeight = 35;
   }
 
   public static final class PivotArmConstants {

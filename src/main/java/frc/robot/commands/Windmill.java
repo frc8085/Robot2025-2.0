@@ -81,13 +81,10 @@ class Windmill extends SequentialCommandGroup {
     public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, WindmillState windmillState,
             boolean mirrored) {
         if (mirrored && windmillState.canMirror()) {
-
+            // mirror the windmill pivot arm if possible
         }
-        constructWindmill(elevatorSubsystem, pivotSubsystem, windmillState.getElevatorHeight(), windmillState.getPivotArmAngle());
+        constructWindmill(elevatorSubsystem, pivotSubsystem, windmillState.getElevatorHeight(),
+                windmillState.getPivotArmAngle());
     }
 
-    private Command ParallelCommandGroup(Elevator elevator, Pivot pivot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ParallelCommandGroup'");
-    }
 }
