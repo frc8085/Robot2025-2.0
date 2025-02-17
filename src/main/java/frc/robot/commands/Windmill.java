@@ -25,7 +25,7 @@ public class Windmill extends SequentialCommandGroup {
         boolean elevatorInDangerZone = elevatorSubsystem.inDangerZone();
         boolean windmillConfict = elevatorSubsystem.targetInConflictZone(targetHeight, targetAngle);
 
-        if (windmillConfict) {
+        if (elevatorEndInDangerZone && pivotEndInDangerZone && windmillConfict) {
             // this means that the elevator and pivot are going to clash with each other or
             // the robot
             // return nothing
