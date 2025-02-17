@@ -23,9 +23,11 @@ public class Windmill extends SequentialCommandGroup {
 
         boolean elevatorEndInDangerZone = elevatorSubsystem.targetInDangerZone(targetHeight);
         boolean elevatorInDangerZone = elevatorSubsystem.inDangerZone();
+        boolean windmillConfict = elevatorSubsystem.targetInConflictZone(targetHeight, targetAngle);
 
-        if (elevatorEndInDangerZone && pivotEndInDangerZone) {
-            // this means that the elevator and pivot are going to clash with each other
+        if (windmillConfict) {
+            // this means that the elevator and pivot are going to clash with each other or
+            // the robot
             // return nothing
             addCommands(new PrintCommand("Elevator and Pivot will clash, Doing nothing"));
             return;
@@ -51,14 +53,14 @@ public class Windmill extends SequentialCommandGroup {
                 // move elevator to safe height, then move pivot
                 addCommands(
                         new PrintCommand("Elevator and Pivot will clash, Running Elevator then Pivot"),
-                        new Elevator(elevatorSubsystem, Constants.ElevatorConstants.kElevatorSafeHeight),
+                        new Elevator(elevatorSubsystem, Constants.ElevatorConstants.kElevatorSafeHeightMax),
                         new Pivot(pivotSubsystem, targetAngle));
             } else {
                 addCommands(
                         new ParallelCommandGroup(
                                 new PrintCommand(
                                         "Elevator and Pivot will clash, Running Elevator and Pivot in parallel"),
-                                new Elevator(elevatorSubsystem, Constants.ElevatorConstants.kElevatorSafeHeight),
+                                new Elevator(elevatorSubsystem, Constants.ElevatorConstants.kElevatorSafeHeightMax),
                                 new Pivot(pivotSubsystem, targetAngle)));
             }
             // then move elevator to target height

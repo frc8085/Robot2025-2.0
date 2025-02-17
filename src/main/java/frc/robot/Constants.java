@@ -150,7 +150,8 @@ public final class Constants {
     public static final double kElevatorMax = 115; // 110 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeight = 50;
+    public static final double kElevatorSafeHeightMax = 50;
+    public static final double kElevatorSafeHeightMin = 20;
   }
 
   public static final class PivotArmConstants {

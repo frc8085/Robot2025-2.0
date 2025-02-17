@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -128,7 +129,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
 
   public boolean targetInDangerZone(double target_position) {
-    return target_position < Constants.ElevatorConstants.kElevatorSafeHeight;
+    return target_position < Constants.ElevatorConstants.kElevatorSafeHeightMax;
+  }
+
+  public boolean targetInConflictZone(double target_position, Rotation2d target_angle) {
+    var deg = Math.abs(target_angle.getRadians());
+    var diff = Constants.ElevatorConstants.kElevatorSafeHeightMax
+        - Constants.ElevatorConstants.kElevatorSafeHeightMin;
+    return target_position < diff * deg + Constants.ElevatorConstants.kElevatorSafeHeightMin;
   }
 
   public boolean inDangerZone() {
