@@ -95,7 +95,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // check to see if the elevator height is above the maximum, and if it is, set
     // it to the maximum
 
-    if (topLimitSwitch.get()) {
+    if (topLimitSwitch.get() || bottomLimitSwitch.get()) {
       m_elevatorMotor.set(0);
     } else {
       if ((rotations < Constants.ElevatorConstants.kElevatorMin)) {
