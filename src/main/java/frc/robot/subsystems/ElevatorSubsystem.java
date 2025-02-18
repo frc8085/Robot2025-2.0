@@ -34,8 +34,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Limit Switches
   DigitalInput topLimitSwitch = new DigitalInput(0);
-  DigitalInput bottomLimitSwitch = new DigitalInput(1);
-  DigitalInput zeroLimitSwitch = new DigitalInput(2);
+  DigitalInput bottomLimitSwitch = new DigitalInput(2);
+  DigitalInput zeroLimitSwitch = new DigitalInput(1);
 
   public boolean ElevatorLowerLimitHit() {
     return bottomLimitSwitch.get();
