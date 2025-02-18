@@ -95,28 +95,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     // check to see if the elevator height is above the maximum, and if it is, set
     // it to the maximum
 
-    // if we are at top limit set elevator to max, if we are at bottom set elevator
-    // to min)
-    if ((rotations < Constants.ElevatorConstants.kElevatorMin) /* || bottomLimitSwitch.get() */) {
-      rotations = Constants.ElevatorConstants.kElevatorMin;
-    } else if ((rotations > Constants.ElevatorConstants.kElevatorMax) /* || topLimitSwitch.get() */) {
-      rotations = Constants.ElevatorConstants.kElevatorMax;
-    }
+    if (topLimitSwitch.get()) {
+      m_elevatorMotor.set(0);
+    } else {
+      if ((rotations < Constants.ElevatorConstants.kElevatorMin)) {
+        rotations = Constants.ElevatorConstants.kElevatorMin;
+      } else if ((rotations > Constants.ElevatorConstants.kElevatorMax)) {
+        rotations = Constants.ElevatorConstants.kElevatorMax;
+      }
 
-    // set the feedforward value based on the elevator height
-    double ff = 0;
-    if (rotations > ElevatorConstants.kElevatorStage2Height) {
-      ff = ElevatorConstants.kElevatorStage3FF;
-    } else if (rotations > Constants.ElevatorConstants.kElevatorStage1Height) {
-      ff = ElevatorConstants.kElevatorStage2FF;
-    }
+      // set the feedforward value based on the elevator height
+      double ff = 0;
+      if (rotations > ElevatorConstants.kElevatorStage2Height) {
+        ff = ElevatorConstants.kElevatorStage3FF;
+      } else if (rotations > Constants.ElevatorConstants.kElevatorStage1Height) {
+        ff = ElevatorConstants.kElevatorStage2FF;
+      }
 
-    // motionMagicControl.Position = rotationsToMotorPosition(rotations);
-    motionMagicPositionControl.Position = rotations;
-    motionMagicVelocityControl.FeedForward = ff;
-    m_elevatorMotor.setControl(motionMagicPositionControl);
-    // SmartDashboard.putNumber("height value", rotations);
-    // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
+      // motionMagicControl.Position = rotationsToMotorPosition(rotations);
+      motionMagicPositionControl.Position = rotations;
+      motionMagicVelocityControl.FeedForward = ff;
+      m_elevatorMotor.setControl(motionMagicPositionControl);
+      // SmartDashboard.putNumber("height value", rotations);
+      // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
+    }
   }
 
   // set the zero value of the motor encoder
