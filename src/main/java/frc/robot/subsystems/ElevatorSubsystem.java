@@ -14,6 +14,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,6 +31,23 @@ public class ElevatorSubsystem extends SubsystemBase {
   private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
   private MotionMagicVelocityVoltage motionMagicVelocityControl = new MotionMagicVelocityVoltage(0);
+
+  // Limit Switches
+  DigitalInput topLimitSwitch = new DigitalInput(0);
+  DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  DigitalInput zeroLimitSwitch = new DigitalInput(2);
+
+  public boolean ElevatorLowerLimitHit() {
+    return bottomLimitSwitch.get();
+  }
+
+  public boolean ElevatorRaiseLimitHit() {
+    return topLimitSwitch.get();
+  }
+
+  public boolean ElevatorZeroLimitHit() {
+    return zeroLimitSwitch.get();
+  }
 
   public ElevatorSubsystem() {
 
@@ -77,9 +95,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     // check to see if the elevator height is above the maximum, and if it is, set
     // it to the maximum
 
-    if (rotations < Constants.ElevatorConstants.kElevatorMin) {
+    // if we are at top limit set elevator to max, if we are at bottom set elevator
+    // to min)
+    if ((rotations < Constants.ElevatorConstants.kElevatorMin) /* || bottomLimitSwitch.get() */) {
       rotations = Constants.ElevatorConstants.kElevatorMin;
-    } else if (rotations > Constants.ElevatorConstants.kElevatorMax) {
+    } else if ((rotations > Constants.ElevatorConstants.kElevatorMax) /* || topLimitSwitch.get() */) {
       rotations = Constants.ElevatorConstants.kElevatorMax;
     }
 
@@ -159,6 +179,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     // display encoder readings on dashboard
     SmartDashboard.putNumber("current Elevator Motor Position", getCurrentMotorPosition());
     // SmartDashboard.putNumber("current Height", getCurrentHeight());
+    SmartDashboard.putBoolean("top limit switch hit", topLimitSwitch.get());
+    SmartDashboard.putBoolean("bottom limit switch hit", bottomLimitSwitch.get());
+    SmartDashboard.putBoolean("zero limit switch hit", zeroLimitSwitch.get());
 
   }
 

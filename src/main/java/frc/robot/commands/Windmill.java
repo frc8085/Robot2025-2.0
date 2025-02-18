@@ -97,7 +97,9 @@ public class Windmill extends SequentialCommandGroup {
         var rotation_target = windmillState.getPivotArmAngle();
         if (mirrored && windmillState.canMirror()) {
             // mirror the windmill pivot arm if possible (flip around the -90 degree angle)
-            rotation_target = windmillState.getPivotArmAngle().plus(Rotation2d.fromDegrees(180));
+            Rotation2d rotation_diff = Rotation2d.fromDegrees(-90).minus(rotation_target);
+            rotation_target = rotation_target.plus(rotation_diff);
+
         }
         constructWindmill(elevatorSubsystem, pivotSubsystem, windmillState.getElevatorHeight(),
                 rotation_target);
