@@ -90,11 +90,13 @@ public class RobotContainer {
                                                                                 OIConstants.kDriveDeadband),
                                                                 true),
                                                 m_robotDrive));
+
+                // Smart Dashboard Buttons
+                SmartDashboard.putData("Zero Pivot Arm",
+                                new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
                 SmartDashboard.putData("Zero Elevator",
                                 new InstantCommand(() -> m_ElevatorSubsystem
                                                 .zero()));
-                SmartDashboard.putData("Zero Pivot Arm",
-                                new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
                 SmartDashboard.putData("Zero Elevator Command", new ZeroElevator(m_ElevatorSubsystem));
                 // SmartDashboard.putData("Set Arm 30",
                 // new Pivot(m_PivotArm, Rotation2d.fromDegrees(30)));
@@ -104,16 +106,16 @@ public class RobotContainer {
                 // new Pivot(m_PivotArm, Rotation2d.fromDegrees(-60)));
                 // SmartDashboard.putData("Set Arm -120",
                 // new Pivot(m_PivotArm, Rotation2d.fromDegrees(-120)));
-                SmartDashboard.putData("Elevator to 6",
-                                new Elevator(m_ElevatorSubsystem, 6));
-                SmartDashboard.putData("Elevator to 26",
-                                new Elevator(m_ElevatorSubsystem, 26));
-                SmartDashboard.putData("Elevator to 71",
-                                new Elevator(m_ElevatorSubsystem, 71));
-                SmartDashboard.putData("Elevator to 100",
-                                new Elevator(m_ElevatorSubsystem, 100));
-                SmartDashboard.putData("Elevator to 35",
-                                new Elevator(m_ElevatorSubsystem, 35));
+                // SmartDashboard.putData("Elevator to 6",
+                // new Elevator(m_ElevatorSubsystem, 6));
+                // SmartDashboard.putData("Elevator to 26",
+                // new Elevator(m_ElevatorSubsystem, 26));
+                // SmartDashboard.putData("Elevator to 71",
+                // new Elevator(m_ElevatorSubsystem, 71));
+                // SmartDashboard.putData("Elevator to 100",
+                // new Elevator(m_ElevatorSubsystem, 100));
+                // SmartDashboard.putData("Elevator to 35",
+                // new Elevator(m_ElevatorSubsystem, 35));
                 SmartDashboard.putData("Windmill Home",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.Home, false));
