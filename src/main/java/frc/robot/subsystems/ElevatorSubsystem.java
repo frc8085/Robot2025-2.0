@@ -19,12 +19,18 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.TuningModeConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  private final TalonFX m_elevatorMotor = new TalonFX(Constants.CanIdConstants.kElevatorCanId, "rio"); // device id and
-                                                                                                       // canbus
+
+  private boolean TUNING_MODE = TuningModeConstants.kElevatorTuning;
+
+  // CAN ID and CANbus
+  private final TalonFX m_elevatorMotor = new TalonFX(Constants.CanIdConstants.kElevatorCanId, "rio");
   TalonFXConfiguration config = new TalonFXConfiguration();
   private final CANcoder m_elevatorEncoder = new CANcoder(Constants.CanIdConstants.kElevatorCancoderCanID);
+
+  // get encoder data
   private StatusSignal<Angle> elevatorPosition;
   private StatusSignal<AngularVelocity> elevatorVelocity;
 
@@ -181,6 +187,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("bottom limit switch hit", bottomLimitSwitch.get());
     SmartDashboard.putBoolean("zero limit switch hit", zeroLimitSwitch.get());
 
+    if (TUNING_MODE) {
+      addTuningtoDashboard();
+      readTuningFromDashboard();
+    }
+
   }
 
   // turn off elevator (stops motor all together)
@@ -210,5 +221,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     // double targetPosition = getCurrentHeight();
     double targetPosition = getCurrentMotorPosition();
     setPos(targetPosition);
+  }
+
+  private void addTuningtoDashboard() {
+    // Elevator Height
+    SmartDashboard.putNumber("Elevator Height", ElevatorConstants.kElevatorStage1Height);
+
+  }
+
+  private void readTuningFromDashboard() {
+    double StartingElevatorHeight = ElevatorConstants.kElevatorStage1Height;
+    double ElevatorHeight = SmartDashboard.getNumber("Elevator Height", StartingElevatorHeight);
+
+    if ((ElevatorHeight != StartingElevatorHeight)) {
+      setPos(ElevatorHeight);
+      StartingElevatorHeight = ElevatorHeight;
+    }
+
   }
 }
