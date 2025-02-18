@@ -169,7 +169,7 @@ public final class Constants {
     public static double kPivotArmMMAcc = 60;
     public static double kPivotArmMMJerk = 1600;
 
-    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-120);
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-150);
     public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
 
     /// The min/max angle of the pivot that will be rotating through the path of the
@@ -226,7 +226,7 @@ public final class Constants {
   }
 
   public static final class CoralConstants {
-    public static final int coralCurrentLimit = 20;
+    public static final int coralCurrentLimit = 40;
     public static final double kCoralSpeed = 1;
 
     // TEMPORARY VALUES

@@ -118,6 +118,13 @@ public class RobotContainer {
                 SmartDashboard.putData("Windmill Algae ground",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
+                SmartDashboard.putData("Windmill Coral Drop Off 1",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.CoralDropOff1, true));
+                SmartDashboard.putData("Windmill Coral Drop Off 3",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.CoralDropOff3, true));
+
         }
 
         /**
@@ -137,8 +144,8 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
 
                 new JoystickButton(m_operatorController, Button.kY.value)
-                                .onTrue(new RunCommand(() -> m_PivotArm.setPos(Rotation2d.fromRotations(0)),
-                                                m_PivotArm));
+                                .onTrue(new RunCommand(() -> m_CoralSubsystem.eject(), m_CoralSubsystem))
+                                .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
 
                 // algae subsystem
                 new JoystickButton(m_operatorController, Button.kA.value)
@@ -147,10 +154,10 @@ public class RobotContainer {
                                                 m_AlgaeSubsystem));
 
                 new JoystickButton(m_operatorController, Button.kB.value)
-                .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
-                .onFalse(new RunCommand(()-> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+                                .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
+                                .onFalse(new RunCommand(() -> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
 
-                                                new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+                new JoystickButton(m_operatorController, Button.kLeftBumper.value)
                                 .onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(), m_ClimberSubsystem))
                                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
 
