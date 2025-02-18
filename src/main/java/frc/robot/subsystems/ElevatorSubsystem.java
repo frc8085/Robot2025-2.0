@@ -37,15 +37,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput bottomLimitSwitch = new DigitalInput(2);
   DigitalInput zeroLimitSwitch = new DigitalInput(1);
 
-  public boolean ElevatorLowerLimitHit() {
+  public Boolean ElevatorLowerLimitHit() {
     return bottomLimitSwitch.get();
   }
 
-  public boolean ElevatorRaiseLimitHit() {
+  public Boolean ElevatorRaiseLimitHit() {
     return topLimitSwitch.get();
   }
 
-  public boolean ElevatorZeroLimitHit() {
+  public Boolean ElevatorZeroLimitHit() {
     return zeroLimitSwitch.get();
   }
 
@@ -123,9 +123,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   // rotations * Constants.ElevatorConstants.kElevatorMotorGearRatio);
   // }
 
-  public void zero(double rotations) {
+  public void zero() {
     m_elevatorMotor.setPosition(
-        rotations);
+        Constants.ElevatorConstants.kElevatorStage1Height);
   }
 
   // read the current elevator encoder position

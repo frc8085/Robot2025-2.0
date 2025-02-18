@@ -31,6 +31,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Elevator;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Windmill;
+import frc.robot.commands.ZeroElevator;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -91,9 +92,10 @@ public class RobotContainer {
                                                 m_robotDrive));
                 SmartDashboard.putData("Zero Elevator",
                                 new InstantCommand(() -> m_ElevatorSubsystem
-                                                .zero(Constants.ElevatorConstants.kElevatorStage1Height)));
+                                                .zero()));
                 SmartDashboard.putData("Zero Pivot Arm",
                                 new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
+                SmartDashboard.putData("Zero Elevator Command", new ZeroElevator(m_ElevatorSubsystem));
                 // SmartDashboard.putData("Set Arm 30",
                 // new Pivot(m_PivotArm, Rotation2d.fromDegrees(30)));
                 SmartDashboard.putData("Set Arm 0",
