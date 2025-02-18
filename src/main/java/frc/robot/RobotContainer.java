@@ -94,14 +94,14 @@ public class RobotContainer {
                                                 .zero(Constants.ElevatorConstants.kElevatorStage1Height)));
                 SmartDashboard.putData("Zero Pivot Arm",
                                 new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
-                SmartDashboard.putData("Set Arm 30",
-                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(30)));
+                // SmartDashboard.putData("Set Arm 30",
+                // new Pivot(m_PivotArm, Rotation2d.fromDegrees(30)));
                 SmartDashboard.putData("Set Arm 0",
                                 new Pivot(m_PivotArm, Rotation2d.fromDegrees(0)));
-                SmartDashboard.putData("Set Arm -60",
-                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(-60)));
-                SmartDashboard.putData("Set Arm -120",
-                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(-120)));
+                // SmartDashboard.putData("Set Arm -60",
+                // new Pivot(m_PivotArm, Rotation2d.fromDegrees(-60)));
+                // SmartDashboard.putData("Set Arm -120",
+                // new Pivot(m_PivotArm, Rotation2d.fromDegrees(-120)));
                 SmartDashboard.putData("Elevator to 6",
                                 new Elevator(m_ElevatorSubsystem, 6));
                 SmartDashboard.putData("Elevator to 26",
@@ -115,15 +115,24 @@ public class RobotContainer {
                 SmartDashboard.putData("Windmill Home",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.Home, false));
+                SmartDashboard.putData("Windmill Coral PickUp",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.CoralPickup, false));
                 SmartDashboard.putData("Windmill Algae ground",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
                 SmartDashboard.putData("Windmill Coral Drop Off 1",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.CoralDropOff1, true));
+                SmartDashboard.putData("Windmill Coral Drop Off 2",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.CoralDropOff2, true));
                 SmartDashboard.putData("Windmill Coral Drop Off 3",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.CoralDropOff3, true));
+                SmartDashboard.putData("Windmill Coral Drop Off 4",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.CoralDropOff4, true));
 
         }
 

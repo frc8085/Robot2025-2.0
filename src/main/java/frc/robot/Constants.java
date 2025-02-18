@@ -187,9 +187,9 @@ public final class Constants {
       CoralPickup(25, Rotation2d.fromDegrees(20)),
       // coral dropoff happens on both sides
       CoralDropOff1(25, Rotation2d.fromDegrees(-120), true),
-      CoralDropOff2(40, Rotation2d.fromDegrees(-120), true),
-      CoralDropOff3(60, Rotation2d.fromDegrees(-120), true),
-      CoralDropOff4(100, Rotation2d.fromDegrees(-110), true),
+      CoralDropOff2(40, Rotation2d.fromDegrees(-140), true),
+      CoralDropOff3(60, Rotation2d.fromDegrees(-140), true),
+      CoralDropOff4(100, Rotation2d.fromDegrees(-120), true),
       AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
       AlgaePickUpReef2(10, Rotation2d.fromDegrees(-120)),
       AlgaePickUpReef3(20, Rotation2d.fromDegrees(-120)),
