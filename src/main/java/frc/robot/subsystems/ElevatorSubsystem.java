@@ -95,30 +95,26 @@ public class ElevatorSubsystem extends SubsystemBase {
     // check to see if the elevator height is above the maximum, and if it is, set
     // it to the maximum
 
-    if (topLimitSwitch.get() || bottomLimitSwitch.get()) {
-      m_elevatorMotor.set(0);
-    } else {
-      if ((rotations < Constants.ElevatorConstants.kElevatorMin)) {
-        rotations = Constants.ElevatorConstants.kElevatorMin;
-      } else if ((rotations > Constants.ElevatorConstants.kElevatorMax)) {
-        rotations = Constants.ElevatorConstants.kElevatorMax;
-      }
-
-      // set the feedforward value based on the elevator height
-      double ff = 0;
-      if (rotations > ElevatorConstants.kElevatorStage2Height) {
-        ff = ElevatorConstants.kElevatorStage3FF;
-      } else if (rotations > Constants.ElevatorConstants.kElevatorStage1Height) {
-        ff = ElevatorConstants.kElevatorStage2FF;
-      }
-
-      // motionMagicControl.Position = rotationsToMotorPosition(rotations);
-      motionMagicPositionControl.Position = rotations;
-      motionMagicVelocityControl.FeedForward = ff;
-      m_elevatorMotor.setControl(motionMagicPositionControl);
-      // SmartDashboard.putNumber("height value", rotations);
-      // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
+    if ((rotations < Constants.ElevatorConstants.kElevatorMin)) {
+      rotations = Constants.ElevatorConstants.kElevatorMin;
+    } else if ((rotations > Constants.ElevatorConstants.kElevatorMax)) {
+      rotations = Constants.ElevatorConstants.kElevatorMax;
     }
+
+    // set the feedforward value based on the elevator height
+    double ff = 0;
+    if (rotations > ElevatorConstants.kElevatorStage2Height) {
+      ff = ElevatorConstants.kElevatorStage3FF;
+    } else if (rotations > Constants.ElevatorConstants.kElevatorStage1Height) {
+      ff = ElevatorConstants.kElevatorStage2FF;
+    }
+
+    // motionMagicControl.Position = rotationsToMotorPosition(rotations);
+    motionMagicPositionControl.Position = rotations;
+    motionMagicVelocityControl.FeedForward = ff;
+    m_elevatorMotor.setControl(motionMagicPositionControl);
+    // SmartDashboard.putNumber("height value", rotations);
+    // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
   }
 
   // set the zero value of the motor encoder
@@ -192,13 +188,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.set(0);
   }
 
-  // open loop move elevator up & down
+  // open loop move elevator up & down but don't allow movement if the limit
+  // switch is being hit
   public void moveDown() {
-    m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+    if (bottomLimitSwitch.get()) {
+      m_elevatorMotor.set(0);
+    } else {
+      m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+    }
   }
 
   public void moveUp() {
-    m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+    if (topLimitSwitch.get()) {
+      m_elevatorMotor.set(0);
+    } else {
+      m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+    }
   }
 
   public void holdHeight() {
