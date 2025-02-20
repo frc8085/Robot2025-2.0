@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -137,7 +138,12 @@ public class RobotContainer {
                 SmartDashboard.putData("Windmill Coral Drop Off 4",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.CoralDropOff4, true));
-
+                SmartDashboard.putData("Windmill Reef 2",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.AlgaePickUpReef2, true));
+                SmartDashboard.putData("Windmill Reef 3",
+                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                                Constants.Windmill.WindmillState.AlgaePickUpReef3, true));
         }
 
         /**
@@ -194,15 +200,15 @@ public class RobotContainer {
 
                 // elevator subsystem
                 new POVButton(m_operatorController, 0)
-                                .whileTrue(new RunCommand(() -> m_ElevatorSubsystem.moveUp(),
-                                                m_ElevatorSubsystem))
-                                .onFalse(new InstantCommand(() -> m_ElevatorSubsystem.holdHeight(),
-                                                m_ElevatorSubsystem));
+                                .whileTrue(new ConditionalCommand(new InstantCommand(m_ElevatorSubsystem::stop),
+                                                new InstantCommand(m_ElevatorSubsystem::moveUp),
+                                                m_ElevatorSubsystem::ElevatorRaiseLimitHit))
+                                .onFalse(new InstantCommand(m_ElevatorSubsystem::stop));
                 new POVButton(m_operatorController, 180)
-                                .whileTrue(new RunCommand(() -> m_ElevatorSubsystem.moveDown(),
-                                                m_ElevatorSubsystem))
-                                .onFalse(new InstantCommand(() -> m_ElevatorSubsystem.holdHeight(),
-                                                m_ElevatorSubsystem));
+                                .whileTrue(new ConditionalCommand(new InstantCommand(m_ElevatorSubsystem::stop),
+                                                new InstantCommand(m_ElevatorSubsystem::moveDown),
+                                                m_ElevatorSubsystem::ElevatorLowerLimitHit))
+                                .onFalse(new InstantCommand(m_ElevatorSubsystem::stop));
         }
 
         /**

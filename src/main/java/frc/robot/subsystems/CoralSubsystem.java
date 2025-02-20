@@ -36,7 +36,7 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void pickup() {
-    m_coralMotor.set(kSpeed);
+    m_coralMotor.set(-kSpeed);
   }
 
   public void stop() {
@@ -44,7 +44,7 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void eject() {
-    m_coralMotor.set(-kSpeed);
+    m_coralMotor.set(kSpeed);
   }
 
 }

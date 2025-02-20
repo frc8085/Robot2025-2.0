@@ -147,7 +147,7 @@ public final class Constants {
     public static final double kElevatorMin = 6;
     public static final double kElevatorStage1Height = 41; // zero position value
     public static final double kElevatorStage2Height = 85;
-    public static final double kElevatorMax = 115; // 110 hard max
+    public static final double kElevatorMax = 125; // 140 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
     public static final double kElevatorSafeHeightMax = 50;
@@ -184,15 +184,15 @@ public final class Constants {
     public static enum WindmillState {
 
       Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
-      CoralPickup(25, Rotation2d.fromDegrees(20)),
+      CoralPickup(30, Rotation2d.fromDegrees(25)),
       // coral dropoff happens on both sides
-      CoralDropOff1(25, Rotation2d.fromDegrees(-120), true),
-      CoralDropOff2(40, Rotation2d.fromDegrees(-140), true),
-      CoralDropOff3(60, Rotation2d.fromDegrees(-140), true),
-      CoralDropOff4(100, Rotation2d.fromDegrees(-120), true),
+      CoralDropOff1(40, Rotation2d.fromDegrees(-130), false),
+      CoralDropOff2(65, Rotation2d.fromDegrees(-130), false),
+      CoralDropOff3(85, Rotation2d.fromDegrees(-130), false),
+      CoralDropOff4(125, Rotation2d.fromDegrees(-140), false),
       AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
-      AlgaePickUpReef2(10, Rotation2d.fromDegrees(-120)),
-      AlgaePickUpReef3(20, Rotation2d.fromDegrees(-120)),
+      AlgaePickUpReef2(10, Rotation2d.fromDegrees(-10)),
+      AlgaePickUpReef3(50, Rotation2d.fromDegrees(-10)),
       AlgaeNet(40, Rotation2d.fromDegrees(-120));
 
       private double kElevatorHeight;

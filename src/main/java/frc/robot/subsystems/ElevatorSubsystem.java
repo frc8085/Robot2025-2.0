@@ -43,15 +43,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput bottomLimitSwitch = new DigitalInput(2);
   DigitalInput zeroLimitSwitch = new DigitalInput(1);
 
-  public Boolean ElevatorLowerLimitHit() {
+  public boolean ElevatorLowerLimitHit() {
     return bottomLimitSwitch.get();
   }
 
-  public Boolean ElevatorRaiseLimitHit() {
+  public boolean ElevatorRaiseLimitHit() {
     return topLimitSwitch.get();
   }
 
-  public Boolean ElevatorZeroLimitHit() {
+  public boolean ElevatorZeroLimitHit() {
     return zeroLimitSwitch.get();
   }
 
@@ -202,19 +202,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   // open loop move elevator up & down but don't allow movement if the limit
   // switch is being hit
   public void moveDown() {
-    if (bottomLimitSwitch.get()) {
-      m_elevatorMotor.set(0);
-    } else {
-      m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
-    }
+    m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
   }
 
   public void moveUp() {
-    if (topLimitSwitch.get()) {
-      m_elevatorMotor.set(0);
-    } else {
-      m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
-    }
+    m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
   }
 
   public void holdHeight() {
