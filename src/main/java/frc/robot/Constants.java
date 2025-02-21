@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -25,16 +26,20 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public final class Constants {
   public static final class CanIdConstants {
     public static final int kGyroCanId = 15;
+
     public static final int kCoralCanId = 21;
 
     public static final int kAlgaeCanId = 22;
-    public static final int kElevatorCanId = 23;
     public static final int kClimberCanId = 24;
+
+    public static final int kElevatorCanId = 23;
     public static final int kPivotArmCanId = 25;
+
+    public static final int kElevatorCancoderCanID = 33;
+    public static final int kPivotArmCancoderCanID = 35;
   }
 
   public static final class DriveConstants {
-    // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
@@ -58,14 +63,14 @@ public final class Constants {
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 4;
+    public static final int kRearLeftDrivingCanId = 3;
     public static final int kFrontRightDrivingCanId = 2;
-    public static final int kRearRightDrivingCanId = 3;
+    public static final int kRearRightDrivingCanId = 4;
 
     public static final int kFrontLeftTurningCanId = 11;
-    public static final int kRearLeftTurningCanId = 14;
+    public static final int kRearLeftTurningCanId = 13;
     public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 13;
+    public static final int kRearRightTurningCanId = 14;
 
     public static final boolean kGyroReversed = false;
   }
@@ -124,15 +129,105 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
+    public static final double kElevatorMotorGearRatio = 5;
+    public static double kElevatorSpeed = .25;
+    public static double kElevatorP = 4;
+    public static double kElevatorI = 0;
+    public static double kElevatorD = 0;
+    public static double kElevatorV = .12;
+    public static double kElevatorA = .01;
+    public static double kElevatorStage2FF = 0.19;
+    public static double kElevatorStage3FF = 0.38;
 
+    public static double kElevatorMMVelo = 75;
+    public static double kElevatorMMAcc = 140;
+    public static double kElevatorMMJerk = 1600;
+
+    // Determine what actual height values these are and/or what encoder readings
+    // Stage Height refers to top of stage value
+    public static final double kElevatorMin = 6;
+    public static final double kElevatorStage1Height = 41; // zero position value
+    public static final double kElevatorStage2Height = 85;
+    public static final double kElevatorMax = 125; // 140 hard max
+
+    /// The minimum height of the elevator that the pivot arm can swing through
+    public static final double kElevatorSafeHeightMax = 50;
+    public static final double kElevatorSafeHeightMin = 15;
   }
 
   public static final class PivotArmConstants {
 
+    public static final double kPivotMotorGearRatio = 27;
+    public static double kPivotArmSpeed = .10;
+
+    public static final double kPivotArmP = 0.7; // 0.7
+    public static final double kPivotArmI = 0; // 0.0
+    public static final double kPivotArmD = 0.1; // 0.1
+    public static final double kPivotArmV = 0.12; // 0.12
+    public static final double kPivotArmA = 0.01; // 0.01
+
+    public static double kPivotArmMMVelo = 25;
+    public static double kPivotArmMMAcc = 60;
+    public static double kPivotArmMMJerk = 1600;
+
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-150);
+    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
+
+    /// The min/max angle of the pivot that will be rotating through the path of the
+    /// elevator
+    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-20); // TODO setup real values
+    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(-120); // TODO setup real values
+
+  }
+
+  public static final class Windmill {
+
+    public static enum WindmillState {
+
+      Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
+      CoralPickup(30, Rotation2d.fromDegrees(25)),
+      // coral dropoff happens on both sides
+      CoralDropOff1(40, Rotation2d.fromDegrees(-130), false),
+      CoralDropOff2(65, Rotation2d.fromDegrees(-130), false),
+      CoralDropOff3(85, Rotation2d.fromDegrees(-130), false),
+      CoralDropOff4(125, Rotation2d.fromDegrees(-140), false),
+      AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
+      AlgaePickUpReef2(10, Rotation2d.fromDegrees(-10)),
+      AlgaePickUpReef3(50, Rotation2d.fromDegrees(-10)),
+      AlgaeNet(40, Rotation2d.fromDegrees(-120));
+
+      private double kElevatorHeight;
+      private Rotation2d kPivotArmAngle;
+      private boolean canMirror = false;
+
+      private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle) {
+        this.kElevatorHeight = kElevatorHeight;
+        this.kPivotArmAngle = kPivotArmAngle;
+      }
+
+      private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle, boolean canMirror) {
+        this.kElevatorHeight = kElevatorHeight;
+        this.kPivotArmAngle = kPivotArmAngle;
+        this.canMirror = canMirror;
+      }
+
+      public double getElevatorHeight() {
+        return kElevatorHeight;
+      }
+
+      public Rotation2d getPivotArmAngle() {
+        return kPivotArmAngle;
+      }
+
+      public boolean canMirror() {
+        return canMirror;
+      }
+
+    }
   }
 
   public static final class CoralConstants {
-    public static final int coralCurrentLimit = 20;
+    public static final int coralCurrentLimit = 40;
     public static final double kCoralSpeed = 1;
 
     // TEMPORARY VALUES
@@ -146,9 +241,11 @@ public final class Constants {
     public static int kCoralVelocityConversionFactor = 1000;
     // TEMPORARY VALUES
     public static double kCoralP = 0.5;
-    public static double kCoarlI = 0.0;
+    public static double kCoralI = 0.0;
     public static double kCoralD = 0.0;
     public static double kCoralFF = 0.0;
+
+    public static int kIRPort = 3;
   }
 
   public static final class AlgaeConstants {
@@ -172,12 +269,20 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
-    public static double kClimberSpeed = 0.8;
+    public static double kWinchSpeed = 0.3;
+    public static double kWinchP = 0;
+    public static double kWinchI = 0;
+    public static double kWinchD = 0;
+    public static double kWinchFF = 0;
+    public static double kWinchMinOutput = 0;
+    public static double kWinchMaxOutput = 1;
   }
 
   public static final class TuningModeConstants {
     public static boolean kAlgaeTuning = false;
     public static boolean kCoralTuning = true;
+    public static boolean kElevatorTuning = true;
+    public static boolean kPivotTuning = false;
   }
 
 }

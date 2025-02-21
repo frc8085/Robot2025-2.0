@@ -1,48 +1,40 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkFlex;
-
-
 import frc.robot.Configs;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
 
-public class ClimberSubsystem extends SubsystemBase{
-    
-    // motor id
-    private final SparkFlex m_climberMotor = new SparkFlex(CanIdConstants.kClimberCanId, MotorDefaultsConstants.NeoVortexMotorType);
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkFlex;
 
-    private double kSpeed = ClimberConstants.kClimberSpeed;
+public class ClimberSubsystem extends SubsystemBase {
+    private final SparkFlex m_winchMotor = new SparkFlex(CanIdConstants.kClimberCanId,
+            MotorDefaultsConstants.NeoVortexMotorType);
+    private SparkAbsoluteEncoder m_winchEncoder;
 
-    public ClimberSubsystem () {
-    
-    // Apply the respective configurations to the SPARKS. Reset parameters before
-    // applying the configuration to bring the SPARK to a known good state. Persist
-    // the settings to the SPARK to avoid losing them on a power cycle.
-    m_climberMotor.configure(Configs.Climber.climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
+    private double kSpeed = ClimberConstants.kWinchSpeed;
 
+    public ClimberSubsystem() {
+        m_winchMotor.configure(Configs.Climber.climberConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+    }
 
-  // forgot what it was called
-  public void start() {
-    m_climberMotor.set(kSpeed);
-  }
+    // turn off climber
+    public void stop() {
+        m_winchMotor.set(0);
+    }
 
-  public void reverse() {
-    m_climberMotor.set(-kSpeed);
-  }
+    // open loop move climber up & down
+    public void moveDown() {
+        m_winchMotor.set(kSpeed);
+    }
 
-  public void stop() {
-    m_climberMotor.set(0);
-  }
-  
+    public void moveUp() {
+        m_winchMotor.set(-kSpeed);
+    }
 
 }

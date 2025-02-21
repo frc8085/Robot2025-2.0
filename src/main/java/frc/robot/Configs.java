@@ -1,16 +1,17 @@
 package frc.robot;
 
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
         public static final class MAXSwerveModule {
-                public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
+                public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
                 public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
                 static {
@@ -63,7 +64,7 @@ public final class Configs {
 
                         coralConfig
                                         .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(20);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoCurrentLimit);
                 }
         }
 
@@ -71,19 +72,18 @@ public final class Configs {
                 public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
 
                 static {
+                        algaeConfig.idleMode(IdleMode.kBrake)
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.Neo550CurrentLimit);
 
-                        algaeConfig
-                                        .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(20);
                         algaeConfig.encoder
                                         .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)
                                         .velocityConversionFactor(AlgaeConstants.kAlgaeVelocityConversionFactor);
+
                         algaeConfig.closedLoop
                                         .outputRange(AlgaeConstants.kAlgaeMinOutput, AlgaeConstants.kAlgaeMaxOutput)
                                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                                         .pidf(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD,
                                                         AlgaeConstants.kAlgaeFF);
-
                 }
         }
 
@@ -94,7 +94,16 @@ public final class Configs {
 
                         climberConfig
                                         .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(40);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoVortexCurrentLimit);
+                        climberConfig.closedLoop
+                                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                                        // These are example gains you may need to them for your own robot!
+                                        .pid(ClimberConstants.kWinchP, ClimberConstants.kWinchI,
+                                                        ClimberConstants.kWinchD)
+                                        .velocityFF(ClimberConstants.kWinchFF)
+                                        .outputRange(ClimberConstants.kWinchMinOutput,
+                                                        ClimberConstants.kWinchMaxOutput);
                 }
         }
+
 }

@@ -4,7 +4,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.CanIdConstants;
@@ -13,33 +14,53 @@ import frc.robot.Constants.MotorDefaultsConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
 
 public class CoralSubsystem extends SubsystemBase {
- 
-    // import motor id
-    private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId, MotorDefaultsConstants.Neo550MotorType);
-    SparkMaxConfig config = new SparkMaxConfig();
- 
-    public CoralSubsystem () {
-    
-        // Apply the respective configurations to the SPARKS. Reset parameters before
-        // applying the configuration to bring the SPARK to a known good state. Persist
-        // the settings to the SPARK to avoid losing them on a power cycle.
 
-        // Set the parameters in the Configs.java file
-        m_coralMotor.configure(Configs.CoralManipulator.coralConfig, ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters);
+  // import motor id
+  private final SparkMax m_coralMotor = new SparkMax(CanIdConstants.kCoralCanId,
+      MotorDefaultsConstants.NeoMotorType);
+
+  private double kSpeed = CoralConstants.kCoralSpeed;
+
+  // light sensor
+  DigitalInput lightSensor = new DigitalInput(CoralConstants.kIRPort);
+
+  // robot starts with Coral
+  private boolean coralTrue = true;
+
+  public CoralSubsystem() {
+
+    // Apply the respective configurations to the SPARKS. Reset parameters before
+    // applying the configuration to bring the SPARK to a known good state. Persist
+    // the settings to the SPARK to avoid losing them on a power cycle.
+    m_coralMotor.configure(Configs.CoralManipulator.coralConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
 
   }
 
+  public Boolean isCoralDetected() {
+    return lightSensor.get();
+  }
+
+  /* When a coral is picked up, it's in the robot */
+  public void coralPickedUp() {
+    coralTrue = true;
+  }
+
+  /* Once a note is shot, it's not in robot */
+  public void coralEjected() {
+    coralTrue = false;
+  }
+
+  /* Give us a state when the note is in robot */
+  public boolean coralInRobot() {
+    return coralTrue;
+  }
+
   public void pickup() {
-    m_coralMotor.set(CoralConstants.kCoralSpeed);
+    m_coralMotor.set(-kSpeed);
   }
 
   public void stop() {
@@ -47,7 +68,10 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void eject() {
-    m_coralMotor.set(-CoralConstants.kCoralSpeed);
+    m_coralMotor.set(kSpeed);
+    // Put Indicator on Dashboard that a Note is in the Robot
+    SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
+
   }
 
 }
