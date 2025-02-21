@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -159,33 +160,14 @@ public class RobotContainer {
          */
 
         private void configureButtonBindings() {
-                // coral subsystem
-                // new JoystickButton(m_operatorController, Button.kX.value)
-                // .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
-                // .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
 
-                new JoystickButton(m_operatorController, Button.kX.value)
-                                .onTrue(new PickUpCoral(m_CoralSubsystem));
-                new JoystickButton(m_operatorController, Button.kY.value)
-                                .onTrue(new EjectCoral(m_CoralSubsystem));
+                final JoystickButton pickUpCoral = new JoystickButton(m_operatorController, Button.kX.value);
+                final JoystickButton ejectCoral = new JoystickButton(m_operatorController, Button.kY.value);
+                final JoystickButton pickUpAlgae = new JoystickButton(m_operatorController, Button.kA.value);
+                final JoystickButton ejectAlgae = new JoystickButton(m_operatorController, Button.kB.value);
+                final JoystickButton raiseClimber = new JoystickButton(m_operatorController, Button.kLeftBumper.value);
+                final JoystickButton lowerClimber = new JoystickButton(m_operatorController, Button.kRightBumper.value);
 
-                // algae subsystem
-                new JoystickButton(m_operatorController, Button.kA.value)
-                                .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
-                                .onFalse(new InstantCommand(() -> m_AlgaeSubsystem.holdAlgae(),
-                                                m_AlgaeSubsystem));
-
-                new JoystickButton(m_operatorController, Button.kB.value)
-                                .whileTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
-                                .onFalse(new RunCommand(() -> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
-
-                new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(), m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
-
-                new JoystickButton(m_operatorController, Button.kRightBumper.value)
-                                .onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(), m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
                 /*
                  * Dpad Controls
                  * Angle 0 = UP
@@ -194,24 +176,50 @@ public class RobotContainer {
                  * Angle 270 = LEFT
                  */
 
-                new POVButton(m_operatorController, 90)
+                final POVButton pivotClockwise = new POVButton(m_operatorController, 90);
+                final POVButton pivotCounterClockwise = new POVButton(m_operatorController, 270);
+                final POVButton raiseElevator = new POVButton(m_operatorController, 0);
+                final POVButton lowerElevator = new POVButton(m_operatorController, 180);
+
+                // coral subsystem
+                pickUpCoral.onTrue(new PickUpCoral(m_CoralSubsystem));
+                ejectCoral.onTrue(new EjectCoral(m_CoralSubsystem));
+
+                // algae subsystem
+                pickUpAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
+                                .onFalse(new InstantCommand(m_AlgaeSubsystem::holdAlgae));
+
+                ejectAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
+                                .onFalse(new RunCommand(() -> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+
+                raiseClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(), m_ClimberSubsystem))
+                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+
+                lowerClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(), m_ClimberSubsystem))
+                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+
+                pivotClockwise
                                 .whileTrue(new RunCommand(() -> m_PivotArm.start(), m_PivotArm))
-                                .onFalse(new RunCommand(() -> m_PivotArm.holdPivotArm(), m_PivotArm));
-                new POVButton(m_operatorController, 270)
-                                .whileTrue(new RunCommand(() -> m_PivotArm.reverse(), m_PivotArm))
-                                .onFalse(new RunCommand(() -> m_PivotArm.holdPivotArm(), m_PivotArm));
+                                .onFalse(new InstantCommand(() -> m_PivotArm.keepPivot(m_PivotArm.getCurrentRotation()),
+                                                m_PivotArm));
+
+                pivotCounterClockwise.whileTrue(new RunCommand(() -> m_PivotArm.reverse(), m_PivotArm))
+                                .onFalse(new InstantCommand(() -> m_PivotArm.keepPivot(m_PivotArm.getCurrentRotation()),
+                                                m_PivotArm));
 
                 // elevator subsystem
-                new POVButton(m_operatorController, 0)
-                                .whileTrue(new ConditionalCommand(new InstantCommand(m_ElevatorSubsystem::stop),
-                                                new InstantCommand(m_ElevatorSubsystem::moveUp),
-                                                m_ElevatorSubsystem::ElevatorRaiseLimitHit))
-                                .onFalse(new InstantCommand(m_ElevatorSubsystem::stop));
-                new POVButton(m_operatorController, 180)
-                                .whileTrue(new ConditionalCommand(new InstantCommand(m_ElevatorSubsystem::stop),
-                                                new InstantCommand(m_ElevatorSubsystem::moveDown),
-                                                m_ElevatorSubsystem::ElevatorLowerLimitHit))
-                                .onFalse(new InstantCommand(m_ElevatorSubsystem::stop));
+                raiseElevator.whileTrue(
+                                new InstantCommand(m_ElevatorSubsystem::moveUp))
+                                .onFalse(new InstantCommand(
+                                                () -> m_ElevatorSubsystem.keepHeight(
+                                                                m_ElevatorSubsystem.getCurrentMotorPosition())));
+
+                lowerElevator.whileTrue(
+                                new InstantCommand(m_ElevatorSubsystem::moveDown))
+                                .onFalse(new InstantCommand(
+                                                () -> m_ElevatorSubsystem.keepHeight(
+                                                                m_ElevatorSubsystem.getCurrentMotorPosition())));
+
         }
 
         /**

@@ -14,9 +14,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configs;
 import frc.robot.Constants;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotArmConstants;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -120,6 +118,12 @@ public class PivotSubsystem extends SubsystemBase {
 
     public void stop() {
         m_pivotMotor.set(0);
+    }
+
+    public void keepPivot(Rotation2d positionPivot) {
+
+        setPos(positionPivot);
+
     }
 
     // checks whether the pivot arm is in the danger zone for the elevator at target

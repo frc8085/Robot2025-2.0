@@ -230,6 +230,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     setPos(targetPosition);
   }
 
+  public void keepHeight(double positionElevator) {
+
+    setPos(positionElevator);
+
+    if (TUNING_MODE) {
+      SmartDashboard.putNumber("Elevator Desired position", positionElevator);
+      System.out.println("Keep Elevator " + positionElevator);
+    }
+  }
+
   private void addTuningtoDashboard() {
     // Elevator Height
     SmartDashboard.putNumber("Elevator Height", ElevatorConstants.kElevatorStage1Height);
