@@ -157,7 +157,7 @@ public final class Constants {
   public static final class PivotArmConstants {
 
     public static final double kPivotMotorGearRatio = 27;
-    public static double kPivotArmSpeed = .25;
+    public static double kPivotArmSpeed = .10;
 
     public static final double kPivotArmP = 0.7; // 0.7
     public static final double kPivotArmI = 0; // 0.0
