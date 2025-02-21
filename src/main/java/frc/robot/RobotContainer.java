@@ -29,7 +29,9 @@ import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.EjectCoral;
 import frc.robot.commands.Elevator;
+import frc.robot.commands.PickUpCoral;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
@@ -158,13 +160,14 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
                 // coral subsystem
-                new JoystickButton(m_operatorController, Button.kX.value)
-                                .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
-                                .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
+                // new JoystickButton(m_operatorController, Button.kX.value)
+                // .onTrue(new RunCommand(() -> m_CoralSubsystem.pickup(), m_CoralSubsystem))
+                // .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
 
+                new JoystickButton(m_operatorController, Button.kX.value)
+                                .onTrue(new PickUpCoral(m_CoralSubsystem));
                 new JoystickButton(m_operatorController, Button.kY.value)
-                                .onTrue(new RunCommand(() -> m_CoralSubsystem.eject(), m_CoralSubsystem))
-                                .onFalse(new RunCommand(() -> m_CoralSubsystem.stop(), m_CoralSubsystem));
+                                .onTrue(new EjectCoral(m_CoralSubsystem));
 
                 // algae subsystem
                 new JoystickButton(m_operatorController, Button.kA.value)
