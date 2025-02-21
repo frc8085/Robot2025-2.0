@@ -94,34 +94,10 @@ public class RobotContainer {
                                                 m_robotDrive));
 
                 // Smart Dashboard Buttons
-
                 SmartDashboard.putData("Windmill Home",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.Home, false));
-                SmartDashboard.putData("Windmill Coral PickUp",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralPickup, false));
-                SmartDashboard.putData("Windmill Algae ground",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
-                SmartDashboard.putData("Windmill Coral Drop Off 1",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff1, true));
-                SmartDashboard.putData("Windmill Coral Drop Off 2",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff2, true));
-                SmartDashboard.putData("Windmill Coral Drop Off 3",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff3, true));
-                SmartDashboard.putData("Windmill Coral Drop Off 4",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff4, true));
-                SmartDashboard.putData("Windmill Reef 2",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.AlgaePickUpReef2, true));
-                SmartDashboard.putData("Windmill Reef 3",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.AlgaePickUpReef3, true));
+
         }
 
         /**
@@ -151,19 +127,16 @@ public class RobotContainer {
                 final Trigger pivotClockwise = m_operatorController.axisGreaterThan(0, 0.25);
                 final Trigger pivotCounterClockwise = m_operatorController.axisLessThan(0, -0.25);
 
-                // final JoystickButton alt_raiseElevator = new
-                // JoystickButton(m_operatorController,
-                // Axis.axisLessThan(1, -0.25));
-
-                // JoystickButton(m_operatorController,);
-
-                /*
-                 * Dpad Controls
-                 * Angle 0 = UP
-                 * Angle 90 = RIGHT
-                 * Angle 180 = DOWN
-                 * Angle 270 = LEFT
-                 */
+                // Set dpad to coral/elevator positions
+                final Trigger armHome = m_operatorController.rightTrigger();
+                final Trigger coralPickup = m_operatorController.povLeft();
+                final Trigger coral4Dropoff = m_operatorController.povUp();
+                final Trigger coral3Dropoff = m_operatorController.povUpRight();
+                final Trigger coral2DropOff = m_operatorController.povRight();
+                final Trigger coral1DropOff = m_operatorController.povDownRight();
+                final Trigger algaeGround = m_operatorController.povDown();
+                final Trigger algaeReef2 = m_operatorController.povDownLeft();
+                final Trigger algaeReef3 = m_operatorController.povUpLeft();
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 zeroElevator.onTrue(new ZeroElevator(m_ElevatorSubsystem));
@@ -186,6 +159,7 @@ public class RobotContainer {
                 lowerClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(), m_ClimberSubsystem))
                                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
 
+                // pivot subsystem
                 pivotClockwise
                                 .whileTrue(new RunCommand(() -> m_PivotArm.start(), m_PivotArm))
                                 .onFalse(new InstantCommand(() -> m_PivotArm.keepPivot(m_PivotArm.getCurrentRotation()),
@@ -207,6 +181,27 @@ public class RobotContainer {
                                 .onFalse(new InstantCommand(
                                                 () -> m_ElevatorSubsystem.keepHeight(
                                                                 m_ElevatorSubsystem.getCurrentMotorPosition())));
+
+                // Positions
+
+                armHome.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm, Constants.Windmill.WindmillState.Home,
+                                false));
+                coralPickup.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.CoralPickup, false));
+                algaeGround.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
+                coral1DropOff.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.CoralDropOff1, false));
+                coral2DropOff.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.CoralDropOff2, false));
+                coral3Dropoff.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.CoralDropOff3, false));
+                coral4Dropoff.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.CoralDropOff4, false));
+                algaeReef2.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.AlgaePickUpReef2, false));
+                algaeReef3.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                Constants.Windmill.WindmillState.AlgaePickUpReef3, false));
 
         }
 
