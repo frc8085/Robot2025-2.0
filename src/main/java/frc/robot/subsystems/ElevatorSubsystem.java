@@ -9,7 +9,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -181,15 +180,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void periodic() {
     // display encoder readings on dashboard
-    SmartDashboard.putNumber("current Elevator Motor Position", getCurrentMotorPosition());
-    // SmartDashboard.putNumber("current Height", getCurrentHeight());
-    SmartDashboard.putBoolean("top limit switch hit", topLimitSwitch.get());
-    SmartDashboard.putBoolean("bottom limit switch hit", bottomLimitSwitch.get());
-    SmartDashboard.putBoolean("zero limit switch hit", zeroLimitSwitch.get());
+    SmartDashboard.putNumber("current Elevator Position", getCurrentMotorPosition());
+    SmartDashboard.putBoolean("top LS hit", topLimitSwitch.get());
+    SmartDashboard.putBoolean("bottom LS hit", bottomLimitSwitch.get());
+    SmartDashboard.putBoolean("zero LS hit", zeroLimitSwitch.get());
 
     if (TUNING_MODE) {
-      addTuningtoDashboard();
-      readTuningFromDashboard();
     }
 
   }
@@ -240,20 +236,4 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  private void addTuningtoDashboard() {
-    // Elevator Height
-    SmartDashboard.putNumber("Elevator Height", ElevatorConstants.kElevatorStage1Height);
-
-  }
-
-  private void readTuningFromDashboard() {
-    double StartingElevatorHeight = ElevatorConstants.kElevatorStage1Height;
-    double ElevatorHeight = SmartDashboard.getNumber("Elevator Height", StartingElevatorHeight);
-
-    if ((ElevatorHeight != StartingElevatorHeight)) {
-      setPos(ElevatorHeight);
-      StartingElevatorHeight = ElevatorHeight;
-    }
-
-  }
 }

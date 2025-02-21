@@ -16,7 +16,7 @@ public class PickUpCoral extends SequentialCommandGroup {
                                 new InstantCommand(coralSubsystem::pickup),
                                 new ParallelRaceGroup(
                                                 new WaitUntilCommand(coralSubsystem::isCoralDetected),
-                                                new WaitCommand(4)),
+                                                new WaitCommand(2)),
                                 new InstantCommand(coralSubsystem::stop));
 
         }

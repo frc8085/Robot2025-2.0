@@ -19,23 +19,19 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.EjectCoral;
-import frc.robot.commands.Elevator;
 import frc.robot.commands.PickUpCoral;
-import frc.robot.commands.Pivot;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
+import frc.robot.commands.ZeroPivot;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -96,30 +92,7 @@ public class RobotContainer {
                                                 m_robotDrive));
 
                 // Smart Dashboard Buttons
-                SmartDashboard.putData("Zero Pivot Arm",
-                                new InstantCommand(() -> m_PivotArm.setRotorPos(Rotation2d.fromRotations(0))));
-                SmartDashboard.putData("Zero Elevator",
-                                new InstantCommand(() -> m_ElevatorSubsystem
-                                                .zero()));
-                SmartDashboard.putData("Zero Elevator Command", new ZeroElevator(m_ElevatorSubsystem));
-                // SmartDashboard.putData("Set Arm 30",
-                // new Pivot(m_PivotArm, Rotation2d.fromDegrees(30)));
-                SmartDashboard.putData("Set Arm 0",
-                                new Pivot(m_PivotArm, Rotation2d.fromDegrees(0)));
-                // SmartDashboard.putData("Set Arm -60",
-                // new Pivot(m_PivotArm, Rotation2d.fromDegrees(-60)));
-                // SmartDashboard.putData("Set Arm -120",
-                // new Pivot(m_PivotArm, Rotation2d.fromDegrees(-120)));
-                // SmartDashboard.putData("Elevator to 6",
-                // new Elevator(m_ElevatorSubsystem, 6));
-                // SmartDashboard.putData("Elevator to 26",
-                // new Elevator(m_ElevatorSubsystem, 26));
-                // SmartDashboard.putData("Elevator to 71",
-                // new Elevator(m_ElevatorSubsystem, 71));
-                // SmartDashboard.putData("Elevator to 100",
-                // new Elevator(m_ElevatorSubsystem, 100));
-                // SmartDashboard.putData("Elevator to 35",
-                // new Elevator(m_ElevatorSubsystem, 35));
+
                 SmartDashboard.putData("Windmill Home",
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                                 Constants.Windmill.WindmillState.Home, false));
@@ -167,6 +140,13 @@ public class RobotContainer {
                 final JoystickButton ejectAlgae = new JoystickButton(m_operatorController, Button.kB.value);
                 final JoystickButton raiseClimber = new JoystickButton(m_operatorController, Button.kLeftBumper.value);
                 final JoystickButton lowerClimber = new JoystickButton(m_operatorController, Button.kRightBumper.value);
+                final JoystickButton zeroElevator = new JoystickButton(m_operatorController, Button.kStart.value);
+                final JoystickButton zeroPivot = new JoystickButton(m_operatorController, Button.kBack.value);
+                // final JoystickButton alt_raiseElevator = new
+                // JoystickButton(m_operatorController,
+                // Axis.axisLessThan(1, -0.25));
+
+                // JoystickButton(m_operatorController,);
 
                 /*
                  * Dpad Controls
@@ -180,6 +160,10 @@ public class RobotContainer {
                 final POVButton pivotCounterClockwise = new POVButton(m_operatorController, 270);
                 final POVButton raiseElevator = new POVButton(m_operatorController, 0);
                 final POVButton lowerElevator = new POVButton(m_operatorController, 180);
+
+                // Zero elevator - carriage must be below stage 1 or it will zero where it is
+                zeroElevator.onTrue(new ZeroElevator(m_ElevatorSubsystem));
+                zeroPivot.onTrue(new ZeroPivot(m_PivotArm));
 
                 // coral subsystem
                 pickUpCoral.onTrue(new PickUpCoral(m_CoralSubsystem));
