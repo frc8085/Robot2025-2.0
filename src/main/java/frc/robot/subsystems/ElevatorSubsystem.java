@@ -202,11 +202,26 @@ public class ElevatorSubsystem extends SubsystemBase {
   // open loop move elevator up & down but don't allow movement if the limit
   // switch is being hit
   public void moveDown() {
-    m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+
+    if (bottomLimitSwitch.get()) {
+      // We are going down and bottom limit is tripped so stop
+      m_elevatorMotor.set(0);
+    } else {
+      // We are going down but bottom limit is not tripped so go at commanded speed
+      m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+    }
   }
 
   public void moveUp() {
-    m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+
+    if (topLimitSwitch.get()) {
+      // We are going up and top limit is tripped so stop
+      m_elevatorMotor.set(0);
+    } else {
+      // We are going up but top limit is not tripped so go at commanded speed
+      m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+    }
+
   }
 
   public void holdHeight() {
