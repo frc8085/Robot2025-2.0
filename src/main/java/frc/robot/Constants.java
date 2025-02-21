@@ -243,6 +243,8 @@ public final class Constants {
     public static double kCoralI = 0.0;
     public static double kCoralD = 0.0;
     public static double kCoralFF = 0.0;
+
+    public static int kIRPort = 3;
   }
 
   public static final class AlgaeConstants {
