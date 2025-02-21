@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -55,8 +57,8 @@ public class RobotContainer {
         private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
 
         // The driver's controller
-        XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-        XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
+        CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+        CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
 
         public void adjustJoystickValues() {
                 double rawX = m_driverController.getLeftX();
@@ -134,14 +136,21 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
 
-                final JoystickButton pickUpCoral = new JoystickButton(m_operatorController, Button.kX.value);
-                final JoystickButton ejectCoral = new JoystickButton(m_operatorController, Button.kY.value);
-                final JoystickButton pickUpAlgae = new JoystickButton(m_operatorController, Button.kA.value);
-                final JoystickButton ejectAlgae = new JoystickButton(m_operatorController, Button.kB.value);
-                final JoystickButton raiseClimber = new JoystickButton(m_operatorController, Button.kLeftBumper.value);
-                final JoystickButton lowerClimber = new JoystickButton(m_operatorController, Button.kRightBumper.value);
-                final JoystickButton zeroElevator = new JoystickButton(m_operatorController, Button.kStart.value);
-                final JoystickButton zeroPivot = new JoystickButton(m_operatorController, Button.kBack.value);
+                final Trigger pickUpCoral = m_operatorController.x();
+                final Trigger ejectCoral = m_operatorController.y();
+                final Trigger pickUpAlgae = m_operatorController.a();
+                final Trigger ejectAlgae = m_operatorController.b();
+                final Trigger raiseClimber = m_operatorController.leftBumper();
+                final Trigger lowerClimber = m_operatorController.rightBumper();
+                final Trigger zeroElevator = m_operatorController.start();
+                final Trigger zeroPivot = m_operatorController.back();
+
+                // Set Left Joystick for manual elevator/pivot movement
+                final Trigger raiseElevator = m_operatorController.axisLessThan(1, -0.25);
+                final Trigger lowerElevator = m_operatorController.axisGreaterThan(1, 0.25);
+                final Trigger pivotClockwise = m_operatorController.axisGreaterThan(0, 0.25);
+                final Trigger pivotCounterClockwise = m_operatorController.axisLessThan(0, -0.25);
+
                 // final JoystickButton alt_raiseElevator = new
                 // JoystickButton(m_operatorController,
                 // Axis.axisLessThan(1, -0.25));
@@ -155,11 +164,6 @@ public class RobotContainer {
                  * Angle 180 = DOWN
                  * Angle 270 = LEFT
                  */
-
-                final POVButton pivotClockwise = new POVButton(m_operatorController, 90);
-                final POVButton pivotCounterClockwise = new POVButton(m_operatorController, 270);
-                final POVButton raiseElevator = new POVButton(m_operatorController, 0);
-                final POVButton lowerElevator = new POVButton(m_operatorController, 180);
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 zeroElevator.onTrue(new ZeroElevator(m_ElevatorSubsystem));
