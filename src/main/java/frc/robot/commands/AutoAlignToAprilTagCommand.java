@@ -1,12 +1,14 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightReefSubsystem;
 
 /**
  * AutoAlignToAprilTagCommand uses vision data from the LimelightReefSubsystem
- * to align the robot with an AprilTag target by applying both rotation and translation.
+ * to align the robot with an AprilTag target by applying both rotation and
+ * translation.
  */
 public class AutoAlignToAprilTagCommand extends Command {
 
@@ -14,22 +16,29 @@ public class AutoAlignToAprilTagCommand extends Command {
     private final LimelightReefSubsystem limelightSubsystem;
 
     // Tuning constants (adjust these as needed)
-    private final double kDesiredArea = 2.0;       // Desired target area when at the correct distance
-    private final double kAreaTolerance = 0.1;       // Acceptable error in target area (translation)
-    private final double kTxTolerance = 1.0;         // Acceptable horizontal offset (degrees) (rotation)
+    private final double kDesiredArea = 2.0; // Desired target area when at the correct distance
+    private final double kAreaTolerance = 0.1; // Acceptable error in target area (translation)
+    private final double kTxTolerance = 1.0; // Acceptable horizontal offset (degrees) (rotation)
 
-    private final double kP_translation = 0.5;       // Proportional gain for translation speed
-    private final double kP_rotation = 0.02;         // Proportional gain for rotation correction
+    private final double kP_translation = 0.5; // Proportional gain for translation speed
+    private final double kP_rotation = 0.02; // Proportional gain for rotation correction
+    private final double maxSpeed = 0.6; // Maximum allowed speed for translation/rotation
+
+    private final double xOffsetDegrees; // Desired horizontal offset in degrees
 
     /**
      * Constructs a new AutoAlignToAprilTagCommand.
      *
      * @param driveSubsystem     the drivetrain subsystem.
      * @param limelightSubsystem the vision subsystem providing fiducial data.
+     * @param xOffsetDegrees     the desired horizontal offset (positive = shift
+     *                           right, negative = shift left).
      */
-    public AutoAlignToAprilTagCommand(DriveSubsystem driveSubsystem, LimelightReefSubsystem limelightSubsystem) {
+    public AutoAlignToAprilTagCommand(DriveSubsystem driveSubsystem, LimelightReefSubsystem limelightSubsystem,
+            double xOffsetDegrees) {
         this.driveSubsystem = driveSubsystem;
         this.limelightSubsystem = limelightSubsystem;
+        this.xOffsetDegrees = xOffsetDegrees;
         addRequirements(driveSubsystem, limelightSubsystem);
     }
 
@@ -47,19 +56,24 @@ public class AutoAlignToAprilTagCommand extends Command {
         }
 
         // Retrieve vision data from the closest fiducial.
-        double xError = limelightSubsystem.getClosestTX();       // Horizontal error (in degrees)
-        double currentArea = limelightSubsystem.getClosestTA();    // Current target area
+        double xError = limelightSubsystem.getClosestTX() - xOffsetDegrees; // Apply the offset
+        double currentArea = limelightSubsystem.getClosestTA(); // Current target area
 
-        // Compute the translation error (positive error means the target is too small/far)
+        // Compute the translation error (positive means the target is too small/far)
         double areaError = kDesiredArea - currentArea;
-        double translationSpeed = kP_translation * areaError;      // Forward/backward speed (can be positive or negative)
+        double translationSpeed = kP_translation * areaError;
 
-        // Compute the rotational correction (negative sign to steer in the proper direction)
+        // Compute the rotational correction (negative sign to steer in the proper
+        // direction)
         double rotationCorrection = -kP_rotation * xError;
 
+        // Clamp the values to prevent excessive speed
+        translationSpeed = MathUtil.clamp(translationSpeed, -maxSpeed, maxSpeed);
+        rotationCorrection = MathUtil.clamp(rotationCorrection, -maxSpeed, maxSpeed);
+
         // Command the drive subsystem:
-        // We drive along the robot’s forward axis (xSpeed = 1.0, ySpeed = 0.0) and apply rotation.
-        // The drive() method multiplies the first parameter (translationSpeed) by the max speed.
+        // We drive along the robot’s forward axis (xSpeed = 1.0, ySpeed = 0.0) and
+        // apply rotation.
         driveSubsystem.drive(translationSpeed, 1.0, 0.0, rotationCorrection, false);
     }
 
@@ -75,11 +89,12 @@ public class AutoAlignToAprilTagCommand extends Command {
         if (!limelightSubsystem.getTV()) {
             return false;
         }
-        double xError = limelightSubsystem.getClosestTX();
+        double xError = limelightSubsystem.getClosestTX() - xOffsetDegrees;
         double currentArea = limelightSubsystem.getClosestTA();
         double areaError = Math.abs(kDesiredArea - currentArea);
 
-        // Finish if both the rotation and translation errors are within acceptable tolerances.
+        // Finish if both the rotation and translation errors are within acceptable
+        // tolerances.
         return (Math.abs(xError) < kTxTolerance) && (areaError < kAreaTolerance);
     }
 }
