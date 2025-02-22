@@ -201,7 +201,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public boolean isWithinSafeDrivingLimits() {
     boolean elevatorInSafeLimit = m_elevatorSubsystem
-        .getCurrentMotorPosition() > ElevatorConstants.kElevatorSafeTravelHeight;
+        .getCurrentMotorPosition() < ElevatorConstants.kElevatorSafeTravelHeight;
 
     // If in Auto, it is safe to drive faster
     // But if in Teleop, consider us within safe driving limits only if the altitude

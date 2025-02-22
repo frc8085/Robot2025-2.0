@@ -5,8 +5,9 @@ import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class ToCoralPickUp extends SequentialCommandGroup {
-    public ToCoralPickUp(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, WindmillState prevState) {
+public class ToCoralPickUpCommand extends SequentialCommandGroup {
+    public ToCoralPickUpCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
+            WindmillState prevState) {
         addCommands(
                 // Switch to a transition state
                 // Maybe turn off all the motors
