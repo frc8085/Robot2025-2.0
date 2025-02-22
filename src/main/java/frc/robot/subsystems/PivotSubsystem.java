@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -38,7 +39,7 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast; // TODO: Switch back to brake
 
         config.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
         config.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
@@ -46,6 +47,16 @@ public class PivotSubsystem extends SubsystemBase {
 
         // expirementing with encoder
         // config.Feedback.
+        config.Feedback.FeedbackRemoteSensorID = Constants.CanIdConstants.kPivotArmCancoderCanID;
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        config.Feedback.RotorToSensorRatio = 9. / 1;
+        config.Feedback.SensorToMechanismRatio = 3. / 1;
+        config.Feedback.FeedbackRotorOffset = 0;
+
+        CANcoderConfiguration c = new CANcoderConfiguration();
+        c.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        m_pivotEncoder.getConfigurator().apply(c);
+
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
 
@@ -103,8 +114,15 @@ public class PivotSubsystem extends SubsystemBase {
 
     public void periodic() {
         // Get motor readings
-        SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-        SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+        // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
+        // SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+
+        SmartDashboard.putNumber("Pivot Deg", getCurrentPosition() * 360); // the getPosition function accounts for
+                                                                           // changes in configs (gear ratio)
+                                                                           // getRotorPosition just gets the motor
+                                                                           // value.
+        SmartDashboard.putNumber("Rotor Deg", m_pivotMotor.getRotorPosition().getValueAsDouble() * 360);
+        SmartDashboard.putNumber("Encoder Deg", m_pivotEncoder.getPosition().getValueAsDouble() * 360);
 
     }
 

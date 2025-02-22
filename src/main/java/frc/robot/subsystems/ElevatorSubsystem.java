@@ -77,6 +77,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorPosition = m_elevatorMotor.getPosition();
     elevatorVelocity = m_elevatorEncoder.getVelocity();
 
+    // config.HardwareLimitSwitch.ForwardLimitSource =
+    // ForwardLimitSourceValue.LimitSwitchPin;
+    // config.HardwareLimitSwitch.ForwardLimitRemoteSensorID = 0;
+    // config.HardwareLimitSwitch.ForwardLimitEnable = true;
+    // config.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = false;
+
     // Apply Configs
     m_elevatorMotor.getConfigurator().apply(config);
     m_elevatorMotor.getConfigurator().apply(slot0Configs);

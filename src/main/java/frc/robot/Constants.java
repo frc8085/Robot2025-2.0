@@ -146,13 +146,26 @@ public final class Constants {
     public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
+    // Elevator Heights for different states
+    public static double kElevatorHomeHeight = 23;
+    public static double kElevatorCoralPickupHeight = 28;
+    public static double kElevatorCoralDropOff1Height = 30;
+    public static double kElevatorCoralDropOff2Height = 50;
+    public static double kElevatorCoralDropOff3Height = 75;
+    public static double kElevatorCoralDropOff4Height = 115;
+    public static double kElevatorAlgaePickUpFloorHeight = 6;
+    public static double kElevatorReef2Height = 40;
     public static double kElevatorReef3Height = 70;
+    public static double kElevatorReef2IntakeHeight = 30;
+    public static double kElevatorReef3IntakeHeight = 50;
+    public static double kElevatorNetHeight = 112;
+
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 6;
     public static final double kElevatorStage1Height = 41; // zero position value
     public static final double kElevatorStage2Height = 85;
-    public static final double kElevatorMax = 125; // 140 hard max
+    public static final double kElevatorMax = 120; // 140 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
     public static final double kElevatorSafeHeightMax = 46;
@@ -190,32 +203,37 @@ public final class Constants {
 
     // the Tolerance for pivot command motion
     public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(4.5);
+    public static final double kPivotToleranceRotations = 0.5;
   }
 
   public static final class Windmill {
 
     public static enum WindmillState {
 
-      Home(23, PivotArmConstants.kPivotArmSwingThroughMin),
-      CoralPickup(28, Rotation2d.fromDegrees(25)),
+      Home(ElevatorConstants.kElevatorHomeHeight, PivotArmConstants.kPivotArmSwingThroughMin),
+      CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight, Rotation2d.fromDegrees(25)),
       // coral dropoff happens on both sides
-      CoralDropOff1(30, Rotation2d.fromDegrees(-145), false),
-      CoralDropOff2(50, Rotation2d.fromDegrees(-145), false),
-      CoralDropOff3(75, Rotation2d.fromDegrees(-145), false),
-      CoralDropOff4(115, Rotation2d.fromDegrees(-140), false),
-      AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
-      AlgaePickUpReef2(40, Rotation2d.fromDegrees(12)),
+      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-145), true),
+      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-145), true),
+      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-145), true),
+      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-140), true),
+
+      AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(20)),
+      AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(12)),
       AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(12)),
-      AlgaeNet(112, Rotation2d.fromDegrees(-30)),
-      AlgaePickUpReef3Flip(50, Rotation2d.fromDegrees(-115), false);
+      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight, Rotation2d.fromDegrees(-115)),
+      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight, Rotation2d.fromDegrees(-115)),
+      AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-30)),
+      AlgaeNetRight(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-105));
 
       private double kElevatorHeight;
       private Rotation2d kPivotArmAngle;
-      private boolean canMirror = false;
+      private boolean canMirror;
 
       private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle) {
         this.kElevatorHeight = kElevatorHeight;
         this.kPivotArmAngle = kPivotArmAngle;
+        this.canMirror = false;
       }
 
       private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle, boolean canMirror) {
