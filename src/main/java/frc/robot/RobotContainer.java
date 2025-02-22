@@ -89,7 +89,7 @@ public class RobotContainer {
                                                                                 OIConstants.kDriveDeadband),
                                                                 -MathUtil.applyDeadband(m_driverController.getRightX(),
                                                                                 OIConstants.kDriveDeadband),
-                                                                true),
+                                                                true, false),
                                                 m_robotDrive));
 
                 // Smart Dashboard Buttons
@@ -99,21 +99,14 @@ public class RobotContainer {
 
         }
 
-        /**
-         * Use this method to define your button->command mappings. Buttons can be
-         * created by
-         * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-         * subclasses ({@link
-         * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-         * passing it to a
-         * {@link JoystickButton}.
-         */
-
         private void configureButtonBindings() {
 
                 // Manual Zero buttons for elevator and pivot
                 final Trigger zeroElevator = m_operatorController.start();
                 final Trigger zeroPivot = m_operatorController.back();
+
+                final Trigger zeroHeadingButton = m_driverController.start();
+                zeroHeadingButton.onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
                 final Trigger ejectCoral = m_driverController.b();
                 final Trigger pickUpCoral = m_driverController.x();
@@ -273,6 +266,6 @@ public class RobotContainer {
                 m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
                 // Run path following command, then stop at the end.
-                return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, 0, false));
+                return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, 0, false, false));
         }
 }

@@ -16,11 +16,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private ElevatorSubsystem m_elevatorSubsystem;
+
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -106,7 +111,10 @@ public class DriveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    */
-  public void drive(double speed, double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void drive(double speed, double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+
+    double speedCommanded = isWithinSafeDrivingLimits() ? speed : DriveConstants.kSafeSpeedLimit * speed;
+    double rotSpeed = isWithinSafeDrivingLimits() ? rot : DriveConstants.kSafeRotLimit * rot;
 
     if (xSpeed == 0 && ySpeed == 0) {
       speed = 0;
@@ -190,4 +198,15 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getAngularVelocityXWorld().getValueAsDouble() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  public boolean isWithinSafeDrivingLimits() {
+    boolean elevatorInSafeLimit = m_elevatorSubsystem
+        .getCurrentMotorPosition() > ElevatorConstants.kElevatorSafeTravelHeight;
+
+    // If in Auto, it is safe to drive faster
+    // But if in Teleop, consider us within safe driving limits only if the altitude
+    // and extension are within safe limits
+    return RobotState.isAutonomous() || (elevatorInSafeLimit);
+  }
+
 }
