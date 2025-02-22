@@ -5,10 +5,10 @@ import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class PivotToHome extends Command {
+public class PivotToCoralDropOff4 extends Command {
     PivotSubsystem pivot;
 
-    public PivotToHome(PivotSubsystem pivot) {
+    public PivotToCoralDropOff4(PivotSubsystem pivot) {
         this.pivot = pivot;
 
         addRequirements(pivot);
@@ -16,13 +16,13 @@ public class PivotToHome extends Command {
 
     @Override
     public void execute() {
-        pivot.setPos(WindmillState.Home.getPivotArmAngle());
+        pivot.setPos(WindmillState.CoralDropOff4.getPivotArmAngle());
     }
 
     @Override
     public boolean isFinished() {
         return Math.abs(pivot.getCurrentPosition()
-                - WindmillState.Home.getPivotArmAngle()
+                - WindmillState.CoralDropOff4.getPivotArmAngle()
                         .getRotations()) < Constants.PivotArmConstants.kPivotToleranceRotations; // TODO Switch to using
                                                                                                  // the Rotation2d value
     }

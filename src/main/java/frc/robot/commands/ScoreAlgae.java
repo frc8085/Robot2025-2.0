@@ -1,34 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.AlgaeSubsystem;
 
-public class ScoreAlgae extends Command {
-        AlgaeSubsystem algaeSubsystem;
+public class ScoreAlgae extends SequentialCommandGroup {
 
         public ScoreAlgae(
                         AlgaeSubsystem algaeSubsystem) {
-
-                this.algaeSubsystem = algaeSubsystem;
+                addCommands(
+                                new ParallelDeadlineGroup(new WaitCommand(0.5),
+                                                new InstantCommand(algaeSubsystem::eject)),
+                                new InstantCommand(algaeSubsystem::stop));
         }
 
-        public void initialize() {
-        }
-
-        @Override
-        public void execute() {
-                algaeSubsystem.eject();
-        }
-
-        @Override
-        public void end(boolean interrupted) {
-                algaeSubsystem.stop();
-        }
-
-        @Override
-        public boolean isFinished() {
-                new WaitCommand(.5);
-                return true;
-        }
 }

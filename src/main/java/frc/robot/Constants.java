@@ -44,9 +44,6 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kSafeSpeedLimit = 0.40; // % of max speed
-    public static final double kSafeRotLimit = .1;
-
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
     // Distance between centers of right and left wheels on robot
@@ -156,6 +153,7 @@ public final class Constants {
     public static double kElevatorAlgaePickUpFloorHeight = 6;
     public static double kElevatorReef2Height = 40;
     public static double kElevatorReef3Height = 70;
+    public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
     public static double kElevatorReef2IntakeHeight = 30;
     public static double kElevatorReef3IntakeHeight = 50;
     public static double kElevatorNetHeight = 112;
@@ -221,6 +219,7 @@ public final class Constants {
       AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(20)),
       AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(12)),
       AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(12)),
+      AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight, Rotation2d.fromDegrees(0)),
       AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight, Rotation2d.fromDegrees(-115)),
       AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight, Rotation2d.fromDegrees(-115)),
       AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-30)),

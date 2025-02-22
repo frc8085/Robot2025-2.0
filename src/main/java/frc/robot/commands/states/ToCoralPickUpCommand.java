@@ -15,9 +15,9 @@ public class ToCoralPickUpCommand extends SequentialCommandGroup {
                 // Check safety
                 new ElevatorToSafefromHomeToPickUp(elevatorSubsystem, prevState),
                 // Move pivot
-                new PivotToHome(pivotSubsystem),
+                new PivotToCoralPickUp(pivotSubsystem),
                 // Move elevator
-                new ElevatorToHome(elevatorSubsystem));
+                new ElevatorToCoralPickUp(elevatorSubsystem));
         // Switch to target state.
     }
 }
