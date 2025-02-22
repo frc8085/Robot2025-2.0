@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -142,6 +143,7 @@ public final class Constants {
     public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
+    public static double kElevatorReef3Height = 70;
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 6;
@@ -150,8 +152,14 @@ public final class Constants {
     public static final double kElevatorMax = 125; // 140 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 50;
+    public static final double kElevatorSafeHeightMax = 46;
     public static final double kElevatorSafeHeightMin = 15;
+
+    // The maximum height that the robot can safely travel at
+    public static final double kElevatorSafeTravelHeight = 50;
+
+    // the Elevator tolerance
+    public static final double kElevatorTolerance = 1.5;
   }
 
   public static final class PivotArmConstants {
@@ -169,31 +177,34 @@ public final class Constants {
     public static double kPivotArmMMAcc = 60;
     public static double kPivotArmMMJerk = 1600;
 
-    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-150);
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-200);
     public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
 
     /// The min/max angle of the pivot that will be rotating through the path of the
     /// elevator
-    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-20); // TODO setup real values
-    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(-120); // TODO setup real values
+    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-55);
+    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(-120);
 
+    // the Tolerance for pivot command motion
+    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(4.5);
   }
 
   public static final class Windmill {
 
     public static enum WindmillState {
 
-      Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
-      CoralPickup(30, Rotation2d.fromDegrees(25)),
+      Home(23, PivotArmConstants.kPivotArmSwingThroughMin),
+      CoralPickup(28, Rotation2d.fromDegrees(25)),
       // coral dropoff happens on both sides
-      CoralDropOff1(40, Rotation2d.fromDegrees(-130), false),
-      CoralDropOff2(65, Rotation2d.fromDegrees(-130), false),
-      CoralDropOff3(85, Rotation2d.fromDegrees(-130), false),
-      CoralDropOff4(125, Rotation2d.fromDegrees(-140), false),
+      CoralDropOff1(30, Rotation2d.fromDegrees(-145), false),
+      CoralDropOff2(50, Rotation2d.fromDegrees(-145), false),
+      CoralDropOff3(75, Rotation2d.fromDegrees(-145), false),
+      CoralDropOff4(115, Rotation2d.fromDegrees(-140), false),
       AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
-      AlgaePickUpReef2(10, Rotation2d.fromDegrees(-10)),
-      AlgaePickUpReef3(50, Rotation2d.fromDegrees(-10)),
-      AlgaeNet(40, Rotation2d.fromDegrees(-120));
+      AlgaePickUpReef2(40, Rotation2d.fromDegrees(12)),
+      AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(12)),
+      AlgaeNet(112, Rotation2d.fromDegrees(-30)),
+      AlgaePickUpReef3Flip(50, Rotation2d.fromDegrees(-115), false);
 
       private double kElevatorHeight;
       private Rotation2d kPivotArmAngle;
