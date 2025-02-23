@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -28,7 +29,6 @@ public final class Constants {
     public static final int kGyroCanId = 15;
 
     public static final int kCoralCanId = 21;
-
     public static final int kAlgaeCanId = 22;
     public static final int kClimberCanId = 24;
 
@@ -143,16 +143,37 @@ public final class Constants {
     public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
+    // Elevator Heights for different states
+    public static double kElevatorHomeHeight = 30;
+    public static double kElevatorCoralPickupHeight = 28;
+    public static double kElevatorCoralDropOff1Height = 30;
+    public static double kElevatorCoralDropOff2Height = 50;
+    public static double kElevatorCoralDropOff3Height = 75;
+    public static double kElevatorCoralDropOff4Height = 115;
+    public static double kElevatorAlgaePickUpFloorHeight = 6;
+    public static double kElevatorReef2Height = 40;
+    public static double kElevatorReef3Height = 70;
+    public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
+    public static double kElevatorReef2IntakeHeight = 30;
+    public static double kElevatorReef3IntakeHeight = 50;
+    public static double kElevatorNetHeight = 112;
+
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 6;
     public static final double kElevatorStage1Height = 41; // zero position value
     public static final double kElevatorStage2Height = 85;
-    public static final double kElevatorMax = 125; // 140 hard max
+    public static final double kElevatorMax = 120; // 140 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 50;
+    public static final double kElevatorSafeHeightMax = 46;
     public static final double kElevatorSafeHeightMin = 15;
+
+    // The maximum height that the robot can safely travel at
+    public static final double kElevatorSafeTravelHeight = 50;
+
+    // the Elevator tolerance
+    public static final double kElevatorTolerance = 5;
   }
 
   public static final class PivotArmConstants {
@@ -160,49 +181,60 @@ public final class Constants {
     public static final double kPivotMotorGearRatio = 27;
     public static double kPivotArmSpeed = .10;
 
-    public static final double kPivotArmP = 0.7; // 0.7
+    public static final double kPivotArmP = 1.4; // 0.7
     public static final double kPivotArmI = 0; // 0.0
     public static final double kPivotArmD = 0.1; // 0.1
-    public static final double kPivotArmV = 0.12; // 0.12
-    public static final double kPivotArmA = 0.01; // 0.01
+    public static final double kPivotArmS = 0.07;
+    public static final double kPivotArmV = 0.2; // 0.2
+    public static final double kPivotArmA = 0.015; // 0.015
+    public static final double kPivotArmFF = -0.13;
 
     public static double kPivotArmMMVelo = 25;
     public static double kPivotArmMMAcc = 60;
     public static double kPivotArmMMJerk = 1600;
 
-    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-150);
-    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-110);
+    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(120);
 
     /// The min/max angle of the pivot that will be rotating through the path of the
     /// elevator
-    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-20); // TODO setup real values
-    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(-120); // TODO setup real values
+    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(35);
+    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-35);
 
+    // the Tolerance for pivot command motion
+    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(5);
+    public static final double kPivotToleranceRotations = kPivotTolerance.getRotations();
   }
 
   public static final class Windmill {
 
     public static enum WindmillState {
 
-      Home(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(-60)),
-      CoralPickup(30, Rotation2d.fromDegrees(25)),
+      Home(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(45)),
+      CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight, Rotation2d.fromDegrees(115)),
       // coral dropoff happens on both sides
-      CoralDropOff1(40, Rotation2d.fromDegrees(-130), false),
-      CoralDropOff2(65, Rotation2d.fromDegrees(-130), false),
-      CoralDropOff3(85, Rotation2d.fromDegrees(-130), false),
-      CoralDropOff4(125, Rotation2d.fromDegrees(-140), false),
-      AlgaePickUpFloor(6, Rotation2d.fromDegrees(20)),
-      AlgaePickUpReef2(10, Rotation2d.fromDegrees(-10)),
-      AlgaePickUpReef3(50, Rotation2d.fromDegrees(-10)),
-      AlgaeNet(40, Rotation2d.fromDegrees(-120));
+      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-50), true),
+
+      AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(110)),
+      AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(102)),
+      AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(102)),
+      AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight, Rotation2d.fromDegrees(90)),
+      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight, Rotation2d.fromDegrees(-25)),
+      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight, Rotation2d.fromDegrees(-25)),
+      AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(60)),
+      AlgaeNetRight(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-15));
 
       private double kElevatorHeight;
       private Rotation2d kPivotArmAngle;
-      private boolean canMirror = false;
+      private boolean canMirror;
 
       private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle) {
         this.kElevatorHeight = kElevatorHeight;
         this.kPivotArmAngle = kPivotArmAngle;
+        this.canMirror = false;
       }
 
       private WindmillState(double kElevatorHeight, Rotation2d kPivotArmAngle, boolean canMirror) {
@@ -280,7 +312,7 @@ public final class Constants {
 
   public static final class TuningModeConstants {
     public static boolean kAlgaeTuning = false;
-    public static boolean kCoralTuning = true;
+    public static boolean kCoralTuning = false;
     public static boolean kElevatorTuning = true;
     public static boolean kPivotTuning = false;
   }

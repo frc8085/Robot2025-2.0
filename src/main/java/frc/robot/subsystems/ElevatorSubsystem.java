@@ -3,18 +3,19 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -41,6 +42,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   DigitalInput topLimitSwitch = new DigitalInput(0);
   DigitalInput bottomLimitSwitch = new DigitalInput(2);
   DigitalInput zeroLimitSwitch = new DigitalInput(1);
+
+  final DutyCycleOut m_dutyCycle = new DutyCycleOut(0.0);
 
   public boolean ElevatorLowerLimitHit() {
     return bottomLimitSwitch.get();
@@ -76,6 +79,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     // get sensor readings
     elevatorPosition = m_elevatorMotor.getPosition();
     elevatorVelocity = m_elevatorEncoder.getVelocity();
+
+    // config.HardwareLimitSwitch.ForwardLimitSource =
+    // ForwardLimitSourceValue.LimitSwitchPin;
+    // config.HardwareLimitSwitch.ForwardLimitRemoteSensorID = 0;
+    // config.HardwareLimitSwitch.ForwardLimitEnable = true;
+    // config.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = false;
 
     // Apply Configs
     m_elevatorMotor.getConfigurator().apply(config);
@@ -152,12 +161,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
 
   public boolean targetInDangerZone(double target_position) {
-    return target_position < Constants.ElevatorConstants.kElevatorSafeHeightMax;
+    return target_position < (Constants.ElevatorConstants.kElevatorSafeHeightMax
+        - Constants.ElevatorConstants.kElevatorTolerance);
   }
 
   public double minConflictHeight(Rotation2d target_angle) {
-    var deg = Math.abs(target_angle.getRadians());
-    var minHeight = 0.004 * deg + Constants.ElevatorConstants.kElevatorSafeHeightMin;
+    var deg = Math.abs(target_angle.getDegrees());
+    var minHeight = -7 * Math.pow(deg, 0.7 / 2) + 50;
     if (minHeight < Constants.ElevatorConstants.kElevatorSafeHeightMin) {
       minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMin;
     } else if (minHeight > Constants.ElevatorConstants.kElevatorSafeHeightMax) {
@@ -167,7 +177,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean targetInConflictZone(double target_position, Rotation2d target_angle) {
-    return target_position < minConflictHeight(target_angle);
+    return target_position < minConflictHeight(target_angle) - Constants.ElevatorConstants.kElevatorTolerance;
   }
 
   public boolean inDangerZone() {
@@ -208,16 +218,33 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void moveUp() {
+  public void zeroMoveUp() {
 
     if (topLimitSwitch.get()) {
       // We are going up and top limit is tripped so stop
       m_elevatorMotor.set(0);
     } else {
-      // We are going up but top limit is not tripped so go at commanded speed
-      m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+      // Go slower when we are zeroing
+      m_elevatorMotor.set(.15);
     }
 
+  }
+
+  public void moveUp() {
+
+    m_elevatorMotor.setControl(m_dutyCycle.withOutput(0.25)
+        .withLimitForwardMotion(topLimitSwitch.get())
+        .withLimitReverseMotion(bottomLimitSwitch.get()));
+
+    /*
+     * if (topLimitSwitch.get()) {
+     * // We are going up and top limit is tripped so stop
+     * m_elevatorMotor.set(0);
+     * } else {
+     * // We are going up but top limit is not tripped so go at commanded speed
+     * m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
+     * }
+     */
   }
 
   public void holdHeight() {

@@ -16,22 +16,31 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.EjectCoral;
+import frc.robot.commands.IntakeMotorsOff;
+import frc.robot.commands.PickUpAlgaeL3;
 import frc.robot.commands.PickUpCoral;
+import frc.robot.commands.PickUpCoralFromSource;
+import frc.robot.commands.ScoreAlgae;
+import frc.robot.commands.ScoreAlgaeNetLeft;
+import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.ZeroPivot;
+import frc.robot.commands.states.ToAlgaeNetLeftCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -47,20 +56,20 @@ import frc.robot.subsystems.PivotSubsystem;
  */
 public class RobotContainer {
         // The robot's subsystems
-        private final PivotSubsystem m_PivotArm = new PivotSubsystem();
-        private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-        private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
-        private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-        private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-        private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
+        private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+        private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+        private final CoralSubsystem coralSubsystem = new CoralSubsystem();
+        private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+        private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+        private final AlgaeSubsystem algaeSubsystem = new AlgaeSubsystem();
 
         // The driver's controller
-        XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-        XboxController m_operatorController = new XboxController(OIConstants.kOperaterControllerPort);
+        CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+        CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
 
         public void adjustJoystickValues() {
-                double rawX = m_driverController.getLeftX();
-                double rawY = m_driverController.getLeftY();
+                double rawX = driverController.getLeftX();
+                double rawY = driverController.getLeftY();
 
         }
 
@@ -72,54 +81,30 @@ public class RobotContainer {
                 configureButtonBindings();
 
                 // Configure default commands
-                m_robotDrive.setDefaultCommand(
+                driveSubsystem.setDefaultCommand(
                                 // The right trigger controls the speed of the robot.
                                 // The left stick controls translation of the robot.
                                 // Turning is controlled by the X axis of the right stick.
                                 new RunCommand(
-                                                () -> m_robotDrive.drive(
+                                                () -> driveSubsystem.drive(
                                                                 MathUtil.applyDeadband(
-                                                                                m_driverController
+                                                                                driverController
                                                                                                 .getRightTriggerAxis(),
                                                                                 OIConstants.kDriveDeadband),
-                                                                -MathUtil.applyDeadband(m_driverController.getLeftY(),
+                                                                -MathUtil.applyDeadband(driverController.getLeftY(),
                                                                                 OIConstants.kDriveDeadband),
-                                                                -MathUtil.applyDeadband(m_driverController.getLeftX(),
+                                                                -MathUtil.applyDeadband(driverController.getLeftX(),
                                                                                 OIConstants.kDriveDeadband),
-                                                                -MathUtil.applyDeadband(m_driverController.getRightX(),
+                                                                -MathUtil.applyDeadband(driverController.getRightX(),
                                                                                 OIConstants.kDriveDeadband),
                                                                 true),
-                                                m_robotDrive));
+                                                driveSubsystem));
 
                 // Smart Dashboard Buttons
-
                 SmartDashboard.putData("Windmill Home",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
                                                 Constants.Windmill.WindmillState.Home, false));
-                SmartDashboard.putData("Windmill Coral PickUp",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralPickup, false));
-                SmartDashboard.putData("Windmill Algae ground",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
-                SmartDashboard.putData("Windmill Coral Drop Off 1",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff1, true));
-                SmartDashboard.putData("Windmill Coral Drop Off 2",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff2, true));
-                SmartDashboard.putData("Windmill Coral Drop Off 3",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff3, true));
-                SmartDashboard.putData("Windmill Coral Drop Off 4",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.CoralDropOff4, true));
-                SmartDashboard.putData("Windmill Reef 2",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.AlgaePickUpReef2, true));
-                SmartDashboard.putData("Windmill Reef 3",
-                                new Windmill(m_ElevatorSubsystem, m_PivotArm,
-                                                Constants.Windmill.WindmillState.AlgaePickUpReef3, true));
+
         }
 
         /**
@@ -134,75 +119,125 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
 
-                final JoystickButton pickUpCoral = new JoystickButton(m_operatorController, Button.kX.value);
-                final JoystickButton ejectCoral = new JoystickButton(m_operatorController, Button.kY.value);
-                final JoystickButton pickUpAlgae = new JoystickButton(m_operatorController, Button.kA.value);
-                final JoystickButton ejectAlgae = new JoystickButton(m_operatorController, Button.kB.value);
-                final JoystickButton raiseClimber = new JoystickButton(m_operatorController, Button.kLeftBumper.value);
-                final JoystickButton lowerClimber = new JoystickButton(m_operatorController, Button.kRightBumper.value);
-                final JoystickButton zeroElevator = new JoystickButton(m_operatorController, Button.kStart.value);
-                final JoystickButton zeroPivot = new JoystickButton(m_operatorController, Button.kBack.value);
-                // final JoystickButton alt_raiseElevator = new
-                // JoystickButton(m_operatorController,
-                // Axis.axisLessThan(1, -0.25));
-
-                // JoystickButton(m_operatorController,);
-
-                /*
-                 * Dpad Controls
-                 * Angle 0 = UP
-                 * Angle 90 = RIGHT
-                 * Angle 180 = DOWN
-                 * Angle 270 = LEFT
-                 */
-
-                final POVButton pivotClockwise = new POVButton(m_operatorController, 90);
-                final POVButton pivotCounterClockwise = new POVButton(m_operatorController, 270);
-                final POVButton raiseElevator = new POVButton(m_operatorController, 0);
-                final POVButton lowerElevator = new POVButton(m_operatorController, 180);
+                // Manual Zero buttons for elevator and pivot
+                final Trigger zeroElevator = operatorController.start();
+                final Trigger zeroPivot = operatorController.back();
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
-                zeroElevator.onTrue(new ZeroElevator(m_ElevatorSubsystem));
-                zeroPivot.onTrue(new ZeroPivot(m_PivotArm));
+                zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
+                zeroPivot.onTrue(new ZeroPivot(pivotSubsystem));
 
-                // coral subsystem
-                pickUpCoral.onTrue(new PickUpCoral(m_CoralSubsystem));
-                ejectCoral.onTrue(new EjectCoral(m_CoralSubsystem));
+                // Reset heading of robot for field relative drive
+                final Trigger zeroHeadingButton = driverController.start();
+                zeroHeadingButton.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
 
-                // algae subsystem
-                pickUpAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
-                                .onFalse(new InstantCommand(m_AlgaeSubsystem::holdAlgae));
+                // Driver operations
+                final Trigger ejectCoral = driverController.b();
+                final Trigger pickUpCoral = driverController.x();
+                final Trigger ejectAlgae = driverController.a();
+                final Trigger pickUpAlgae = driverController.y();
+                final Trigger shootAlgaeLeft = driverController.leftBumper();
+                final Trigger shootAlgaeRight = driverController.rightBumper();
+                final Trigger raiseClimber = driverController.povUp();
+                final Trigger lowerClimber = driverController.povDown();
+                final Trigger intakeMotorsOff = driverController.back();
 
-                ejectAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.eject(), m_AlgaeSubsystem))
-                                .onFalse(new RunCommand(() -> m_AlgaeSubsystem.stop(), m_AlgaeSubsystem));
+                // commands that go with driver operations
+                ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                ejectAlgae.onTrue(new ScoreAlgae(algaeSubsystem));
+                shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
+                shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
+                raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
+                                climberSubsystem))
+                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                                                climberSubsystem));
 
-                raiseClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(), m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+                lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
+                                climberSubsystem))
+                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                                                climberSubsystem));
+                pickUpAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
+                                .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));
+                // pickUpAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(),
+                // algaeSubsystem))
+                // .onFalse(new PickUpAlgaeL3(algaeSubsystem, elevatorSubsystem,
+                // pivotSubsystem));
+                intakeMotorsOff.onTrue(new IntakeMotorsOff(coralSubsystem, algaeSubsystem));
 
-                lowerClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(), m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(), m_ClimberSubsystem));
+                // Operator Controls
+                // position controls
+                final Trigger armHome = operatorController.leftBumper();
+                final Trigger algaeGround = operatorController.povDown();
+                final Trigger algaeReef2 = operatorController.povRight();
+                final Trigger algaeReef3 = operatorController.povUp();
+                final Trigger coralDropOff4 = operatorController.y();
+                final Trigger coralDropOff3 = operatorController.x();
+                final Trigger coralDropOff2 = operatorController.b();
+                final Trigger coralDropOff1 = operatorController.a();
+                final Trigger altPositionRight = operatorController.rightBumper();
 
+                armHome.onTrue(new SequentialCommandGroup(new PrintCommand("arm button pressed"),
+                                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
+                                                false)));
+                algaeGround.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
+                algaeReef2.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.AlgaePickUpReef2, false));
+                algaeReef3.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.AlgaePickUpReef3, false));
+                coralDropOff1.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff1, false));
+                coralDropOff2.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff2, false));
+                coralDropOff3.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff3, false));
+                coralDropOff4.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff4, false));
+
+                // alternate positions
+                algaeGround.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.AlgaePickUpFloorFlip, false));
+                algaeReef2.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.AlgaePickUpReef2Flip, false));
+                algaeReef3.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.AlgaePickUpReef3Flip, false));
+                coralDropOff1.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff1, true));
+                coralDropOff2.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff2, true));
+                coralDropOff3.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff3, true));
+                coralDropOff4.and(altPositionRight).onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                Constants.Windmill.WindmillState.CoralDropOff4, true));
+
+                // Set Left Joystick for manual elevator/pivot movement
+                final Trigger raiseElevator = operatorController.axisLessThan(1, -0.25);
+                final Trigger lowerElevator = operatorController.axisGreaterThan(1, 0.25);
+                final Trigger pivotClockwise = operatorController.axisGreaterThan(4, 0.25);
+                final Trigger pivotCounterClockwise = operatorController.axisLessThan(4,
+                                -0.25);
+
+                // commands that go with manual elevator/pivot movement
                 pivotClockwise
-                                .whileTrue(new RunCommand(() -> m_PivotArm.start(), m_PivotArm))
-                                .onFalse(new InstantCommand(() -> m_PivotArm.keepPivot(m_PivotArm.getCurrentRotation()),
-                                                m_PivotArm));
-
-                pivotCounterClockwise.whileTrue(new RunCommand(() -> m_PivotArm.reverse(), m_PivotArm))
-                                .onFalse(new InstantCommand(() -> m_PivotArm.keepPivot(m_PivotArm.getCurrentRotation()),
-                                                m_PivotArm));
-
-                // elevator subsystem
+                                .whileTrue(new RunCommand(() -> pivotSubsystem.start(), pivotSubsystem))
+                                .onFalse(new InstantCommand(
+                                                () -> pivotSubsystem.keepPivot(pivotSubsystem.getCurrentRotation()),
+                                                pivotSubsystem));
+                pivotCounterClockwise.whileTrue(new RunCommand(() -> pivotSubsystem.reverse(), pivotSubsystem))
+                                .onFalse(new InstantCommand(
+                                                () -> pivotSubsystem.keepPivot(pivotSubsystem.getCurrentRotation()),
+                                                pivotSubsystem));
                 raiseElevator.whileTrue(
-                                new InstantCommand(m_ElevatorSubsystem::moveUp))
+                                new InstantCommand(elevatorSubsystem::moveUp))
                                 .onFalse(new InstantCommand(
-                                                () -> m_ElevatorSubsystem.keepHeight(
-                                                                m_ElevatorSubsystem.getCurrentMotorPosition())));
-
+                                                () -> elevatorSubsystem.keepHeight(
+                                                                elevatorSubsystem.getCurrentMotorPosition())));
                 lowerElevator.whileTrue(
-                                new InstantCommand(m_ElevatorSubsystem::moveDown))
+                                new InstantCommand(elevatorSubsystem::moveDown))
                                 .onFalse(new InstantCommand(
-                                                () -> m_ElevatorSubsystem.keepHeight(
-                                                                m_ElevatorSubsystem.getCurrentMotorPosition())));
+                                                () -> elevatorSubsystem.keepHeight(
+                                                                elevatorSubsystem.getCurrentMotorPosition())));
 
         }
 
@@ -235,20 +270,20 @@ public class RobotContainer {
 
                 SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
                                 exampleTrajectory,
-                                m_robotDrive::getPose, // Functional interface to feed supplier
+                                driveSubsystem::getPose, // Functional interface to feed supplier
                                 DriveConstants.kDriveKinematics,
 
                                 // Position controllers
                                 new PIDController(AutoConstants.kPXController, 0, 0),
                                 new PIDController(AutoConstants.kPYController, 0, 0),
                                 thetaController,
-                                m_robotDrive::setModuleStates,
-                                m_robotDrive);
+                                driveSubsystem::setModuleStates,
+                                driveSubsystem);
 
                 // Reset odometry to the starting pose of the trajectory.
-                m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+                driveSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
 
                 // Run path following command, then stop at the end.
-                return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, 0, false));
+                return swerveControllerCommand.andThen(() -> driveSubsystem.drive(0, 0, 0, 0, false));
         }
 }

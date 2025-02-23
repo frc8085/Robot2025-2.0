@@ -3,11 +3,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants.PivotArmConstants;
 
 public class Pivot extends Command {
     private final Rotation2d m_targetAngle;
     private final PivotSubsystem m_pivot;
-    private final Rotation2d tolerance = Rotation2d.fromDegrees(5);
+    private final Rotation2d tolerance = PivotArmConstants.kPivotTolerance;
 
     public Pivot(PivotSubsystem pivot, Rotation2d targetAngle) {
         m_targetAngle = targetAngle;

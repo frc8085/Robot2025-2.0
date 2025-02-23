@@ -94,6 +94,7 @@ public final class Configs {
 
                         climberConfig
                                         .idleMode(IdleMode.kBrake)
+                                        .inverted(true)
                                         .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoVortexCurrentLimit);
                         climberConfig.closedLoop
                                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)

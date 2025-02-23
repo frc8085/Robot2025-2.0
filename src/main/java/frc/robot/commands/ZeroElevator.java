@@ -10,7 +10,7 @@ public class ZeroElevator extends
 
     public ZeroElevator(ElevatorSubsystem elevatorSubsystem) {
         addCommands(
-                new InstantCommand(elevatorSubsystem::moveUp),
+                new InstantCommand(elevatorSubsystem::zeroMoveUp),
                 new WaitUntilCommand(elevatorSubsystem::ElevatorZeroLimitHit),
                 new InstantCommand(elevatorSubsystem::stop),
                 new InstantCommand(elevatorSubsystem::zero));

@@ -12,7 +12,7 @@ public class ZeroPivot extends
     public ZeroPivot(PivotSubsystem pivotSubsystem) {
         addCommands(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> pivotSubsystem.setRotorPos(Rotation2d.fromDegrees(0))),
-                        new InstantCommand(() -> pivotSubsystem.setPos(Rotation2d.fromDegrees(0)))));
+                        new InstantCommand(() -> pivotSubsystem.setAnglePos(Rotation2d.fromDegrees(90))),
+                        new InstantCommand(() -> pivotSubsystem.setPos(Rotation2d.fromDegrees(90)))));
     }
 }
