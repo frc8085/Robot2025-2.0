@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -220,24 +221,26 @@ public class RobotContainer {
 
                 // commands that go with manual elevator/pivot movement
                 pivotClockwise
-                                .whileTrue(new RunCommand(() -> pivotSubsystem.start(), pivotSubsystem))
+                                .onTrue(new InstantCommand(() -> pivotSubsystem.start()))
                                 .onFalse(new InstantCommand(
-                                                () -> pivotSubsystem.keepPivot(pivotSubsystem.getCurrentRotation()),
-                                                pivotSubsystem));
-                pivotCounterClockwise.whileTrue(new RunCommand(() -> pivotSubsystem.reverse(), pivotSubsystem))
+                                                () -> pivotSubsystem.holdPivotArmManual()));
+                pivotCounterClockwise.onTrue(new InstantCommand(() -> pivotSubsystem.reverse()))
                                 .onFalse(new InstantCommand(
-                                                () -> pivotSubsystem.keepPivot(pivotSubsystem.getCurrentRotation()),
-                                                pivotSubsystem));
+                                                () -> pivotSubsystem.holdPivotArmManual()));
                 raiseElevator.whileTrue(
-                                new InstantCommand(elevatorSubsystem::moveUp))
+                                new InstantCommand(() -> elevatorSubsystem.moveUp())
+                                                .andThen(new WaitUntilCommand(
+                                                                () -> elevatorSubsystem.ElevatorRaiseLimitHit()))
+                                                .andThen(new InstantCommand(() -> elevatorSubsystem.holdHeight())))
                                 .onFalse(new InstantCommand(
-                                                () -> elevatorSubsystem.keepHeight(
-                                                                elevatorSubsystem.getCurrentMotorPosition())));
+                                                () -> elevatorSubsystem.holdHeight()));
                 lowerElevator.whileTrue(
-                                new InstantCommand(elevatorSubsystem::moveDown))
+                                new InstantCommand(() -> elevatorSubsystem.moveDown())
+                                                .andThen(new WaitUntilCommand(
+                                                                () -> elevatorSubsystem.ElevatorLowerLimitHit()))
+                                                .andThen(new InstantCommand(() -> elevatorSubsystem.holdHeight())))
                                 .onFalse(new InstantCommand(
-                                                () -> elevatorSubsystem.keepHeight(
-                                                                elevatorSubsystem.getCurrentMotorPosition())));
+                                                () -> elevatorSubsystem.holdHeight()));
 
         }
 

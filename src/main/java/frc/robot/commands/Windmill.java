@@ -4,17 +4,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
+import frc.robot.Constants.TuningModeConstants;
 import frc.robot.Constants.Windmill.WindmillState;
-import java.util.Vector;
 
 public class Windmill extends Command {
 
@@ -34,6 +32,8 @@ public class Windmill extends Command {
                 this.targetHeight = targetHeight;
         }
 
+        // if the same elevator/arm position can be used on both sides of the robot,
+        // then set the pivot arm angle as the mirror when on the right (intake) side
         public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, WindmillState windmillState,
                         boolean mirrored) {
                 var rotation_target = windmillState.getPivotArmAngle();
@@ -53,17 +53,30 @@ public class Windmill extends Command {
 
         @Override
         public void initialize() {
+
+                // check if elevator is currently below the safe pivot arm movement height (i.e.
+                // danger zone)
                 boolean elevatorInDangerZone = elevatorSubsystem.inDangerZone();
+                // check if end height of the elevator is in the danger zone
                 boolean elevatorEndInDangerZone = elevatorSubsystem.targetInDangerZone(this.targetHeight);
+                // check if the arm will go through the danger zone when below the safe height
                 boolean pivotWillSwingThrough = pivotSubsystem.willPivotThroughDangerZone(this.targetAngle);
 
                 SequentialCommandGroup commands = new SequentialCommandGroup();
 
-                if (elevatorInDangerZone && pivotWillSwingThrough) {
-                        commands.addCommands(new PrintCommand("Windmill: Pivot will swing through danger zone"));
-                } else {
-                        commands.addCommands(new PrintCommand("Windmill: Pivot will not swing through danger zone"));
+                // logging
+                if (TuningModeConstants.kElevatorTuning) {
+
+                        if (elevatorInDangerZone && pivotWillSwingThrough) {
+                                commands.addCommands(
+                                                new PrintCommand("Windmill: Pivot will swing through danger zone"));
+                        } else {
+                                commands.addCommands(
+                                                new PrintCommand("Windmill: Pivot will not swing through danger zone"));
+                        }
                 }
+                // if elevator is not in danger zone or pivot will not swing through the danger
+                // zone, move the elevator and pivot arm in parallel
 
                 if (!elevatorInDangerZone || !pivotWillSwingThrough) {
                         commands.addCommands(
@@ -71,7 +84,10 @@ public class Windmill extends Command {
                                                         new Elevator(elevatorSubsystem, targetHeight),
                                                         new Pivot(pivotSubsystem, targetAngle)));
 
-                } else {
+                }
+                // if elevator ends in the danger zone, then move the elevator to the safe
+                // height, move the pivot, then continue to the final height
+                else {
                         if (elevatorEndInDangerZone) {
                                 commands.addCommands(
                                                 new SequentialCommandGroup(
@@ -79,7 +95,12 @@ public class Windmill extends Command {
                                                                                 Constants.ElevatorConstants.kElevatorSafeHeightMax),
                                                                 new Pivot(pivotSubsystem, targetAngle),
                                                                 new Elevator(elevatorSubsystem, targetHeight)));
-                        } else {
+                        }
+
+                        // if elevator does not end in danger zone, then move the elevator to the target
+                        // height, and once the elevator reaches the safe height, move the pivot arm
+
+                        else {
                                 commands.addCommands(
                                                 new ParallelCommandGroup(
                                                                 new Elevator(elevatorSubsystem, targetHeight),

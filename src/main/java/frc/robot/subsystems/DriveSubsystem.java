@@ -19,6 +19,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.States.DriveState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -41,6 +43,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
+
+  // private DriveState driveState;
 
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(CanIdConstants.kGyroCanId);
@@ -112,6 +116,9 @@ public class DriveSubsystem extends SubsystemBase {
       speed = 0;
     }
 
+    double dElevatorSpeed = DriveConstants.kMaxSpeedMetersPerSecond
+        - DriveConstants.kMinSpeedMetersPerSecondMaxElevatorHeight;
+
     // Convert the commanded speeds into the correct units(angle) for the drivetrain
     double joystickAngle = Math.atan2(ySpeed, xSpeed);
 
@@ -119,8 +126,14 @@ public class DriveSubsystem extends SubsystemBase {
     double vy = speed * Math.sin(joystickAngle);
     double vx = speed * Math.cos(joystickAngle);
 
-    double xSpeedDelivered = vx * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = vy * DriveConstants.kMaxSpeedMetersPerSecond;
+    double maxDrivableSpeed = DriveState.elevatorMultiplier * dElevatorSpeed
+        + DriveConstants.kMinSpeedMetersPerSecondMaxElevatorHeight;
+
+    SmartDashboard.putNumber("Max drivable speed",
+        maxDrivableSpeed);
+
+    double xSpeedDelivered = vx * maxDrivableSpeed;
+    double ySpeedDelivered = vy * maxDrivableSpeed;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
