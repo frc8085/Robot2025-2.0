@@ -172,7 +172,7 @@ public class PivotSubsystem extends SubsystemBase {
         var result = false;
 
         // check if the start and/or end position is in the danger zone
-        if (targetInDangerZone(targetAngle) || inDangerZone()) {
+        if (this.targetInDangerZone(targetAngle) || this.inDangerZone()) {
             result = true;
         }
 
@@ -181,18 +181,7 @@ public class PivotSubsystem extends SubsystemBase {
 
         // check if the current position is on one side of the danger zone, and the
         // target is on the other
-        var minSwing = Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
-        var maxSwing = Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
-                - Constants.PivotArmConstants.kPivotTolerance.getDegrees();
-        if (
-        // if the start and end positions are not between the minimum angle and the min
-        // danger zone
-        !(getCurrentRotation().getDegrees() < minSwing
-                && targetAngle.getDegrees() < minSwing)
-                // or
-                || !(getCurrentRotation().getDegrees() > maxSwing
-                        && targetAngle.getDegrees() > maxSwing)) {
+        if (Math.signum(getCurrentRotation().getDegrees()) != Math.signum(targetAngle.getDegrees())) {
             result = true;
         }
 
