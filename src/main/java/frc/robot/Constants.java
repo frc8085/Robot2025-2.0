@@ -291,6 +291,7 @@ public final class Constants {
     public static double kCoralD = 0.0;
     public static double kCoralFF = 0.0;
 
+    // Beam Break Sensor
     public static int kIRPort = 3;
   }
 
@@ -312,6 +313,10 @@ public final class Constants {
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
     public static double kAlgaeFF = 0.0;
+
+    // Beam Break Sensor
+    public static int kIRPort = 4;
+
   }
 
   public static final class ClimberConstants {
