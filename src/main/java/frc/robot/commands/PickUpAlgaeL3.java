@@ -43,7 +43,7 @@ public class PickUpAlgaeL3 extends Command {
         @Override
         public void execute() {
                 elevatorSubsystem.setPos(ElevatorConstants.kElevatorReef3Height - 20);
-                pivotSubsystem.setPos(Rotation2d.fromDegrees(-40));
+                pivotSubsystem.setPos(Rotation2d.fromDegrees(0));
         }
 
         @Override

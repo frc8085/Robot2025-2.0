@@ -144,7 +144,7 @@ public final class Constants {
     public static double kElevatorMMJerk = 1600;
 
     // Elevator Heights for different states
-    public static double kElevatorHomeHeight = 23;
+    public static double kElevatorHomeHeight = 30;
     public static double kElevatorCoralPickupHeight = 28;
     public static double kElevatorCoralDropOff1Height = 30;
     public static double kElevatorCoralDropOff2Height = 50;
@@ -173,7 +173,7 @@ public final class Constants {
     public static final double kElevatorSafeTravelHeight = 50;
 
     // the Elevator tolerance
-    public static final double kElevatorTolerance = 1.5;
+    public static final double kElevatorTolerance = 5;
   }
 
   public static final class PivotArmConstants {
@@ -181,49 +181,51 @@ public final class Constants {
     public static final double kPivotMotorGearRatio = 27;
     public static double kPivotArmSpeed = .10;
 
-    public static final double kPivotArmP = 0.7; // 0.7
+    public static final double kPivotArmP = 1.4; // 0.7
     public static final double kPivotArmI = 0; // 0.0
     public static final double kPivotArmD = 0.1; // 0.1
-    public static final double kPivotArmV = 0.12; // 0.12
-    public static final double kPivotArmA = 0.01; // 0.01
+    public static final double kPivotArmS = 0.07;
+    public static final double kPivotArmV = 0.2; // 0.2
+    public static final double kPivotArmA = 0.015; // 0.015
+    public static final double kPivotArmFF = -0.33;
 
     public static double kPivotArmMMVelo = 25;
     public static double kPivotArmMMAcc = 60;
     public static double kPivotArmMMJerk = 1600;
 
-    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-200);
-    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(30);
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-110);
+    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(120);
 
     /// The min/max angle of the pivot that will be rotating through the path of the
     /// elevator
-    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-55);
-    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(-120);
+    public static final Rotation2d kPivotArmSwingThroughMax = Rotation2d.fromDegrees(35);
+    public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-35);
 
     // the Tolerance for pivot command motion
-    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(4.5);
-    public static final double kPivotToleranceRotations = 0.5;
+    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(5);
+    public static final double kPivotToleranceRotations = kPivotTolerance.getRotations();
   }
 
   public static final class Windmill {
 
     public static enum WindmillState {
 
-      Home(ElevatorConstants.kElevatorHomeHeight, PivotArmConstants.kPivotArmSwingThroughMin),
-      CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight, Rotation2d.fromDegrees(25)),
+      Home(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(45)),
+      CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight, Rotation2d.fromDegrees(115)),
       // coral dropoff happens on both sides
-      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-145), true),
-      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-145), true),
-      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-145), true),
-      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-140), true),
+      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-50), true),
 
-      AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(20)),
-      AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(12)),
-      AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(12)),
-      AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight, Rotation2d.fromDegrees(0)),
-      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight, Rotation2d.fromDegrees(-115)),
-      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight, Rotation2d.fromDegrees(-115)),
-      AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-30)),
-      AlgaeNetRight(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-105));
+      AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(110)),
+      AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(102)),
+      AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(102)),
+      AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight, Rotation2d.fromDegrees(90)),
+      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight, Rotation2d.fromDegrees(-25)),
+      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight, Rotation2d.fromDegrees(-25)),
+      AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(60)),
+      AlgaeNetRight(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(-15));
 
       private double kElevatorHeight;
       private Rotation2d kPivotArmAngle;

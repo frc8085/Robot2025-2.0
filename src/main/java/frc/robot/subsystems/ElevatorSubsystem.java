@@ -158,12 +158,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
 
   public boolean targetInDangerZone(double target_position) {
-    return target_position < Constants.ElevatorConstants.kElevatorSafeHeightMax;
+    return target_position < (Constants.ElevatorConstants.kElevatorSafeHeightMax
+        - Constants.ElevatorConstants.kElevatorTolerance);
   }
 
   public double minConflictHeight(Rotation2d target_angle) {
-    var deg = Math.abs(target_angle.getRadians());
-    var minHeight = 0.004 * deg + Constants.ElevatorConstants.kElevatorSafeHeightMin;
+    var deg = Math.abs(target_angle.getDegrees());
+    var minHeight = -7 * Math.pow(deg, 0.7 / 2) + 50;
     if (minHeight < Constants.ElevatorConstants.kElevatorSafeHeightMin) {
       minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMin;
     } else if (minHeight > Constants.ElevatorConstants.kElevatorSafeHeightMax) {
@@ -173,7 +174,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean targetInConflictZone(double target_position, Rotation2d target_angle) {
-    return target_position < minConflictHeight(target_angle);
+    return target_position < minConflictHeight(target_angle) - Constants.ElevatorConstants.kElevatorTolerance;
   }
 
   public boolean inDangerZone() {
@@ -212,6 +213,18 @@ public class ElevatorSubsystem extends SubsystemBase {
       // We are going down but bottom limit is not tripped so go at commanded speed
       m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
     }
+  }
+
+  public void zeroMoveUp() {
+
+    if (topLimitSwitch.get()) {
+      // We are going up and top limit is tripped so stop
+      m_elevatorMotor.set(0);
+    } else {
+      // We are going up but top limit is not tripped so go at commanded speed
+      m_elevatorMotor.set(.15);
+    }
+
   }
 
   public void moveUp() {

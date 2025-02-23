@@ -19,7 +19,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -156,7 +158,11 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
                                                 climberSubsystem));
                 pickUpAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
-                                .onFalse(new PickUpAlgaeL3(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
+                                .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));
+                // pickUpAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(),
+                // algaeSubsystem))
+                // .onFalse(new PickUpAlgaeL3(algaeSubsystem, elevatorSubsystem,
+                // pivotSubsystem));
                 intakeMotorsOff.onTrue(new IntakeMotorsOff(coralSubsystem, algaeSubsystem));
 
                 // Operator Controls
@@ -171,8 +177,9 @@ public class RobotContainer {
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
 
-                armHome.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
-                                false));
+                armHome.onTrue(new SequentialCommandGroup(new PrintCommand("arm button pressed"),
+                                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
+                                                false)));
                 algaeGround.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,
                                 Constants.Windmill.WindmillState.AlgaePickUpFloor, false));
                 algaeReef2.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem,

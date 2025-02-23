@@ -38,6 +38,7 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kD = PivotArmConstants.kPivotArmD;
         slot0Configs.kV = PivotArmConstants.kPivotArmV;
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
+        // slot0Configs.kS = PivotArmConstants.kPivotArmS;
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake; //
@@ -84,15 +85,19 @@ public class PivotSubsystem extends SubsystemBase {
             angle = Constants.PivotArmConstants.kPivotArmMax;
         }
 
-        // motionMagicControl.Position = angle.getRotations() *
-        // Constants.PivotArmConstants.kPivotMotorGearRatio;
         motionMagicPositionControl.Position = angleToMotorPos(angle);
+        motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
+                * Constants.PivotArmConstants.kPivotArmFF;
         m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
     }
 
     public void setRotorPos(Rotation2d angle) {
         m_pivotMotor.setPosition(angle.getRotations());
+    }
+
+    public void setAnglePos(Rotation2d angle) {
+        m_pivotMotor.setPosition(angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio);
     }
 
     public double getCurrentPosition() {
@@ -151,10 +156,12 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     // checks whether the pivot arm is in the danger zone for the elevator at target
-    // angle
+    // angle GOOD
     public boolean targetInDangerZone(Rotation2d targetAngle) {
-        return targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                && targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees();
+        return targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()
+                && targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
+                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
     public boolean inDangerZone() {
@@ -174,11 +181,18 @@ public class PivotSubsystem extends SubsystemBase {
 
         // check if the current position is on one side of the danger zone, and the
         // target is on the other
-        if ((getCurrentRotation().getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                && targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()) ||
-                (getCurrentRotation().getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
-                        && targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin
-                                .getDegrees())) {
+        var minSwing = Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
+        var maxSwing = Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
+                - Constants.PivotArmConstants.kPivotTolerance.getDegrees();
+        if (
+        // if the start and end positions are not between the minimum angle and the min
+        // danger zone
+        !(getCurrentRotation().getDegrees() < minSwing
+                && targetAngle.getDegrees() < minSwing)
+                // or
+                || !(getCurrentRotation().getDegrees() > maxSwing
+                        && targetAngle.getDegrees() > maxSwing)) {
             result = true;
         }
 

@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.states.ToCoralPickUpCommand;
 import frc.robot.commands.states.ToHomeCommand;
@@ -14,10 +15,12 @@ public class PickUpCoralFromSource extends SequentialCommandGroup {
                         CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem) {
                 addCommands(
-                                new ToCoralPickUpCommand(elevatorSubsystem, pivotSubsystem, WindmillState.Home),
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.CoralPickup, false),
                                 new PickUpCoral(coralSubsystem),
                                 new WaitCommand(0.25),
-                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, WindmillState.CoralPickup));
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.Home, false));
 
         }
 }
