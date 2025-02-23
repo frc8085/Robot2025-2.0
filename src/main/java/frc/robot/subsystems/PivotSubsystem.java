@@ -84,6 +84,17 @@ public class PivotSubsystem extends SubsystemBase {
         } else if (angle.getRotations() > Constants.PivotArmConstants.kPivotArmMax.getRotations()) {
             angle = Constants.PivotArmConstants.kPivotArmMax;
         }
+        this.setPosManual(angle);
+    }
+
+    // WARNING: NO BOUNDS ON THIS FUNCTION, ONLY MANUAL USE ONLY, NOT FOR COMMANDS
+    public void setPosManual(Rotation2d angle) {
+
+        if (angle.getRotations() < Constants.PivotArmConstants.kPivotArmMinManual.getRotations()) {
+            angle = Constants.PivotArmConstants.kPivotArmMinManual;
+        } else if (angle.getRotations() > Constants.PivotArmConstants.kPivotArmMaxManual.getRotations()) {
+            angle = Constants.PivotArmConstants.kPivotArmMaxManual;
+        }
 
         motionMagicPositionControl.Position = angleToMotorPos(angle);
         motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
@@ -149,12 +160,6 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotor.set(0);
     }
 
-    public void keepPivot(Rotation2d positionPivot) {
-
-        setPos(positionPivot);
-
-    }
-
     // checks whether the pivot arm is in the danger zone for the elevator at target
     // angle GOOD
     public boolean targetInDangerZone(Rotation2d targetAngle) {
@@ -191,6 +196,11 @@ public class PivotSubsystem extends SubsystemBase {
     public void holdPivotArm() {
         Rotation2d targetAngle = getCurrentRotation();
         setPos(targetAngle);
+    }
+
+    public void holdPivotArmManual() {
+        Rotation2d targetAngle = getCurrentRotation();
+        setPosManual(targetAngle);
     }
 
 }

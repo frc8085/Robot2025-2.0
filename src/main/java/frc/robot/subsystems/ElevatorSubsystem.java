@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.TuningModeConstants;
+import frc.robot.States;
+import frc.robot.States.DriveState;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -33,6 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   // get encoder data
   private StatusSignal<Angle> elevatorPosition;
   private StatusSignal<AngularVelocity> elevatorVelocity;
+
+  // private driveState = new DriveState.getInstance();
 
   private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
@@ -55,6 +59,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean ElevatorZeroLimitHit() {
     return zeroLimitSwitch.get();
+  }
+
+  public boolean eitherLimitSwitchPressed() {
+    return topLimitSwitch.get() || bottomLimitSwitch.get();
   }
 
   public ElevatorSubsystem() {
@@ -198,6 +206,27 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (TUNING_MODE) {
     }
 
+    // the following code is for the drive speed multiplier based on the elevator
+    // height
+    double elevatorHeight = getCurrentMotorPosition();
+    if (elevatorHeight < ElevatorConstants.kElevatorSafeTravelHeight) {
+
+      // DriveState.getInstance().setElevatorMultiplier(1);
+      DriveState.elevatorMultiplier = 1;
+    } else {
+      double multiplier = ((ElevatorConstants.kElevatorMinTravelHeight - elevatorHeight)
+          / (ElevatorConstants.kElevatorMinTravelHeight
+              - ElevatorConstants.kElevatorSafeTravelHeight));
+
+      multiplier = Math.min(1, multiplier);
+      multiplier = Math.max(0, multiplier);
+
+      // driveState.setElevatorMultiplier(multiplier);
+      DriveState.elevatorMultiplier = multiplier;
+    }
+
+    SmartDashboard.putNumber("Elevator Multiplier", DriveState.elevatorMultiplier);
+
   }
 
   // turn off elevator (stops motor all together)
@@ -209,58 +238,25 @@ public class ElevatorSubsystem extends SubsystemBase {
   // switch is being hit
   public void moveDown() {
 
-    if (bottomLimitSwitch.get()) {
-      // We are going down and bottom limit is tripped so stop
-      m_elevatorMotor.set(0);
-    } else {
-      // We are going down but bottom limit is not tripped so go at commanded speed
-      m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
-    }
+    // We are going down but bottom limit is not tripped so go at commanded speed
+    m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
   }
 
   public void zeroMoveUp() {
 
-    if (topLimitSwitch.get()) {
-      // We are going up and top limit is tripped so stop
-      m_elevatorMotor.set(0);
-    } else {
-      // Go slower when we are zeroing
-      m_elevatorMotor.set(.15);
-    }
-
+    // Go slower when we are zeroing
+    m_elevatorMotor.set(.15);
   }
 
   public void moveUp() {
 
-    m_elevatorMotor.setControl(m_dutyCycle.withOutput(0.25)
-        .withLimitForwardMotion(topLimitSwitch.get())
-        .withLimitReverseMotion(bottomLimitSwitch.get()));
-
-    /*
-     * if (topLimitSwitch.get()) {
-     * // We are going up and top limit is tripped so stop
-     * m_elevatorMotor.set(0);
-     * } else {
-     * // We are going up but top limit is not tripped so go at commanded speed
-     * m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
-     * }
-     */
+    m_elevatorMotor.set(ElevatorConstants.kElevatorSpeed);
   }
 
   public void holdHeight() {
     // double targetPosition = getCurrentHeight();
     double targetPosition = getCurrentMotorPosition();
     setPos(targetPosition);
-  }
-
-  public void keepHeight(double positionElevator) {
-
-    setPos(positionElevator);
-
-    if (TUNING_MODE) {
-      SmartDashboard.putNumber("Elevator Desired position", positionElevator);
-      System.out.println("Keep Elevator " + positionElevator);
-    }
   }
 
 }
