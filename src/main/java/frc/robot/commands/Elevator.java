@@ -2,13 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends Command {
 
     private final ElevatorSubsystem m_elevatorSubsystem;
     // private double m_speed;
     private double m_targetHeight;
-    private double m_tolerance = 1;
+    private double m_tolerance = ElevatorConstants.kElevatorTolerance;
 
     public Elevator(ElevatorSubsystem elevatorSubsystem, double target_height) {
         m_elevatorSubsystem = elevatorSubsystem;
@@ -25,4 +26,5 @@ public class Elevator extends Command {
     public boolean isFinished() {
         return m_elevatorSubsystem.atTarget(m_tolerance);
     }
+
 }

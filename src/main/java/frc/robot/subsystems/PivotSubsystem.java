@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -22,11 +23,12 @@ public class PivotSubsystem extends SubsystemBase {
     private StatusSignal<Angle> pivotArmPosition;
     private StatusSignal<AngularVelocity> pivotArmVelocity;
     TalonFXConfiguration config = new TalonFXConfiguration();
-    private final CANcoder m_pivotEncoder = new CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanID);
+    // private final CANcoder m_pivotEncoder = new
+    // CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanID);
 
     private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
-    private MotionMagicVelocityVoltage motionMagicVeloctiyControl = new MotionMagicVelocityVoltage(0);
+    private MotionMagicVelocityVoltage motionMagicVelocityControl = new MotionMagicVelocityVoltage(0);
 
     public PivotSubsystem() {
 
@@ -36,9 +38,10 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kD = PivotArmConstants.kPivotArmD;
         slot0Configs.kV = PivotArmConstants.kPivotArmV;
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
+        // slot0Configs.kS = PivotArmConstants.kPivotArmS;
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake; //
 
         config.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
         config.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
@@ -46,6 +49,18 @@ public class PivotSubsystem extends SubsystemBase {
 
         // expirementing with encoder
         // config.Feedback.
+        // config.Feedback.FeedbackRemoteSensorID =
+        // Constants.CanIdConstants.kPivotArmCancoderCanID;
+        // config.Feedback.FeedbackSensorSource =
+        // FeedbackSensorSourceValue.RemoteCANcoder;
+        // config.Feedback.RotorToSensorRatio = 9. / 1;
+        // config.Feedback.SensorToMechanismRatio = 3. / 1;
+        // config.Feedback.FeedbackRotorOffset = 0;
+
+        // CANcoderConfiguration c = new CANcoderConfiguration();
+        // c.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        // m_pivotEncoder.getConfigurator().apply(c);
+
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
 
@@ -69,16 +84,31 @@ public class PivotSubsystem extends SubsystemBase {
         } else if (angle.getRotations() > Constants.PivotArmConstants.kPivotArmMax.getRotations()) {
             angle = Constants.PivotArmConstants.kPivotArmMax;
         }
+        this.setPosManual(angle);
+    }
 
-        // motionMagicControl.Position = angle.getRotations() *
-        // Constants.PivotArmConstants.kPivotMotorGearRatio;
+    // WARNING: NO BOUNDS ON THIS FUNCTION, ONLY MANUAL USE ONLY, NOT FOR COMMANDS
+    public void setPosManual(Rotation2d angle) {
+
+        if (angle.getRotations() < Constants.PivotArmConstants.kPivotArmMinManual.getRotations()) {
+            angle = Constants.PivotArmConstants.kPivotArmMinManual;
+        } else if (angle.getRotations() > Constants.PivotArmConstants.kPivotArmMaxManual.getRotations()) {
+            angle = Constants.PivotArmConstants.kPivotArmMaxManual;
+        }
+
         motionMagicPositionControl.Position = angleToMotorPos(angle);
+        motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
+                * Constants.PivotArmConstants.kPivotArmFF;
         m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
     }
 
     public void setRotorPos(Rotation2d angle) {
         m_pivotMotor.setPosition(angle.getRotations());
+    }
+
+    public void setAnglePos(Rotation2d angle) {
+        m_pivotMotor.setPosition(angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio);
     }
 
     public double getCurrentPosition() {
@@ -106,6 +136,16 @@ public class PivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("currentPosition", getCurrentPosition());
         SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
 
+        // SmartDashboard.putNumber("Pivot Deg", getCurrentPosition() * 360); // the
+        // getPosition function accounts for
+        // // changes in configs (gear ratio)
+        // // getRotorPosition just gets the motor
+        // // value.
+        // SmartDashboard.putNumber("Rotor Deg",
+        // m_pivotMotor.getRotorPosition().getValueAsDouble() * 360);
+        // SmartDashboard.putNumber("Encoder Deg",
+        // m_pivotEncoder.getPosition().getValueAsDouble() * 360);
+
     }
 
     public void start() {
@@ -120,17 +160,13 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotor.set(0);
     }
 
-    public void keepPivot(Rotation2d positionPivot) {
-
-        setPos(positionPivot);
-
-    }
-
     // checks whether the pivot arm is in the danger zone for the elevator at target
-    // angle
+    // angle GOOD
     public boolean targetInDangerZone(Rotation2d targetAngle) {
-        return targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                && targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees();
+        return targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()
+                && targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
+                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
     public boolean inDangerZone() {
@@ -141,7 +177,7 @@ public class PivotSubsystem extends SubsystemBase {
         var result = false;
 
         // check if the start and/or end position is in the danger zone
-        if (targetInDangerZone(targetAngle) || inDangerZone()) {
+        if (this.targetInDangerZone(targetAngle) || this.inDangerZone()) {
             result = true;
         }
 
@@ -150,11 +186,7 @@ public class PivotSubsystem extends SubsystemBase {
 
         // check if the current position is on one side of the danger zone, and the
         // target is on the other
-        if ((getCurrentRotation().getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                && targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()) ||
-                (getCurrentRotation().getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
-                        && targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin
-                                .getDegrees())) {
+        if (Math.signum(getCurrentRotation().getDegrees()) != Math.signum(targetAngle.getDegrees())) {
             result = true;
         }
 
@@ -164,6 +196,11 @@ public class PivotSubsystem extends SubsystemBase {
     public void holdPivotArm() {
         Rotation2d targetAngle = getCurrentRotation();
         setPos(targetAngle);
+    }
+
+    public void holdPivotArmManual() {
+        Rotation2d targetAngle = getCurrentRotation();
+        setPosManual(targetAngle);
     }
 
 }

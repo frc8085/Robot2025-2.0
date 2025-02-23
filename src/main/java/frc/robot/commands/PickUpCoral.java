@@ -1,23 +1,43 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 // if command is interrupted before coral is picked up, kill command
-public class PickUpCoral extends SequentialCommandGroup {
+public class PickUpCoral extends Command {
+        CoralSubsystem coralSubsystem;
+        ElevatorSubsystem elevatorSubsystem;
+        PivotSubsystem pivotSubsystem;
+
         public PickUpCoral(
                         CoralSubsystem coralSubsystem) {
-                addCommands(
 
-                                new InstantCommand(coralSubsystem::pickup),
-                                new ParallelRaceGroup(
-                                                new WaitUntilCommand(coralSubsystem::isCoralDetected),
-                                                new WaitCommand(2)),
-                                new InstantCommand(coralSubsystem::stop));
+                this.coralSubsystem = coralSubsystem;
+
+                addRequirements(coralSubsystem);
 
         }
+
+        @Override
+        public void initialize() {
+
+        }
+
+        @Override
+        public void execute() {
+                coralSubsystem.pickup();
+        }
+
+        @Override
+        public void end(boolean interrupted) {
+                coralSubsystem.stop();
+        }
+
+        @Override
+        public boolean isFinished() {
+                return coralSubsystem.isCoralDetected();
+        }
+
 }

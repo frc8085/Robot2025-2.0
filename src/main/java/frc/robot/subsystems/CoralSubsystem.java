@@ -69,6 +69,9 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void eject() {
     m_coralMotor.set(kSpeed);
+  }
+
+  public void periodic() {
     // Put Indicator on Dashboard that a Note is in the Robot
     SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
 
