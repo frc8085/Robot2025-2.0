@@ -187,7 +187,7 @@ public final class Constants {
     public static final double kPivotArmS = 0.07;
     public static final double kPivotArmV = 0.2; // 0.2
     public static final double kPivotArmA = 0.015; // 0.015
-    public static final double kPivotArmFF = -0.33;
+    public static final double kPivotArmFF = -0.13;
 
     public static double kPivotArmMMVelo = 25;
     public static double kPivotArmMMAcc = 60;

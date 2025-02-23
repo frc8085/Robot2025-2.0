@@ -14,7 +14,7 @@ import frc.robot.Constants.Windmill.WindmillState;
 
 public class Windmill extends SequentialCommandGroup {
 
-        private ParallelCommandGroup ParrallelWindmill(ElevatorSubsystem elevatorSubsystem,
+        private ParallelCommandGroup ParallelWindmill(ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem,
                         double targetHeight, Rotation2d targetAngle) {
                 return new ParallelCommandGroup(
@@ -43,13 +43,11 @@ public class Windmill extends SequentialCommandGroup {
                 addCommands(new ConditionalCommand(
                                 // On true, if elevator is not in danger zone, run elevator and pivot in
                                 // parallel
-                                new ParallelCommandGroup(
-                                                ParrallelWindmill(elevatorSubsystem, pivotSubsystem, targetHeight,
-                                                                targetAngle)),
+                                ParallelWindmill(elevatorSubsystem, pivotSubsystem, targetHeight,
+                                                targetAngle),
                                 // On false, if elevator is in danger zone, run elevator and pivot in
-                                new SequentialCommandGroup(
-                                                ElevatorDangerZone(elevatorSubsystem, pivotSubsystem, targetHeight,
-                                                                targetAngle)),
+                                ElevatorDangerZone(elevatorSubsystem, pivotSubsystem, targetHeight,
+                                                targetAngle),
                                 () -> !elevatorSubsystem.inDangerZone()));
         }
 
