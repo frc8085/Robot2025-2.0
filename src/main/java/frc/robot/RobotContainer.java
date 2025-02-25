@@ -39,6 +39,7 @@ import frc.robot.commands.PickUpCoral;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.ZeroPivot;
+import frc.robot.commands.AutoAlignToAprilTagCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -54,6 +55,7 @@ public class RobotContainer {
         private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
         private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
         private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
+        private final LimelightReefSubsystem m_LimelightReefSubsystem = new LimelightReefSubsystem();
 
         // The driver's controller
         XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -216,6 +218,11 @@ public class RobotContainer {
                                 .onFalse(new InstantCommand(
                                                 () -> m_ElevatorSubsystem.keepHeight(
                                                                 m_ElevatorSubsystem.getCurrentMotorPosition())));
+
+                // limelight stuff
+                final JoystickButton align = new JoystickButton(m_driverController, Button.kX.value);
+
+                align.onTrue(AutoAlignToAprilTagCommand(m_robotDrive, m_LimelightReefSubsystem));
 
         }
 
