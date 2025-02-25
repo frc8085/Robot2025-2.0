@@ -10,7 +10,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class ToHomeCommand extends SequentialCommandGroup {
-    public ToHomeCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, WindmillState prevState,
+    public ToHomeCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
             CoralSubsystem coralSubsystem) {
         addCommands(
                 // Switch to a transition state
@@ -19,8 +19,9 @@ public class ToHomeCommand extends SequentialCommandGroup {
                 new InstantCommand(coralSubsystem::stop),
 
                 // go home
-                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
-                        false));
+                new Windmill(elevatorSubsystem, pivotSubsystem,
+                        Constants.Windmill.WindmillState.Home, false));
+
         // Switch to target state.
     }
 }

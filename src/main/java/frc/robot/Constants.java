@@ -41,9 +41,10 @@ public final class Constants {
 
   public static final class DriveConstants {
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8 / 4; // 4.8
+    public static final double kMaxSpeedMetersPerSecond = 4.8 / 2; // 4.8
 
-    public static final double kMinSpeedMetersPerSecondMaxElevatorHeightMul = 0.05;
+    // what is the multiplier for the speed decrease
+    public static final double kMinSpeedMetersPerSecondMaxElevatorHeightMul = 0.025;
 
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeight = 0.2;
 
@@ -144,7 +145,7 @@ public final class Constants {
     public static double kElevatorStage2FF = 0.19;
     public static double kElevatorStage3FF = 0.38;
 
-    public static double kElevatorMMVelo = 75;
+    public static double kElevatorMMVelo = 120;
     public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
@@ -152,36 +153,36 @@ public final class Constants {
     public static double kElevatorHomeHeight = 30;
     public static double kElevatorCoralPickupHeight = 28;
     public static double kElevatorCoralDropOff1Height = 30;
-    public static double kElevatorCoralDropOff2Height = 50;
-    public static double kElevatorCoralDropOff3Height = 75;
-    public static double kElevatorCoralDropOff4Height = 115;
+    public static double kElevatorCoralDropOff2Height = 55;
+    public static double kElevatorCoralDropOff3Height = 82;
+    public static double kElevatorCoralDropOff4Height = 124;
     public static double kElevatorAlgaePickUpFloorHeight = 6;
     public static double kElevatorReef2Height = 40;
     public static double kElevatorReef3Height = 70;
     public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
     public static double kElevatorReef2IntakeHeight = 30;
-    public static double kElevatorReef3IntakeHeight = 50;
+    public static double kElevatorReef3IntakeHeight = 45;
     public static double kElevatorNetHeight = 112;
 
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
-    public static final double kElevatorMin = 6;
+    public static final double kElevatorMin = 28; // adjusting for climber
     public static final double kElevatorStage1Height = 41; // zero position value
     public static final double kElevatorStage2Height = 85;
-    public static final double kElevatorMax = 120; // 140 hard max
+    public static final double kElevatorMax = 130; // 140 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 46;
+    public static final double kElevatorSafeHeightMax = 50;
     public static final double kElevatorSafeHeightMin = 15;
 
     // The maximum height that the robot can safely travel at
     public static final double kElevatorSafeTravelHeight = 50;
-    public static final double kElevatorSafeMidSpeedTravelHeight = 80;
+    public static final double kElevatorSafeMidSpeedTravelHeight = 50;
     // this variable determines the minimum height at which the drivetrain speed
     // will be
     // its
     // slowest
-    public static final double kElevatorMinTravelHeight = 90;
+    public static final double kElevatorMinTravelHeight = 80;
 
     // the Elevator tolerance
     public static final double kElevatorTolerance = 5;
@@ -201,7 +202,7 @@ public final class Constants {
     public static final double kPivotArmFF = -0.13;
 
     public static double kPivotArmMMVelo = 25;
-    public static double kPivotArmMMAcc = 60;
+    public static double kPivotArmMMAcc = 20;
     public static double kPivotArmMMJerk = 1600;
 
     public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-110);
@@ -230,7 +231,7 @@ public final class Constants {
       CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-55), true),
       CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-55), true),
       CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-55), true),
-      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-50), true),
+      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-53), true),
 
       AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(110)),
       AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(102)),

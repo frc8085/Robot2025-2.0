@@ -79,13 +79,11 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   /* When a algae is picked up, it's in the robot */
-  public void algaePickedUp() {
+  public void algaeStatus() {
+    if (lightSensor.get()){
     algaeTrue = true;
-  }
-
-  /* Once a note is shot, it's not in robot */
-  public void algaeEjected() {
-    algaeTrue = false;
+    }
+    else{algaeTrue=false;}
   }
 
   /* Give us a state when the note is in robot */

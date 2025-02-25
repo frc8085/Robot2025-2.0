@@ -32,6 +32,9 @@ public class PickUpCoral extends Command {
 
         @Override
         public void end(boolean interrupted) {
+                if (interrupted) {
+                        coralSubsystem.stop();
+                }
                 coralSubsystem.stop();
         }
 

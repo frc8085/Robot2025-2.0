@@ -24,18 +24,19 @@ public class MoveAfterAlgaePickedUp extends Command {
 
         @Override
         public void initialize() {
-
-        }
-
-        @Override
-        public void execute() {
                 double currentPosition = elevatorSubsystem.getCurrentMotorPosition();
                 elevatorSubsystem.setPos(currentPosition - 20);
                 pivotSubsystem.setPos(Rotation2d.fromDegrees(0));
         }
 
         @Override
+        public void execute() {
+                
+        }
+
+        @Override
         public void end(boolean interrupted) {
+                
                 elevatorSubsystem.setPos(elevatorSubsystem.getCurrentMotorPosition());
                 pivotSubsystem.setPos(pivotSubsystem.getCurrentRotation());
         }

@@ -1,6 +1,8 @@
 package frc.robot.commands.states;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.commands.Windmill;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
@@ -11,11 +13,7 @@ public class ToCoralDropOff4 extends SequentialCommandGroup {
                 // Maybe turn off all the motors
 
                 // Check safety
-                new ElevatorToSafe(elevatorSubsystem),
-                // Move pivot
-                new PivotToCoralDropOff4(pivotSubsystem),
-                // Move elevator
-                new ElevatorToCoralDropOff4(elevatorSubsystem));
+                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.CoralDropOff4, false));
         // Switch to target state.
     }
 }
