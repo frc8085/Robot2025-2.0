@@ -103,4 +103,7 @@ public RawFiducial getFiducialWithId(int id, boolean verbose) {
   public double getClosestTA(){
     return getClosestFiducial().ta;
   }
+
+
+
 }

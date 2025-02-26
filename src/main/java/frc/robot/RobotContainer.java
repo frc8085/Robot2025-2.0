@@ -16,14 +16,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.LimelightReefSubsystem;
-import frc.robot.commands.AutoAlignToAprilTagCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -32,25 +24,23 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.commands.EjectCoral;
-import frc.robot.commands.IntakeMotorsOff;
-import frc.robot.commands.PickUpAlgaeL3;
-import frc.robot.commands.PickUpCoral;
 import frc.robot.commands.PickUpCoralFromSource;
-import frc.robot.commands.ScoreAlgae;
-import frc.robot.commands.ScoreAlgaeNetLeft;
-import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.ZeroPivot;
 import frc.robot.commands.AutoAlignToAprilTagCommand;
-import frc.robot.commands.states.ToAlgaeNetLeftCommand;
-import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LimelightReefSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class RobotContainer {
@@ -60,7 +50,7 @@ public class RobotContainer {
         private final CoralSubsystem m_CoralSubsystem = new CoralSubsystem();
         private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
         private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-        private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
+        // private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
         private final LimelightReefSubsystem m_LimelightReefSubsystem = new LimelightReefSubsystem();
 
         // The driver's controller
@@ -154,28 +144,32 @@ public class RobotContainer {
                 final Trigger lowerClimber = driverController.povDown();
                 final Trigger intakeMotorsOff = driverController.back();
 
+                final Trigger AutoAlign = driverController.povLeft();
+
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(m_CoralSubsystem, m_ElevatorSubsystem, m_PivotArm));
                 pickUpCoral.onTrue(new PickUpCoralFromSource(m_CoralSubsystem, m_ElevatorSubsystem, m_PivotArm));
-                ejectAlgae.onTrue(new ScoreAlgae(m_AlgaeSubsystem));
-                shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(m_AlgaeSubsystem, m_ElevatorSubsystem, m_PivotArm));
-                shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(m_AlgaeSubsystem, m_ElevatorSubsystem, m_PivotArm));
-                raiseClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(),
-                                m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
-                                                m_ClimberSubsystem));
 
-                lowerClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(),
-                                m_ClimberSubsystem))
-                                .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
-                                                m_ClimberSubsystem));
-                pickUpAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
-                                .onFalse(new InstantCommand(m_AlgaeSubsystem::holdAlgae));
+                AutoAlign.onTrue(new AutoAlignToAprilTagCommand(m_robotDrive, m_LimelightReefSubsystem, 0));
+                // ejectAlgae.onTrue(new ScoreAlgae(m_AlgaeSubsystem));
+                // shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(m_AlgaeSubsystem, m_ElevatorSubsystem, m_PivotArm));
+                // shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(m_AlgaeSubsystem, m_ElevatorSubsystem, m_PivotArm));
+                // raiseClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(),
+                //                 m_ClimberSubsystem))
+                //                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
+                //                                 m_ClimberSubsystem));
+
+                // lowerClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(),
+                //                 m_ClimberSubsystem))
+                //                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
+                //                                 m_ClimberSubsystem));
+                // pickUpAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
+                //                 .onFalse(new InstantCommand(m_AlgaeSubsystem::holdAlgae));
                 // pickUpAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(),
                 // algaeSubsystem))
                 // .onFalse(new PickUpAlgaeL3(algaeSubsystem, elevatorSubsystem,
                 // pivotSubsystem));
-                intakeMotorsOff.onTrue(new IntakeMotorsOff(m_CoralSubsystem, m_AlgaeSubsystem));
+                // intakeMotorsOff.onTrue(new IntakeMotorsOff(m_CoralSubsystem, m_AlgaeSubsystem));
 
                 // Operator Controls
                 // position controls
@@ -188,6 +182,8 @@ public class RobotContainer {
                 final Trigger coralDropOff2 = operatorController.b();
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
+
+
 
                 armHome.onTrue(new SequentialCommandGroup(new PrintCommand("arm button pressed"),
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm, Constants.Windmill.WindmillState.Home,
@@ -206,6 +202,8 @@ public class RobotContainer {
                                 Constants.Windmill.WindmillState.CoralDropOff3, false));
                 coralDropOff4.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                 Constants.Windmill.WindmillState.CoralDropOff4, false));
+
+
 
                 // alternate positions
                 algaeGround.and(altPositionRight).onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
@@ -254,9 +252,6 @@ public class RobotContainer {
                                                 () -> m_ElevatorSubsystem.holdHeight()));
 
                 // limelight stuff
-                final JoystickButton align = new JoystickButton(m_driverController, Button.kX.value);
-
-                align.onTrue(AutoAlignToAprilTagCommand(m_robotDrive, m_LimelightReefSubsystem /* x_offset */));
 
         }
 
