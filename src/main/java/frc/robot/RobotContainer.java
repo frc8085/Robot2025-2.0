@@ -150,26 +150,30 @@ public class RobotContainer {
                 ejectCoral.onTrue(new EjectCoral(m_CoralSubsystem, m_ElevatorSubsystem, m_PivotArm));
                 pickUpCoral.onTrue(new PickUpCoralFromSource(m_CoralSubsystem, m_ElevatorSubsystem, m_PivotArm));
 
-                AutoAlign.onTrue(new AutoAlignToAprilTagCommand(m_robotDrive, m_LimelightReefSubsystem, 0));
+                AutoAlign.onTrue(new AutoAlignToAprilTagCommand(m_robotDrive, m_LimelightReefSubsystem));
                 // ejectAlgae.onTrue(new ScoreAlgae(m_AlgaeSubsystem));
-                // shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(m_AlgaeSubsystem, m_ElevatorSubsystem, m_PivotArm));
-                // shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(m_AlgaeSubsystem, m_ElevatorSubsystem, m_PivotArm));
+                // shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(m_AlgaeSubsystem,
+                // m_ElevatorSubsystem, m_PivotArm));
+                // shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(m_AlgaeSubsystem,
+                // m_ElevatorSubsystem, m_PivotArm));
                 // raiseClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveUp(),
-                //                 m_ClimberSubsystem))
-                //                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
-                //                                 m_ClimberSubsystem));
+                // m_ClimberSubsystem))
+                // .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
+                // m_ClimberSubsystem));
 
                 // lowerClimber.onTrue(new RunCommand(() -> m_ClimberSubsystem.moveDown(),
-                //                 m_ClimberSubsystem))
-                //                 .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
-                //                                 m_ClimberSubsystem));
-                // pickUpAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(), m_AlgaeSubsystem))
-                //                 .onFalse(new InstantCommand(m_AlgaeSubsystem::holdAlgae));
+                // m_ClimberSubsystem))
+                // .onFalse(new RunCommand(() -> m_ClimberSubsystem.stop(),
+                // m_ClimberSubsystem));
+                // pickUpAlgae.whileTrue(new RunCommand(() -> m_AlgaeSubsystem.pickup(),
+                // m_AlgaeSubsystem))
+                // .onFalse(new InstantCommand(m_AlgaeSubsystem::holdAlgae));
                 // pickUpAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(),
                 // algaeSubsystem))
                 // .onFalse(new PickUpAlgaeL3(algaeSubsystem, elevatorSubsystem,
                 // pivotSubsystem));
-                // intakeMotorsOff.onTrue(new IntakeMotorsOff(m_CoralSubsystem, m_AlgaeSubsystem));
+                // intakeMotorsOff.onTrue(new IntakeMotorsOff(m_CoralSubsystem,
+                // m_AlgaeSubsystem));
 
                 // Operator Controls
                 // position controls
@@ -182,8 +186,6 @@ public class RobotContainer {
                 final Trigger coralDropOff2 = operatorController.b();
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
-
-
 
                 armHome.onTrue(new SequentialCommandGroup(new PrintCommand("arm button pressed"),
                                 new Windmill(m_ElevatorSubsystem, m_PivotArm, Constants.Windmill.WindmillState.Home,
@@ -202,8 +204,6 @@ public class RobotContainer {
                                 Constants.Windmill.WindmillState.CoralDropOff3, false));
                 coralDropOff4.onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
                                 Constants.Windmill.WindmillState.CoralDropOff4, false));
-
-
 
                 // alternate positions
                 algaeGround.and(altPositionRight).onTrue(new Windmill(m_ElevatorSubsystem, m_PivotArm,
