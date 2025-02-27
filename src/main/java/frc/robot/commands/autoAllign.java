@@ -12,8 +12,10 @@ public class autoAllign extends Command {
   /** Creates a new autoAllign. */
   public autoAllign() {
     // Use addRequirements() here to declare subsystem dependencies. The original
-    // 
+    //
     // limelight writing should be here.
+
+    //TODO: resolve errors in the code
   }
 
   // Called when the command is initially scheduled.
@@ -21,22 +23,15 @@ public class autoAllign extends Command {
   public void initialize() {
 
   }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
+  // Called
 
   
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-
-  }
+  
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
   }
+}
 }
