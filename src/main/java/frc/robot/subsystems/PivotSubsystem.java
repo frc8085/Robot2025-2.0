@@ -93,6 +93,14 @@ public class PivotSubsystem extends SubsystemBase {
         }
     }
 
+    public boolean moreThanHomeAngle() {
+        if ((getPivotArmAngle()) >= -37) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private Rotation2d motorPosToAngle(double pos) {
         return Rotation2d.fromRotations(pos / Constants.PivotArmConstants.kPivotMotorGearRatio);
     }

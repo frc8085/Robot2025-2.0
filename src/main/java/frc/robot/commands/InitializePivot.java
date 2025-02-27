@@ -17,7 +17,10 @@ public class InitializePivot extends
                                                 new ConditionalCommand(new InstantCommand(pivotSubsystem::zeroStart),
                                                                 new InstantCommand(pivotSubsystem::zeroReverse),
                                                                 (pivotSubsystem::lessThanHomeAngle)),
-                                                new WaitUntilCommand(pivotSubsystem::atHomeAngle)),
+                                                new ConditionalCommand(
+                                                                new WaitUntilCommand(pivotSubsystem::moreThanHomeAngle),
+                                                                new WaitUntilCommand(pivotSubsystem::lessThanHomeAngle),
+                                                                (pivotSubsystem::lessThanHomeAngle))),
                                 new ParallelCommandGroup(
                                                 new InstantCommand(() -> pivotSubsystem
                                                                 .setAnglePos(Rotation2d
