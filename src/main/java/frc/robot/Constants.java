@@ -27,6 +27,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public final class Constants {
   public static final class CanIdConstants {
     public static final int kGyroCanId = 15;
+    public static final int kPivotGyroCanId = 16;
 
     public static final int kCoralCanId = 21;
     public static final int kAlgaeCanId = 22;
@@ -172,7 +173,7 @@ public final class Constants {
     public static final double kElevatorMax = 130; // 140 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 50;
+    public static final double kElevatorSafeHeightMax = 55;
     public static final double kElevatorSafeHeightMin = 15;
 
     // The maximum height that the robot can safely travel at

@@ -30,11 +30,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // open loop move climber up & down
     public void moveDown() {
-        m_winchMotor.set(kSpeed);
+        m_winchMotor.set(-kSpeed);
     }
 
     public void moveUp() {
-        m_winchMotor.set(-kSpeed);
+        m_winchMotor.set(kSpeed);
     }
 
 }

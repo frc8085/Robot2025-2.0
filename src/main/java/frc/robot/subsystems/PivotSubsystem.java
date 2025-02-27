@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 
@@ -16,6 +17,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.PivotArmConstants;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -23,8 +25,9 @@ public class PivotSubsystem extends SubsystemBase {
     private StatusSignal<Angle> pivotArmPosition;
     private StatusSignal<AngularVelocity> pivotArmVelocity;
     TalonFXConfiguration config = new TalonFXConfiguration();
-    // private final CANcoder m_pivotEncoder = new
-    // CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanID);
+
+    // The gyro sensor
+    private final Pigeon2 m_pivotGyro = new Pigeon2(CanIdConstants.kPivotGyroCanId);
 
     private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
@@ -67,6 +70,27 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotor.getConfigurator().apply(config);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
 
+    }
+
+    public double getPivotArmAngle() {
+        return Rotation2d.fromDegrees(m_pivotGyro.getPitch().getValueAsDouble()).getDegrees();
+    }
+
+    public boolean atHomeAngle() {
+        if ((getPivotArmAngle()) == -37) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean lessThanHomeAngle() {
+        if ((getPivotArmAngle()) < -37) {
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
     private Rotation2d motorPosToAngle(double pos) {
@@ -135,7 +159,7 @@ public class PivotSubsystem extends SubsystemBase {
         // Get motor readings
         SmartDashboard.putNumber("currentPosition", getCurrentPosition());
         SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
-
+        SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         // SmartDashboard.putNumber("Pivot Deg", getCurrentPosition() * 360); // the
         // getPosition function accounts for
         // // changes in configs (gear ratio)
@@ -146,6 +170,14 @@ public class PivotSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Encoder Deg",
         // m_pivotEncoder.getPosition().getValueAsDouble() * 360);
 
+    }
+
+    public void zeroStart() {
+        m_pivotMotor.set(0.045);
+    }
+
+    public void zeroReverse() {
+        m_pivotMotor.set(-0.045);
     }
 
     public void start() {

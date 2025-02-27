@@ -15,8 +15,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.CoralSubsystem;
@@ -35,10 +37,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.EjectCoral;
+import frc.robot.commands.InitializePivot;
 import frc.robot.commands.IntakeMotorsOff;
 import frc.robot.commands.MoveAfterAlgaePickedUp;
 import frc.robot.commands.PickUpAlgae;
 import frc.robot.commands.PickUpAlgaeFromReef;
+import frc.robot.commands.PickUpCoral;
 import frc.robot.commands.PickUpCoralFromSource;
 import frc.robot.commands.ScoreAlgae;
 import frc.robot.commands.ScoreAlgaeNetLeft;
@@ -148,7 +152,7 @@ public class RobotContainer {
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
-                pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                pickUpCoral.onTrue(new PickUpCoral(coralSubsystem));
                 ejectAlgae.onTrue(new ScoreAlgae(algaeSubsystem));
                 shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(algaeSubsystem, elevatorSubsystem, pivotSubsystem,
                                 coralSubsystem));
