@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class autoAllign extends Command {
   /** Creates a new autoAllign. */
   public autoAllign() {
-    // Use addRequirements() here to declare subsystem dependencies. The original limelight writing should be here.
+    // Use addRequirements() here to declare subsystem dependencies. The original
+    // 
+    // limelight writing should be here.
   }
 
   // Called when the command is initially scheduled.
@@ -22,8 +24,8 @@ public class autoAllign extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    
+
+  
   }
 
   // Called once the command ends or is interrupted.
