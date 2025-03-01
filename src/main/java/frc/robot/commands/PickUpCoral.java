@@ -7,7 +7,7 @@ import frc.robot.subsystems.CoralSubsystem;
 public class PickUpCoral extends Command {
         CoralSubsystem coralSubsystem;
 
-        private boolean coralPickedUp;
+        private boolean coralPickedUp = false;
 
         public PickUpCoral(
                         CoralSubsystem coralSubsystem) {
