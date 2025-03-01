@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.AlgaeConstants;
@@ -25,6 +26,12 @@ public class AlgaeSubsystem extends SubsystemBase {
   SparkMaxConfig config = new SparkMaxConfig();
   private RelativeEncoder m_algaeEncoder;
   private SparkClosedLoopController m_algaePIDController;
+
+  // light sensor
+  DigitalInput lightSensor = new DigitalInput(AlgaeConstants.kIRPort);
+
+  // robot does not start with algae
+  private boolean algaeTrue = false;
 
   // Determine current intake encoder position
   public double CurrentAlgaeEncoderPosition() {
@@ -65,6 +72,23 @@ public class AlgaeSubsystem extends SubsystemBase {
     double targetPosition = CurrentAlgaeEncoderPosition();
     m_algaePIDController.setReference(targetPosition, ControlType.kPosition);
 
+  }
+
+  public Boolean isAlgaeDetected() {
+    return lightSensor.get();
+  }
+
+  /* When a algae is picked up, it's in the robot */
+  public void algaeStatus() {
+    if (lightSensor.get()){
+    algaeTrue = true;
+    }
+    else{algaeTrue=false;}
+  }
+
+  /* Give us a state when the note is in robot */
+  public boolean algaeInRobot() {
+    return algaeTrue;
   }
 
   @Override

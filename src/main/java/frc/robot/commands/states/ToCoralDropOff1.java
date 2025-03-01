@@ -6,11 +6,11 @@ import frc.robot.commands.Windmill;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class ToCoralDropOff4 extends SequentialCommandGroup {
-    public ToCoralDropOff4(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, boolean mirror) {
+public class ToCoralDropOff1 extends SequentialCommandGroup {
+    public ToCoralDropOff1(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, boolean mirror) {
         if (mirror) {
             addCommands(
-                    new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.CoralDropOff4,
+                    new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.CoralDropOff1,
                             true));
         } else {
             addCommands(
@@ -18,9 +18,10 @@ public class ToCoralDropOff4 extends SequentialCommandGroup {
                     // Maybe turn off all the motors
 
                     // Check safety
-                    new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.CoralDropOff4,
+                    new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.CoralDropOff1,
                             false));
             // Switch to target state.
         }
+
     }
 }

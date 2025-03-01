@@ -1,12 +1,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 
@@ -16,15 +15,18 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.PivotArmConstants;
+import frc.robot.Constants.TuningModeConstants;
 
 public class PivotSubsystem extends SubsystemBase {
     private final TalonFX m_pivotMotor = new TalonFX(Constants.CanIdConstants.kPivotArmCanId, "rio");
     private StatusSignal<Angle> pivotArmPosition;
     private StatusSignal<AngularVelocity> pivotArmVelocity;
     TalonFXConfiguration config = new TalonFXConfiguration();
-    // private final CANcoder m_pivotEncoder = new
-    // CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanID);
+
+    // The gyro sensor
+    private final Pigeon2 m_pivotGyro = new Pigeon2(CanIdConstants.kPivotGyroCanId);
 
     private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
@@ -47,26 +49,46 @@ public class PivotSubsystem extends SubsystemBase {
         config.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
         config.MotionMagic.MotionMagicJerk = Constants.PivotArmConstants.kPivotArmMMJerk;
 
-        // expirementing with encoder
-        // config.Feedback.
-        // config.Feedback.FeedbackRemoteSensorID =
-        // Constants.CanIdConstants.kPivotArmCancoderCanID;
-        // config.Feedback.FeedbackSensorSource =
-        // FeedbackSensorSourceValue.RemoteCANcoder;
-        // config.Feedback.RotorToSensorRatio = 9. / 1;
-        // config.Feedback.SensorToMechanismRatio = 3. / 1;
-        // config.Feedback.FeedbackRotorOffset = 0;
-
-        // CANcoderConfiguration c = new CANcoderConfiguration();
-        // c.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        // m_pivotEncoder.getConfigurator().apply(c);
-
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
 
         m_pivotMotor.getConfigurator().apply(config);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
 
+    }
+
+    public double getPivotArmAngle() {
+        return Rotation2d.fromDegrees(m_pivotGyro.getPitch().getValueAsDouble()).getDegrees();
+    }
+
+    public boolean atHomeAngle() {
+        if ((getPivotArmAngle()) == -25) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean lessThanHomeAngle() {
+        if ((getPivotArmAngle()) < -25) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    public boolean moreThanHomeAngle() {
+        if ((getPivotArmAngle()) >= -25) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean pivotAtAlgaeRightScorePosition() {
+        return getCurrentRotation().getDegrees() <= PivotArmConstants.kAlgaeNetRightPivot
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
     private Rotation2d motorPosToAngle(double pos) {
@@ -132,20 +154,21 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-        // Get motor readings
-        SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-        SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+        if (TuningModeConstants.kPivotTuning) {
+            // Get motor readings
+            // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
+            SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+            SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
+        }
 
-        // SmartDashboard.putNumber("Pivot Deg", getCurrentPosition() * 360); // the
-        // getPosition function accounts for
-        // // changes in configs (gear ratio)
-        // // getRotorPosition just gets the motor
-        // // value.
-        // SmartDashboard.putNumber("Rotor Deg",
-        // m_pivotMotor.getRotorPosition().getValueAsDouble() * 360);
-        // SmartDashboard.putNumber("Encoder Deg",
-        // m_pivotEncoder.getPosition().getValueAsDouble() * 360);
+    }
 
+    public void zeroStart() {
+        m_pivotMotor.set(0.04);
+    }
+
+    public void zeroReverse() {
+        m_pivotMotor.set(-0.04);
     }
 
     public void start() {

@@ -10,13 +10,13 @@ import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class EjectCoral extends SequentialCommandGroup {
-        public EjectCoral(
+public class DropCoral extends SequentialCommandGroup {
+        public DropCoral(
                         CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem) {
                 addCommands(
-                                new PrintCommand("Coral Eject Started"),
-                                new RunCommand(() -> coralSubsystem.eject(), coralSubsystem).withTimeout(1),
+                                new PrintCommand("Coral DropOff Started"),
+                                new RunCommand(() -> coralSubsystem.drop(), coralSubsystem).withTimeout(1),
                                 new InstantCommand(coralSubsystem::stop),
                                 new WaitCommand(0.25),
                                 new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));

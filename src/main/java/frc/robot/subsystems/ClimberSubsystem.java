@@ -8,13 +8,11 @@ import frc.robot.Constants.MotorDefaultsConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkFlex;
 
 public class ClimberSubsystem extends SubsystemBase {
     private final SparkFlex m_winchMotor = new SparkFlex(CanIdConstants.kClimberCanId,
             MotorDefaultsConstants.NeoVortexMotorType);
-    private SparkAbsoluteEncoder m_winchEncoder;
 
     private double kSpeed = ClimberConstants.kWinchSpeed;
 
@@ -30,11 +28,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // open loop move climber up & down
     public void moveDown() {
-        m_winchMotor.set(kSpeed);
+        m_winchMotor.set(-kSpeed);
     }
 
     public void moveUp() {
-        m_winchMotor.set(-kSpeed);
+        m_winchMotor.set(1);
     }
 
 }

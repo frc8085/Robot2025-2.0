@@ -2,17 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 // if command is interrupted before coral is picked up, kill command
 public class PickUpCoral extends Command {
         CoralSubsystem coralSubsystem;
-        ElevatorSubsystem elevatorSubsystem;
-        PivotSubsystem pivotSubsystem;
 
-        public PickUpCoral(
-                        CoralSubsystem coralSubsystem) {
+        private boolean coralPickedUp;
+
+        public PickUpCoral(CoralSubsystem coralSubsystem) {
 
                 this.coralSubsystem = coralSubsystem;
 
@@ -22,22 +19,34 @@ public class PickUpCoral extends Command {
 
         @Override
         public void initialize() {
-
+                System.out.println("Coral PickUp Starting");
+                coralPickedUp = false;
         }
 
         @Override
         public void execute() {
-                coralSubsystem.pickup();
+                if (coralSubsystem.isCoralDetected()) {
+                        coralPickedUp = true;
+                        coralSubsystem.stop();
+                        System.out.println("Coral Picked Up");
+                } else {
+                        coralSubsystem.pickup();
+                }
         }
 
         @Override
         public void end(boolean interrupted) {
-                coralSubsystem.stop();
+                if (interrupted) {
+                        coralSubsystem.stop();
+                        System.out.println("Coral PickUp Interrupted");
+                } else {
+                        System.out.println("Coral Picked Up");
+                }
         }
 
         @Override
         public boolean isFinished() {
-                return coralSubsystem.isCoralDetected();
+                return coralPickedUp;
         }
 
 }

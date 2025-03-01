@@ -169,7 +169,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
 
   public boolean targetInDangerZone(double target_position) {
-    return target_position < (Constants.ElevatorConstants.kElevatorSafeHeightMax
+    return target_position < (Constants.ElevatorConstants.kElevatorSafeHeightMax);
+  }
+
+  public boolean elevatorAtAlgaeScoreHeight() {
+    return getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorNetHeight
         - Constants.ElevatorConstants.kElevatorTolerance);
   }
 
@@ -185,7 +189,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean targetInConflictZone(double target_position, Rotation2d target_angle) {
-    return target_position < minConflictHeight(target_angle) - Constants.ElevatorConstants.kElevatorTolerance;
+    return target_position < minConflictHeight(target_angle);
   }
 
   public boolean inDangerZone() {
@@ -198,7 +202,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void periodic() {
     // display encoder readings on dashboard
-    SmartDashboard.putNumber("current Elevator Position", getCurrentMotorPosition());
+    if (TuningModeConstants.kElevatorTuning) {
+      SmartDashboard.putNumber("current Elevator Position", getCurrentMotorPosition());
+    }
     SmartDashboard.putBoolean("top LS hit", topLimitSwitch.get());
     SmartDashboard.putBoolean("bottom LS hit", bottomLimitSwitch.get());
     SmartDashboard.putBoolean("zero LS hit", zeroLimitSwitch.get());
@@ -225,8 +231,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       DriveState.elevatorMultiplier = multiplier;
     }
 
-    SmartDashboard.putNumber("Elevator Multiplier", DriveState.elevatorMultiplier);
-
+    if (TuningModeConstants.kElevatorTuning) {
+      SmartDashboard.putNumber("Elevator Multiplier", DriveState.elevatorMultiplier);
+    }
   }
 
   // turn off elevator (stops motor all together)
