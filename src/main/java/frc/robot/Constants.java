@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeight = 0.2;
 
     // if you want to slow down the rotation speed, change the adjustment factor
-    public static final double kAngularSpeedAdjustment = .5;
+    public static final double kAngularSpeedAdjustment = 1;
     public static final double kMaxAngularSpeed = 2 * Math.PI * kAngularSpeedAdjustment; // radians per second
 
     // Chassis configuration
@@ -104,7 +104,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperaterControllerPort = 1;
-    public static final double kDriveDeadband = 0.1;
+    public static final double kDriveDeadband = 0.05;
   }
 
   public static final class AutoConstants {

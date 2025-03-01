@@ -116,7 +116,9 @@ public class RobotContainer {
                                                                                 OIConstants.kDriveDeadband),
                                                                 -MathUtil.applyDeadband(driverController.getLeftX(),
                                                                                 OIConstants.kDriveDeadband),
-                                                                -MathUtil.applyDeadband(driverController.getRightX(),
+                                                                -MathUtil.applyDeadband(
+                                                                                Math.pow(driverController.getRightX(),
+                                                                                                3),
                                                                                 OIConstants.kDriveDeadband),
                                                                 true),
                                                 driveSubsystem));
@@ -154,7 +156,7 @@ public class RobotContainer {
 
                 // Driver operations
                 final Trigger ejectCoral = driverController.b();
-                final Trigger pickUpCoral = driverController.x();
+                final Trigger pickUpCoral = driverController.leftTrigger();
                 final Trigger ejectAlgae = driverController.a();
                 final Trigger pickUpAlgae = driverController.y();
                 final Trigger shootAlgaeLeft = driverController.leftBumper();
