@@ -10,6 +10,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -45,6 +46,14 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
+
+  private SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+      this.getKinematics(),
+      this.getPigeon2().getRotation2d(),
+      this.getState().ModulePositions,
+      this.getState().Pose);
+
+  public double aprilTagCache = -1;
 
   // private DriveState driveState;
 

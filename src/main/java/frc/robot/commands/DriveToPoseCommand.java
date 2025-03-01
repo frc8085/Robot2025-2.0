@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.PathplannerConstants;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +15,7 @@ import com.pathplanner.lib.util.FlippingUtil;
 
 import java.util.List;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindThenFollowPath;
 import com.pathplanner.lib.path.GoalEndState;
@@ -26,10 +28,11 @@ public class DriveToPoseCommand extends Command {
     private Pose2d cache;
     private Command pathCommand;
     private boolean isBarge;
+    private Pigeon2 m_gyro = new Pigeon2(CanIdConstants.kGyroCanId);
 
     private SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
-            this.getKinematics(),
-            this.getPigeon2().getRotation2d(),
+            driveSubsystem.getKinematics(),
+            driveSubsystem.getPigeon2().getRotation2d(),
             this.getState().ModulePositions,
             this.getState().Pose);
 
