@@ -75,10 +75,10 @@ public class Windmill extends Command {
                                                 new PrintCommand("Windmill: Pivot will not swing through danger zone"));
                         }
                 }
-                // if elevator is not in danger zone or pivot will not swing through the danger
+                // if elevator is not in danger zone and pivot will not swing through the danger
                 // zone, move the elevator and pivot arm in parallel
 
-                if (!elevatorInDangerZone || !pivotWillSwingThrough) {
+                if (!elevatorInDangerZone && !pivotWillSwingThrough) {
                         commands.addCommands(
                                         new ParallelCommandGroup(
                                                         new Elevator(elevatorSubsystem, targetHeight),
@@ -88,7 +88,16 @@ public class Windmill extends Command {
                 // if elevator ends in the danger zone, then move the elevator to the safe
                 // height, move the pivot, then continue to the final height
                 else {
-                        if (elevatorEndInDangerZone) {
+                        if ((!elevatorInDangerZone) && (pivotWillSwingThrough)) {
+                                commands.addCommands(
+                                                new ParallelCommandGroup(
+                                                                new Pivot(pivotSubsystem, targetAngle),
+                                                                new Elevator(elevatorSubsystem,
+                                                                                Constants.ElevatorConstants.kElevatorSafeHeightMax)),
+                                                new WaitUntilCommand(() -> !pivotSubsystem.inDangerZone()),
+                                                new Elevator(elevatorSubsystem, targetHeight));
+
+                        } else if (elevatorEndInDangerZone) {
                                 commands.addCommands(
                                                 new SequentialCommandGroup(
                                                                 new Elevator(elevatorSubsystem,

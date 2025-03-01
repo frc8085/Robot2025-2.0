@@ -7,10 +7,9 @@ import frc.robot.subsystems.CoralSubsystem;
 public class PickUpCoral extends Command {
         CoralSubsystem coralSubsystem;
 
-        private boolean coralPickedUp = false;
+        private boolean coralPickedUp;
 
-        public PickUpCoral(
-                        CoralSubsystem coralSubsystem) {
+        public PickUpCoral(CoralSubsystem coralSubsystem) {
 
                 this.coralSubsystem = coralSubsystem;
 
@@ -20,6 +19,7 @@ public class PickUpCoral extends Command {
 
         @Override
         public void initialize() {
+                System.out.println("Coral PickUp Starting");
                 coralPickedUp = false;
         }
 
@@ -28,6 +28,7 @@ public class PickUpCoral extends Command {
                 if (coralSubsystem.isCoralDetected()) {
                         coralPickedUp = true;
                         coralSubsystem.stop();
+                        System.out.println("Coral Picked Up");
                 } else {
                         coralSubsystem.pickup();
                 }
@@ -36,12 +37,11 @@ public class PickUpCoral extends Command {
         @Override
         public void end(boolean interrupted) {
                 if (interrupted) {
-                        System.out.println("Coral PickUp Interrupted");
                         coralSubsystem.stop();
+                        System.out.println("Coral PickUp Interrupted");
                 } else {
                         System.out.println("Coral Picked Up");
                 }
-                coralPickedUp = false;
         }
 
         @Override

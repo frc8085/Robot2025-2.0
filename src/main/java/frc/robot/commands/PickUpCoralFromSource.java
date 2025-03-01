@@ -10,14 +10,24 @@ import frc.robot.subsystems.PivotSubsystem;
 public class PickUpCoralFromSource extends SequentialCommandGroup {
         public PickUpCoralFromSource(
                         CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
-                        PivotSubsystem pivotSubsystem) {
-                addCommands(
-                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.CoralPickup, false),
-                                new PickUpCoral(coralSubsystem),
-                                new WaitCommand(0.25),
-                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.Home, false));
+                        PivotSubsystem pivotSubsystem, boolean altButton) {
+                if (altButton) {
+                        addCommands(
+                                        new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                        Constants.Windmill.WindmillState.CoralPickupAlternate, false),
+                                        new PickUpCoral(coralSubsystem),
+                                        new WaitCommand(0.25),
+                                        new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                        Constants.Windmill.WindmillState.Home, false));
 
+                } else {
+                        addCommands(
+                                        new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                        Constants.Windmill.WindmillState.CoralPickup, false),
+                                        new PickUpCoral(coralSubsystem),
+                                        new WaitCommand(0.25),
+                                        new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                        Constants.Windmill.WindmillState.Home, false));
+                }
         }
 }

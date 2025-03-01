@@ -34,7 +34,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void moveUp() {
-        m_winchMotor.set(kSpeed);
+        m_winchMotor.set(1);
     }
 
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.PivotArmConstants;
+import frc.robot.Constants.TuningModeConstants;
 
 public class PivotSubsystem extends SubsystemBase {
     private final TalonFX m_pivotMotor = new TalonFX(Constants.CanIdConstants.kPivotArmCanId, "rio");
@@ -77,7 +78,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean atHomeAngle() {
-        if ((getPivotArmAngle()) == -220) {
+        if ((getPivotArmAngle()) == -25) {
             return true;
         } else {
             return false;
@@ -85,7 +86,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean lessThanHomeAngle() {
-        if ((getPivotArmAngle()) < -22) {
+        if ((getPivotArmAngle()) < -25) {
             return true;
 
         } else {
@@ -94,11 +95,16 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean moreThanHomeAngle() {
-        if ((getPivotArmAngle()) >= -22) {
+        if ((getPivotArmAngle()) >= -25) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean pivotAtAlgaeRightScorePosition() {
+        return getCurrentRotation().getDegrees() <= PivotArmConstants.kAlgaeNetRightPivot
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
     private Rotation2d motorPosToAngle(double pos) {
@@ -164,10 +170,12 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-        // Get motor readings
-        SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-        SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
-        SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
+        if (TuningModeConstants.kPivotTuning) {
+            // Get motor readings
+            // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
+            SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+            SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
+        }
         // SmartDashboard.putNumber("Pivot Deg", getCurrentPosition() * 360); // the
         // getPosition function accounts for
         // // changes in configs (gear ratio)

@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -15,12 +16,10 @@ public class EjectCoral extends SequentialCommandGroup {
                         PivotSubsystem pivotSubsystem) {
                 addCommands(
                                 new PrintCommand("Coral Eject Started"),
-                                new InstantCommand(coralSubsystem::eject),
-                                new WaitCommand(1),
+                                new RunCommand(() -> coralSubsystem.eject(), coralSubsystem).withTimeout(1),
                                 new InstantCommand(coralSubsystem::stop),
                                 new WaitCommand(0.25),
-                                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
-                                                false));
+                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));
 
         }
 }
