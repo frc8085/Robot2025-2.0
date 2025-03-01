@@ -1,12 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
@@ -50,20 +48,6 @@ public class PivotSubsystem extends SubsystemBase {
         config.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
         config.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
         config.MotionMagic.MotionMagicJerk = Constants.PivotArmConstants.kPivotArmMMJerk;
-
-        // expirementing with encoder
-        // config.Feedback.
-        // config.Feedback.FeedbackRemoteSensorID =
-        // Constants.CanIdConstants.kPivotArmCancoderCanID;
-        // config.Feedback.FeedbackSensorSource =
-        // FeedbackSensorSourceValue.RemoteCANcoder;
-        // config.Feedback.RotorToSensorRatio = 9. / 1;
-        // config.Feedback.SensorToMechanismRatio = 3. / 1;
-        // config.Feedback.FeedbackRotorOffset = 0;
-
-        // CANcoderConfiguration c = new CANcoderConfiguration();
-        // c.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        // m_pivotEncoder.getConfigurator().apply(c);
 
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
@@ -176,15 +160,6 @@ public class PivotSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
             SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         }
-        // SmartDashboard.putNumber("Pivot Deg", getCurrentPosition() * 360); // the
-        // getPosition function accounts for
-        // // changes in configs (gear ratio)
-        // // getRotorPosition just gets the motor
-        // // value.
-        // SmartDashboard.putNumber("Rotor Deg",
-        // m_pivotMotor.getRotorPosition().getValueAsDouble() * 360);
-        // SmartDashboard.putNumber("Encoder Deg",
-        // m_pivotEncoder.getPosition().getValueAsDouble() * 360);
 
     }
 

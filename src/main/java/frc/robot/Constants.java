@@ -288,6 +288,7 @@ public final class Constants {
   public static final class CoralConstants {
     public static final int coralCurrentLimit = 40;
     public static final double kCoralSpeed = 1;
+    public static final double kCoralSlowSpeed = .5;
 
     // TEMPORARY VALUES
     public static double kCoralMinOutput = -0.25;

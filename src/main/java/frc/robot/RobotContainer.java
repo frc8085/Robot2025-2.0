@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DropCoral;
 import frc.robot.commands.EjectCoral;
 import frc.robot.commands.InitializePivot;
 import frc.robot.commands.InitializePivotAndElevator;
@@ -163,6 +164,7 @@ public class RobotContainer {
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                ejectCoral.and(altButton).onTrue(new DropCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
                 pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
                 // pickUpCoral.and(altButton).whileTrue(new RunCommand(() ->
                 // coralSubsystem.pickup(), coralSubsystem))
