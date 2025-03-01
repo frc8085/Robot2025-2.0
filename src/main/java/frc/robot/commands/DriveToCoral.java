@@ -57,11 +57,13 @@ public class DriveToCoral extends Command {
         }
 
         // Retrieve AprilTag pose data
-        double[] botPose = LimelightHelpers.getBotPose("limelight-left");
-
-        double xError = botPose[0]; // Side-to-side alignment
-        double yError = botPose[2]; // Distance to tag (forward movement)
-        double thetaError = botPose[5]; // Rotation error (yaw)
+        double[] botPose = limelight.camerapose_targetspace("limelight-left");
+        for (double element : botPose) {
+            System.out.println(element);
+        }
+        double xError = botPose[1]; // Side-to-side alignment
+        double yError = botPose[2] - 3; // Distance to tag (forward movement)
+        double thetaError = botPose[4]; // Rotation error (yaw)
 
         // Compute PID outputs
         double xSpeed = maxSpeed * -xPid.calculate(xError);
@@ -79,8 +81,8 @@ public class DriveToCoral extends Command {
 
     @Override
     public boolean isFinished() {
-        //probably a better way to do this
-        if (hasTarget){
+        // probably a better way to do this
+        if (hasTarget) {
             return xPid.atSetpoint() && yPid.atSetpoint() && thetaPid.atSetpoint();
         } else {
             return true;

@@ -133,6 +133,10 @@ public class LimelightSubsystem extends SubsystemBase {
         return LimelightHelpers.getTV(limelightName);
     }
 
+    public double[] camerapose_targetspace(String limelightName) {
+        return LimelightHelpers.getCameraPose_TargetSpace(limelightName);
+    }
+
     public int getID(String limelightName) {
         return (int) LimelightHelpers.getFiducialID(limelightName);
     }
