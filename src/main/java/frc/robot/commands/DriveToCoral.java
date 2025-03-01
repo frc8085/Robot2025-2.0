@@ -57,7 +57,10 @@ public class DriveToCoral extends Command {
         }
 
         // Retrieve AprilTag pose data
-        double[] botPose = limelight.camerapose_targetspace("limelight-left");
+
+        double[] botPose = LimelightHelpers
+                .pose3dToArray(LimelightHelpers.getCameraPose3d_TargetSpace("limelight-left"));
+        // double[] botPose = limelight.camerapose_targetspace("limelight-left");
         double xError = botPose[1]; // Side-to-side alignment
         double yError = botPose[2] - 3; // Distance to tag (forward movement)
         double thetaError = botPose[4]; // Rotation error (yaw)
