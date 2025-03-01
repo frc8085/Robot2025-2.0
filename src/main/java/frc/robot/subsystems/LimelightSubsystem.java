@@ -134,7 +134,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double[] camerapose_targetspace(String limelightName) {
-        return LimelightHelpers.getCameraPose_TargetSpace(limelightName);
+        return (double[]) LimelightHelpers.getCameraPose_TargetSpace(limelightName);
     }
 
     public int getID(String limelightName) {
