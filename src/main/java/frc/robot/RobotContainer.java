@@ -62,6 +62,7 @@ import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 /*
@@ -78,6 +79,7 @@ public class RobotContainer {
         private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
         private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
         private final AlgaeSubsystem algaeSubsystem = new AlgaeSubsystem();
+        private final LimelightSubsystem limelight = new LimelightSubsystem(driveSubsystem);
 
         // The driver's controller
         CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -106,8 +108,9 @@ public class RobotContainer {
                                 new RunCommand(
                                                 () -> driveSubsystem.drive(
                                                                 MathUtil.applyDeadband(
-                                                                                driverController
+                                                                                Math.pow(driverController
                                                                                                 .getRightTriggerAxis(),
+                                                                                                2),
                                                                                 OIConstants.kDriveDeadband),
                                                                 -MathUtil.applyDeadband(driverController.getLeftY(),
                                                                                 OIConstants.kDriveDeadband),

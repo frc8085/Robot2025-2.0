@@ -344,6 +344,7 @@ public final class Constants {
   }
 
   public static final class TuningModeConstants {
+    public static boolean kLimelightTuning = false;
     public static boolean kAlgaeTuning = false;
     public static boolean kCoralTuning = false;
     public static boolean kElevatorTuning = true;
