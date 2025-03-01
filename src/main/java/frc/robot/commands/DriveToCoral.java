@@ -25,6 +25,8 @@ public class DriveToCoral extends Command {
     private final double yTarget = 1.5; // Stop 1.5m from tag
     private final double thetaTarget = 0; // Square up to tag
 
+    public boolean hasTarget = true;
+
     public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
@@ -50,7 +52,7 @@ public class DriveToCoral extends Command {
     @Override
     public void execute() {
         if (!limelight.hasTarget("limelight-left")) {
-            end(true);
+            hasTarget = false;
             return;
         }
 
@@ -77,6 +79,11 @@ public class DriveToCoral extends Command {
 
     @Override
     public boolean isFinished() {
-        return xPid.atSetpoint() && yPid.atSetpoint() && thetaPid.atSetpoint();
+        //probably a better way to do this
+        if (hasTarget){
+            return xPid.atSetpoint() && yPid.atSetpoint() && thetaPid.atSetpoint();
+        } else {
+            return true;
+        }
     }
 }
