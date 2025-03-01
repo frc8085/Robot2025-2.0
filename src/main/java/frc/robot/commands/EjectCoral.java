@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -13,7 +14,7 @@ public class EjectCoral extends SequentialCommandGroup {
                         CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem) {
                 addCommands(
-
+                                new PrintCommand("Coral Eject Started"),
                                 new InstantCommand(coralSubsystem::eject),
                                 new WaitCommand(1),
                                 new InstantCommand(coralSubsystem::stop),
