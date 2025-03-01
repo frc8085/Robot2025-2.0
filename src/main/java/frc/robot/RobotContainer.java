@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CoralConstants;
@@ -39,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.EjectCoral;
 import frc.robot.commands.EjectCoralNoMove;
 import frc.robot.commands.InitializePivot;
+import frc.robot.commands.InitializePivotAndElevator;
 import frc.robot.commands.IntakeMotorsOff;
 import frc.robot.commands.MoveAfterAlgaePickedUp;
 import frc.robot.commands.PickUpAlgae;
@@ -75,6 +77,8 @@ public class RobotContainer {
         // The driver's controller
         CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
+        GenericHID driverControllerRumble = driverController.getHID();
+        GenericHID operatorControllerRumble = operatorController.getHID();
 
         public void adjustJoystickValues() {
                 double rawX = driverController.getLeftX();
@@ -134,7 +138,7 @@ public class RobotContainer {
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
-                zeroPivot.onTrue(new ZeroPivot(pivotSubsystem));
+                zeroPivot.onTrue(new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
 
                 // Reset heading of robot for field relative drive
                 final Trigger zeroHeadingButton = driverController.start();
@@ -154,7 +158,7 @@ public class RobotContainer {
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
-                pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                pickUpCoral.onTrue(new PickUpCoral(coralSubsystem));
                 pickUpCoral.and(altButton).whileTrue(new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem))
                                 .onFalse(new SequentialCommandGroup(
                                                 new InstantCommand(coralSubsystem::stop),
@@ -268,6 +272,7 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
+
                 // Create config for trajectory
                 TrajectoryConfig config = new TrajectoryConfig(
                                 AutoConstants.kMaxSpeedMetersPerSecond,
@@ -307,4 +312,19 @@ public class RobotContainer {
                 // Run path following command, then stop at the end.
                 return swerveControllerCommand.andThen(() -> driveSubsystem.drive(0, 0, 0, 0, false));
         }
+
+        public Command rumbleDriverCommand() {
+                return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(() -> stopRumbleDriverCtrl());
+        }
+
+        public void rumbleDriverCtrl() {
+                driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+                operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        }
+
+        public void stopRumbleDriverCtrl() {
+                driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+                operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        }
+
 }

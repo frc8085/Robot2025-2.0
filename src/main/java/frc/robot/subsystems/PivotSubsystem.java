@@ -77,7 +77,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean atHomeAngle() {
-        if ((getPivotArmAngle()) == -37) {
+        if ((getPivotArmAngle()) == -220) {
             return true;
         } else {
             return false;
@@ -85,7 +85,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean lessThanHomeAngle() {
-        if ((getPivotArmAngle()) < -37) {
+        if ((getPivotArmAngle()) < -22) {
             return true;
 
         } else {
@@ -94,7 +94,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean moreThanHomeAngle() {
-        if ((getPivotArmAngle()) >= -37) {
+        if ((getPivotArmAngle()) >= -22) {
             return true;
         } else {
             return false;
@@ -181,11 +181,11 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void zeroStart() {
-        m_pivotMotor.set(0.045);
+        m_pivotMotor.set(0.04);
     }
 
     public void zeroReverse() {
-        m_pivotMotor.set(-0.045);
+        m_pivotMotor.set(-0.04);
     }
 
     public void start() {

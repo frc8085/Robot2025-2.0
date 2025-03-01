@@ -24,7 +24,7 @@ public class InitializePivot extends
                                 new ParallelCommandGroup(
                                                 new InstantCommand(() -> pivotSubsystem
                                                                 .setAnglePos(Rotation2d
-                                                                                .fromDegrees(45))),
+                                                                                .fromDegrees(60))),
                                                 new InstantCommand(() -> pivotSubsystem
                                                                 .setPos(Rotation2d.fromDegrees(45)))));
         }

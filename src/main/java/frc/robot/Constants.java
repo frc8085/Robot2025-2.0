@@ -49,7 +49,9 @@ public final class Constants {
 
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeight = 0.2;
 
-    public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+    // if you want to slow down the rotation speed, change the adjustment factor
+    public static final double kAngularSpeedAdjustment = .5;
+    public static final double kMaxAngularSpeed = 2 * Math.PI * kAngularSpeedAdjustment; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
