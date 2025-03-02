@@ -8,85 +8,60 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class DriveToCoral extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
-    PIDController xPid;
+    PIDController xPid; // Moves left and right
+    PIDController yPid; // Moves forward and back
     double maxSpeed = 0.5;
 
     double[] rhat = { 0, 0 }; // Unit vector in the correct direction.
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kP = 0;
-    double kI = 0;
-    double kD = 0;
+    double kPX = 20;
+    double kIX = 0;
+    double kDX = 0;
+    double kPY = 50;
+    double kIY = 0;
+    double kDY = 0;
     double tolerance = 0.01;
-    double xTarget = -17;
+    double xTarget = -11;
     double yTarget = 7.46;
 
     public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
-        xPid = new PIDController(kP, kI, kD);
+        xPid = new PIDController(kPX, kIX, kDX);
         xPid.setTolerance(tolerance);
+        yPid = new PIDController(kPY, kIY, kDY);
+        yPid.setTolerance(tolerance);
 
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
+        double ty = limelight.getY("limelight-left");
+        xTarget += -3.67 * ty + 9.06; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
-
-        // int tagId = limelight.getID("limelight-left"); //In the future, you can add
-        // some logic to switch b/w left & right
-        // switch(tagId){ //TODO: Finish the rest with the specific unit vectors.
-        // case 6: //Assuming that there is a explicit positive direction that doesn't
-        // change red vs. blue
-        // case 22:
-        // rhat[0] = Math.cos(Math.PI - theta);
-        // rhat[1] = Math.sin(Math.PI - theta);
-        // break;
-        // case 7:
-        // case 21:
-        // rhat[0] = -1;
-        // rhat[1] = 0;
-        // break;
-        // case 8:
-        // case 20:
-        // rhat[0] = Math.cos(theta);
-        // rhat[1] = Math.sin(theta);
-        // break;
-        // case 9:
-        // case 19:
-        // break;
-        // case 10:
-        // case 18:
-        // rhat[0] = 1;
-        // rhat[1] = 0;
-        // break;
-        // case 11:
-        // case 17:
-        // break;
-        // default:
-        // //You're not seeing the right tag.
-        // break;
-        // }
+        yPid.setSetpoint(yTarget);
     }
 
     @Override
     public void execute() {
-        double speed = maxSpeed * -xPid.calculate(limelight.getX("limelight-left"));
+
+        double tx = limelight.getX("limelight-left");
+        double ty = limelight.getY("limelight-left");
+
+        double xSpeed = maxSpeed * -xPid.calculate(tx);
+        // double ySpeed = maxSpeed * yPid.calculate(ty);
+        double ySpeed = 0;
+        double speed = Math.hypot(xSpeed, ySpeed);
 
         if (!limelight.hasTarget("limelight-left")) {
             speed = 0;
         }
 
-        drive.drive(speed, 1, 0, 0, false); // If field relative boolean works correctly, above switch case is
-                                            // unnecessary
-        /*
-         * If it doesn't,
-         * Do:
-         * drive.drive(speed, speed*rhat[0], speed*rhat[1], 0, true);
-         */
+        drive.drive(speed, xSpeed, ySpeed, 0, false);
     }
 
     public void end(boolean interrupted) {
@@ -94,7 +69,7 @@ public class DriveToCoral extends Command {
     }
 
     public boolean isFinished() {
-        return xPid.atSetpoint();
+        return xPid.atSetpoint() && yPid.atSetpoint();
     }
 
 }

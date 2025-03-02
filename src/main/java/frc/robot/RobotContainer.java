@@ -25,6 +25,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -36,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DropCoral;
 import frc.robot.commands.EjectCoral;
 import frc.robot.commands.InitializePivotAndElevator;
+import frc.robot.commands.LockPivotAndElevatorCommand;
 import frc.robot.commands.PickUpAlgaeFromGround;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.PickUpCoralFromSource;
@@ -46,6 +48,7 @@ import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.DeployClimb;
+import frc.robot.commands.DriveToCoral;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
@@ -148,12 +151,16 @@ public class RobotContainer {
                 final Trigger zeroHeadingButton = driverController.start();
                 zeroHeadingButton.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
 
+                // Limelight Buttons
+                final Trigger limelightTrigger1 = driverController.x();
+                final Trigger limelightTrigger2 = driverController.y();
+
+                limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight));
+
                 // Driver operations
                 final Trigger ejectCoral = driverController.b();
                 final Trigger pickUpCoral = driverController.leftTrigger();
                 final Trigger ejectAlgae = driverController.a();
-                final Trigger limelightTrigger1 = driverController.y();
-                final Trigger limelightTrigger2 = driverController.x();
                 final Trigger shootAlgaeLeft = driverController.leftBumper();
                 final Trigger shootAlgaeRight = driverController.rightBumper();
                 final Trigger raiseClimber = driverController.povUp();
@@ -187,10 +194,17 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
                                                 climberSubsystem));
 
-                toggleClimber.toggleOnTrue(new ConditionalCommand(new SequentialCommandGroup(
-                                new DeployClimb(elevatorSubsystem, pivotSubsystem, climberSubsystem)),
+                toggleClimber.toggleOnTrue(new ConditionalCommand(new ParallelCommandGroup(
+                                new DeployClimb(climberSubsystem),
+                                new LockPivotAndElevatorCommand(elevatorSubsystem, pivotSubsystem)
+                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)),
                                 new RetractClimb(climberSubsystem),
                                 climberSubsystem::climberAtHomePosition));
+
+                // toggleClimber.toggleOnTrue(new ConditionalCommand(
+                // new DeployClimb(climberSubsystem),
+                // new RetractClimb(climberSubsystem),
+                // climberSubsystem::climberAtHomePosition));
 
                 lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
                                 climberSubsystem))

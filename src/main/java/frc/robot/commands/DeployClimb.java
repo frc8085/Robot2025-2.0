@@ -3,13 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
 
 public class DeployClimb extends SequentialCommandGroup {
-    public DeployClimb(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
+    public DeployClimb(
             ClimberSubsystem climberSubsystem) {
         addCommands(
                 // Switch to a transition state

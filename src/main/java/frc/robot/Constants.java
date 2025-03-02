@@ -42,7 +42,7 @@ public final class Constants {
 
   public static final class DriveConstants {
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8 / 2; // 4.8
+    public static final double kMaxSpeedMetersPerSecond = 4.8 / 4; // 4.8
 
     // what is the multiplier for the speed decrease
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeightMul = 0.025;

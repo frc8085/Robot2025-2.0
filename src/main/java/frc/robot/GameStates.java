@@ -24,5 +24,6 @@ public enum GameStates {
     ALGAE_REEF_YELLOW_2,
     ALGAE_REEF_YELLOW_3,
     ALGAE_NET_YELLOW,
+    CLIMB_MODE
 
 }

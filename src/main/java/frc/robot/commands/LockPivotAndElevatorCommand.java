@@ -28,17 +28,22 @@ public class LockPivotAndElevatorCommand extends Command {
         SmartDashboard.putBoolean("Enable Arm", enableArm);
         elevatorSubsystem.setPos(Constants.ElevatorConstants.kElevatorStage1Height);
         pivotSubsystem.setPos(Rotation2d.fromDegrees(90));
-        displayDisableSystem();
+
     }
 
     @Override
     public void execute() {
+        displayDisableSystem();
+    }
 
+    @Override
+    public void end(boolean interrupted) {
+        System.out.println("Elevator Unlocked");
     }
 
     @Override
     public boolean isFinished() {
-        return enableArm;
+        return (enableArm);
     }
 
     public void displayDisableSystem() {
