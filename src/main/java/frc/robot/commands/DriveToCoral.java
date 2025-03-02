@@ -17,7 +17,7 @@ public class DriveToCoral extends Command {
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 20;
+    double kPX = 10;
     double kIX = 0;
     double kDX = 0;
     double kPY = 50;
