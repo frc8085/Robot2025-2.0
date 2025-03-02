@@ -55,6 +55,11 @@ public class DriveToCoral extends Command {
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);
         double ySpeed = maxSpeed * yPid.calculate(ty);
+
+        // If we got to the correct x, stop moving in that direction.
+        if (xPid.atSetpoint())
+            xSpeed = 0;
+
         double speed = Math.hypot(xSpeed, ySpeed);
 
         if (!limelight.hasTarget("limelight-left")) {
@@ -69,6 +74,7 @@ public class DriveToCoral extends Command {
     }
 
     public boolean isFinished() {
+        // TODO: Add a condition that allows the driver/operator to exit this command.
         return xPid.atSetpoint() && yPid.atSetpoint();
     }
 
