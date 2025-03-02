@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -78,6 +79,8 @@ public class RobotContainer {
         private final AlgaeSubsystem algaeSubsystem = new AlgaeSubsystem();
         private final LimelightSubsystem limelight = new LimelightSubsystem(driveSubsystem);
 
+        public boolean automated = true; // Controls automation state
+
         // The driver's controller
         CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
@@ -127,6 +130,10 @@ public class RobotContainer {
 
         }
 
+        public boolean getAutomated() {
+                return automated;
+        }
+
         /**
          * Use this method to define your button->command mappings. Buttons can be
          * created by
@@ -155,7 +162,22 @@ public class RobotContainer {
                 final Trigger limelightTrigger1 = driverController.x();
                 final Trigger limelightTrigger2 = driverController.y();
 
-                limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight));
+                // Pressing the trigger in automation mode will run this command.
+                limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight)).and(
+                                new BooleanSupplier() {
+                                        @Override
+                                        public boolean getAsBoolean() {
+                                                return automated;
+                                        }
+                                });
+                // Pressing the trigger NOT in automation mode will run this one.
+                limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight)).and(
+                                new BooleanSupplier() {
+                                        @Override
+                                        public boolean getAsBoolean() {
+                                                return !automated;
+                                        }
+                                });
 
                 // Driver operations
                 final Trigger ejectCoral = driverController.b();

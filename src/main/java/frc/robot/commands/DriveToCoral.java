@@ -50,10 +50,8 @@ public class DriveToCoral extends Command {
         double tx = limelight.getX("limelight-left");
         double ty = limelight.getY("limelight-left");
 
-        if (!xPid.atSetpoint()) {
-            xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
-            xPid.setSetpoint(xTarget);
-        }
+        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
+        xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);
         double ySpeed = maxSpeed * yPid.calculate(ty);
