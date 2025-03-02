@@ -15,47 +15,37 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DropCoral;
 import frc.robot.commands.EjectCoral;
-import frc.robot.commands.InitializePivot;
 import frc.robot.commands.InitializePivotAndElevator;
-import frc.robot.commands.IntakeMotorsOff;
-import frc.robot.commands.MoveAfterAlgaePickedUp;
-import frc.robot.commands.PickUpAlgae;
-import frc.robot.commands.PickUpAlgaeAndReturnToHome;
 import frc.robot.commands.PickUpAlgaeFromGround;
 import frc.robot.commands.PickUpAlgaeFromReef;
-import frc.robot.commands.PickUpCoral;
 import frc.robot.commands.PickUpCoralFromSource;
+import frc.robot.commands.RetractClimb;
 import frc.robot.commands.ScoreAlgae;
 import frc.robot.commands.ScoreAlgaeNetLeft;
 import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
-import frc.robot.commands.ZeroPivot;
-import frc.robot.commands.ToClimb;
+import frc.robot.commands.DeployClimb;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
@@ -170,7 +160,7 @@ public class RobotContainer {
                 final Trigger lowerClimber = driverController.povDown();
                 // final Trigger intakeMotorsOff = driverController.back();
                 final Trigger altButton = driverController.back();
-                final Trigger deployClimber = driverController.povLeft();
+                final Trigger toggleClimber = driverController.povLeft();
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
@@ -196,8 +186,12 @@ public class RobotContainer {
                                 climberSubsystem))
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
                                                 climberSubsystem));
-                deployClimber.onTrue(
-                                new frc.robot.commands.ToClimb(elevatorSubsystem, pivotSubsystem, climberSubsystem));
+
+                toggleClimber.toggleOnTrue(new ConditionalCommand(new SequentialCommandGroup(
+                                new DeployClimb(elevatorSubsystem, pivotSubsystem, climberSubsystem)),
+                                new RetractClimb(climberSubsystem),
+                                climberSubsystem::climberAtHomePosition));
+
                 lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
                                 climberSubsystem))
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),

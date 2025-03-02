@@ -349,6 +349,7 @@ public final class Constants {
     public static boolean kCoralTuning = false;
     public static boolean kElevatorTuning = true;
     public static boolean kPivotTuning = true;
+    public static boolean kClimberTuning = false;
   }
 
 }
