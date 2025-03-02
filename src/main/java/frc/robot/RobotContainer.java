@@ -49,7 +49,7 @@ import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.DeployClimb;
-import frc.robot.commands.DriveToCoral;
+import frc.robot.commands.scoring.DriveToCoral;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
@@ -80,6 +80,34 @@ public class RobotContainer {
         private final LimelightSubsystem limelight = new LimelightSubsystem(driveSubsystem);
 
         public boolean automated = true; // Controls automation state
+
+        public enum ScoreDirection {
+                LEFT,
+                RIGHT,
+                UNDECIDED
+        }
+
+        public enum AlgaeLevel {
+                TWO,
+                THREE,
+                NONE,
+                UNDECIDED
+        }
+
+        public enum CoralLevel {
+                ONE,
+                TWO,
+                THREE,
+                FOUR,
+                NONE,
+                UNDECIDED
+        }
+
+        // TODO: Implement buttons that change these values. Consider using LEDs to show
+        // the target mode
+        public static ScoreDirection scoreDirection = ScoreDirection.UNDECIDED;
+        public static AlgaeLevel algaeLevel = AlgaeLevel.UNDECIDED;
+        public static CoralLevel coralLevel = CoralLevel.UNDECIDED;
 
         // The driver's controller
         CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
