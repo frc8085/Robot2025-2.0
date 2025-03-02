@@ -20,7 +20,7 @@ public class DriveToCoral extends Command {
     double kPX = 0.125;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.125;
+    double kPY = 0.12;
     double kIY = 0;
     double kDY = 0;
     double tolerance = 0.01;
@@ -50,11 +50,18 @@ public class DriveToCoral extends Command {
         double tx = limelight.getX("limelight-left");
         double ty = limelight.getY("limelight-left");
 
-        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
-        xPid.setSetpoint(xTarget);
+        if (!xPid.atSetpoint()) {
+            xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
+            xPid.setSetpoint(xTarget);
+        }
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);
         double ySpeed = maxSpeed * yPid.calculate(ty);
+
+        // If we got to the correct x, stop moving in that direction.
+        if (xPid.atSetpoint()) {
+            xSpeed = 0;
+        }
 
         double speed = Math.hypot(xSpeed, ySpeed);
 
@@ -63,6 +70,10 @@ public class DriveToCoral extends Command {
         }
 
         drive.drive(speed, xSpeed, ySpeed, 0, false);
+
+        SmartDashboard.putNumber("X Error", tx - xPid.getSetpoint());
+        SmartDashboard.putNumber("y Error", ty - yPid.getSetpoint());
+
     }
 
     public void end(boolean interrupted) {
