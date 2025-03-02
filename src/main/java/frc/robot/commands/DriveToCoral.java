@@ -55,7 +55,7 @@ public class DriveToCoral extends Command {
         double tx = limelight.getX("limelight-left");
         double ty = limelight.getY("limelight-left");
 
-        double xSpeed = maxSpeed * xPid.calculate(tx);
+        double xSpeed = maxSpeed * -xPid.calculate(tx);
         // double ySpeed = maxSpeed * yPid.calculate(ty);
         double ySpeed = 0;
         double speed = Math.hypot(xSpeed, ySpeed);
