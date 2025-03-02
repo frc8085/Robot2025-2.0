@@ -11,21 +11,21 @@ public class DriveToCoral extends Command {
     LimelightSubsystem limelight;
     PIDController xPid; // Moves left and right
     PIDController yPid; // Moves forward and back
-    double maxSpeed = 0.5;
+    double maxSpeed = 1;
 
     double[] rhat = { 0, 0 }; // Unit vector in the correct direction.
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 10;
+    double kPX = 0.125;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 50;
+    double kPY = 10;
     double kIY = 0;
     double kDY = 0;
     double tolerance = 0.01;
     double xTarget;
-    double yTarget = 7.46;
+    double yTarget = 6;
 
     public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
@@ -41,23 +41,20 @@ public class DriveToCoral extends Command {
 
     @Override
     public void initialize() {
-        double ty = limelight.getY("limelight-left");
-        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
-        xPid.setSetpoint(xTarget);
         yPid.setSetpoint(yTarget);
-
-        SmartDashboard.putNumber("X target", xTarget);
+        // X setpoint changes with distance, so we update it in execute
     }
 
     @Override
     public void execute() {
-
         double tx = limelight.getX("limelight-left");
         double ty = limelight.getY("limelight-left");
 
+        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
+        xPid.setSetpoint(xTarget);
+
         double xSpeed = maxSpeed * -xPid.calculate(tx);
-        // double ySpeed = maxSpeed * yPid.calculate(ty);
-        double ySpeed = 0;
+        double ySpeed = maxSpeed * yPid.calculate(ty);
         double speed = Math.hypot(xSpeed, ySpeed);
 
         if (!limelight.hasTarget("limelight-left")) {
