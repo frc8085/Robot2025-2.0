@@ -27,6 +27,8 @@ public class DriveToCoral extends Command {
     double xTarget;
     double yTarget = 6;
 
+    boolean flag;
+
     public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
@@ -41,6 +43,7 @@ public class DriveToCoral extends Command {
 
     @Override
     public void initialize() {
+        flag = false;
         yPid.setSetpoint(yTarget);
         // X setpoint changes with distance, so we update it in execute
     }
@@ -57,8 +60,10 @@ public class DriveToCoral extends Command {
         double ySpeed = maxSpeed * yPid.calculate(ty);
 
         // If we got to the correct x, stop moving in that direction.
-        if (xPid.atSetpoint())
+        if (xPid.atSetpoint() || flag) {
             xSpeed = 0;
+            flag = true;
+        }
 
         double speed = Math.hypot(xSpeed, ySpeed);
 
