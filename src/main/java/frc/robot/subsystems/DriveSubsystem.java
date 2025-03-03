@@ -131,6 +131,9 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+    SmartDashboard.putNumber("Drive X", getPose().getX());
+    SmartDashboard.putNumber("Drive Y", getPose().getY());
   }
 
   // This next set of statements was copied from 2024 code

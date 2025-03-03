@@ -47,6 +47,7 @@ import frc.robot.commands.ScoreAlgaeNetLeft;
 import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
+import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.DriveToCoral;
 import frc.robot.commands.scoring.MoveToScore;
@@ -191,6 +192,8 @@ public class RobotContainer {
                 final Trigger limelightTrigger1 = driverController.x();
                 final Trigger limelightTrigger2 = driverController.y();
 
+                // limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight));
+
                 // Pressing the trigger in automation mode will run this command.
                 limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight)).and(
                                 new BooleanSupplier() {
@@ -301,6 +304,8 @@ public class RobotContainer {
                                                                 return !automated;
                                                         }
                                                 });
+
+                // moveLeft.onTrue(new AutoDriveMeters(driveSubsystem, 0, 0.5));
 
                 moveRight.onTrue(new InstantCommand(() -> {
                         scoreDirection = ScoreDirection.RIGHT;

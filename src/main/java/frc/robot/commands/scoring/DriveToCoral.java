@@ -17,15 +17,15 @@ public class DriveToCoral extends Command {
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 0.125;
+    double kPX = 0.03;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.12;
+    double kPY = 0.06;
     double kIY = 0;
     double kDY = 0;
-    double tolerance = 0.01;
-    double xTarget;
-    double yTarget = 6;
+    double tolerance = 1;
+    double xTarget = -5.56;
+    double yTarget = 12.57;
 
     public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
@@ -50,7 +50,7 @@ public class DriveToCoral extends Command {
         double tx = limelight.getX("limelight-left");
         double ty = limelight.getY("limelight-left");
 
-        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
+        xTarget = -2.31 * ty + 22.5; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);
