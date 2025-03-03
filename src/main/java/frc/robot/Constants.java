@@ -230,8 +230,8 @@ public final class Constants {
     public static final double kPivotHome = 45;
     public static final double kPivotClimb = 90;
     public static final double kPivotCoralPickup = 120;
-    public static final double kPivotCoralDropOff = -50;
-    public static final double kPivotCoralDropOff4 = -55;
+    public static final double kPivotCoralDropOff = -72;
+    public static final double kPivotCoralDropOff4 = -52;
     public static final double kPivotAlgaePickUpFloor = 116;
     public static final double kPivotReef = 102;
     public static final double kPivotAlgaePickUpFloorFlip = 90;

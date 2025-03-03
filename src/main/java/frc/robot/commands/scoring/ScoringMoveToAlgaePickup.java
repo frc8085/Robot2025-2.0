@@ -11,8 +11,8 @@ import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class AutoPickUpAlgaeFromReef extends SequentialCommandGroup {
-        public AutoPickUpAlgaeFromReef(
+public class ScoringMoveToAlgaePickup extends SequentialCommandGroup {
+        public ScoringMoveToAlgaePickup(
                         AlgaeSubsystem algaeSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem, boolean level, boolean mirror) {
 
