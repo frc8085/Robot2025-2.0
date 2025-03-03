@@ -156,11 +156,11 @@ public final class Constants {
 
     // Elevator Heights for different states
     public static double kElevatorHomeHeight = 30;
-    public static double kElevatorCoralPickupHeight = 20;
-    public static double kElevatorCoralPickupAlternateHeight = 15;
-    public static double kElevatorCoralDropOff1Height = 30;
-    public static double kElevatorCoralDropOff2Height = 60;
-    public static double kElevatorCoralDropOff3Height = 88;
+    public static double kElevatorCoralPickupHeight = 25;
+    public static double kElevatorCoralPickupAlternateHeight = 20;
+    public static double kElevatorCoralDropOff1Height = 55;
+    public static double kElevatorCoralDropOff2Height = 47;
+    public static double kElevatorCoralDropOff3Height = 75;
     public static double kElevatorCoralDropOff4Height = 130;
     public static double kElevatorAlgaePickUpFloorHeight = 11;
     public static double kElevatorReef2Height = 40;
