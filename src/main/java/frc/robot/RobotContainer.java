@@ -119,7 +119,7 @@ public class RobotContainer {
                                                                 -MathUtil.applyDeadband(
                                                                                 Math.pow(driverController.getRightX(),
                                                                                                 3),
-                                                                                OIConstants.kDriveDeadband),
+                                                                                OIConstants.kTurnDeadband),
                                                                 true),
                                                 driveSubsystem));
 

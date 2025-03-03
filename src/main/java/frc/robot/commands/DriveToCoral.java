@@ -20,10 +20,10 @@ public class DriveToCoral extends Command {
     double kPX = 0.125;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.12;
+    double kPY = .25;
     double kIY = 0;
     double kDY = 0;
-    double tolerance = 0.01;
+    double tolerance = 1;
     double xTarget;
     double yTarget = 6;
 

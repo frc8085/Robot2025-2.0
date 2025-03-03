@@ -42,7 +42,7 @@ public final class Constants {
 
   public static final class DriveConstants {
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8 / 4; // 4.8
+    public static final double kMaxSpeedMetersPerSecond = 4; // 4.8
 
     // what is the multiplier for the speed decrease
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeightMul = 0.025;
@@ -105,6 +105,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperaterControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
+    public static final double kTurnDeadband = 0.025;
   }
 
   public static final class AutoConstants {
@@ -154,11 +155,12 @@ public final class Constants {
 
     // Elevator Heights for different states
     public static double kElevatorHomeHeight = 30;
-    public static double kElevatorCoralPickupHeight = 20;
-    public static double kElevatorCoralPickupAlternateHeight = 15;
-    public static double kElevatorCoralDropOff1Height = 30;
-    public static double kElevatorCoralDropOff2Height = 60;
-    public static double kElevatorCoralDropOff3Height = 88;
+    public static double kElevatorCoralPickupHeight = 25;
+    public static double kElevatorCoralPickupAlternateHeight = 20;
+    // adjusted heights up by 5 at southington
+    public static double kElevatorCoralDropOff1Height = 40;
+    public static double kElevatorCoralDropOff2Height = 47;
+    public static double kElevatorCoralDropOff3Height = 75;
     public static double kElevatorCoralDropOff4Height = 130;
     public static double kElevatorAlgaePickUpFloorHeight = 11;
     public static double kElevatorReef2Height = 40;
@@ -239,10 +241,11 @@ public final class Constants {
       CoralPickupAlternate(ElevatorConstants.kElevatorCoralPickupAlternateHeight, Rotation2d.fromDegrees(120)),
 
       // coral dropoff happens on both sides
-      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-50), true),
-      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-50), true),
-      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-50), true),
-      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-72), true),
+      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-72), true),
+      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-72), true),
+      // was -55
+      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-52), true),
 
       AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(116)),
       AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(102)),
