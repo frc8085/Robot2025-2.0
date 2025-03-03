@@ -2,16 +2,30 @@ package frc.robot.commands.scoring;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
+import frc.robot.Constants.PivotArmConstants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.AlgaeLevel;
 import frc.robot.RobotContainer.CoralLevel;
+import frc.robot.commands.DropCoral;
+import frc.robot.commands.Pivot;
+import frc.robot.commands.states.ToCoralDropOff1;
+import frc.robot.commands.states.ToCoralDropOff2;
+import frc.robot.commands.states.ToCoralDropOff3;
+import frc.robot.commands.states.ToCoralDropOff4;
+import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class ToCoralScore extends SequentialCommandGroup {
-    public ToCoralScore(CoralSubsystem coral, PivotSubsystem pivot) {
+    public ToCoralScore(CoralSubsystem coral, ElevatorSubsystem elevator, PivotSubsystem pivot, DriveSubsystem drive) {
+
         // Logic structure Assuming blue limelight
         boolean blue = true;
 
@@ -47,27 +61,51 @@ public class ToCoralScore extends SequentialCommandGroup {
                 break;
         }
 
-        scoreCoral(coral, pivot);
+        scoreCoral(coral, elevator, pivot, drive);
     }
 
-    public void scoreCoral(CoralSubsystem coral, PivotSubsystem pivot) {
+    public void scoreCoral(CoralSubsystem coral, ElevatorSubsystem elevator, PivotSubsystem pivot,
+            DriveSubsystem drive) {
+
         switch (RobotContainer.coralLevel) {
             case ONE:
                 addCommands(
+                        new ToCoralDropOff1(elevator, pivot, false),
+                        new ParallelCommandGroup(
+                                new WaitUntilCommand(elevator::elevatorAtCoralDropOff1Height),
+                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                        new DropCoral(coral, elevator, pivot),
+                        new ToHomeCommand(elevator, pivot, coral));
 
-                );
                 break;
             case TWO:
                 addCommands(
+                        new ToCoralDropOff2(elevator, pivot, false),
+                        new ParallelCommandGroup(
+                                new WaitUntilCommand(elevator::elevatorAtCoralDropOff2Height),
+                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                        new DropCoral(coral, elevator, pivot),
+                        new ToHomeCommand(elevator, pivot, coral));
 
-                );
                 break;
             case THREE:
                 addCommands(
-
-                );
+                        new ToCoralDropOff3(elevator, pivot, false),
+                        new ParallelCommandGroup(
+                                new WaitUntilCommand(elevator::elevatorAtCoralDropOff3Height),
+                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                        new DropCoral(coral, elevator, pivot),
+                        new ToHomeCommand(elevator, pivot, coral));
                 break;
             case FOUR:
+                addCommands(
+                        new ToCoralDropOff4(elevator, pivot, false),
+                        new ParallelCommandGroup(
+                                new WaitUntilCommand(elevator::elevatorAtCoralDropOff4Height),
+                                new WaitUntilCommand(pivot::pivotAtCoral4DropOffAngle)),
+                        new DropCoral(coral, elevator, pivot),
+                        new ToHomeCommand(elevator, pivot, coral));
+
                 break;
             case NONE:
                 break;
@@ -84,8 +122,9 @@ public class ToCoralScore extends SequentialCommandGroup {
                                         return RobotContainer.coralLevel != CoralLevel.UNDECIDED;
                                     }
                                 }),
-                        new ToCoralScore(coral, pivot));
+                        new ToCoralScore(coral, elevator, pivot, drive));
                 break;
         }
     }
+
 }

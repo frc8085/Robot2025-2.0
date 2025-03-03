@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -174,6 +176,48 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean elevatorAtAlgaeScoreHeight() {
     return getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorNetHeight
         - Constants.ElevatorConstants.kElevatorTolerance);
+  }
+
+  public boolean elevatorAtCoralDropOff1Height() {
+    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff1Height
+        - Constants.ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff1Height
+            + Constants.ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralDropOff2Height() {
+    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff2Height
+        - Constants.ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff2Height
+            + Constants.ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralDropOff3Height() {
+    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff3Height
+        - Constants.ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff3Height
+            + Constants.ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralDropOff4Height() {
+    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff4Height
+        - Constants.ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff4Height
+            + Constants.ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtAlgaeReefL2() {
+    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef2Height
+        - Constants.ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef2Height
+            + Constants.ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtAlgaeReefL3() {
+    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef3Height
+        - Constants.ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef3Height
+            + Constants.ElevatorConstants.kElevatorTolerance)));
   }
 
   public double minConflictHeight(Rotation2d target_angle) {

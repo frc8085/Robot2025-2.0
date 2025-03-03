@@ -40,7 +40,6 @@ import frc.robot.commands.EjectCoral;
 import frc.robot.commands.InitializePivotAndElevator;
 import frc.robot.commands.LockPivotAndElevatorCommand;
 import frc.robot.commands.PickUpAlgaeFromGround;
-import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.PickUpCoralFromSource;
 import frc.robot.commands.RetractClimb;
 import frc.robot.commands.ScoreAlgae;
@@ -50,6 +49,8 @@ import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.DriveToCoral;
+import frc.robot.commands.scoring.MoveToScore;
+import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
@@ -262,20 +263,45 @@ public class RobotContainer {
                                                 climberSubsystem));
 
                 // Operator Controls
-                final Trigger manualCoral = operatorController.rightTrigger();
-                final Trigger manualAlgae = operatorController.leftTrigger();
+                // final Trigger manualCoral = operatorController.rightTrigger();
+                // final Trigger manualAlgae = operatorController.leftTrigger();
 
-                manualCoral.whileTrue(
-                                new SequentialCommandGroup(new ToCoralSource(elevatorSubsystem, pivotSubsystem, false),
-                                                new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
+                final Trigger moveLeft = operatorController.leftTrigger();
+                final Trigger moveRight = operatorController.rightTrigger();
+
+                moveLeft.onTrue(new InstantCommand()->{scoreDirection=ScoreDirection.LEFT}).and(
+                                new BooleanSupplier() {
+                                        @Override
+                                        public boolean getAsBoolean() {
+                                                return automated;
+                                        }
+                                });
+
+                // Pressing the trigger NOT in automation mode will run this one.
+                moveLeft.onTrue(new SequentialCommandGroup(new ToCoralSource(elevatorSubsystem, pivotSubsystem, false),
+                                new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
                                 .onFalse(new SequentialCommandGroup(
                                                 new InstantCommand(coralSubsystem::stop),
                                                 new WaitCommand(0.25),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                Constants.Windmill.WindmillState.Home, false)));
+                                                                Constants.Windmill.WindmillState.Home, false)))
+                                .and(
+                                                new BooleanSupplier() {
+                                                        @Override
+                                                        public boolean getAsBoolean() {
+                                                                return !automated;
+                                                        }
+                                                });
 
-                manualAlgae.whileTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
-                                .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));
+                moveRight.onTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
+                                .onFalse(new InstantCommand(algaeSubsystem::holdAlgae))
+                                .and(
+                                                new BooleanSupplier() {
+                                                        @Override
+                                                        public boolean getAsBoolean() {
+                                                                return !automated;
+                                                        }
+                                                });
 
                 // position controls
                 final Trigger armHome = operatorController.leftBumper();

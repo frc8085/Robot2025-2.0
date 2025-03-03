@@ -161,9 +161,9 @@ public class DriveSubsystem extends SubsystemBase {
     };
   }
 
-  // public void stop() {
-  // drive(0, 0, 0, 0, false, false);
-  // }
+  public void stop() {
+    drive(0, 0, 0, 0, false);
+  }
 
   // public void turn(double speed) {
   // double direction = speed > 0 ? 1 : -1;

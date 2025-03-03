@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.commands.Pivot;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 /**
@@ -224,32 +226,52 @@ public final class Constants {
     public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(5);
     public static final double kPivotToleranceRotations = kPivotTolerance.getRotations();
 
+    // Pivot Angles for different states
+    public static final double kPivotHome = 45;
+    public static final double kPivotClimb = 90;
+    public static final double kPivotCoralPickup = 120;
+    public static final double kPivotCoralDropOff = -50;
+    public static final double kPivotCoralDropOff4 = -55;
+    public static final double kPivotAlgaePickUpFloor = 116;
+    public static final double kPivotReef = 102;
+    public static final double kPivotAlgaePickUpFloorFlip = 90;
+    public static final double kPivotReef2Intake = -35;
+    public static final double kPivotReef3Intake = -25;
     public static final double kAlgaeNetLeftPivot = 60;
     public static final double kAlgaeNetRightPivot = 0;
-
   }
 
   public static final class Windmill {
 
     public static enum WindmillState {
 
-      Home(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(45)),
-      Climb(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(90)),
-      CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight, Rotation2d.fromDegrees(120)),
-      CoralPickupAlternate(ElevatorConstants.kElevatorCoralPickupAlternateHeight, Rotation2d.fromDegrees(120)),
+      Home(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotHome)),
+      Climb(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotClimb)),
+      CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
+      CoralPickupAlternate(ElevatorConstants.kElevatorCoralPickupAlternateHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
 
       // coral dropoff happens on both sides
-      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height, Rotation2d.fromDegrees(-50), true),
-      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height, Rotation2d.fromDegrees(-50), true),
-      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height, Rotation2d.fromDegrees(-50), true),
-      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height, Rotation2d.fromDegrees(-55), true),
+      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff), true),
+      CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff), true),
+      CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff), true),
+      CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff4), true),
 
-      AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight, Rotation2d.fromDegrees(116)),
-      AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(102)),
-      AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(102)),
-      AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight, Rotation2d.fromDegrees(90)),
-      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight, Rotation2d.fromDegrees(-35)),
-      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight, Rotation2d.fromDegrees(-25)),
+      AlgaePickUpFloor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaePickUpFloor)),
+      AlgaePickUpReef2(ElevatorConstants.kElevatorReef2Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotReef)),
+      AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotReef)),
+      AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaePickUpFloorFlip)),
+      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotReef2Intake)),
+      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotReef3Intake)),
       AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(PivotArmConstants.kAlgaeNetLeftPivot)),
       AlgaeNetRight(ElevatorConstants.kElevatorNetHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kAlgaeNetRightPivot));
@@ -352,4 +374,7 @@ public final class Constants {
     public static boolean kClimberTuning = false;
   }
 
+  public static final class CommandScoreConstants {
+    public static double kMoveSpeed = 1;
+  }
 }
