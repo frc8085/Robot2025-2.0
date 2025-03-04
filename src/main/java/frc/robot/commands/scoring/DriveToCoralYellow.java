@@ -17,15 +17,15 @@ public class DriveToCoralYellow extends Command {
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 0.125;
+    double kPX = 0.03;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.12;
+    double kPY = 0.06;
     double kIY = 0;
     double kDY = 0;
-    double tolerance = 0.01;
-    double xTarget;
-    double yTarget = 6;
+    double tolerance = 1;
+    double xTarget = -5.56;
+    double yTarget = 12.57;
 
     public DriveToCoralYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
@@ -84,5 +84,3 @@ public class DriveToCoralYellow extends Command {
     }
 
 }
-
-    
