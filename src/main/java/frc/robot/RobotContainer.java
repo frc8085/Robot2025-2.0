@@ -143,7 +143,7 @@ public class RobotContainer {
                                                                                 Math.pow(driverController
                                                                                                 .getRightTriggerAxis(),
                                                                                                 2),
-                                                                                OIConstants.kDriveDeadband),
+                                                                                0),
                                                                 -MathUtil.applyDeadband(driverController.getLeftY(),
                                                                                 OIConstants.kDriveDeadband),
                                                                 -MathUtil.applyDeadband(driverController.getLeftX(),
