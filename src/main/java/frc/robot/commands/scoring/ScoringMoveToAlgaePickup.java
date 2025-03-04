@@ -1,10 +1,7 @@
 package frc.robot.commands.scoring;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.commands.PickUpAlgae;
-import frc.robot.commands.Windmill;
 import frc.robot.commands.states.ToAlgaeL2;
 import frc.robot.commands.states.ToAlgaeL3;
 import frc.robot.subsystems.AlgaeSubsystem;

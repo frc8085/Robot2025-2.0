@@ -84,6 +84,12 @@ public class Windmill extends Command {
                                                         new Elevator(elevatorSubsystem, targetHeight),
                                                         new Pivot(pivotSubsystem, targetAngle)));
 
+                } else if (!pivotWillSwingThrough) {
+                        commands.addCommands(
+                                        new ParallelCommandGroup(
+                                                        new Elevator(elevatorSubsystem, targetHeight),
+                                                        new Pivot(pivotSubsystem, targetAngle)));
+
                 }
                 // if elevator ends in the danger zone, then move the elevator to the safe
                 // height, move the pivot, then continue to the final height
