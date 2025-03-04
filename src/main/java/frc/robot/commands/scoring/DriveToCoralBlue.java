@@ -9,6 +9,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class DriveToCoralBlue extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
+    private boolean lostTarget;
     PIDController xPid; // Moves left and right
     PIDController yPid; // Moves forward and back
     double maxSpeed = 1;
@@ -20,7 +21,7 @@ public class DriveToCoralBlue extends Command {
     double kPX = 0.03;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.06;
+    double kPY = 0.08;
     double kIY = 0;
     double kDY = 0;
     double tolerance = 1;
@@ -35,13 +36,13 @@ public class DriveToCoralBlue extends Command {
         xPid.setTolerance(tolerance);
         yPid = new PIDController(kPY, kIY, kDY);
         yPid.setTolerance(tolerance);
-
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
         yPid.setSetpoint(yTarget);
+        lostTarget = false;
         // X setpoint changes with distance, so we update it in execute
     }
 
@@ -65,6 +66,7 @@ public class DriveToCoralBlue extends Command {
 
         if (!limelight.hasTarget("limelight-blue")) {
             speed = 0;
+            lostTarget = true;
         }
 
         drive.drive(speed, xSpeed, ySpeed, 0, false);
@@ -80,7 +82,7 @@ public class DriveToCoralBlue extends Command {
 
     public boolean isFinished() {
         // TODO: Add a condition that allows the driver/operator to exit this command.
-        return xPid.atSetpoint() && yPid.atSetpoint();
+        return (xPid.atSetpoint() && yPid.atSetpoint());
     }
 
 }
