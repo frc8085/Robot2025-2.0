@@ -27,13 +27,13 @@ public class LockPivotAndElevatorCommand extends Command {
         enableArm = false;
         SmartDashboard.putBoolean("Enable Arm", enableArm);
         elevatorSubsystem.setPos(Constants.ElevatorConstants.kElevatorStage1Height);
-        pivotSubsystem.setPos(Rotation2d.fromDegrees(90));
+        pivotSubsystem.setPos(Rotation2d.fromDegrees(75));
 
     }
 
     @Override
     public void execute() {
-        displayDisableSystem();
+        enableArm = SmartDashboard.getBoolean("Enable Arm", false);
     }
 
     @Override
@@ -47,6 +47,6 @@ public class LockPivotAndElevatorCommand extends Command {
     }
 
     public void displayDisableSystem() {
-        SmartDashboard.getBoolean("Enable Arm", false);
+        enableArm = SmartDashboard.getBoolean("Enable Arm", false);
     }
 }

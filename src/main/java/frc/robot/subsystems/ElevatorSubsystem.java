@@ -18,6 +18,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -284,12 +286,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.set(0);
   }
 
+  public Command stopCommand() {
+    return new RunCommand(() -> {
+      m_elevatorMotor.set(0);
+    }, this);
+  }
+
   // open loop move elevator up & down but don't allow movement if the limit
   // switch is being hit
   public void moveDown() {
 
     // We are going down but bottom limit is not tripped so go at commanded speed
     m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+  }
+
+  public Command moveDownCommand() {
+    return new RunCommand(() -> {
+      m_elevatorMotor.set(-ElevatorConstants.kElevatorSpeed);
+    }, this);
   }
 
   public void zeroMoveUp() {

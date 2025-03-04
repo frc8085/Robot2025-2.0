@@ -50,7 +50,9 @@ import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.DriveToCoralBlue;
+import frc.robot.commands.scoring.DriveToCoralYellow;
 import frc.robot.commands.scoring.MoveToScore;
+import frc.robot.commands.scoring.ResetOperatorInputs;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
@@ -209,12 +211,21 @@ public class RobotContainer {
                                         }
                                 });
 
-                limelightTrigger2.onTrue(new InstantCommand(() -> turnOffAutomated()));
-                // limelightTrigger2.toggleOnTrue(
-                // new ConditionalCommand(
-                // new InstantCommand(() -> turnOffAutomated()),
-                // new InstantCommand(() -> turnOnAutomated()),
-                // automated));
+                limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem, limelight)).and(
+                                new BooleanSupplier() {
+                                        @Override
+                                        public boolean getAsBoolean() {
+                                                return automated;
+                                        }
+                                });
+                // Pressing the trigger NOT in automation mode will run this one.
+                limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem, limelight)).and(
+                                new BooleanSupplier() {
+                                        @Override
+                                        public boolean getAsBoolean() {
+                                                return !automated;
+                                        }
+                                });
 
                 // Driver operations
                 final Trigger ejectCoral = driverController.b();
@@ -253,17 +264,13 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
                                                 climberSubsystem));
 
-                toggleClimber.toggleOnTrue(new ConditionalCommand(new ParallelCommandGroup(
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
                                 new DeployClimb(climberSubsystem),
-                                new LockPivotAndElevatorCommand(elevatorSubsystem, pivotSubsystem)
-                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)),
                                 new RetractClimb(climberSubsystem),
                                 climberSubsystem::climberAtHomePosition));
 
-                // toggleClimber.toggleOnTrue(new ConditionalCommand(
-                // new DeployClimb(climberSubsystem),
-                // new RetractClimb(climberSubsystem),
-                // climberSubsystem::climberAtHomePosition));
+                toggleClimber.onTrue(new LockPivotAndElevatorCommand(elevatorSubsystem, pivotSubsystem)
+                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
 
                 lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
                                 climberSubsystem))
@@ -324,7 +331,7 @@ public class RobotContainer {
                                                 });
 
                 // position controls
-                final Trigger armHome = operatorController.leftBumper();
+                final Trigger initializeInputs = operatorController.leftBumper();
                 final Trigger algaeGround = operatorController.povDown();
                 final Trigger algaeReef2 = operatorController.povRight();
                 final Trigger algaeReef3 = operatorController.povUp();
@@ -335,7 +342,7 @@ public class RobotContainer {
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
 
-                armHome.onTrue(new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));
+                initializeInputs.onTrue(new ResetOperatorInputs());
 
                 algaeGround.onTrue(new InstantCommand(() -> {
                         algaeLevel = AlgaeLevel.NONE;
@@ -505,26 +512,25 @@ public class RobotContainer {
 
                 // commands that go with manual elevator/pivot movement
                 pivotClockwise
-                                .onTrue(new InstantCommand(() -> pivotSubsystem.start()))
-                                .onFalse(new InstantCommand(
-                                                () -> pivotSubsystem.holdPivotArmManual()));
-                pivotCounterClockwise.onTrue(new InstantCommand(() -> pivotSubsystem.reverse()))
-                                .onFalse(new InstantCommand(
-                                                () -> pivotSubsystem.holdPivotArmManual()));
+                                .onTrue(new InstantCommand(pivotSubsystem::start, pivotSubsystem))
+                                .onFalse(new InstantCommand(pivotSubsystem::holdPivotArmManual, pivotSubsystem));
+                pivotCounterClockwise.onTrue(new InstantCommand(pivotSubsystem::reverse, pivotSubsystem))
+                                .onFalse(new InstantCommand(pivotSubsystem::holdPivotArmManual, pivotSubsystem));
                 raiseElevator.whileTrue(
-                                new InstantCommand(() -> elevatorSubsystem.moveUp())
+                                new InstantCommand(elevatorSubsystem::moveUp, elevatorSubsystem)
                                                 .andThen(new WaitUntilCommand(
                                                                 () -> elevatorSubsystem.ElevatorRaiseLimitHit()))
-                                                .andThen(new InstantCommand(() -> elevatorSubsystem.holdHeight())))
-                                .onFalse(new InstantCommand(
-                                                () -> elevatorSubsystem.holdHeight()));
+                                                .andThen(new InstantCommand(elevatorSubsystem::holdHeight,
+                                                                elevatorSubsystem)))
+                                .onFalse(new InstantCommand(elevatorSubsystem::holdHeight, elevatorSubsystem));
                 lowerElevator.whileTrue(
-                                new InstantCommand(() -> elevatorSubsystem.moveDown())
+                                new InstantCommand(elevatorSubsystem::moveDown, elevatorSubsystem)
                                                 .andThen(new WaitUntilCommand(
                                                                 () -> elevatorSubsystem.ElevatorLowerLimitHit()))
-                                                .andThen(new InstantCommand(() -> elevatorSubsystem.holdHeight())))
-                                .onFalse(new InstantCommand(
-                                                () -> elevatorSubsystem.holdHeight()));
+                                                .andThen(new InstantCommand(elevatorSubsystem::holdHeight,
+                                                                elevatorSubsystem)))
+                                .onFalse(new InstantCommand(elevatorSubsystem::holdHeight,
+                                                elevatorSubsystem));
 
         }
 

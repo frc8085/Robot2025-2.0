@@ -24,8 +24,8 @@ public class DriveToCoralBlue extends Command {
     double kIY = 0;
     double kDY = 0;
     double tolerance = 1;
-    double xTarget = -5.56;
-    double yTarget = 12.57;
+    double xTarget = -2.72;
+    double yTarget = 6.77;
 
     public DriveToCoralBlue(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
@@ -50,7 +50,7 @@ public class DriveToCoralBlue extends Command {
         double tx = limelight.getX("limelight-blue");
         double ty = limelight.getY("limelight-blue");
 
-        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
+        xTarget = -2.82 * ty + 16.2; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);
