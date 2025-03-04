@@ -594,5 +594,6 @@ public class RobotContainer {
 
         public void turnOnAutomated() {
                 automated = true;
+
         }
 }

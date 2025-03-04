@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class DriveToCoral extends Command {
+public class DriveToCoralBlue extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
     PIDController xPid; // Moves left and right
@@ -27,7 +27,7 @@ public class DriveToCoral extends Command {
     double xTarget;
     double yTarget = 6;
 
-    public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
+    public DriveToCoralBlue(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
