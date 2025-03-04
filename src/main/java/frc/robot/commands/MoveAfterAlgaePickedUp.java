@@ -31,12 +31,12 @@ public class MoveAfterAlgaePickedUp extends Command {
 
         @Override
         public void execute() {
-                
+
         }
 
         @Override
         public void end(boolean interrupted) {
-                
+
                 elevatorSubsystem.setPos(elevatorSubsystem.getCurrentMotorPosition());
                 pivotSubsystem.setPos(pivotSubsystem.getCurrentRotation());
         }

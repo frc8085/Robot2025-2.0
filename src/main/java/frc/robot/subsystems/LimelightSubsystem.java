@@ -4,16 +4,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.LimelightHelpers;
-import frc.robot.subsystems.DriveSubsystem;
 
 public class LimelightSubsystem extends SubsystemBase {
     private boolean TUNING_MODE = TuningModeConstants.kLimelightTuning;
@@ -74,6 +69,47 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public double getX(String limelightName) {
         return LimelightHelpers.getTX(limelightName);
+    }
+
+    public void getDesiredAngle(double ApriltagID) { // TODO: get correct Gyro levels
+
+        if (ApriltagID == 18) {
+            double desiredAngle = 0;
+            return;
+        } else if (ApriltagID == 19) {
+            double desiredAngle = 60;
+            return;
+        } else if (ApriltagID == 20) {
+            double desiredAngle = 120;
+            return;
+        } else if (ApriltagID == 21) {
+            double desiredAngle = 180;
+            return;
+        } else if (ApriltagID == 22) {
+            double desiredAngle = 240;
+            return;
+        } else if (ApriltagID == 17) {
+            double desiredAngle = 300;
+            return;
+        } else if (ApriltagID == 8) {
+            double desiredAngle = 0;
+            return;
+        } else if (ApriltagID == 9) {
+            double desiredAngle = 60;
+            return;
+        } else if (ApriltagID == 10) {
+            double desiredAngle = 120;
+            return;
+        } else if (ApriltagID == 11) {
+            double desiredAngle = 180;
+            return;
+        } else if (ApriltagID == 12) {
+            double desiredAngle = 240;
+            return;
+        } else if (ApriltagID == 7) {
+            double desiredAngle = 300;
+            return;
+        }
     }
 
     // Account for the Robot's current heading when returning the X value
