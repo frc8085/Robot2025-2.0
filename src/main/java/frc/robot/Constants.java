@@ -12,6 +12,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.commands.Pivot;
 
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PathFollowingController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 /**
@@ -40,6 +43,18 @@ public final class Constants {
 
     public static final int kElevatorCancoderCanID = 33;
     public static final int kPivotArmCancoderCanID = 35;
+
+    // Drive SPARK MAX CAN IDs
+    public static final int kFrontLeftDrivingCanId = 1;
+    public static final int kRearLeftDrivingCanId = 3;
+    public static final int kFrontRightDrivingCanId = 2;
+    public static final int kRearRightDrivingCanId = 4;
+
+    public static final int kFrontLeftTurningCanId = 11;
+    public static final int kRearLeftTurningCanId = 13;
+    public static final int kFrontRightTurningCanId = 12;
+    public static final int kRearRightTurningCanId = 14;
+
   }
 
   public static final class DriveConstants {
@@ -72,18 +87,19 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 3;
-    public static final int kFrontRightDrivingCanId = 2;
-    public static final int kRearRightDrivingCanId = 4;
-
-    public static final int kFrontLeftTurningCanId = 11;
-    public static final int kRearLeftTurningCanId = 13;
-    public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 14;
-
     public static final boolean kGyroReversed = false;
+
+    // Copied from 6616
+    // Hold time on motor brakes when disabled
+    public static final double WHEEL_LOCK_TIME = 10; // seconds
+
+    // TODO: Update this value
+    public static final double GYRO_OFFSET = 0;
+
+    // Enum for auto-orienting to field directions
+    public enum Direction {
+      FORWARD, BACKWARD, LEFT, RIGHT
+    }
   }
 
   public static final class ModuleConstants {
@@ -122,6 +138,27 @@ public final class Constants {
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+    public static final double ROBOT_MASS_KG = 62.14;
+    public static final double ROBOT_MOI = 8.66;
+    public static final double WHEEL_COF = 0.0484;
+
+    // TODO: Tune these values
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants ANGLE_PID = new PIDConstants(0.01, 0, 0);
+
+    public static final PathFollowingController PP_CONTROLLER = new PPHolonomicDriveController(
+        TRANSLATION_PID, // new PIDConstants(5, 0.0, 0.0), // Translation PID constants
+        ANGLE_PID); // new PIDConstants(5, 0.0, 0.0)); // Rotation PID constants
+
+    // TODO: Update these values
+    public static final double LIMELIGHT_HEIGHT_METERS = 0.254;
+    public static final double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 30.0;
+    public static final double LIMELIGHT_MOUNTING_ANGLE_RADIANS = Math
+        .toRadians(AutoConstants.LIMELIGHT_MOUNTING_ANGLE_DEGREES);
+
+    public static final double REEF_APRILTAG_HEIGHT = 0.324;
+
   }
 
   public static final class NeoMotorConstants {
@@ -378,9 +415,4 @@ public final class Constants {
     public static double kMoveSpeed = 0.5;
   }
 
-  public static final class PathPlannerConstants {
-    public static final double ROBOT_MASS_KG = 62.14;
-    public static final double ROBOT_MOI = 8.66;
-    public static final double WHEEL_COF = 0.0484;
-  }
 }

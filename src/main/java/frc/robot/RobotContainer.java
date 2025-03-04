@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,12 +18,18 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer.AlgaeLevel;
+import frc.robot.RobotContainer.CoralLevel;
+import frc.robot.RobotContainer.ScoreDirection;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -83,7 +91,17 @@ public class RobotContainer {
         private final AlgaeSubsystem algaeSubsystem = new AlgaeSubsystem();
         private final LimelightSubsystem limelight = new LimelightSubsystem(driveSubsystem);
 
+        private final SendableChooser<Command> autoChooser;
+        protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
+
+        private final Field2d field;
+
         public boolean automated = true; // Controls automation state
+
+        // Register Named Commands for PathPlanner
+        private void configureAutoCommands() {
+
+        }
 
         public enum ScoreDirection {
                 LEFT,
@@ -132,6 +150,9 @@ public class RobotContainer {
                 // Configure the button bindings
                 configureButtonBindings();
 
+                // Register Named Commands for Pathplanner
+                configureAutoCommands();
+
                 // Configure default commands
                 driveSubsystem.setDefaultCommand(
                                 // The right trigger controls the speed of the robot.
@@ -154,6 +175,14 @@ public class RobotContainer {
                                                                                 OIConstants.kDriveDeadband),
                                                                 true),
                                                 driveSubsystem));
+
+                // Another option that allows you to specify the default auto by its name
+                autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
+
+                SmartDashboard.putData("Auto Chooser", autoChooser);
+
+                field = new Field2d();
+                SmartDashboard.putData("Field", field);
 
                 // Smart Dashboard Buttons
                 SmartDashboard.putBoolean("Automation", getAutomated());
@@ -540,46 +569,48 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-
-                // Create config for trajectory
-                TrajectoryConfig config = new TrajectoryConfig(
-                                AutoConstants.kMaxSpeedMetersPerSecond,
-                                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                                // Add kinematics to ensure max speed is actually obeyed
-                                .setKinematics(DriveConstants.kDriveKinematics);
-
-                // An example trajectory to follow. All units in meters.
-                Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                                // Start at the origin facing the +X direction
-                                new Pose2d(0, 0, new Rotation2d(0)),
-                                // Pass through these two interior waypoints, making an 's' curve path
-                                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                                // End 3 meters straight ahead of where we started, facing forward
-                                new Pose2d(3, 0, new Rotation2d(0)),
-                                config);
-
-                var thetaController = new ProfiledPIDController(
-                                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-                thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-                SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                                exampleTrajectory,
-                                driveSubsystem::getPose, // Functional interface to feed supplier
-                                DriveConstants.kDriveKinematics,
-
-                                // Position controllers
-                                new PIDController(AutoConstants.kPXController, 0, 0),
-                                new PIDController(AutoConstants.kPYController, 0, 0),
-                                thetaController,
-                                driveSubsystem::setModuleStates,
-                                driveSubsystem);
-
-                // Reset odometry to the starting pose of the trajectory.
-                driveSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
-
-                // Run path following command, then stop at the end.
-                return swerveControllerCommand.andThen(() -> driveSubsystem.drive(0, 0, 0, 0, false));
+                return autoChooser.getSelected();
         }
+
+        // // Create config for trajectory
+        // TrajectoryConfig config = new TrajectoryConfig(
+        // AutoConstants.kMaxSpeedMetersPerSecond,
+        // AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        // // Add kinematics to ensure max speed is actually obeyed
+        // .setKinematics(DriveConstants.kDriveKinematics);
+
+        // // An example trajectory to follow. All units in meters.
+        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // // Start at the origin facing the +X direction
+        // new Pose2d(0, 0, new Rotation2d(0)),
+        // // Pass through these two interior waypoints, making an 's' curve path
+        // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        // // End 3 meters straight ahead of where we started, facing forward
+        // new Pose2d(3, 0, new Rotation2d(0)),
+        // config);
+
+        // var thetaController = new ProfiledPIDController(
+        // AutoConstants.kPThetaController, 0, 0,
+        // AutoConstants.kThetaControllerConstraints);
+        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        // SwerveControllerCommand swerveControllerCommand = new
+        // SwerveControllerCommand(
+        // exampleTrajectory,
+        // driveSubsystem::getPose, // Functional interface to feed supplier
+        // DriveConstants.kDriveKinematics,
+
+        // // Position controllers
+        // new PIDController(AutoConstants.kPXController, 0, 0),
+        // new PIDController(AutoConstants.kPYController, 0, 0),
+        // thetaController,
+        // driveSubsystem::setModuleStates,
+        // driveSubsystem);
+
+        // // Run path following command, then stop at the end.
+        // return swerveControllerCommand.andThen(() -> driveSubsystem.drive(0, 0, 0, 0,
+        // false));
+        // }
 
         public Command rumbleDriverCommand() {
                 return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(() -> stopRumbleDriverCtrl());

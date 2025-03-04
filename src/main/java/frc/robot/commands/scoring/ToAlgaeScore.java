@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.AlgaeLevel;
 import frc.robot.commands.PickUpAlgaeAndReturnToHome;
-import frc.robot.commands.movement.AutoDriveMeters;
+// import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -27,7 +27,7 @@ public class ToAlgaeScore extends SequentialCommandGroup {
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtAlgaeReefL2),
                                 new WaitUntilCommand(pivot::pivotAtAlgaeReefDropOffAngle)),
-                        new AutoDriveMeters(drive, 0.05, 0),
+                        // new AutoDriveMeters(drive, 0.05, 0),
                         new PickUpAlgaeAndReturnToHome(algae, elevator, pivot));
                 break;
             case THREE:
@@ -36,7 +36,7 @@ public class ToAlgaeScore extends SequentialCommandGroup {
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtAlgaeReefL3),
                                 new WaitUntilCommand(pivot::pivotAtAlgaeReefDropOffAngle)),
-                        new AutoDriveMeters(drive, 0.05, 0),
+                        // new AutoDriveMeters(drive, 0.05, 0),
                         new PickUpAlgaeAndReturnToHome(algae, elevator, pivot));
                 break;
             case NONE:
