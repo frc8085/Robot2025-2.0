@@ -5,6 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
@@ -56,68 +60,60 @@ public class DriveSubsystem extends SubsystemBase {
   // This section was copied from 2024 code, I think for auto
   public Field2d field = new Field2d();
 
-  // SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
-  // DriveConstants.kDriveKinematics,
-  // getYaw(),
-  // getModulePositions(),
-  // new Pose2d());
-
-  // private void configurePathPlanner() {
-
-  // // Configure PathPlanner AutoBuilder
-  // AutoBuilder.configureHolonomic(
-  // this::getPose, // Robot pose supplier
-  // this::resetOdometry, // Method to reset odometry (will be called if your auto
-  // has a starting pose)
-  // this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
-  // RELATIVE
-  // this::driveRobotRelative, // Method that will drive the robot given ROBOT
-  // RELATIVE ChassisSpeeds
-  // new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
-  // likely live in your
-  // // Constants class
-  // new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-  // new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-  // 4.5, // Max module speed, in m/s
-  // 0.4, // Drive base radius in meters. Distance from robot center to furthest
-  // module.
-  // new ReplanningConfig() // Default path replanning config. See the API for the
-  // options here
-  // ),
-  // () -> {
-  // // Boolean supplier that controls when the path will be mirrored for the red
-  // // alliance
-  // // This will flip the path being followed to the red side of the field.
-  // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-  // var alliance = DriverStation.getAlliance();
-  // if (alliance.isPresent()) {
-  // return alliance.get() == DriverStation.Alliance.Red;
-  // }
-  // return false;
-  // },
-  // this // Reference to this subsystem to set requirements
-  // );
-  // }
-  // This ends the copied section
-
   // Odometry class for tracking robot pose
   SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       getYaw(),
       getModulePositions(),
-      // Matching 2024 code
-      // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()),
-      // new SwerveModulePosition[] {
-      // m_frontLeft.getPosition(), m_frontRight.getPosition(),
-      // m_rearLeft.getPosition(), m_rearRight.getPosition() },
       new Pose2d(0, 0, new Rotation2d(0)));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
-    // configurePathPlanner();
+
+    // RobotConfig config;
+    // try {
+    // config = RobotConfig.fromGUISettings();
+    // } catch (
+
+    // Exception e) {
+    // // Handle exception as needed
+    // e.printStackTrace();
+    // }
+
+    // // Configure AutoBuilder last
+    // AutoBuilder.configure(
+    // this::getPose, // Robot pose supplier
+    // this::resetOdometry, // Method to reset odometry (will be called if your auto
+    // has a starting pose)
+    // this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
+    // RELATIVE
+    // (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will
+    // drive the robot given ROBOT RELATIVE
+    // // ChassisSpeeds. Also optionally outputs individual
+    // // module feedforwards
+    // new PPHolonomicDriveController( // PPHolonomicController is the built in path
+    // following controller for holonomic
+    // // drive trains
+    // new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    // new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+    // ),
+    // config, // The robot configuration
+    // () -> {
+    // // Boolean supplier that controls when the path will be mirrored for the red
+    // // alliance
+    // // This will flip the path being followed to the red side of the field.
+    // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+    // var alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent()) {
+    // return alliance.get() == DriverStation.Alliance.Red;
+    // }
+    // return false;
+    // },
+    // this // Reference to this subsystem to set requirements
+    // );
   }
 
   @Override
@@ -131,6 +127,9 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+    SmartDashboard.putNumber("Drive X", getPose().getX());
+    SmartDashboard.putNumber("Drive Y", getPose().getY());
   }
 
   // This next set of statements was copied from 2024 code
@@ -142,6 +141,14 @@ public class DriveSubsystem extends SubsystemBase {
   private ChassisSpeeds getRobotRelativeSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
+
+  // private void driveRobotRelative(ChassisSpeeds speeds) {
+  // ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds,
+  // LoggedRobot.defaultPeriodSecs);
+  // SwerveModuleState[] targetStates =
+  // DriveConstants.kDriveKinematics.toSwerveModuleStates((targetSpeeds));
+  // setModuleStates(targetStates);
+  // }
 
   private SwerveModuleState[] getModuleStates() {
     return new SwerveModuleState[] {
@@ -184,26 +191,21 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getEstimatedPosition();
   }
 
+  // /**
+  // * Resets the odometry to the specified pose.
+  // *
+  // * @param pose The pose to which to set the odometry.
+  // */
+  // public void resetPose(Pose2d pose) {
+  // m_odometry.resetPosition(
+  // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()),
+  // getModulePositions(),
+  // pose);
+  // }
+
   public void UpdatePoseFromCameras() {
 
   }
-
-  /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  // public void resetOdometry(Pose2d pose) {
-  // m_odometry.resetPosition(
-  // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()),
-  // new SwerveModulePosition[] {
-  // m_frontLeft.getPosition(),
-  // m_frontRight.getPosition(),
-  // m_rearLeft.getPosition(),
-  // m_rearRight.getPosition()
-  // },
-  // pose);
-  // }
 
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(

@@ -375,6 +375,12 @@ public final class Constants {
   }
 
   public static final class CommandScoreConstants {
-    public static double kMoveSpeed = 1;
+    public static double kMoveSpeed = 0.5;
+  }
+
+  public static final class PathPlannerConstants {
+    public static final double ROBOT_MASS_KG = 62.14;
+    public static final double ROBOT_MOI = 8.66;
+    public static final double WHEEL_COF = 0.0484;
   }
 }

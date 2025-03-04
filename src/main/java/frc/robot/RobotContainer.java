@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -48,8 +49,9 @@ import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.DeployClimb;
-import frc.robot.commands.scoring.DriveToCoral;
+import frc.robot.commands.scoring.DriveToCoralBlue;
 import frc.robot.commands.scoring.MoveToScore;
+import frc.robot.commands.scoring.ResetOperatorInputs;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
@@ -153,9 +155,10 @@ public class RobotContainer {
                                                 driveSubsystem));
 
                 // Smart Dashboard Buttons
-                // SmartDashboard.putData("Windmill Home",
-                // new Windmill(elevatorSubsystem, pivotSubsystem,
-                // Constants.Windmill.WindmillState.Home, false));
+                SmartDashboard.putBoolean("Automation", getAutomated());
+                SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
+                SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
+                SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
 
         }
 
@@ -192,7 +195,7 @@ public class RobotContainer {
                 final Trigger limelightTrigger2 = driverController.y();
 
                 // Pressing the trigger in automation mode will run this command.
-                limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight)).and(
+                limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem, limelight)).and(
                                 new BooleanSupplier() {
                                         @Override
                                         public boolean getAsBoolean() {
@@ -200,7 +203,7 @@ public class RobotContainer {
                                         }
                                 });
                 // Pressing the trigger NOT in automation mode will run this one.
-                limelightTrigger1.onTrue(new DriveToCoral(driveSubsystem, limelight)).and(
+                limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem, limelight)).and(
                                 new BooleanSupplier() {
                                         @Override
                                         public boolean getAsBoolean() {
@@ -323,7 +326,7 @@ public class RobotContainer {
                                                 });
 
                 // position controls
-                final Trigger armHome = operatorController.leftBumper();
+                final Trigger initializeInputs = operatorController.leftBumper();
                 final Trigger algaeGround = operatorController.povDown();
                 final Trigger algaeReef2 = operatorController.povRight();
                 final Trigger algaeReef3 = operatorController.povUp();
@@ -334,7 +337,10 @@ public class RobotContainer {
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
 
-                armHome.onTrue(new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));
+                // armHome.onTrue(new ToHomeCommand(elevatorSubsystem, pivotSubsystem,
+                // coralSubsystem));
+
+                initializeInputs.onTrue(new ResetOperatorInputs());
 
                 algaeGround.onTrue(new InstantCommand(() -> {
                         algaeLevel = AlgaeLevel.NONE;
@@ -594,5 +600,29 @@ public class RobotContainer {
 
         public void turnOnAutomated() {
                 automated = true;
+        }
+
+        public boolean scoreDirectionChosen() {
+                if (scoreDirection == ScoreDirection.UNDECIDED) {
+                        return false;
+                } else {
+                        return true;
+                }
+        }
+
+        public boolean algaeLevelChosen() {
+                if (algaeLevel == AlgaeLevel.UNDECIDED) {
+                        return false;
+                } else {
+                        return true;
+                }
+        }
+
+        public boolean coralLevelChosen() {
+                if (coralLevel == CoralLevel.UNDECIDED) {
+                        return false;
+                } else {
+                        return true;
+                }
         }
 }

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class DriveToCoral extends Command {
+public class DriveToCoralBlue extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
     PIDController xPid; // Moves left and right
@@ -17,17 +17,17 @@ public class DriveToCoral extends Command {
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 0.125;
+    double kPX = 0.03;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.12;
+    double kPY = 0.06;
     double kIY = 0;
     double kDY = 0;
-    double tolerance = 0.01;
-    double xTarget;
-    double yTarget = 6;
+    double tolerance = 1;
+    double xTarget = -5.56;
+    double yTarget = 12.57;
 
-    public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
+    public DriveToCoralBlue(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
@@ -50,7 +50,7 @@ public class DriveToCoral extends Command {
         double tx = limelight.getX("limelight-left");
         double ty = limelight.getY("limelight-left");
 
-        xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
+        xTarget = -2.31 * ty + 22.5; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);
@@ -80,7 +80,11 @@ public class DriveToCoral extends Command {
 
     public boolean isFinished() {
         // TODO: Add a condition that allows the driver/operator to exit this command.
-        return xPid.atSetpoint() && yPid.atSetpoint();
+        return ((xPid.atSetpoint() && yPid.atSetpoint()) || targetLost());
+    }
+
+    public boolean targetLost() {
+        return (!limelight.hasTarget("limelight-left"));
     }
 
 }
