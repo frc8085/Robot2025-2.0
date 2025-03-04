@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -153,10 +154,10 @@ public class RobotContainer {
                                                 driveSubsystem));
 
                 // Smart Dashboard Buttons
-                // SmartDashboard.putData("Windmill Home",
-                // new Windmill(elevatorSubsystem, pivotSubsystem,
-                // Constants.Windmill.WindmillState.Home, false));
-
+                SmartDashboard.putBoolean("Automation", getAutomated());
+                SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
+                SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
+                SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
         }
 
         public boolean getAutomated() {
@@ -594,6 +595,29 @@ public class RobotContainer {
 
         public void turnOnAutomated() {
                 automated = true;
+        }
 
+        public boolean scoreDirectionChosen() {
+                if (scoreDirection == ScoreDirection.UNDECIDED) {
+                        return false;
+                } else {
+                        return true;
+                }
+        }
+
+        public boolean algaeLevelChosen() {
+                if (algaeLevel == AlgaeLevel.UNDECIDED) {
+                        return false;
+                } else {
+                        return true;
+                }
+        }
+
+        public boolean coralLevelChosen() {
+                if (coralLevel == CoralLevel.UNDECIDED) {
+                        return false;
+                } else {
+                        return true;
+                }
         }
 }
