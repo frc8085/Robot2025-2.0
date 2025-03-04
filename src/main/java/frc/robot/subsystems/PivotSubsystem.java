@@ -158,6 +158,7 @@ public class PivotSubsystem extends SubsystemBase {
                 * Constants.PivotArmConstants.kPivotArmFF;
         m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
+
     }
 
     public void setRotorPos(Rotation2d angle) {
@@ -192,8 +193,8 @@ public class PivotSubsystem extends SubsystemBase {
         if (TuningModeConstants.kPivotTuning) {
             // Get motor readings
             // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-            // SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
-            SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
+            SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+            // SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         }
 
     }
