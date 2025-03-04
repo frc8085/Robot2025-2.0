@@ -61,13 +61,19 @@ public class LimelightSubsystem extends SubsystemBase {
         // SmartDashboard.putData(SendableCameraWrapper.wrap(m_limelightRight));
         // limelight-left, limelight-right
         if (TUNING_MODE || true) {
-            // SmartDashboard.putNumber("April tag ID", getAprilTagID("limelight-left"));
-            SmartDashboard.putBoolean("Target", hasTarget("limelight-left"));
-            SmartDashboard.putNumber("LL ID", getID("limelight-left"));
+            // SmartDashboard.putNumber("April tag ID", getAprilTagID("limelight-blue"));
+            SmartDashboard.putBoolean("B Target", hasTarget("limelight-blue"));
+            SmartDashboard.putNumber("B LL ID", getID("limelight-blue"));
 
-            SmartDashboard.putNumber("LL X", getX("limelight-left"));
-            SmartDashboard.putNumber("LL Y", getY("limelight-left"));
+            SmartDashboard.putNumber("B LL X", getX("limelight-blue"));
+            SmartDashboard.putNumber("B LL Y", getY("limelight-blue"));
 
+            // SmartDashboard.putNumber("April tag ID", getAprilTagID("limelight-yellow"));
+            SmartDashboard.putBoolean("Y Target", hasTarget("limelight-yellow"));
+            SmartDashboard.putNumber("Y LL ID", getID("limelight-yellow"));
+
+            SmartDashboard.putNumber("Y LL X", getX("limelight-yellow"));
+            SmartDashboard.putNumber("Y LL Y", getY("limelight-yellow"));
         }
 
     }

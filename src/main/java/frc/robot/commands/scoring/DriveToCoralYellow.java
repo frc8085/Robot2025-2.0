@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class DriveToCoral extends Command {
+public class DriveToCoralYellow extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
     PIDController xPid; // Moves left and right
@@ -27,7 +27,7 @@ public class DriveToCoral extends Command {
     double xTarget;
     double yTarget = 6;
 
-    public DriveToCoral(DriveSubsystem drive, LimelightSubsystem limelight) {
+    public DriveToCoralYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
@@ -47,8 +47,8 @@ public class DriveToCoral extends Command {
 
     @Override
     public void execute() {
-        double tx = limelight.getX("limelight-blue");
-        double ty = limelight.getY("limelight-blue");
+        double tx = limelight.getX("limelight-yellow");
+        double ty = limelight.getY("limelight-yellow");
 
         xTarget = -3.68 * ty + 8.91; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
@@ -63,7 +63,7 @@ public class DriveToCoral extends Command {
 
         double speed = Math.hypot(xSpeed, ySpeed);
 
-        if (!limelight.hasTarget("limelight-blue")) {
+        if (!limelight.hasTarget("limelight-yellow")) {
             speed = 0;
         }
 

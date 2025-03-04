@@ -615,7 +615,7 @@ public class LimelightHelpers {
 
     static final String sanitizeName(String name) {
         if ("".equals(name) || name == null) {
-            return "limelight-left";
+            return "limelight";
         }
         return name;
     }
