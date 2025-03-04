@@ -192,7 +192,7 @@ public class PivotSubsystem extends SubsystemBase {
         if (TuningModeConstants.kPivotTuning) {
             // Get motor readings
             // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-            SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
+            // SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
             SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         }
 

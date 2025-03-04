@@ -4,7 +4,6 @@
 
 package frc.robot.commands.movement;
 
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CommandScoreConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
