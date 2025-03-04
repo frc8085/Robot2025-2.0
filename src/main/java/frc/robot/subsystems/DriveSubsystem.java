@@ -5,11 +5,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -20,8 +26,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.Direction;
+import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.NeoMotorConstants;
+import frc.robot.Constants.AutoConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.States.DriveState;
+import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,26 +40,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
-      DriveConstants.kFrontLeftDrivingCanId,
-      DriveConstants.kFrontLeftTurningCanId,
+      CanIdConstants.kFrontLeftDrivingCanId,
+      CanIdConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
   private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
-      DriveConstants.kFrontRightDrivingCanId,
-      DriveConstants.kFrontRightTurningCanId,
+      CanIdConstants.kFrontRightDrivingCanId,
+      CanIdConstants.kFrontRightTurningCanId,
       DriveConstants.kFrontRightChassisAngularOffset);
 
   private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
-      DriveConstants.kRearLeftDrivingCanId,
-      DriveConstants.kRearLeftTurningCanId,
+      CanIdConstants.kRearLeftDrivingCanId,
+      CanIdConstants.kRearLeftTurningCanId,
       DriveConstants.kBackLeftChassisAngularOffset);
 
   private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
-      DriveConstants.kRearRightDrivingCanId,
-      DriveConstants.kRearRightTurningCanId,
+      CanIdConstants.kRearRightDrivingCanId,
+      CanIdConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
-
-  // private DriveState driveState;
 
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(CanIdConstants.kGyroCanId);
@@ -56,87 +65,132 @@ public class DriveSubsystem extends SubsystemBase {
   // This section was copied from 2024 code, I think for auto
   public Field2d field = new Field2d();
 
+  // Copied from 6616 - PID Controller for orientation to supplied angle
+  private final PIDController orientationController;
+
+  // Odometry class for tracking robot pose
   // SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
   // DriveConstants.kDriveKinematics,
   // getYaw(),
   // getModulePositions(),
-  // new Pose2d());
-
-  // private void configurePathPlanner() {
-
-  // // Configure PathPlanner AutoBuilder
-  // AutoBuilder.configureHolonomic(
-  // this::getPose, // Robot pose supplier
-  // this::resetOdometry, // Method to reset odometry (will be called if your auto
-  // has a starting pose)
-  // this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
-  // RELATIVE
-  // this::driveRobotRelative, // Method that will drive the robot given ROBOT
-  // RELATIVE ChassisSpeeds
-  // new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
-  // likely live in your
-  // // Constants class
-  // new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-  // new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-  // 4.5, // Max module speed, in m/s
-  // 0.4, // Drive base radius in meters. Distance from robot center to furthest
-  // module.
-  // new ReplanningConfig() // Default path replanning config. See the API for the
-  // options here
-  // ),
-  // () -> {
-  // // Boolean supplier that controls when the path will be mirrored for the red
-  // // alliance
-  // // This will flip the path being followed to the red side of the field.
-  // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-  // var alliance = DriverStation.getAlliance();
-  // if (alliance.isPresent()) {
-  // return alliance.get() == DriverStation.Alliance.Red;
-  // }
-  // return false;
-  // },
-  // this // Reference to this subsystem to set requirements
-  // );
-  // }
-  // This ends the copied section
-
-  // Odometry class for tracking robot pose
-  SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
+  // new Pose2d(0, 0, new Rotation2d(0)));
+  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      getYaw(),
-      getModulePositions(),
-      // Matching 2024 code
-      // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()),
-      // new SwerveModulePosition[] {
-      // m_frontLeft.getPosition(), m_frontRight.getPosition(),
-      // m_rearLeft.getPosition(), m_rearRight.getPosition() },
-      new Pose2d(0, 0, new Rotation2d(0)));
+      Rotation2d.fromDegrees(getGyroOrientation()),
+      getModulePositions());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     // configurePathPlanner();
+
+    RobotConfig config;
+    try {
+      config = RobotConfig.fromGUISettings();
+
+      // Configure AutoBuilder last
+      AutoBuilder.configure(
+          this::getPose, // Robot pose supplier
+          this::updatePose, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          (speeds, feedforwards) ->
+
+          driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also
+                                      // optionally outputs individual module feedforwards
+          AutoConstants.PP_CONTROLLER,
+          config, // The robot configuration
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red
+            // alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
+      );
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
+
+    // from 6616
+    orientationController = new PIDController(AutoConstants.ANGLE_PID.kP, AutoConstants.ANGLE_PID.kI,
+        AutoConstants.ANGLE_PID.kD);
+    orientationController.enableContinuousInput(-180, 180);
+
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
+        Rotation2d.fromDegrees(getGyroOrientation()),
+        getModulePositions());
+
+  }
+
+  // Copying code from 6616 for limelight and orienting
+  /**
+   * Method to drive the robot while it adjusts to a specified orientation.
+   *
+   * @param xSpeed
+   *                  Speed of the robot in the x direction (forward).
+   * @param ySpeed
+   *                  Speed of the robot in the y direction (sideways).
+   * @param direction
+   *                  Direction to orient front of robot towards.
+   */
+  public void driveAndOrient(double speed, double xSpeed, double ySpeed, Direction direction) {
+    this.driveAndOrient(speed, xSpeed, ySpeed,
+        SwerveUtils.normalizeAngle(SwerveUtils.directionToAngle(direction, this.getHeading())));
+  }
+
+  /**
+   * Method to drive the robot while it adjusts to a specified orientation.
+   *
+   * @param xSpeed
+   *                      Speed of the robot in the x direction (forward).
+   * @param ySpeed
+   *                      Speed of the robot in the y direction (sideways).
+   * @param targetHeading
+   *                      Target heading (angle) robot should face
+   */
+  public void driveAndOrient(double speed, double xSpeed, double ySpeed, double target) {
+    double currentHeading = this.getHeading();
+    double targetHeading = SwerveUtils.normalizeAngle(target);
+
+    // The left stick controls translation of the robot.
+    // Automatically turn to face the supplied heading
+    this.drive(
+        speed,
+        xSpeed,
+        ySpeed,
+        this.orientationController.calculate(currentHeading, targetHeading),
+        true);
   }
 
   // This next set of statements was copied from 2024 code
   public Rotation2d getYaw() {
     return (DriveConstants.kGyroReversed) ? Rotation2d.fromDegrees((360 - m_gyro.getYaw().getValueAsDouble()))
         : Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble());
+  }
+
+  /**
+   * Drive in a robot relative direction.
+   * Accepts ChassisSpeeds object for path planner integration.
+   * 
+   * @param robotRelativeSpeeds
+   */
+  private void driveRobotRelative(ChassisSpeeds speeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates((targetSpeeds));
+    setModuleStates(targetStates);
   }
 
   private ChassisSpeeds getRobotRelativeSpeeds() {
@@ -165,53 +219,35 @@ public class DriveSubsystem extends SubsystemBase {
     drive(0, 0, 0, 0, false);
   }
 
-  // public void turn(double speed) {
-  // double direction = speed > 0 ? 1 : -1;
-  // double speedWithMinimum = Math.max(0.00, Math.abs(speed)) * direction;
-
-  // drive(0, 0, 0, speedWithMinimum, true, false);
-  // }
-
-  // This ends the copied section
-
   /**
    * Returns the currently-estimated pose of the robot.
    *
-   * @return The pose.
+   * @return The pose (x / y coordinates and rotation).
    */
   public Pose2d getPose() {
-    // return m_odometry.getPoseMeters();
-    return m_odometry.getEstimatedPosition();
-  }
-
-  public void UpdatePoseFromCameras() {
-
+    // return m_odometry.getPoseMeters(); // this was using PoseEstimator
+    return m_odometry.getPoseMeters();
   }
 
   /**
-   * Resets the odometry to the specified pose.
+   * Updates the odometry to the specified pose.
    *
-   * @param pose The pose to which to set the odometry.
+   * @param pose
+   *             The pose to which to set the odometry.
    */
-  // public void resetOdometry(Pose2d pose) {
-  // m_odometry.resetPosition(
-  // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()),
-  // new SwerveModulePosition[] {
-  // m_frontLeft.getPosition(),
-  // m_frontRight.getPosition(),
-  // m_rearLeft.getPosition(),
-  // m_rearRight.getPosition()
-  // },
-  // pose);
-  // }
-
-  public void resetOdometry(Pose2d pose) {
+  public void updatePose(Pose2d pose) {
     m_odometry.resetPosition(
-        getYaw(),
+        Rotation2d.fromDegrees(getGyroOrientation()),
         getModulePositions(),
         pose);
-
   }
+
+  // // This was using the PoseEstimator
+  // public void resetOdometry(Pose2d pose) {
+  // m_odometry.resetPosition(
+  // getYaw(),
+  // getModulePositions(),
+  // pose);
 
   /**
    * Method to drive the robot using joystick info.
@@ -305,7 +341,63 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()).getDegrees();
+    return SwerveUtils.normalizeAngle(getGyroOrientation());
+  }
+  // public double getHeading() {
+  // return
+  // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()).getDegrees();
+  // }
+
+  // more from 6616
+  /**
+   * Drives the robot to achieve the specified offsets relative to a detected
+   * AprilTag.
+   * It computes the current forward and lateral distances to the tag using
+   * limelightTy and limelightTx,
+   * constructs a current relative pose, and then uses the path following
+   * controller's
+   * calculateRobotRelativeSpeeds method to determine the required robot-relative
+   * speeds.
+   *
+   * @param desiredXOffset Desired forward distance (in meters) from the tag.
+   * @param desiredYOffset Desired lateral distance (in meters) from the tag.
+   * @param limelightTx    Horizontal offset from the tag (in degrees).
+   * @param limelightTy    Vertical offset from the tag (in degrees).
+   */
+  public void driveToTagOffset(double speed, double desiredXOffset, double desiredYOffset, double limelightTx,
+      double limelightTy) {
+    // Calculate the current forward distance (x) from the tag using the vertical
+    // offset.
+    double currentXOffset = (AutoConstants.REEF_APRILTAG_HEIGHT - AutoConstants.LIMELIGHT_HEIGHT_METERS)
+        / Math.tan(AutoConstants.LIMELIGHT_MOUNTING_ANGLE_RADIANS + Math.toRadians(limelightTy));
+
+    // Calculate the current lateral distance (y) from the camera center using the
+    // horizontal offset.
+    double currentYOffset = currentXOffset * Math.tan(Math.toRadians(limelightTx));
+
+    // Construct the current relative pose.
+    // The rotation is set from limelightTx so that zero means the limelight is
+    // directly facing the tag.
+    Pose2d currentRelativePose = new Pose2d(currentXOffset, currentYOffset, Rotation2d.fromDegrees(limelightTx));
+
+    // The desired relative pose has the desired offsets with zero rotation error
+    // (directly facing the tag).
+    Pose2d desiredRelativePose = new Pose2d(desiredXOffset, desiredYOffset, new Rotation2d(0));
+
+    // Create a target trajectory state using the desired relative pose.
+    PathPlannerTrajectoryState targetState = new PathPlannerTrajectoryState();
+    targetState.pose = desiredRelativePose;
+
+    // Calculate the robot-relative speeds using the path following controller.
+    ChassisSpeeds robotRelativeSpeeds = AutoConstants.PP_CONTROLLER
+        .calculateRobotRelativeSpeeds(currentRelativePose, targetState);
+
+    double normalizedX = robotRelativeSpeeds.vxMetersPerSecond / ModuleConstants.kDriveWheelFreeSpeedRps;
+    double normalizedY = robotRelativeSpeeds.vyMetersPerSecond / ModuleConstants.kDriveWheelFreeSpeedRps;
+    double normalizedRot = robotRelativeSpeeds.omegaRadiansPerSecond / DriveConstants.kMaxAngularSpeed;
+
+    // Command the drivetrain using field-relative control.
+    drive(speed, normalizedX, normalizedY, normalizedRot, true);
   }
 
   /**
@@ -320,4 +412,9 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeadingWrappedDegrees() {
     return MathUtil.inputModulus(getHeading(), -180, 180);
   }
+
+  public double getGyroOrientation() {
+    return m_gyro.getYaw().getValueAsDouble() + DriveConstants.GYRO_OFFSET;
+  }
+
 }
