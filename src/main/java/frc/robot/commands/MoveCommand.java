@@ -45,42 +45,42 @@ public class MoveCommand extends Command {
         public void execute() {
                 // Trigger mappings for fine-tuned robot-oriented adjustments using the d-pad
                 if (driverController.povLeft().getAsBoolean()) {
-                        driveSubsystem.drive(1, 0, .2,
+                        driveSubsystem.drive(1, 0, 1,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povRight().getAsBoolean()) {
-                        driveSubsystem.drive(1, 0, -.2,
+                        driveSubsystem.drive(1, 0, -1,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povUp().getAsBoolean()) {
-                        driveSubsystem.drive(1, .2, 0,
+                        driveSubsystem.drive(1, 1, 0,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povDown().getAsBoolean()) {
-                        driveSubsystem.drive(1, -0.2, 0,
+                        driveSubsystem.drive(1, -1, 0,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povUpLeft().getAsBoolean()) {
-                        driveSubsystem.drive(1, .14, .14,
+                        driveSubsystem.drive(1, 1, 1,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povUpRight().getAsBoolean()) {
-                        driveSubsystem.drive(1, .14, -.14,
+                        driveSubsystem.drive(1, 1, -1,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povDownLeft().getAsBoolean()) {
-                        driveSubsystem.drive(1, -.14, .14,
+                        driveSubsystem.drive(1, -1, 1,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
                 } else if (driverController.povDownRight().getAsBoolean()) {
-                        driveSubsystem.drive(1, -.14, -.14,
+                        driveSubsystem.drive(1, -1, -1,
                                         -MathUtil.applyDeadband(driverController.getRightX(),
                                                         OIConstants.kDriveDeadband),
                                         false);
@@ -97,7 +97,7 @@ public class MoveCommand extends Command {
                                                         Math.pow(driverController
                                                                         .getRightTriggerAxis(),
                                                                         2),
-                                                        OIConstants.kDriveDeadband),
+                                                        0),
 
                                         -MathUtil.applyDeadband(driverController.getLeftY(),
                                                         OIConstants.kDriveDeadband),
@@ -111,7 +111,7 @@ public class MoveCommand extends Command {
                                                         Math.pow(driverController
                                                                         .getRightTriggerAxis(),
                                                                         2),
-                                                        OIConstants.kDriveDeadband),
+                                                        0),
 
                                         -MathUtil.applyDeadband(driverController.getLeftY(),
                                                         OIConstants.kDriveDeadband),
@@ -125,7 +125,7 @@ public class MoveCommand extends Command {
                                                         Math.pow(driverController
                                                                         .getRightTriggerAxis(),
                                                                         2),
-                                                        OIConstants.kDriveDeadband),
+                                                        0),
 
                                         -MathUtil.applyDeadband(driverController.getLeftY(),
                                                         OIConstants.kDriveDeadband),
@@ -139,7 +139,7 @@ public class MoveCommand extends Command {
                                                         Math.pow(driverController
                                                                         .getRightTriggerAxis(),
                                                                         2),
-                                                        OIConstants.kDriveDeadband),
+                                                        0),
                                         -MathUtil.applyDeadband(driverController.getLeftY(),
                                                         OIConstants.kDriveDeadband),
                                         -MathUtil.applyDeadband(driverController.getLeftX(),
@@ -154,7 +154,7 @@ public class MoveCommand extends Command {
                                                         Math.pow(driverController
                                                                         .getRightTriggerAxis(),
                                                                         2),
-                                                        OIConstants.kDriveDeadband),
+                                                        0),
 
                                         -MathUtil.applyDeadband(driverController.getLeftY(),
                                                         OIConstants.kDriveDeadband),
