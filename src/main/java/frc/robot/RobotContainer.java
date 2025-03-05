@@ -191,6 +191,8 @@ public class RobotContainer {
                 SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
                 SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
                 SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
+                SmartDashboard.putNumber("driver Y", driverController.getLeftY());
+                SmartDashboard.putNumber("driver X", driverController.getLeftX());
         }
 
         public boolean getAutomated() {
