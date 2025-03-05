@@ -70,69 +70,74 @@ public class Windmill extends Command {
                         if (elevatorInDangerZone && pivotWillSwingThrough) {
                                 commands.addCommands(
                                                 new PrintCommand("Windmill: Pivot will swing through danger zone"));
-                        } else {
+                        } else if (!pivotWillSwingThrough) {
                                 commands.addCommands(
                                                 new PrintCommand("Windmill: Pivot will not swing through danger zone"));
+                        } else if (!elevatorInDangerZone && !elevatorEndInDangerZone) {
+                                commands.addCommands(new PrintCommand("Windmill: Elevator will not be in danger zone"));
                         }
                 }
-                // if elevator is not in danger zone and pivot will not swing through the danger
-                // zone, move the elevator and pivot arm in parallel
 
-                if (!elevatorInDangerZone && !pivotWillSwingThrough) {
+                // if pivot will not swing through the danger zone, then move the elevator and
+                // pivot together
+
+                if (!pivotWillSwingThrough) {
                         commands.addCommands(
                                         new ParallelCommandGroup(
                                                         new Elevator(elevatorSubsystem, targetHeight),
                                                         new Pivot(pivotSubsystem, targetAngle)));
 
                 }
-                // if elevator ends in the danger zone, then move the elevator to the safe
-                // height, move the pivot, then continue to the final height
-                else {
-                        if ((!elevatorInDangerZone) && (!elevatorEndInDangerZone)) {
-                                commands.addCommands(
-                                                new ParallelCommandGroup(
-                                                                new Elevator(elevatorSubsystem, targetHeight),
-                                                                new Pivot(pivotSubsystem, targetAngle)));
-                        } else if ((!elevatorInDangerZone) && (pivotWillSwingThrough)) {
-                                commands.addCommands(
-                                                new ParallelCommandGroup(
-                                                                new Pivot(pivotSubsystem, targetAngle),
-                                                                new Elevator(elevatorSubsystem,
-                                                                                Constants.ElevatorConstants.kElevatorSafeHeightMax)),
-                                                new WaitUntilCommand(() -> !pivotSubsystem.inDangerZone()),
-                                                new Elevator(elevatorSubsystem, targetHeight));
+                // if elevator starts and ends outside the danger zone, move the elevator and
+                // pivot together
+                else if (!elevatorInDangerZone && !elevatorEndInDangerZone) {
+                        commands.addCommands(
+                                        new ParallelCommandGroup(
+                                                        new Elevator(elevatorSubsystem, targetHeight),
+                                                        new Pivot(pivotSubsystem, targetAngle)));
+                }
+                // if elevator starts outside the danger zone and ends in the danger zone, then
+                // turn the pivot and lower the elevator to the safe height and then finish
+                // lowering the elevator once the pivot is clear
+                else if (!elevatorInDangerZone && elevatorEndInDangerZone) {
+                        commands.addCommands(
+                                        new ParallelCommandGroup(
+                                                        new Pivot(pivotSubsystem, targetAngle),
+                                                        new Elevator(elevatorSubsystem,
+                                                                        Constants.ElevatorConstants.kElevatorSafeHeightMax)),
+                                        new WaitUntilCommand(() -> !pivotSubsystem.inDangerZone()),
+                                        new Elevator(elevatorSubsystem, targetHeight));
 
-                        } else if (elevatorEndInDangerZone) {
-                                commands.addCommands(
-                                                new SequentialCommandGroup(
-                                                                new Elevator(elevatorSubsystem,
-                                                                                Constants.ElevatorConstants.kElevatorSafeHeightMax),
-                                                                new Pivot(pivotSubsystem, targetAngle),
-                                                                new Elevator(elevatorSubsystem, targetHeight)));
-                        }
+                } // if elevator starts in the danger zone and ends in the danger zone, then raise
+                  // the elevator to the safe height, turn the pivot, then lower the elevator to
+                  // the final height
 
-                        // if elevator does not end in danger zone, then move the elevator to the target
-                        // height, and once the elevator reaches the safe height, move the pivot arm
-
-                        else {
-                                commands.addCommands(
-                                                new ParallelCommandGroup(
-                                                                new Elevator(elevatorSubsystem, targetHeight),
-                                                                new SequentialCommandGroup(
-                                                                                new WaitUntilCommand(
-                                                                                                () -> !elevatorSubsystem
-                                                                                                                .inDangerZone()),
-                                                                                new Pivot(pivotSubsystem,
-                                                                                                targetAngle))));
-
-                        }
+                else if (elevatorInDangerZone && elevatorEndInDangerZone) {
+                        commands.addCommands(
+                                        new SequentialCommandGroup(
+                                                        new Elevator(elevatorSubsystem,
+                                                                        Constants.ElevatorConstants.kElevatorSafeHeightMax),
+                                                        new Pivot(pivotSubsystem, targetAngle),
+                                                        new Elevator(elevatorSubsystem, targetHeight)));
                 }
 
-                CommandScheduler.getInstance().schedule(
-                                new SequentialCommandGroup(
-                                                commands
-                                // new InstantCommand(() -> this.finish())
-                                ));
+                // if elevator starts in danger zone and does not end in danger zone, then move
+                // the elevator to the target
+                // height, and once the elevator reaches the safe height, move the pivot arm
+
+                else {
+                        commands.addCommands(
+                                        new SequentialCommandGroup(
+                                                        new Elevator(elevatorSubsystem, targetHeight),
+                                                        new WaitUntilCommand(() -> !elevatorSubsystem.inDangerZone()),
+                                                        new Pivot(pivotSubsystem, targetAngle)));
+
+                }
+
+                CommandScheduler.getInstance().schedule(new SequentialCommandGroup(commands
+                // new InstantCommand(() -> this.finish())
+                ));
+
         }
 
         @Override
