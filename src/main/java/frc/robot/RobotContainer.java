@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -46,7 +47,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DropCoral;
 import frc.robot.commands.EjectCoral;
+import frc.robot.commands.InitializePivot;
 import frc.robot.commands.InitializePivotAndElevator;
+import frc.robot.commands.InitializePivotCommand;
 import frc.robot.commands.LockPivotAndElevatorCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PickUpAlgaeFromGround;
@@ -57,6 +60,7 @@ import frc.robot.commands.ScoreAlgaeNetLeft;
 import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
+import frc.robot.commands.autoCommands.AutoYCoral1;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.DriveToCoralBlue;
 import frc.robot.commands.scoring.DriveToCoralYellow;
@@ -101,7 +105,10 @@ public class RobotContainer {
 
         // Register Named Commands for PathPlanner
         private void configureAutoCommands() {
-
+                NamedCommands.registerCommand("InitializePE",
+                                new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
+                NamedCommands.registerCommand("AutoYCoral1",
+                                new AutoYCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem));
         }
 
         public enum ScoreDirection {
@@ -155,31 +162,32 @@ public class RobotContainer {
                 configureAutoCommands();
 
                 // testing alternate drive
-                MoveCommand moveCommand = new MoveCommand(this.driveSubsystem, driverController);
-                driveSubsystem.setDefaultCommand(moveCommand);
+                // MoveCommand moveCommand = new MoveCommand(this.driveSubsystem,
+                // driverController);
+                // driveSubsystem.setDefaultCommand(moveCommand);
 
                 // Configure default commands
-                // driveSubsystem.setDefaultCommand(
-                // // The right trigger controls the speed of the robot.
-                // // The left stick controls translation of the robot.
-                // // Turning is controlled by the X axis of the right stick.
-                // new RunCommand(
-                // () -> driveSubsystem.drive(
-                // MathUtil.applyDeadband(
-                // Math.pow(driverController
-                // .getRightTriggerAxis(),
-                // 2),
-                // OIConstants.kDriveDeadband),
-                // -MathUtil.applyDeadband(driverController.getLeftY(),
-                // OIConstants.kDriveDeadband),
-                // -MathUtil.applyDeadband(driverController.getLeftX(),
-                // OIConstants.kDriveDeadband),
-                // -MathUtil.applyDeadband(
-                // Math.pow(driverController.getRightX(),
-                // 3),
-                // OIConstants.kDriveDeadband),
-                // true),
-                // driveSubsystem));
+                driveSubsystem.setDefaultCommand(
+                                // The right trigger controls the speed of the robot.
+                                // The left stick controls translation of the robot.
+                                // Turning is controlled by the X axis of the right stick.
+                                new RunCommand(
+                                                () -> driveSubsystem.drive(
+                                                                MathUtil.applyDeadband(
+                                                                                Math.pow(driverController
+                                                                                                .getRightTriggerAxis(),
+                                                                                                2),
+                                                                                OIConstants.kDriveDeadband),
+                                                                -MathUtil.applyDeadband(driverController.getLeftY(),
+                                                                                OIConstants.kDriveDeadband),
+                                                                -MathUtil.applyDeadband(driverController.getLeftX(),
+                                                                                OIConstants.kDriveDeadband),
+                                                                -MathUtil.applyDeadband(
+                                                                                Math.pow(driverController.getRightX(),
+                                                                                                3),
+                                                                                OIConstants.kDriveDeadband),
+                                                                true),
+                                                driveSubsystem));
 
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
@@ -218,109 +226,109 @@ public class RobotContainer {
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
-                zeroPivot.onTrue(new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
+                zeroPivot.onTrue(new InitializePivotCommand(pivotSubsystem));
 
                 // Reset heading of robot for field relative drive
                 final Trigger zeroHeadingButton = driverController.start();
                 zeroHeadingButton.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
 
                 // // Limelight Buttons
-                // final Trigger limelightTrigger1 = driverController.x();
-                // final Trigger limelightTrigger2 = driverController.y();
+                final Trigger limelightTrigger1 = driverController.x();
+                final Trigger limelightTrigger2 = driverController.y();
 
-                // // Pressing the trigger in automation mode will run this command.
-                // limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
-                // limelight)).and(
-                // new BooleanSupplier() {
-                // @Override
-                // public boolean getAsBoolean() {
-                // return automated;
-                // }
-                // });
-                // // Pressing the trigger NOT in automation mode will run this one.
-                // limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
-                // limelight)).and(
-                // new BooleanSupplier() {
-                // @Override
-                // public boolean getAsBoolean() {
-                // return !automated;
-                // }
-                // });
+                // Pressing the trigger in automation mode will run this command.
+                limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
+                                limelight)).and(
+                                                new BooleanSupplier() {
+                                                        @Override
+                                                        public boolean getAsBoolean() {
+                                                                return automated;
+                                                        }
+                                                });
+                // Pressing the trigger NOT in automation mode will run this one.
+                limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
+                                limelight)).and(
+                                                new BooleanSupplier() {
+                                                        @Override
+                                                        public boolean getAsBoolean() {
+                                                                return !automated;
+                                                        }
+                                                });
 
-                // limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem,
-                // limelight)).and(
-                // new BooleanSupplier() {
-                // @Override
-                // public boolean getAsBoolean() {
-                // return automated;
-                // }
-                // });
-                // // Pressing the trigger NOT in automation mode will run this one.
-                // limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem,
-                // limelight)).and(
-                // new BooleanSupplier() {
-                // @Override
-                // public boolean getAsBoolean() {
-                // return !automated;
-                // }
-                // });
+                limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem,
+                                limelight)).and(
+                                                new BooleanSupplier() {
+                                                        @Override
+                                                        public boolean getAsBoolean() {
+                                                                return automated;
+                                                        }
+                                                });
+                // Pressing the trigger NOT in automation mode will run this one.
+                limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem,
+                                limelight)).and(
+                                                new BooleanSupplier() {
+                                                        @Override
+                                                        public boolean getAsBoolean() {
+                                                                return !automated;
+                                                        }
+                                                });
 
                 // Driver operations
-                // final Trigger ejectCoral = driverController.b();
-                // final Trigger pickUpCoral = driverController.leftTrigger();
-                // final Trigger ejectAlgae = driverController.a();
-                // final Trigger shootAlgaeLeft = driverController.leftBumper();
-                // final Trigger shootAlgaeRight = driverController.rightBumper();
-                // final Trigger raiseClimber = driverController.povUp();
-                // final Trigger lowerClimber = driverController.povDown();
-                // // final Trigger intakeMotorsOff = driverController.back();
-                // final Trigger altButton = driverController.back();
-                // final Trigger toggleClimber = driverController.povLeft();
+                final Trigger ejectCoral = driverController.b();
+                final Trigger pickUpCoral = driverController.leftTrigger();
+                final Trigger ejectAlgae = driverController.a();
+                final Trigger shootAlgaeLeft = driverController.leftBumper();
+                final Trigger shootAlgaeRight = driverController.rightBumper();
+                final Trigger raiseClimber = driverController.povUp();
+                final Trigger lowerClimber = driverController.povDown();
+                // final Trigger intakeMotorsOff = driverController.back();
+                final Trigger altButton = driverController.back();
+                final Trigger toggleClimber = driverController.povLeft();
 
-                // // commands that go with driver operations
-                // ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
-                // pivotSubsystem));
-                // ejectCoral.and(altButton).onTrue(new DropCoral(coralSubsystem,
-                // elevatorSubsystem, pivotSubsystem));
-                // pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem,
-                // elevatorSubsystem, pivotSubsystem, false));
-                // // pickUpCoral.and(altButton).whileTrue(new RunCommand(() ->
-                // // coralSubsystem.pickup(), coralSubsystem))
-                // // .onFalse(new SequentialCommandGroup(
-                // // new InstantCommand(coralSubsystem::stop),
-                // // new WaitCommand(0.25),
-                // // new Windmill(elevatorSubsystem, pivotSubsystem,
-                // // Constants.Windmill.WindmillState.Home, false)));
-                // pickUpCoral.and(altButton)
-                // .onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem,
-                // pivotSubsystem,
-                // true));
+                // commands that go with driver operations
+                ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
+                                pivotSubsystem));
+                ejectCoral.and(altButton).onTrue(new DropCoral(coralSubsystem,
+                                elevatorSubsystem, pivotSubsystem));
+                pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem,
+                                elevatorSubsystem, pivotSubsystem, false));
+                // pickUpCoral.and(altButton).whileTrue(new RunCommand(() ->
+                // coralSubsystem.pickup(), coralSubsystem))
+                // .onFalse(new SequentialCommandGroup(
+                // new InstantCommand(coralSubsystem::stop),
+                // new WaitCommand(0.25),
+                // new Windmill(elevatorSubsystem, pivotSubsystem,
+                // Constants.Windmill.WindmillState.Home, false)));
+                pickUpCoral.and(altButton)
+                                .onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem,
+                                                pivotSubsystem,
+                                                true));
 
-                // ejectAlgae.onTrue(new ScoreAlgae(algaeSubsystem));
-                // shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(algaeSubsystem,
-                // elevatorSubsystem, pivotSubsystem,
-                // coralSubsystem));
-                // shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(algaeSubsystem,
-                // elevatorSubsystem, pivotSubsystem,
-                // coralSubsystem));
-                // raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
-                // climberSubsystem))
-                // .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                // climberSubsystem));
+                ejectAlgae.onTrue(new ScoreAlgae(algaeSubsystem));
+                shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(algaeSubsystem,
+                                elevatorSubsystem, pivotSubsystem,
+                                coralSubsystem));
+                shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(algaeSubsystem,
+                                elevatorSubsystem, pivotSubsystem,
+                                coralSubsystem));
+                raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
+                                climberSubsystem))
+                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                                                climberSubsystem));
 
-                // toggleClimber.toggleOnTrue(new ConditionalCommand(
-                // new DeployClimb(climberSubsystem),
-                // new RetractClimb(climberSubsystem),
-                // climberSubsystem::climberAtHomePosition));
+                toggleClimber.and(altButton).toggleOnTrue(new ConditionalCommand(
+                                new DeployClimb(climberSubsystem),
+                                new RetractClimb(climberSubsystem),
+                                climberSubsystem::climberAtHomePosition));
 
-                // toggleClimber.onTrue(new LockPivotAndElevatorCommand(elevatorSubsystem,
-                // pivotSubsystem)
-                // .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
+                toggleClimber.and(altButton).onTrue(new LockPivotAndElevatorCommand(elevatorSubsystem,
+                                pivotSubsystem)
+                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
 
-                // lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
-                // climberSubsystem))
-                // .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                // climberSubsystem));
+                lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
+                                climberSubsystem))
+                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                                                climberSubsystem));
 
                 // Operator Controls
                 // final Trigger manualCoral = operatorController.rightTrigger();
@@ -462,9 +470,17 @@ public class RobotContainer {
                                         }
                                 });
 
-                coralDropOff1.onTrue(new InstantCommand(() -> {
-                        coralLevel = CoralLevel.ONE;
-                })).and(
+                // coralDropOff1.onTrue(new InstantCommand(() -> {
+                // coralLevel = CoralLevel.ONE;
+                // })).and(
+                // new BooleanSupplier() {
+                // @Override
+                // public boolean getAsBoolean() {
+                // return automated;
+                // }
+                // });
+
+                coralDropOff1.onTrue(new ToCoralDropOff1(elevatorSubsystem, pivotSubsystem, false)).and(
                                 new BooleanSupplier() {
                                         @Override
                                         public boolean getAsBoolean() {

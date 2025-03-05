@@ -73,7 +73,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff1(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff1Height),
-                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoralDropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
 
@@ -83,7 +83,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff2(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff2Height),
-                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoralDropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
 
@@ -93,7 +93,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff3(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff3Height),
-                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoralDropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
                 break;
@@ -102,7 +102,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff4(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff4Height),
-                                new WaitUntilCommand(pivot::pivotAtCoral4DropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoral4DropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
 
