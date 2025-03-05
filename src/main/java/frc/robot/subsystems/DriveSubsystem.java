@@ -243,11 +243,12 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   // // This was using the PoseEstimator
-  // public void resetOdometry(Pose2d pose) {
-  // m_odometry.resetPosition(
-  // getYaw(),
-  // getModulePositions(),
-  // pose);
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(
+        getYaw(),
+        getModulePositions(),
+        pose);
+  }
 
   /**
    * Method to drive the robot using joystick info.

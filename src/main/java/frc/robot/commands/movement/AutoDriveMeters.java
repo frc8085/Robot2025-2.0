@@ -27,7 +27,6 @@ public class AutoDriveMeters extends Command {
     }
 
     // Reset the odometry when the command is scheduled
-    // Then run the drive command to travel backwards
     @Override
     public void initialize() {
         super.initialize();
