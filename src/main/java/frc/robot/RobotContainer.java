@@ -25,21 +25,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.RobotContainer.AlgaeLevel;
-import frc.robot.RobotContainer.CoralLevel;
-import frc.robot.RobotContainer.ScoreDirection;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -47,24 +40,21 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DropCoral;
 import frc.robot.commands.EjectCoral;
-import frc.robot.commands.InitializePivot;
 import frc.robot.commands.InitializePivotAndElevator;
-import frc.robot.commands.InitializePivotCommand;
 import frc.robot.commands.LockPivotAndElevatorCommand;
-import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PickUpAlgaeFromGround;
 import frc.robot.commands.PickUpCoralFromSource;
 import frc.robot.commands.RetractClimb;
 import frc.robot.commands.ScoreAlgae;
 import frc.robot.commands.ScoreAlgaeNetLeft;
 import frc.robot.commands.ScoreAlgaeNetRight;
+import frc.robot.commands.ScoreCoralL4;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.autoCommands.AutoYCoral1;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.DriveToCoralBlue;
 import frc.robot.commands.scoring.DriveToCoralYellow;
-import frc.robot.commands.scoring.MoveToScore;
 import frc.robot.commands.scoring.ResetOperatorInputs;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
@@ -73,7 +63,6 @@ import frc.robot.commands.states.ToCoralDropOff2;
 import frc.robot.commands.states.ToCoralDropOff3;
 import frc.robot.commands.states.ToCoralDropOff4;
 import frc.robot.commands.states.ToCoralSource;
-import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -108,7 +97,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("InitializePE",
                                 new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
                 NamedCommands.registerCommand("AutoYCoral1",
-                                new AutoYCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                                new AutoYCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
         }
 
         public enum ScoreDirection {
@@ -226,7 +215,7 @@ public class RobotContainer {
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
-                zeroPivot.onTrue(new InitializePivotCommand(pivotSubsystem));
+                zeroPivot.onTrue(new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
 
                 // Reset heading of robot for field relative drive
                 final Trigger zeroHeadingButton = driverController.start();
@@ -542,7 +531,7 @@ public class RobotContainer {
                                         }
                                 });
 
-                coralDropOff4.onTrue(new ToCoralDropOff4(elevatorSubsystem, pivotSubsystem, false)).and(
+                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false)).and(
                                 new BooleanSupplier() {
                                         @Override
                                         public boolean getAsBoolean() {
@@ -562,7 +551,7 @@ public class RobotContainer {
                 coralDropOff3.and(altPositionRight)
                                 .onTrue(new ToCoralDropOff3(elevatorSubsystem, pivotSubsystem, true));
                 coralDropOff4.and(altPositionRight)
-                                .onTrue(new ToCoralDropOff4(elevatorSubsystem, pivotSubsystem, true));
+                                .onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
 
                 // Set Left Joystick for manual elevator/pivot movement
                 final Trigger raiseElevator = operatorController.axisLessThan(1, -0.25);
