@@ -13,6 +13,9 @@ public class AutoDriveMeters extends Command {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final DriveSubsystem m_drive;
     private double m_forwardMeters = 0;
+    private double xP = 0.5;
+    private double xI = 0;
+    private double xD = 0;
     private double m_sidewaysMeters = 0;
     private double m_speed = 0;
     boolean forwardReached = false;
@@ -38,7 +41,11 @@ public class AutoDriveMeters extends Command {
     @Override
     public void execute() {
         super.execute();
-
+        double xError = m_forwardMeters - m_drive.getPose().getX();
+        m_speed = xP * xError;
+        if (m_speed < .05) {
+            m_speed = .05;
+        }
         m_drive.drive(
                 m_speed,
                 forwardReached ? 0 : Math.signum(m_forwardMeters),
