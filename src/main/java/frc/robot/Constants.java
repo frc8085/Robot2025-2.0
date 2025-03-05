@@ -414,7 +414,7 @@ public final class Constants {
   }
 
   public static final class CommandScoreConstants {
-    public static double kMoveSpeed = 0.5;
+    public static double kMoveSpeed = 0.25;
   }
 
 }
