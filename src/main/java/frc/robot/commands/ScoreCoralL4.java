@@ -12,11 +12,11 @@ import frc.robot.subsystems.PivotSubsystem;
 public class ScoreCoralL4 extends SequentialCommandGroup {
         public ScoreCoralL4(
                         ElevatorSubsystem elevatorSubsystem,
-                        PivotSubsystem pivotSubsystem, CoralSubsystem coralSubsystem, boolean mirror) {
+                        PivotSubsystem pivotSubsystem, CoralSubsystem coralSubsystem, boolean yellow) {
                 addCommands(
-                                new ToCoralDropOff4(elevatorSubsystem, pivotSubsystem, mirror),
+                                new ToCoralDropOff4(elevatorSubsystem, pivotSubsystem, yellow),
                                 new WaitUntilCommand(elevatorSubsystem::elevatorAtCoralDropOff4Height),
-                                new WaitUntilCommand(() -> pivotSubsystem.pivotAtCoral4DropOffAngle(mirror)),
+                                new WaitUntilCommand(() -> pivotSubsystem.pivotAtCoral4DropOffAngle(yellow)),
                                 new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem),
                                 new WaitCommand(0.25),
                                 new ToHomeCommand(elevatorSubsystem, pivotSubsystem,

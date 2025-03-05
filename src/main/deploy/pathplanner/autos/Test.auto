@@ -5,21 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "InitializePE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Test"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoYCoral1"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "InitializePE"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of Test"
+                }
+              }
+            ]
           }
         }
       ]

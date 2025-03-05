@@ -7,8 +7,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class ToAlgaeL3 extends SequentialCommandGroup {
-    public ToAlgaeL3(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, boolean mirror) {
-        if (mirror) {
+    public ToAlgaeL3(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, boolean yellow) {
+        if (yellow) {
             addCommands(
                     new Windmill(elevatorSubsystem, pivotSubsystem,
                             Constants.Windmill.WindmillState.AlgaePickUpReef3Flip,

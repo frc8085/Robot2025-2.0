@@ -92,8 +92,8 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     // Pivot angle checks
-    public boolean pivotAtCoralDropOffAngle(boolean mirror) {
-        if (!mirror) {
+    public boolean pivotAtCoralDropOffAngle(boolean yellow) {
+        if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
                     + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff
@@ -127,8 +127,8 @@ public class PivotSubsystem extends SubsystemBase {
                         - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
     }
 
-    public boolean pivotAtCoral4DropOffAngle(boolean mirror) {
-        if (!mirror) {
+    public boolean pivotAtCoral4DropOffAngle(boolean yellow) {
+        if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff4
                     + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff4

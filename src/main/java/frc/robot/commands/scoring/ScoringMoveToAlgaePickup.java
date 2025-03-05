@@ -11,11 +11,11 @@ import frc.robot.subsystems.PivotSubsystem;
 public class ScoringMoveToAlgaePickup extends SequentialCommandGroup {
         public ScoringMoveToAlgaePickup(
                         AlgaeSubsystem algaeSubsystem, ElevatorSubsystem elevatorSubsystem,
-                        PivotSubsystem pivotSubsystem, boolean level, boolean mirror) {
+                        PivotSubsystem pivotSubsystem, boolean level, boolean yellow) {
 
-                // level true= L3, false = L2; mirror true = left, false = right
+                // level true= L3, false = L2; yellow true = right, false = blue/left
                 if (level) {
-                        if (mirror) {
+                        if (yellow) {
                                 addCommands(
                                                 new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, true),
                                                 new PickUpAlgae(algaeSubsystem));
@@ -26,7 +26,7 @@ public class ScoringMoveToAlgaePickup extends SequentialCommandGroup {
 
                         }
                 } else {
-                        if (mirror) {
+                        if (yellow) {
                                 addCommands(
                                                 new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, true),
                                                 new PickUpAlgae(algaeSubsystem));
