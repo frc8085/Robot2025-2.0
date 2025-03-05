@@ -14,11 +14,13 @@ public class AutoDriveMeters extends Command {
     private final DriveSubsystem m_drive;
     private double m_forwardMeters = 0;
     private double m_sidewaysMeters = 0;
+    private double m_speed = 0;
     boolean forwardReached = false;
     boolean sidewaysReached = false;
 
-    public AutoDriveMeters(DriveSubsystem drive, double forwardMeters, double sidewaysMeters) {
+    public AutoDriveMeters(DriveSubsystem drive, double forwardMeters, double sidewaysMeters, double speed) {
         m_drive = drive;
+        m_speed = speed;
         m_forwardMeters = forwardMeters;
         m_sidewaysMeters = sidewaysMeters;
         addRequirements(m_drive);
@@ -38,7 +40,7 @@ public class AutoDriveMeters extends Command {
         super.execute();
 
         m_drive.drive(
-                CommandScoreConstants.kMoveSpeed,
+                m_speed,
                 forwardReached ? 0 : Math.signum(m_forwardMeters),
                 sidewaysReached ? 0 : Math.signum(m_sidewaysMeters),
                 0,
