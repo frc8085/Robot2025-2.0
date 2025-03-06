@@ -53,8 +53,10 @@ import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.autoCommands.AutoYCoral1;
 import frc.robot.commands.DeployClimb;
-import frc.robot.commands.scoring.DriveToCoralBlue;
-import frc.robot.commands.scoring.DriveToCoralYellow;
+import frc.robot.commands.scoring.AlignAndDriveYellow;
+import frc.robot.commands.scoring.AlignToAprilTagYellow;
+import frc.robot.commands.scoring.DriveToReefBlue;
+import frc.robot.commands.scoring.DriveToReefYellow;
 import frc.robot.commands.scoring.ResetOperatorInputs;
 import frc.robot.commands.sequences.AutoRemoveAlgaeL3ScoreL3;
 import frc.robot.commands.PickUpAlgaeFromReef;
@@ -64,6 +66,7 @@ import frc.robot.commands.states.ToCoralDropOff2;
 import frc.robot.commands.states.ToCoralDropOff3;
 import frc.robot.commands.states.ToCoralDropOff4;
 import frc.robot.commands.states.ToCoralSource;
+import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -192,8 +195,6 @@ public class RobotContainer {
                 SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
                 SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
                 SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
-                SmartDashboard.putNumber("driver Y", driverController.getLeftY());
-                SmartDashboard.putNumber("driver X", driverController.getLeftX());
         }
 
         public boolean getAutomated() {
@@ -228,26 +229,26 @@ public class RobotContainer {
                 final Trigger limelightTrigger1 = driverController.x();
                 final Trigger limelightTrigger2 = driverController.y();
 
-                // Pressing the trigger in automation mode will run this command.
-                limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
-                                limelight)).and(
-                                                new BooleanSupplier() {
-                                                        @Override
-                                                        public boolean getAsBoolean() {
-                                                                return automated;
-                                                        }
-                                                });
-                // Pressing the trigger NOT in automation mode will run this one.
-                limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
-                                limelight)).and(
-                                                new BooleanSupplier() {
-                                                        @Override
-                                                        public boolean getAsBoolean() {
-                                                                return !automated;
-                                                        }
-                                                });
+                // // Pressing the trigger in automation mode will run this command.
+                // limelightTrigger1.and(new BooleanSupplier() {
+                // @Override
+                // public boolean getAsBoolean() {
+                // return automated;
+                // }
+                // }).onTrue(new DriveToCoralBlue(driveSubsystem, limelight));
+                // // Pressing the trigger NOT in automation mode will run this one.
+                // limelightTrigger1.onTrue(new DriveToCoralBlue(driveSubsystem,
+                // limelight)).and(
+                // new BooleanSupplier() {
+                // @Override
+                // public boolean getAsBoolean() {
+                // return !automated;
+                // }
+                // });
 
-                limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem,
+                limelightTrigger1.onTrue(new AlignAndDriveYellow(driveSubsystem, limelight));
+
+                limelightTrigger2.onTrue(new DriveToReefYellow(driveSubsystem,
                                 limelight)).and(
                                                 new BooleanSupplier() {
                                                         @Override
@@ -256,7 +257,7 @@ public class RobotContainer {
                                                         }
                                                 });
                 // Pressing the trigger NOT in automation mode will run this one.
-                limelightTrigger2.onTrue(new DriveToCoralYellow(driveSubsystem,
+                limelightTrigger2.onTrue(new DriveToReefYellow(driveSubsystem,
                                 limelight)).and(
                                                 new BooleanSupplier() {
                                                         @Override
@@ -308,14 +309,16 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
                                                 climberSubsystem));
 
-                toggleClimber.and(altButton).toggleOnTrue(new ConditionalCommand(
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
                                 new DeployClimb(climberSubsystem),
                                 new RetractClimb(climberSubsystem),
                                 climberSubsystem::climberAtHomePosition));
 
-                toggleClimber.and(altButton).onTrue(new LockPivotAndElevatorCommand(elevatorSubsystem,
-                                pivotSubsystem)
-                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
+                                new LockPivotAndElevatorCommand(elevatorSubsystem, pivotSubsystem).withTimeout(15)
+                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
+                                climberSubsystem::climberAtHomePosition));
 
                 lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
                                 climberSubsystem))

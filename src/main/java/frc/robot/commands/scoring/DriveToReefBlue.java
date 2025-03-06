@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class DriveToCoralBlue extends Command {
+public class DriveToReefBlue extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
     private boolean lostTarget;
@@ -28,7 +28,7 @@ public class DriveToCoralBlue extends Command {
     double xTarget = -2.72;
     double yTarget = 6.77;
 
-    public DriveToCoralBlue(DriveSubsystem drive, LimelightSubsystem limelight) {
+    public DriveToReefBlue(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
