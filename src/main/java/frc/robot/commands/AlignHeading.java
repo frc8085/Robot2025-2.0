@@ -18,7 +18,8 @@ public class AlignHeading extends Command {
     private final double maxRotationSpeed = 0.4;
 
     private final double base = 0; // tune
-    private final double thetaFinal = 0;
+    private final double thetaFinal = 25;
+    private final double tolerance = 3;
 
     public boolean hasTarget = true;
 
@@ -44,6 +45,15 @@ public class AlignHeading extends Command {
         double baseAbs = xAbs * base;
 
         double thetaInitial = Math.atan(xAbs / baseAbs);
+        if ((thetaInitial - thetaFinal) < tolerance) {
+            if (xOffset > 0) {
+                drive.drive(maxSpeed, 0, 0, -0.3, false);
+            } else {
+                drive.drive(maxSpeed, 0, 0, 0.3, false);
+            }
+        } else {
+            return;
+        }
 
     }
 
