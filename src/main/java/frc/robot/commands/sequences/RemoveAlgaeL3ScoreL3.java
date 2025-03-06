@@ -19,8 +19,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class AutoRemoveAlgaeL3ScoreL3 extends SequentialCommandGroup {
-        public AutoRemoveAlgaeL3ScoreL3(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem,
+public class RemoveAlgaeL3ScoreL3 extends SequentialCommandGroup {
+        public RemoveAlgaeL3ScoreL3(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem, AlgaeSubsystem algaeSubsystem, CoralSubsystem coralSubsystem,
                         boolean yellow) {
                 if (yellow) {
