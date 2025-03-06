@@ -2,17 +2,13 @@ package frc.robot.commands.scoring;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants;
-import frc.robot.Constants.PivotArmConstants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.AlgaeLevel;
 import frc.robot.RobotContainer.CoralLevel;
 import frc.robot.commands.DropCoral;
-import frc.robot.commands.Pivot;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
 import frc.robot.commands.states.ToCoralDropOff3;
