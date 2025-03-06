@@ -1,0 +1,112 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "InitializePE"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Barge to 17"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYLimelightRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveForward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYCoral4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "20 to Source"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoCoralSource"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source to 19"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYLimelightRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveForward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYCoral4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "19 to Source"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoCoralSource"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

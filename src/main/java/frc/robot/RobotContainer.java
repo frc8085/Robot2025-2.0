@@ -55,8 +55,10 @@ import frc.robot.commands.ScoreAlgaeNetRight;
 import frc.robot.commands.ScoreCoralL4;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
-import frc.robot.commands.autoCommands.AutoYCoral1;
+import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.movement.AutoDriveMeters;
+import frc.robot.commands.movement.AutoMoveForwardForTime;
+import frc.robot.commands.movement.AutoPosition;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.AlignAndDriveBlue;
 import frc.robot.commands.scoring.AlignAndDriveYellow;
@@ -109,7 +111,19 @@ public class RobotContainer {
                 NamedCommands.registerCommand("InitializePE",
                                 new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
                 NamedCommands.registerCommand("AutoYCoral1",
-                                new AutoYCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                                new AutoCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                NamedCommands.registerCommand("AutoYCoral2",
+                                new AutoCoral2(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                NamedCommands.registerCommand("AutoYCoral3",
+                                new AutoCoral3(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                NamedCommands.registerCommand("AutoYCoral4",
+                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                NamedCommands.registerCommand("AutoCoralSource",
+                                new AutoCoralSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
+                NamedCommands.registerCommand("AutoYLimelightRight",
+                                new AutoLimelightPosition(driveSubsystem, limelight, true));
+                NamedCommands.registerCommand("AutoYMoveForward",
+                                new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
         }
 
         public enum ScoreDirection {
@@ -199,10 +213,10 @@ public class RobotContainer {
                 SmartDashboard.putData("Field", field);
 
                 // Smart Dashboard Buttons
-                SmartDashboard.putBoolean("Automation", getAutomated());
-                SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
-                SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
-                SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
+                // SmartDashboard.putBoolean("Automation", getAutomated());
+                // SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
+                // SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
+                // SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
         }
 
         public boolean getAutomated() {
@@ -270,7 +284,9 @@ public class RobotContainer {
                                         }
                                 }).onTrue(new SequentialCommandGroup(
                                                 new AlignAndDriveYellow(driveSubsystem,
-                                                                limelight)));
+                                                                limelight),
+                                                new ToScoreYellow(driveSubsystem, coralSubsystem, algaeSubsystem,
+                                                                pivotSubsystem, elevatorSubsystem, true)));
                 // new ToScoreYellow(driveSubsystem, coralSubsystem, algaeSubsystem,
                 // pivotSubsystem, elevatorSubsystem, automated)));
                 // Pressing the trigger NOT in automation mode will run this one.
@@ -297,7 +313,7 @@ public class RobotContainer {
                 final Trigger lowerClimber = driverController.povDown();
                 // final Trigger intakeMotorsOff = driverController.back();
                 final Trigger altButton = driverController.back();
-                final Trigger toggleClimber = driverController.povLeft();
+                final Trigger left = driverController.povLeft();
                 final Trigger right = driverController.povRight();
 
                 // commands that go with driver operations
@@ -327,14 +343,16 @@ public class RobotContainer {
                                 elevatorSubsystem, pivotSubsystem,
                                 coralSubsystem));
 
-                toggleClimber.onTrue(new AutoDriveMeters(driveSubsystem, -0.17, 0, 0.1));
-                right.onTrue(new AutoDriveMeters(driveSubsystem, 0.17, 0, 0.1));
-                raiseClimber.onTrue(new AutoDriveMeters(driveSubsystem, 0, 0.1, 0.1));
-                lowerClimber.onTrue(new AutoDriveMeters(driveSubsystem, 0, -0.1, 0.1));
-                // raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
-                // climberSubsystem))
-                // .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                // climberSubsystem));
+                left.onTrue(new AutoPosition(driveSubsystem, limelight, false));
+                right.onTrue(new AutoPosition(driveSubsystem, limelight, true));
+                raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
+                                climberSubsystem))
+                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                                                climberSubsystem));
+                lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
+                                climberSubsystem))
+                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                                                climberSubsystem));
 
                 // toggleClimber.toggleOnTrue(new ConditionalCommand(
                 // new DeployClimb(climberSubsystem),
@@ -347,11 +365,6 @@ public class RobotContainer {
                 // .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
                 // new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
                 // climberSubsystem::climberAtHomePosition));
-
-                // lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
-                // climberSubsystem))
-                // .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                // climberSubsystem));
 
                 // Operator Controls
                 // final Trigger manualCoral = operatorController.rightTrigger();
