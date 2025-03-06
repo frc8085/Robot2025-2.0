@@ -106,25 +106,32 @@ public class PivotSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean pivotAtAlgaeReefDropOffAngle() {
-        return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
-                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+    public boolean pivotAtAlgaeReef2DropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Flip
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef2Flip
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
     }
 
-    public boolean pivotAtAlgaeReef2FlipDropOffAngle() {
-        return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Intake
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef2Intake
-                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
-    }
-
-    public boolean pivotAtAlgaeReef3FlipDropOffAngle() {
-        return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Intake
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef3Intake
-                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+    public boolean pivotAtAlgaeReef3DropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Flip
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef3Flip
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
     }
 
     public boolean pivotAtCoral4DropOffAngle(boolean yellow) {

@@ -123,6 +123,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperaterControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
+    public static final double kTurnDeadband = 0.015;
     public static final double kDpadSpeedRegulator = 0.25;
 
   }
@@ -205,8 +206,8 @@ public final class Constants {
     public static double kElevatorReef2Height = 40;
     public static double kElevatorReef3Height = 70;
     public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
-    public static double kElevatorReef2IntakeHeight = 30;
-    public static double kElevatorReef3IntakeHeight = 45;
+    public static double kElevatorReef2FlipHeight = 30;
+    public static double kElevatorReef3FlipHeight = 45;
     public static double kElevatorNetHeight = 120;
 
     // Determine what actual height values these are and/or what encoder readings
@@ -274,8 +275,8 @@ public final class Constants {
     public static final double kPivotAlgaePickUpFloor = 116;
     public static final double kPivotReef = 102;
     public static final double kPivotAlgaePickUpFloorFlip = 90;
-    public static final double kPivotReef2Intake = -35;
-    public static final double kPivotReef3Intake = -25;
+    public static final double kPivotReef2Flip = -35;
+    public static final double kPivotReef3Flip = -25;
     public static final double kAlgaeNetLeftPivot = 60;
     public static final double kAlgaeNetRightPivot = 0;
   }
@@ -307,10 +308,10 @@ public final class Constants {
       AlgaePickUpReef3(ElevatorConstants.kElevatorReef3Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotReef)),
       AlgaePickUpFloorFlip(ElevatorConstants.kElevatorAlgaePickUpFloorFlipHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaePickUpFloorFlip)),
-      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2IntakeHeight,
-          Rotation2d.fromDegrees(PivotArmConstants.kPivotReef2Intake)),
-      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3IntakeHeight,
-          Rotation2d.fromDegrees(PivotArmConstants.kPivotReef3Intake)),
+      AlgaePickUpReef2Flip(ElevatorConstants.kElevatorReef2FlipHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotReef2Flip)),
+      AlgaePickUpReef3Flip(ElevatorConstants.kElevatorReef3FlipHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotReef3Flip)),
       AlgaeNetLeft(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(PivotArmConstants.kAlgaeNetLeftPivot)),
       AlgaeNetRight(ElevatorConstants.kElevatorNetHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kAlgaeNetRightPivot));

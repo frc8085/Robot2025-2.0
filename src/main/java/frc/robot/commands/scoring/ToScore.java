@@ -6,15 +6,13 @@ import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.commands.Elevator;
-import frc.robot.commands.scoring.*;
 
 public class ToScore extends SequentialCommandGroup {
     public ToScore(DriveSubsystem drive, CoralSubsystem coral, AlgaeSubsystem algae, PivotSubsystem pivot,
-            ElevatorSubsystem elevator) {
+            ElevatorSubsystem elevator, boolean yellow) {
         addCommands(
                 new MoveToScore(drive),
-                new ToAlgaeScore(algae, elevator, pivot, drive),
+                new ToAlgaeScore(algae, elevator, pivot, drive, yellow),
                 new ToCoralScore(coral, elevator, pivot, drive),
                 new ResetOperatorInputs());
     }

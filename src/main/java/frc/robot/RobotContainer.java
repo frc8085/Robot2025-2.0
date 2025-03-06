@@ -56,6 +56,7 @@ import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.DriveToCoralBlue;
 import frc.robot.commands.scoring.DriveToCoralYellow;
 import frc.robot.commands.scoring.ResetOperatorInputs;
+import frc.robot.commands.sequences.AutoRemoveAlgaeL3ScoreL3;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
@@ -174,7 +175,7 @@ public class RobotContainer {
                                                                 -MathUtil.applyDeadband(
                                                                                 Math.pow(driverController.getRightX(),
                                                                                                 3),
-                                                                                OIConstants.kDriveDeadband),
+                                                                                OIConstants.kTurnDeadband),
                                                                 true),
                                                 driveSubsystem));
 
@@ -386,7 +387,10 @@ public class RobotContainer {
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
 
-                initializeInputs.onTrue(new ResetOperatorInputs());
+                // initializeInputs.onTrue(new ResetOperatorInputs());
+
+                initializeInputs.onTrue(new AutoRemoveAlgaeL3ScoreL3(driveSubsystem, elevatorSubsystem, pivotSubsystem,
+                                algaeSubsystem, coralSubsystem, true));
 
                 algaeGround.onTrue(new InstantCommand(() -> {
                         algaeLevel = AlgaeLevel.NONE;
