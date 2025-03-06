@@ -11,10 +11,10 @@ public class ToScoreYellow extends SequentialCommandGroup {
     public ToScoreYellow(DriveSubsystem drive, CoralSubsystem coral, AlgaeSubsystem algae, PivotSubsystem pivot,
             ElevatorSubsystem elevator, boolean yellow) {
         addCommands(
-                new MoveToScoreYellow(drive),
-                new ToAlgaeScoreYellow(algae, elevator, pivot, drive, true),
-                new ToCoralScoreYellow(coral, elevator, pivot, drive),
-                new ResetOperatorInputs());
+                new MoveToScoreYellow(drive));
+        // new ToAlgaeScoreYellow(algae, elevator, pivot, drive, true),
+        // new ToCoralScoreYellow(coral, elevator, pivot, drive),
+        // new ResetOperatorInputs());
     }
 
 }
