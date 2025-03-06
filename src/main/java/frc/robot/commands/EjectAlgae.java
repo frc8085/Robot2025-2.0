@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.AlgaeSubsystem;
 
-public class ScoreAlgae extends SequentialCommandGroup {
+public class EjectAlgae extends SequentialCommandGroup {
 
-        public ScoreAlgae(
+        public EjectAlgae(
                         AlgaeSubsystem algaeSubsystem) {
                 addCommands(
                                 new RunCommand(() -> algaeSubsystem.eject(), algaeSubsystem).withTimeout(0.5),

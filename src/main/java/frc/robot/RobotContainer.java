@@ -49,23 +49,23 @@ import frc.robot.commands.PickUpAlgaeFromGround;
 import frc.robot.commands.PickUpCoralFromSource;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.RetractClimb;
-import frc.robot.commands.ScoreAlgae;
-import frc.robot.commands.ScoreAlgaeNetBlue;
-import frc.robot.commands.ScoreAlgaeNetYellow;
-import frc.robot.commands.ScoreCoralL4;
+import frc.robot.commands.EjectAlgae;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.autoCommands.*;
+import frc.robot.commands.automated.AlignAndDriveBlue;
+import frc.robot.commands.automated.AlignAndDriveYellow;
+import frc.robot.commands.movement.AlignToAprilTagYellow;
 import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.movement.AutoPositionLeftRight;
+import frc.robot.commands.movement.DriveToReefBlue;
+import frc.robot.commands.movement.DriveToReefYellow;
+import frc.robot.commands.scoring.ScoreAlgaeNetBlue;
+import frc.robot.commands.scoring.ScoreAlgaeNetYellow;
+import frc.robot.commands.scoring.ScoreCoralL4;
 import frc.robot.commands.DeployClimb;
-import frc.robot.commands.scoring.AlignAndDriveBlue;
-import frc.robot.commands.scoring.AlignAndDriveYellow;
-import frc.robot.commands.scoring.AlignToAprilTagYellow;
-import frc.robot.commands.scoring.DriveToReefBlue;
-import frc.robot.commands.scoring.DriveToReefYellow;
-import frc.robot.commands.sequences.AutoRemoveAlgaeL3ScoreL3;
+import frc.robot.commands.sequences.RemoveAlgaeL3ScoreL3;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.commands.states.ToCoralDropOff1;
@@ -241,7 +241,7 @@ public class RobotContainer {
                                                 pivotSubsystem,
                                                 true));
 
-                ejectAlgae.onTrue(new ScoreAlgae(algaeSubsystem));
+                ejectAlgae.onTrue(new EjectAlgae(algaeSubsystem));
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(algaeSubsystem,
                                 elevatorSubsystem, pivotSubsystem,
                                 coralSubsystem));

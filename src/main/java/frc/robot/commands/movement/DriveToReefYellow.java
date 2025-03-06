@@ -1,4 +1,4 @@
-package frc.robot.commands.scoring;
+package frc.robot.commands.movement;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class DriveToReefBlue extends Command {
+public class DriveToReefYellow extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
     private boolean lostTarget;
+
     PIDController xPid; // Moves left and right
     PIDController yPid; // Moves forward and back
     double maxSpeed = 1;
@@ -21,14 +22,14 @@ public class DriveToReefBlue extends Command {
     double kPX = 0.015;
     double kIX = 0;
     double kDX = 0;
-    double kPY = 0.08;
+    double kPY = 0.06;
     double kIY = 0;
     double kDY = 0;
     double tolerance = .2;
-    double xTarget = -3.40;
-    double yTarget = 5.53;
+    double xTarget = 6.32;
+    double yTarget = 4;
 
-    public DriveToReefBlue(DriveSubsystem drive, LimelightSubsystem limelight) {
+    public DriveToReefYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
@@ -36,26 +37,27 @@ public class DriveToReefBlue extends Command {
         xPid.setTolerance(tolerance);
         yPid = new PIDController(kPY, kIY, kDY);
         yPid.setTolerance(tolerance);
+
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
         yPid.setSetpoint(yTarget);
-        lostTarget = false;
         // X setpoint changes with distance, so we update it in execute
+        lostTarget = false;
     }
 
     @Override
     public void execute() {
-        double tx = limelight.getX("limelight-blue");
-        double ty = limelight.getY("limelight-blue");
+        double tx = limelight.getX("limelight-yellow");
+        double ty = limelight.getY("limelight-yellow");
 
-        xTarget = -2.82 * ty + 16.2 - 4; // Heuristic equation we found
+        xTarget = 2.76 * ty - 4.72; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
 
-        double xSpeed = maxSpeed * -xPid.calculate(tx);
-        double ySpeed = maxSpeed * yPid.calculate(ty);
+        double xSpeed = maxSpeed * xPid.calculate(tx);
+        double ySpeed = maxSpeed * -yPid.calculate(ty);
 
         // If we got to the correct x, stop moving in that direction.
         if (xPid.atSetpoint()) {
@@ -64,7 +66,7 @@ public class DriveToReefBlue extends Command {
 
         double speed = Math.hypot(xSpeed, ySpeed);
 
-        if (!limelight.hasTarget("limelight-blue")) {
+        if (!limelight.hasTarget("limelight-yellow")) {
             speed = 0;
             lostTarget = true;
         }
@@ -81,7 +83,7 @@ public class DriveToReefBlue extends Command {
     }
 
     public boolean isFinished() {
-        return ((xPid.atSetpoint() && yPid.atSetpoint()) || !this.limelight.hasTarget("limelight-blue"));
+        return ((xPid.atSetpoint() && yPid.atSetpoint()) || !this.limelight.hasTarget("limelight-yellow"));
     }
 
 }

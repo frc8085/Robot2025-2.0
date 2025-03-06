@@ -198,6 +198,7 @@ public final class Constants {
 
     // Elevator Heights for different states
     public static double kElevatorHomeHeight = 30;
+    public static double kElevatorAlgaeHoldHeight = 40;
     public static double kElevatorCoralPickupHeight = 25;
     public static double kElevatorCoralPickupAlternateHeight = 20;
     public static double kElevatorCoralDropOff1Height = 40;
@@ -290,6 +291,7 @@ public final class Constants {
       Home(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotHome)),
       Climb(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotClimb)),
       LimelightYellowTarget(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(74)),
+      AlgaeHoldHeight(ElevatorConstants.kElevatorAlgaeHoldHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotHome)),
       CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
       CoralPickupAlternate(ElevatorConstants.kElevatorCoralPickupAlternateHeight,

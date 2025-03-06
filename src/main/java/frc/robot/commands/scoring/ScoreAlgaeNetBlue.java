@@ -1,8 +1,9 @@
-package frc.robot.commands;
+package frc.robot.commands.scoring;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.EjectAlgae;
 import frc.robot.commands.states.ToAlgaeNetBlue;
 import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -17,7 +18,7 @@ public class ScoreAlgaeNetBlue extends SequentialCommandGroup {
                 addCommands(
                                 new ToAlgaeNetBlue(elevatorSubsystem, pivotSubsystem),
                                 new WaitUntilCommand(elevatorSubsystem::elevatorAtAlgaeScoreHeight),
-                                new ScoreAlgae(algaeSubsystem),
+                                new EjectAlgae(algaeSubsystem),
                                 new WaitCommand(0.25),
                                 new ToHomeCommand(elevatorSubsystem, pivotSubsystem,
                                                 coralSubsystem));

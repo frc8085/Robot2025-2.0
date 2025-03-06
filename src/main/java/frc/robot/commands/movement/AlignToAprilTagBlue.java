@@ -1,4 +1,4 @@
-package frc.robot.commands.scoring;
+package frc.robot.commands.movement;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

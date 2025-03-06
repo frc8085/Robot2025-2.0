@@ -1,9 +1,9 @@
 package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.movement.AlignToAprilTagYellow;
 import frc.robot.commands.movement.AutoPositionLeftRight;
-import frc.robot.commands.scoring.AlignToAprilTagYellow;
-import frc.robot.commands.scoring.DriveToReefYellow;
+import frc.robot.commands.movement.DriveToReefYellow;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 

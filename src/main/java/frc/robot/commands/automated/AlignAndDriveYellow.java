@@ -1,6 +1,8 @@
-package frc.robot.commands.scoring;
+package frc.robot.commands.automated;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.movement.AlignToAprilTagYellow;
+import frc.robot.commands.movement.DriveToReefYellow;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
