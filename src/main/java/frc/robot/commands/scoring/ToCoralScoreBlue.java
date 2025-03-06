@@ -19,8 +19,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class ToCoralScore extends SequentialCommandGroup {
-    public ToCoralScore(CoralSubsystem coral, ElevatorSubsystem elevator, PivotSubsystem pivot, DriveSubsystem drive) {
+public class ToCoralScoreBlue extends SequentialCommandGroup {
+    public ToCoralScoreBlue(CoralSubsystem coral, ElevatorSubsystem elevator, PivotSubsystem pivot,
+            DriveSubsystem drive) {
 
         // Logic structure Assuming blue limelight
         boolean blue = true;
@@ -118,7 +119,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                                         return RobotContainer.coralLevel != CoralLevel.UNDECIDED;
                                     }
                                 }),
-                        new ToCoralScore(coral, elevator, pivot, drive));
+                        new ToCoralScoreBlue(coral, elevator, pivot, drive));
                 break;
         }
     }

@@ -3,11 +3,13 @@ package frc.robot.commands.scoring;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.AlgaeLevel;
 import frc.robot.commands.PickUpAlgaeAndReturnToHome;
+import frc.robot.commands.movement.AutoDriveMeters;
 // import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -16,8 +18,9 @@ import frc.robot.subsystems.PivotSubsystem;
 
 //TO DO: Need to add which limelight we're using
 
-public class ToAlgaeScore extends SequentialCommandGroup {
-    public ToAlgaeScore(AlgaeSubsystem algae, ElevatorSubsystem elevator, PivotSubsystem pivot, DriveSubsystem drive,
+public class ToAlgaeScoreYellow extends SequentialCommandGroup {
+    public ToAlgaeScoreYellow(AlgaeSubsystem algae, ElevatorSubsystem elevator, PivotSubsystem pivot,
+            DriveSubsystem drive,
             boolean yellow) {
         switch (RobotContainer.algaeLevel) {
             // Add the specific commands in states in here.
@@ -28,8 +31,9 @@ public class ToAlgaeScore extends SequentialCommandGroup {
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(() -> elevator.elevatorAtAlgaeReefL2(yellow)),
                                 new WaitUntilCommand(() -> pivot.pivotAtAlgaeReef2DropOffAngle(yellow))),
-                        // new AutoDriveMeters(drive, 0.05, 0),
-                        new PickUpAlgaeAndReturnToHome(algae, elevator, pivot));
+                        new ParallelDeadlineGroup(
+                                new PickUpAlgaeAndReturnToHome(algae, elevator, pivot),
+                                new AutoDriveMeters(drive, 0, -0.1, 0.1)));
                 break;
             case THREE:
                 addCommands(
@@ -37,8 +41,9 @@ public class ToAlgaeScore extends SequentialCommandGroup {
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(() -> elevator.elevatorAtAlgaeReefL3(yellow)),
                                 new WaitUntilCommand(() -> pivot.pivotAtAlgaeReef3DropOffAngle(yellow))),
-                        // new AutoDriveMeters(drive, 0.05, 0),
-                        new PickUpAlgaeAndReturnToHome(algae, elevator, pivot));
+                        new ParallelDeadlineGroup(
+                                new PickUpAlgaeAndReturnToHome(algae, elevator, pivot),
+                                new AutoDriveMeters(drive, 0, -0.1, 0.1)));
                 break;
             case NONE:
                 break;
@@ -54,7 +59,7 @@ public class ToAlgaeScore extends SequentialCommandGroup {
                                         return RobotContainer.algaeLevel != AlgaeLevel.UNDECIDED;
                                     }
                                 }),
-                        new ToAlgaeScore(algae, elevator, pivot, drive, yellow));
+                        new ToAlgaeScoreYellow(algae, elevator, pivot, drive, yellow));
                 break;
         }
     }

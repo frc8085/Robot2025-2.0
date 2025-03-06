@@ -81,8 +81,7 @@ public class DriveToReefBlue extends Command {
     }
 
     public boolean isFinished() {
-        // TODO: Add a condition that allows the driver/operator to exit this command.
-        return (xPid.atSetpoint() && yPid.atSetpoint());
+        return ((xPid.atSetpoint() && yPid.atSetpoint()) || !this.limelight.hasTarget("limelight-blue"));
     }
 
 }
