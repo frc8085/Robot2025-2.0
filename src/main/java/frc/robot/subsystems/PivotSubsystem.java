@@ -91,39 +91,61 @@ public class PivotSubsystem extends SubsystemBase {
                 + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
-    public boolean pivotAtCoralDropOffAngle() {
-        return (getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()) &&
-                getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
-                        + Constants.PivotArmConstants.kPivotTolerance.getDegrees()));
+    // Pivot angle checks
+    public boolean pivotAtCoralDropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
     }
 
-    public boolean pivotAtAlgaeReefDropOffAngle() {
-        return (getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()) &&
-                getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                        + Constants.PivotArmConstants.kPivotTolerance.getDegrees()));
+    public boolean pivotAtAlgaeReef2DropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Flip
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef2Flip
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
     }
 
-    public boolean pivotAtAlgaeReef2FlipDropOffAngle() {
-        return (getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Intake
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()) &&
-                getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Intake
-                        + Constants.PivotArmConstants.kPivotTolerance.getDegrees()));
+    public boolean pivotAtAlgaeReef3DropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Flip
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef3Flip
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
     }
 
-    public boolean pivotAtAlgaeReef3FlipDropOffAngle() {
-        return (getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Intake
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()) &&
-                getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Intake
-                        + Constants.PivotArmConstants.kPivotTolerance.getDegrees()));
-    }
-
-    public boolean pivotAtCoral4DropOffAngle() {
-        return (getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff4
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()) &&
-                getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff4
-                        + Constants.PivotArmConstants.kPivotTolerance.getDegrees()));
+    public boolean pivotAtCoral4DropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff4
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff4
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff4
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff4
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
     }
 
     private Rotation2d motorPosToAngle(double pos) {
@@ -158,6 +180,7 @@ public class PivotSubsystem extends SubsystemBase {
                 * Constants.PivotArmConstants.kPivotArmFF;
         m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
+
     }
 
     public void setRotorPos(Rotation2d angle) {
@@ -193,7 +216,7 @@ public class PivotSubsystem extends SubsystemBase {
             // Get motor readings
             // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
             SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
-            SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
+            // SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         }
 
     }

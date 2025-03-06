@@ -7,8 +7,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class ToCoralDropOff1 extends SequentialCommandGroup {
-    public ToCoralDropOff1(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, boolean mirror) {
-        if (mirror) {
+    public ToCoralDropOff1(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, boolean yellow) {
+        if (yellow) {
             addCommands(
                     new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.CoralDropOff1,
                             true));

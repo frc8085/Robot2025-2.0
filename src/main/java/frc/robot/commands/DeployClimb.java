@@ -15,7 +15,7 @@ public class DeployClimb extends SequentialCommandGroup {
                 // Check safety
                 // new Windmill(elevatorSubsystem, pivotSubsystem,
                 // Constants.Windmill.WindmillState.Climb, false),
-                new RunCommand(() -> climberSubsystem.moveUp(), climberSubsystem).withTimeout(2),
+                new RunCommand(() -> climberSubsystem.moveUp(), climberSubsystem).withTimeout(2.5),
                 new InstantCommand(climberSubsystem::stop));
         // Switch to target state.
     }

@@ -2,17 +2,13 @@ package frc.robot.commands.scoring;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants;
-import frc.robot.Constants.PivotArmConstants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.AlgaeLevel;
 import frc.robot.RobotContainer.CoralLevel;
 import frc.robot.commands.DropCoral;
-import frc.robot.commands.Pivot;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
 import frc.robot.commands.states.ToCoralDropOff3;
@@ -73,7 +69,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff1(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff1Height),
-                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoralDropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
 
@@ -83,7 +79,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff2(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff2Height),
-                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoralDropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
 
@@ -93,7 +89,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff3(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff3Height),
-                                new WaitUntilCommand(pivot::pivotAtCoralDropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoralDropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
                 break;
@@ -102,7 +98,7 @@ public class ToCoralScore extends SequentialCommandGroup {
                         new ToCoralDropOff4(elevator, pivot, false),
                         new ParallelCommandGroup(
                                 new WaitUntilCommand(elevator::elevatorAtCoralDropOff4Height),
-                                new WaitUntilCommand(pivot::pivotAtCoral4DropOffAngle)),
+                                new WaitUntilCommand(() -> pivot.pivotAtCoral4DropOffAngle(false))),
                         new DropCoral(coral, elevator, pivot),
                         new ToHomeCommand(elevator, pivot, coral));
 

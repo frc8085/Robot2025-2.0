@@ -4,7 +4,6 @@
 
 package frc.robot.commands.movement;
 
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CommandScoreConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,18 +14,19 @@ public class AutoDriveMeters extends Command {
     private final DriveSubsystem m_drive;
     private double m_forwardMeters = 0;
     private double m_sidewaysMeters = 0;
+    private double m_speed = 0;
     boolean forwardReached = false;
     boolean sidewaysReached = false;
 
-    public AutoDriveMeters(DriveSubsystem drive, double forwardMeters, double sidewaysMeters) {
+    public AutoDriveMeters(DriveSubsystem drive, double forwardMeters, double sidewaysMeters, double speed) {
         m_drive = drive;
+        m_speed = speed;
         m_forwardMeters = forwardMeters;
         m_sidewaysMeters = sidewaysMeters;
         addRequirements(m_drive);
     }
 
     // Reset the odometry when the command is scheduled
-    // Then run the drive command to travel backwards
     @Override
     public void initialize() {
         super.initialize();
@@ -39,11 +39,11 @@ public class AutoDriveMeters extends Command {
         super.execute();
 
         m_drive.drive(
-                CommandScoreConstants.kMoveSpeed,
+                m_speed,
                 forwardReached ? 0 : Math.signum(m_forwardMeters),
                 sidewaysReached ? 0 : Math.signum(m_sidewaysMeters),
                 0,
-                true);
+                false);
     }
 
     // Stop driving when the command ends or is interrupted

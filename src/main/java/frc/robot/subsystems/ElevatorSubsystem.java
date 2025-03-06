@@ -208,18 +208,32 @@ public class ElevatorSubsystem extends SubsystemBase {
             + Constants.ElevatorConstants.kElevatorTolerance)));
   }
 
-  public boolean elevatorAtAlgaeReefL2() {
-    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef2Height
-        - Constants.ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef2Height
-            + Constants.ElevatorConstants.kElevatorTolerance)));
+  public boolean elevatorAtAlgaeReefL2(boolean yellow) {
+    if (!yellow) {
+      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef2Height
+          - Constants.ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef2Height
+              + Constants.ElevatorConstants.kElevatorTolerance)));
+    } else {
+      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef2FlipHeight
+          - Constants.ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef2FlipHeight
+              + Constants.ElevatorConstants.kElevatorTolerance)));
+    }
   }
 
-  public boolean elevatorAtAlgaeReefL3() {
-    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef3Height
-        - Constants.ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef3Height
-            + Constants.ElevatorConstants.kElevatorTolerance)));
+  public boolean elevatorAtAlgaeReefL3(boolean yellow) {
+    if (!yellow) {
+      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef3Height
+          - Constants.ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef3Height
+              + Constants.ElevatorConstants.kElevatorTolerance)));
+    } else {
+      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef3FlipHeight
+          - Constants.ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef3FlipHeight
+              + Constants.ElevatorConstants.kElevatorTolerance)));
+    }
   }
 
   public double minConflictHeight(Rotation2d target_angle) {
