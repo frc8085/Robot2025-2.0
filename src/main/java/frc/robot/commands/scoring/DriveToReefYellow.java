@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class DriveToCoralYellow extends Command {
+public class DriveToReefYellow extends Command {
     DriveSubsystem drive;
     LimelightSubsystem limelight;
     private boolean lostTarget;
@@ -19,17 +19,17 @@ public class DriveToCoralYellow extends Command {
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 0.03;
+    double kPX = 0.015;
     double kIX = 0;
     double kDX = 0;
     double kPY = 0.06;
     double kIY = 0;
     double kDY = 0;
-    double tolerance = 1;
+    double tolerance = .2;
     double xTarget = 9.85;
     double yTarget = 5.24;
 
-    public DriveToCoralYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
+    public DriveToReefYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
         this.limelight = limelight;
 
@@ -83,8 +83,7 @@ public class DriveToCoralYellow extends Command {
     }
 
     public boolean isFinished() {
-        // TODO: Add a condition that allows the driver/operator to exit this command.
-        return (xPid.atSetpoint() && yPid.atSetpoint());
+        return ((xPid.atSetpoint() && yPid.atSetpoint()) || !this.limelight.hasTarget("limelight-yellow"));
     }
 
 }

@@ -132,6 +132,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(
         Rotation2d.fromDegrees(getGyroOrientation()),
         getModulePositions());
+    SmartDashboard.putNumber("robot heading", getHeading());
+    SmartDashboard.putNumber("robot wrapped heading", getHeadingWrappedDegrees());
 
   }
 

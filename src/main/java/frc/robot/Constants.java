@@ -12,6 +12,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.commands.Pivot;
 
+import java.text.BreakIterator;
+
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
@@ -287,6 +289,7 @@ public final class Constants {
 
       Home(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotHome)),
       Climb(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotClimb)),
+      LimelightYellowTarget(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(74)),
       CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
       CoralPickupAlternate(ElevatorConstants.kElevatorCoralPickupAlternateHeight,

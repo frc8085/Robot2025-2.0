@@ -1,0 +1,66 @@
+package frc.robot.commands.scoring;
+
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.RobotContainer;
+import frc.robot.RobotContainer.AlgaeLevel;
+import frc.robot.commands.PickUpAlgaeAndReturnToHome;
+import frc.robot.commands.movement.AutoDriveMeters;
+// import frc.robot.commands.movement.AutoDriveMeters;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+
+//TO DO: Need to add which limelight we're using
+
+public class ToAlgaeScoreBlue extends SequentialCommandGroup {
+    public ToAlgaeScoreBlue(AlgaeSubsystem algae, ElevatorSubsystem elevator, PivotSubsystem pivot,
+            DriveSubsystem drive,
+            boolean yellow) {
+        switch (RobotContainer.algaeLevel) {
+            // Add the specific commands in states in here.
+            case TWO:
+                addCommands(
+                        new ScoringMoveToAlgaePickup(algae, elevator, pivot, false,
+                                yellow),
+                        new ParallelCommandGroup(
+                                new WaitUntilCommand(() -> elevator.elevatorAtAlgaeReefL2(yellow)),
+                                new WaitUntilCommand(() -> pivot.pivotAtAlgaeReef2DropOffAngle(yellow))),
+                        new ParallelDeadlineGroup(
+                                new PickUpAlgaeAndReturnToHome(algae, elevator, pivot),
+                                new AutoDriveMeters(drive, 0, 0.1, 0.1)));
+                break;
+            case THREE:
+                addCommands(
+                        new ScoringMoveToAlgaePickup(algae, elevator, pivot, true, yellow),
+                        new ParallelCommandGroup(
+                                new WaitUntilCommand(() -> elevator.elevatorAtAlgaeReefL3(yellow)),
+                                new WaitUntilCommand(() -> pivot.pivotAtAlgaeReef3DropOffAngle(yellow))),
+                        new ParallelDeadlineGroup(
+                                new PickUpAlgaeAndReturnToHome(algae, elevator, pivot),
+                                new AutoDriveMeters(drive, 0, 0.1, 0.1)));
+                break;
+            case NONE:
+                break;
+            case UNDECIDED:
+                addCommands(
+                        // Waits until a level is given and will rerun this current command
+                        // TODO: Add a way to exit this command in case you don't want to score or
+                        // change your mind
+                        new WaitUntilCommand(
+                                new BooleanSupplier() {
+                                    @Override
+                                    public boolean getAsBoolean() {
+                                        return RobotContainer.algaeLevel != AlgaeLevel.UNDECIDED;
+                                    }
+                                }),
+                        new ToAlgaeScoreBlue(algae, elevator, pivot, drive, yellow));
+                break;
+        }
+    }
+}

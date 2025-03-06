@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
+import frc.robot.Constants;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
@@ -77,8 +78,9 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void periodic() {
     // Put Indicator on Dashboard that a Note is in the Robot
-    SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
-
+    if (Constants.TuningModeConstants.kCoralTuning) {
+      SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
+    }
   }
 
 }
