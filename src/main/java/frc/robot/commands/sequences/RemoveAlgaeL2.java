@@ -28,13 +28,13 @@ public class RemoveAlgaeL2 extends SequentialCommandGroup {
                                 new ParallelCommandGroup(
                                                 new SequentialCommandGroup(
                                                                 new WaitUntilCommand(() -> elevatorSubsystem
-                                                                                .elevatorAtAlgaeReefL3(yellow)),
-                                                                new PrintCommand("elevator at Algae L3")),
+                                                                                .elevatorAtAlgaeReefL2(yellow)),
+                                                                new PrintCommand("elevator at Algae L2")),
                                                 new SequentialCommandGroup(
                                                                 new WaitUntilCommand(() -> pivotSubsystem
-                                                                                .pivotAtAlgaeReef3DropOffAngle(
+                                                                                .pivotAtAlgaeReef2DropOffAngle(
                                                                                                 yellow)),
-                                                                new PrintCommand("pivot at algae L3"))),
+                                                                new PrintCommand("pivot at algae L2"))),
                                 new ParallelDeadlineGroup(
                                                 new PickUpAlgae(algaeSubsystem),
                                                 new AutoMoveForwardForTime(driveSubsystem, limelight, yellow,
