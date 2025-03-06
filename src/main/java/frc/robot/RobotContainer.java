@@ -65,6 +65,12 @@ import frc.robot.commands.scoring.ScoreAlgaeNetBlue;
 import frc.robot.commands.scoring.ScoreAlgaeNetYellow;
 import frc.robot.commands.scoring.ScoreCoralL4;
 import frc.robot.commands.DeployClimb;
+import frc.robot.commands.sequences.MoveAndScoreCoralL1;
+import frc.robot.commands.sequences.MoveAndScoreCoralL2;
+import frc.robot.commands.sequences.MoveAndScoreCoralL3;
+import frc.robot.commands.sequences.MoveAndScoreCoralL4;
+import frc.robot.commands.sequences.RemoveAlgaeL2;
+import frc.robot.commands.sequences.RemoveAlgaeL3;
 import frc.robot.commands.sequences.RemoveAlgaeL3ScoreL3;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
@@ -312,35 +318,43 @@ public class RobotContainer {
 
                 algaeGround.onTrue(new PickUpAlgaeFromGround(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
 
-                algaeReef2.onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem,
-                                false,
-                                false));
-                algaeReef3.onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem, true,
-                                false));
+                algaeReef2.onTrue(new RemoveAlgaeL2(driveSubsystem, elevatorSubsystem, limelight, pivotSubsystem,
+                                algaeSubsystem, coralSubsystem, false));
+                algaeReef3.onTrue(new RemoveAlgaeL3(driveSubsystem, elevatorSubsystem, limelight, pivotSubsystem,
+                                algaeSubsystem, coralSubsystem, false));
 
                 algaeProcessor.onTrue(new ToAlgaeGround(elevatorSubsystem, pivotSubsystem));
 
-                coralDropOff1.onTrue(new ToCoralDropOff1(elevatorSubsystem, pivotSubsystem, false));
+                coralDropOff1.onTrue(new MoveAndScoreCoralL1(driveSubsystem, elevatorSubsystem, limelight,
+                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
 
-                coralDropOff2.onTrue(new ToCoralDropOff2(elevatorSubsystem, pivotSubsystem, false));
+                coralDropOff2.onTrue(new MoveAndScoreCoralL2(driveSubsystem, elevatorSubsystem, limelight,
+                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
 
-                coralDropOff3.onTrue(new ToCoralDropOff3(elevatorSubsystem, pivotSubsystem, false));
+                coralDropOff3.onTrue(new MoveAndScoreCoralL3(driveSubsystem, elevatorSubsystem, limelight,
+                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
 
-                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
+                coralDropOff4.onTrue(new MoveAndScoreCoralL4(driveSubsystem, elevatorSubsystem, limelight,
+                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
 
-                algaeReef2.and(altPositionRight).onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem,
-                                pivotSubsystem, false, true));
+                algaeReef2.and(altPositionRight).onTrue(new RemoveAlgaeL2(driveSubsystem, elevatorSubsystem, limelight,
+                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
                 algaeReef3.and(altPositionRight).onTrue(
-                                new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem, true, true));
+                                new RemoveAlgaeL3(driveSubsystem, elevatorSubsystem, limelight, pivotSubsystem,
+                                                algaeSubsystem, coralSubsystem, true));
 
                 coralDropOff1.and(altPositionRight)
-                                .onTrue(new ToCoralDropOff1(elevatorSubsystem, pivotSubsystem, true));
+                                .onTrue(new MoveAndScoreCoralL1(driveSubsystem, elevatorSubsystem, limelight,
+                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
                 coralDropOff2.and(altPositionRight)
-                                .onTrue(new ToCoralDropOff2(elevatorSubsystem, pivotSubsystem, true));
+                                .onTrue(new MoveAndScoreCoralL2(driveSubsystem, elevatorSubsystem, limelight,
+                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
                 coralDropOff3.and(altPositionRight)
-                                .onTrue(new ToCoralDropOff3(elevatorSubsystem, pivotSubsystem, true));
+                                .onTrue(new MoveAndScoreCoralL3(driveSubsystem, elevatorSubsystem, limelight,
+                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
                 coralDropOff4.and(altPositionRight)
-                                .onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
+                                .onTrue(new MoveAndScoreCoralL4(driveSubsystem, elevatorSubsystem, limelight,
+                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
 
                 // Set Left Joystick for manual elevator/pivot movement
                 final Trigger raiseElevator = operatorController.axisLessThan(1, -0.25);
