@@ -19,13 +19,13 @@ public class DriveToReefYellow extends Command {
 
     // TO BE TUNED:
     // double theta = 0; //Angle of the reef.
-    double kPX = 0.03;
+    double kPX = 0.015;
     double kIX = 0;
     double kDX = 0;
     double kPY = 0.06;
     double kIY = 0;
     double kDY = 0;
-    double tolerance = 1;
+    double tolerance = .2;
     double xTarget = 9.85;
     double yTarget = 5.24;
 

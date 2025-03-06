@@ -31,6 +31,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -44,6 +47,7 @@ import frc.robot.commands.InitializePivotAndElevator;
 import frc.robot.commands.LockPivotAndElevatorCommand;
 import frc.robot.commands.PickUpAlgaeFromGround;
 import frc.robot.commands.PickUpCoralFromSource;
+import frc.robot.commands.Pivot;
 import frc.robot.commands.RetractClimb;
 import frc.robot.commands.ScoreAlgae;
 import frc.robot.commands.ScoreAlgaeNetLeft;
@@ -52,6 +56,7 @@ import frc.robot.commands.ScoreCoralL4;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.autoCommands.AutoYCoral1;
+import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.AlignAndDriveBlue;
 import frc.robot.commands.scoring.AlignAndDriveYellow;
@@ -97,7 +102,7 @@ public class RobotContainer {
 
         private final Field2d field;
 
-        public boolean automated = true; // Controls automation state
+        public boolean automated = false; // Controls automation state
 
         // Register Named Commands for PathPlanner
         private void configureAutoCommands() {
@@ -232,26 +237,30 @@ public class RobotContainer {
                 final Trigger limelightTrigger1 = driverController.x();
                 final Trigger limelightTrigger2 = driverController.y();
 
-                // Pressing the trigger in automation mode will run this command.
-                limelightTrigger1.and(new BooleanSupplier() {
-                        @Override
-                        public boolean getAsBoolean() {
-                                return automated;
-                        }
-                }).onTrue(new SequentialCommandGroup(
-                                new AlignAndDriveBlue(driveSubsystem, limelight),
-                                new ToScoreBlue(driveSubsystem, coralSubsystem, algaeSubsystem, pivotSubsystem,
-                                                elevatorSubsystem, false)));
-                // Pressing the trigger NOT in automation mode will run this one.
+                // // Pressing the trigger in automation mode will run this command.
+                // limelightTrigger1.and(new BooleanSupplier() {
+                // @Override
+                // public boolean getAsBoolean() {
+                // return automated;
+                // }
+                // }).onTrue(new SequentialCommandGroup(
+                // new AlignAndDriveBlue(driveSubsystem, limelight)));
+                // // new ToScoreBlue(driveSubsystem, coralSubsystem, algaeSubsystem,
+                // // pivotSubsystem,
+                // // elevatorSubsystem, false)));
+                // // Pressing the trigger NOT in automation mode will run this one.
 
-                limelightTrigger1.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new AlignAndDriveBlue(driveSubsystem,
-                                                limelight));
+                // limelightTrigger1.and(
+                // new BooleanSupplier() {
+                // @Override
+                // public boolean getAsBoolean() {
+                // return !automated;
+                // }
+                // }).onTrue(new AlignAndDriveBlue(driveSubsystem,
+                // limelight));
+                limelightTrigger1.onTrue(
+                                new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveBlue(driveSubsystem,
+                                                limelight)));
 
                 limelightTrigger2.and(
                                 new BooleanSupplier() {
@@ -261,9 +270,9 @@ public class RobotContainer {
                                         }
                                 }).onTrue(new SequentialCommandGroup(
                                                 new AlignAndDriveYellow(driveSubsystem,
-                                                                limelight),
-                                                new ToScoreYellow(driveSubsystem, coralSubsystem, algaeSubsystem,
-                                                                pivotSubsystem, elevatorSubsystem, automated)));
+                                                                limelight)));
+                // new ToScoreYellow(driveSubsystem, coralSubsystem, algaeSubsystem,
+                // pivotSubsystem, elevatorSubsystem, automated)));
                 // Pressing the trigger NOT in automation mode will run this one.
                 limelightTrigger2.and(
                                 new BooleanSupplier() {
@@ -271,8 +280,12 @@ public class RobotContainer {
                                         public boolean getAsBoolean() {
                                                 return !automated;
                                         }
-                                }).onTrue(new DriveToReefYellow(driveSubsystem,
-                                                limelight));
+                                })
+                                .onTrue(new ParallelCommandGroup(new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.LimelightYellowTarget, false),
+                                                new ParallelRaceGroup(new WaitCommand(3),
+                                                                new AlignAndDriveYellow(driveSubsystem,
+                                                                                limelight))));
 
                 // Driver operations
                 final Trigger ejectCoral = driverController.b();
@@ -285,6 +298,7 @@ public class RobotContainer {
                 // final Trigger intakeMotorsOff = driverController.back();
                 final Trigger altButton = driverController.back();
                 final Trigger toggleClimber = driverController.povLeft();
+                final Trigger right = driverController.povRight();
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
@@ -312,26 +326,32 @@ public class RobotContainer {
                 shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(algaeSubsystem,
                                 elevatorSubsystem, pivotSubsystem,
                                 coralSubsystem));
-                raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
-                                climberSubsystem))
-                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                                                climberSubsystem));
 
-                toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new DeployClimb(climberSubsystem),
-                                new RetractClimb(climberSubsystem),
-                                climberSubsystem::climberAtHomePosition));
+                toggleClimber.onTrue(new AutoDriveMeters(driveSubsystem, -0.17, 0, 0.1));
+                right.onTrue(new AutoDriveMeters(driveSubsystem, 0.17, 0, 0.1));
+                raiseClimber.onTrue(new AutoDriveMeters(driveSubsystem, 0, 0.1, 0.1));
+                lowerClimber.onTrue(new AutoDriveMeters(driveSubsystem, 0, -0.1, 0.1));
+                // raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
+                // climberSubsystem))
+                // .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                // climberSubsystem));
 
-                toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new LockPivotAndElevatorCommand(elevatorSubsystem, pivotSubsystem).withTimeout(15)
-                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
-                                climberSubsystem::climberAtHomePosition));
+                // toggleClimber.toggleOnTrue(new ConditionalCommand(
+                // new DeployClimb(climberSubsystem),
+                // new RetractClimb(climberSubsystem),
+                // climberSubsystem::climberAtHomePosition));
 
-                lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
-                                climberSubsystem))
-                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                                                climberSubsystem));
+                // toggleClimber.toggleOnTrue(new ConditionalCommand(
+                // new LockPivotAndElevatorCommand(elevatorSubsystem,
+                // pivotSubsystem).withTimeout(15)
+                // .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                // new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
+                // climberSubsystem::climberAtHomePosition));
+
+                // lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
+                // climberSubsystem))
+                // .onFalse(new RunCommand(() -> climberSubsystem.stop(),
+                // climberSubsystem));
 
                 // Operator Controls
                 // final Trigger manualCoral = operatorController.rightTrigger();
