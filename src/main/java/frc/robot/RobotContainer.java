@@ -236,11 +236,11 @@ public class RobotContainer {
         private void configureButtonBindings() {
 
                 // Manual Zero buttons for elevator and pivot
-                final Trigger zeroElevator = operatorController.start();
+                // final Trigger zeroElevator = operatorController.start();
                 final Trigger zeroPivot = operatorController.back();
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
-                zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
+                // zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
                 zeroPivot.onTrue(new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
 
                 // Reset heading of robot for field relative drive
@@ -354,18 +354,6 @@ public class RobotContainer {
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
                                                 climberSubsystem));
 
-                // toggleClimber.toggleOnTrue(new ConditionalCommand(
-                // new DeployClimb(climberSubsystem),
-                // new RetractClimb(climberSubsystem),
-                // climberSubsystem::climberAtHomePosition));
-
-                // toggleClimber.toggleOnTrue(new ConditionalCommand(
-                // new LockPivotAndElevatorCommand(elevatorSubsystem,
-                // pivotSubsystem).withTimeout(15)
-                // .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                // new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
-                // climberSubsystem::climberAtHomePosition));
-
                 // Operator Controls
                 // final Trigger manualCoral = operatorController.rightTrigger();
                 // final Trigger manualAlgae = operatorController.leftTrigger();
@@ -419,8 +407,23 @@ public class RobotContainer {
                                 }).onTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
                                 .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));
 
+                // climber control
+                final Trigger toggleClimber = operatorController.start();
+
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
+                                new DeployClimb(climberSubsystem),
+                                new RetractClimb(climberSubsystem),
+                                climberSubsystem::climberAtHomePosition));
+
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
+                                new LockPivotAndElevatorCommand(elevatorSubsystem,
+                                                pivotSubsystem).withTimeout(15)
+                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
+                                climberSubsystem::climberAtHomePosition));
+
                 // position controls
-                final Trigger initializeInputs = operatorController.leftBumper();
+                final Trigger home = operatorController.leftBumper();
                 final Trigger algaeGround = operatorController.povDown();
                 final Trigger algaeReef2 = operatorController.povRight();
                 final Trigger algaeReef3 = operatorController.povUp();
@@ -431,7 +434,10 @@ public class RobotContainer {
                 final Trigger coralDropOff1 = operatorController.a();
                 final Trigger altPositionRight = operatorController.rightBumper();
 
-                initializeInputs.onTrue(new ResetOperatorInputs());
+                // initializeInputs.onTrue(new ResetOperatorInputs());
+
+                home.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
+                                false));
 
                 algaeGround.and(
                                 new BooleanSupplier() {
