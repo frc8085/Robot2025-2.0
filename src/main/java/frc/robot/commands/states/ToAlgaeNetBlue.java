@@ -6,10 +6,10 @@ import frc.robot.commands.Windmill;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class ToAlgaeNetLeftCommand extends SequentialCommandGroup {
-    public ToAlgaeNetLeftCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
+public class ToAlgaeNetBlue extends SequentialCommandGroup {
+    public ToAlgaeNetBlue(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
         addCommands(
-                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.AlgaeNetLeft, false)
+                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.AlgaeNetBlue, false)
 
         );
 

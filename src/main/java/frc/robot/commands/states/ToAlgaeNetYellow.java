@@ -6,12 +6,12 @@ import frc.robot.commands.Windmill;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class ToAlgaeNetRightCommand extends SequentialCommandGroup {
-    public ToAlgaeNetRightCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
+public class ToAlgaeNetYellow extends SequentialCommandGroup {
+    public ToAlgaeNetYellow(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
         addCommands(
                 // Switch to a transition state
                 // Maybe turn off all the motors
-                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.AlgaeNetRight, false)
+                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.AlgaeNetYellow, false)
         // Switch to target state.
         );
     }

@@ -50,24 +50,21 @@ import frc.robot.commands.PickUpCoralFromSource;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.RetractClimb;
 import frc.robot.commands.ScoreAlgae;
-import frc.robot.commands.ScoreAlgaeNetLeft;
-import frc.robot.commands.ScoreAlgaeNetRight;
+import frc.robot.commands.ScoreAlgaeNetBlue;
+import frc.robot.commands.ScoreAlgaeNetYellow;
 import frc.robot.commands.ScoreCoralL4;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
-import frc.robot.commands.movement.AutoPosition;
+import frc.robot.commands.movement.AutoPositionLeftRight;
 import frc.robot.commands.DeployClimb;
 import frc.robot.commands.scoring.AlignAndDriveBlue;
 import frc.robot.commands.scoring.AlignAndDriveYellow;
 import frc.robot.commands.scoring.AlignToAprilTagYellow;
 import frc.robot.commands.scoring.DriveToReefBlue;
 import frc.robot.commands.scoring.DriveToReefYellow;
-import frc.robot.commands.scoring.ResetOperatorInputs;
-import frc.robot.commands.scoring.ToScoreBlue;
-import frc.robot.commands.scoring.ToScoreYellow;
 import frc.robot.commands.sequences.AutoRemoveAlgaeL3ScoreL3;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
@@ -104,8 +101,6 @@ public class RobotContainer {
 
         private final Field2d field;
 
-        public boolean automated = false; // Controls automation state
-
         // Register Named Commands for PathPlanner
         private void configureAutoCommands() {
                 NamedCommands.registerCommand("InitializePE",
@@ -121,38 +116,10 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoCoralSource",
                                 new AutoCoralSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
                 NamedCommands.registerCommand("AutoYLimelightRight",
-                                new AutoLimelightPosition(driveSubsystem, limelight, true));
+                                new AutoLimelightPosition(driveSubsystem, limelight, true, true));
                 NamedCommands.registerCommand("AutoYMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
         }
-
-        public enum ScoreDirection {
-                LEFT,
-                RIGHT,
-                UNDECIDED
-        }
-
-        public enum AlgaeLevel {
-                TWO,
-                THREE,
-                NONE,
-                UNDECIDED
-        }
-
-        public enum CoralLevel {
-                ONE,
-                TWO,
-                THREE,
-                FOUR,
-                NONE,
-                UNDECIDED
-        }
-
-        // TODO: Implement buttons that change these values. Consider using LEDs to show
-        // the target mode
-        public static ScoreDirection scoreDirection = ScoreDirection.UNDECIDED;
-        public static AlgaeLevel algaeLevel = AlgaeLevel.UNDECIDED;
-        public static CoralLevel coralLevel = CoralLevel.UNDECIDED;
 
         // The driver's controller
         CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -212,15 +179,6 @@ public class RobotContainer {
                 field = new Field2d();
                 SmartDashboard.putData("Field", field);
 
-                // Smart Dashboard Buttons
-                // SmartDashboard.putBoolean("Automation", getAutomated());
-                // SmartDashboard.putBoolean("Direction Chosen", scoreDirectionChosen());
-                // SmartDashboard.putBoolean("Algae Chosen", algaeLevelChosen());
-                // SmartDashboard.putBoolean("Coral Chosen", coralLevelChosen());
-        }
-
-        public boolean getAutomated() {
-                return automated;
         }
 
         /**
@@ -237,7 +195,7 @@ public class RobotContainer {
 
                 // Manual Zero buttons for elevator and pivot
                 // final Trigger zeroElevator = operatorController.start();
-                final Trigger zeroPivot = operatorController.back();
+                final Trigger zeroPivot = operatorController.start();
 
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 // zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
@@ -249,72 +207,27 @@ public class RobotContainer {
 
                 // // Limelight Buttons
                 final Trigger limelightTrigger1 = driverController.x();
-                final Trigger limelightTrigger2 = driverController.y();
+                final Trigger limelightTrigger2 = driverController.b();
 
-                // // Pressing the trigger in automation mode will run this command.
-                // limelightTrigger1.and(new BooleanSupplier() {
-                // @Override
-                // public boolean getAsBoolean() {
-                // return automated;
-                // }
-                // }).onTrue(new SequentialCommandGroup(
-                // new AlignAndDriveBlue(driveSubsystem, limelight)));
-                // // new ToScoreBlue(driveSubsystem, coralSubsystem, algaeSubsystem,
-                // // pivotSubsystem,
-                // // elevatorSubsystem, false)));
-                // // Pressing the trigger NOT in automation mode will run this one.
-
-                // limelightTrigger1.and(
-                // new BooleanSupplier() {
-                // @Override
-                // public boolean getAsBoolean() {
-                // return !automated;
-                // }
-                // }).onTrue(new AlignAndDriveBlue(driveSubsystem,
-                // limelight));
                 limelightTrigger1.onTrue(
                                 new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveBlue(driveSubsystem,
                                                 limelight)));
 
-                limelightTrigger2.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new SequentialCommandGroup(
-                                                new AlignAndDriveYellow(driveSubsystem,
-                                                                limelight),
-                                                new ToScoreYellow(driveSubsystem, coralSubsystem, algaeSubsystem,
-                                                                pivotSubsystem, elevatorSubsystem, true)));
-                // new ToScoreYellow(driveSubsystem, coralSubsystem, algaeSubsystem,
-                // pivotSubsystem, elevatorSubsystem, automated)));
-                // Pressing the trigger NOT in automation mode will run this one.
-                limelightTrigger2.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                })
-                                .onTrue(new ParallelCommandGroup(new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.LimelightYellowTarget, false),
-                                                new ParallelRaceGroup(new WaitCommand(3),
-                                                                new AlignAndDriveYellow(driveSubsystem,
-                                                                                limelight))));
+                limelightTrigger2.onTrue(
+                                new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveYellow(driveSubsystem,
+                                                limelight)));
 
                 // Driver operations
-                final Trigger ejectCoral = driverController.b();
+                final Trigger ejectCoral = driverController.y();
                 final Trigger pickUpCoral = driverController.leftTrigger();
                 final Trigger ejectAlgae = driverController.a();
-                final Trigger shootAlgaeLeft = driverController.leftBumper();
-                final Trigger shootAlgaeRight = driverController.rightBumper();
-                final Trigger raiseClimber = driverController.povUp();
-                final Trigger lowerClimber = driverController.povDown();
-                // final Trigger intakeMotorsOff = driverController.back();
+                final Trigger shootAlgaeNetBlue = driverController.leftBumper();
+                final Trigger shootAlgaeNetYellow = driverController.rightBumper();
+                final Trigger raiseClimber = driverController.povRight();
+                final Trigger lowerClimber = driverController.povLeft();
                 final Trigger altButton = driverController.back();
-                final Trigger left = driverController.povLeft();
-                final Trigger right = driverController.povRight();
+                final Trigger left = driverController.povDown();
+                final Trigger right = driverController.povUp();
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
@@ -323,28 +236,23 @@ public class RobotContainer {
                                 elevatorSubsystem, pivotSubsystem));
                 pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem,
                                 elevatorSubsystem, pivotSubsystem, false));
-                // pickUpCoral.and(altButton).whileTrue(new RunCommand(() ->
-                // coralSubsystem.pickup(), coralSubsystem))
-                // .onFalse(new SequentialCommandGroup(
-                // new InstantCommand(coralSubsystem::stop),
-                // new WaitCommand(0.25),
-                // new Windmill(elevatorSubsystem, pivotSubsystem,
-                // Constants.Windmill.WindmillState.Home, false)));
                 pickUpCoral.and(altButton)
                                 .onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem,
                                                 pivotSubsystem,
                                                 true));
 
                 ejectAlgae.onTrue(new ScoreAlgae(algaeSubsystem));
-                shootAlgaeLeft.onTrue(new ScoreAlgaeNetLeft(algaeSubsystem,
+                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(algaeSubsystem,
                                 elevatorSubsystem, pivotSubsystem,
                                 coralSubsystem));
-                shootAlgaeRight.onTrue(new ScoreAlgaeNetRight(algaeSubsystem,
+                shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(algaeSubsystem,
                                 elevatorSubsystem, pivotSubsystem,
                                 coralSubsystem));
 
-                left.onTrue(new AutoPosition(driveSubsystem, limelight, false));
-                right.onTrue(new AutoPosition(driveSubsystem, limelight, true));
+                left.onTrue(new AutoPositionLeftRight(driveSubsystem, limelight, false,
+                                (limelight.hasTarget("limelight-yellow"))));
+                right.onTrue(new AutoPositionLeftRight(driveSubsystem, limelight, true,
+                                (limelight.hasTarget("limelight-yellow"))));
                 raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
                                 climberSubsystem))
                                 .onFalse(new RunCommand(() -> climberSubsystem.stop(),
@@ -355,60 +263,23 @@ public class RobotContainer {
                                                 climberSubsystem));
 
                 // Operator Controls
-                // final Trigger manualCoral = operatorController.rightTrigger();
-                // final Trigger manualAlgae = operatorController.leftTrigger();
+                final Trigger manualCoral = operatorController.rightTrigger();
+                final Trigger manualAlgae = operatorController.leftTrigger();
 
-                final Trigger moveLeft = operatorController.leftTrigger();
-                final Trigger moveRight = operatorController.rightTrigger();
-
-                moveLeft.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        scoreDirection = ScoreDirection.LEFT;
-                                }));
-
-                // Pressing the trigger NOT in automation mode will run this one.
-                moveLeft.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                })
-                                .onTrue(new SequentialCommandGroup(
-                                                new ToCoralSource(elevatorSubsystem, pivotSubsystem, false),
-                                                new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
+                manualCoral.onTrue(new SequentialCommandGroup(
+                                new ToCoralSource(elevatorSubsystem, pivotSubsystem, false),
+                                new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
                                 .onFalse(new SequentialCommandGroup(
                                                 new InstantCommand(coralSubsystem::stop),
                                                 new WaitCommand(0.25),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                                 Constants.Windmill.WindmillState.Home, false)));
 
-                moveRight.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        scoreDirection = ScoreDirection.RIGHT;
-                                }));
-
-                moveRight.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
+                manualAlgae.onTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
                                 .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));
 
                 // climber control
-                final Trigger toggleClimber = operatorController.start();
+                final Trigger toggleClimber = operatorController.back();
 
                 toggleClimber.toggleOnTrue(new ConditionalCommand(
                                 new DeployClimb(climberSubsystem),
@@ -439,153 +310,23 @@ public class RobotContainer {
                 home.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
                                 false));
 
-                algaeGround.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        algaeLevel = AlgaeLevel.NONE;
-                                }));
+                algaeGround.onTrue(new PickUpAlgaeFromGround(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
 
-                algaeGround.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new PickUpAlgaeFromGround(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
+                algaeReef2.onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem,
+                                false,
+                                false));
+                algaeReef3.onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem, true,
+                                false));
 
-                algaeReef2.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        algaeLevel = AlgaeLevel.TWO;
-                                }));
+                algaeProcessor.onTrue(new ToAlgaeGround(elevatorSubsystem, pivotSubsystem));
 
-                algaeReef2.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                })
-                                .onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem,
-                                                false,
-                                                false));
-                algaeReef3.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        algaeLevel = AlgaeLevel.THREE;
-                                }));
+                coralDropOff1.onTrue(new ToCoralDropOff1(elevatorSubsystem, pivotSubsystem, false));
 
-                algaeReef3.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                })
-                                .onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem, pivotSubsystem, true,
-                                                false));
+                coralDropOff2.onTrue(new ToCoralDropOff2(elevatorSubsystem, pivotSubsystem, false));
 
-                algaeProcessor.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        algaeLevel = AlgaeLevel.NONE;
-                                }));
+                coralDropOff3.onTrue(new ToCoralDropOff3(elevatorSubsystem, pivotSubsystem, false));
 
-                algaeProcessor.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new ToAlgaeGround(elevatorSubsystem, pivotSubsystem));
-
-                coralDropOff1.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        coralLevel = CoralLevel.ONE;
-                                }));
-
-                coralDropOff1.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new ToCoralDropOff1(elevatorSubsystem, pivotSubsystem, false));
-
-                coralDropOff2.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        coralLevel = CoralLevel.TWO;
-                                }));
-
-                coralDropOff2.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new ToCoralDropOff2(elevatorSubsystem, pivotSubsystem, false));
-
-                coralDropOff3.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        coralLevel = CoralLevel.THREE;
-                                }));
-
-                coralDropOff3.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new ToCoralDropOff3(elevatorSubsystem, pivotSubsystem, false));
-
-                coralDropOff4.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return automated;
-                                        }
-                                }).onTrue(new InstantCommand(() -> {
-                                        coralLevel = CoralLevel.FOUR;
-                                }));
-
-                coralDropOff4.and(
-                                new BooleanSupplier() {
-                                        @Override
-                                        public boolean getAsBoolean() {
-                                                return !automated;
-                                        }
-                                }).onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
+                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
                 algaeReef2.and(altPositionRight).onTrue(new PickUpAlgaeFromReef(algaeSubsystem, elevatorSubsystem,
                                 pivotSubsystem, false, true));
@@ -695,35 +436,4 @@ public class RobotContainer {
                 operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
         }
 
-        public void turnOffAutomated() {
-                automated = false; // Controls automation state
-        }
-
-        public void turnOnAutomated() {
-                automated = true;
-        }
-
-        public boolean scoreDirectionChosen() {
-                if (scoreDirection == ScoreDirection.UNDECIDED) {
-                        return false;
-                } else {
-                        return true;
-                }
-        }
-
-        public boolean algaeLevelChosen() {
-                if (algaeLevel == AlgaeLevel.UNDECIDED) {
-                        return false;
-                } else {
-                        return true;
-                }
-        }
-
-        public boolean coralLevelChosen() {
-                if (coralLevel == CoralLevel.UNDECIDED) {
-                        return false;
-                } else {
-                        return true;
-                }
-        }
 }

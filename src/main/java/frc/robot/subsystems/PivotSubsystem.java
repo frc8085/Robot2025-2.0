@@ -86,8 +86,13 @@ public class PivotSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean pivotAtAlgaeRightScorePosition() {
-        return getCurrentRotation().getDegrees() <= PivotArmConstants.kAlgaeNetRightPivot
+    public boolean pivotAtAlgaeYellowScorePosition() {
+        return getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetYellow
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
+    }
+
+    public boolean pivotAtAlgaeBlueScorePosition() {
+        return getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetBlue
                 + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
