@@ -65,6 +65,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.commands.DriveToCoral;
+import frc.robot.commands.AlignHeadingAlternate;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -173,7 +174,8 @@ public class RobotContainer {
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
                 ejectCoral.and(altButton).onTrue(new DropCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
                 pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
-                autoAlign.onTrue(new DriveToCoral(driveSubsystem, limelight));
+                autoAlign.onTrue(new AlignHeadingAlternate(driveSubsystem, limelight, true)); // DriveToCoral(driveSubsystem,
+                                                                                              // limelight)
                 // pickUpCoral.and(altButton).whileTrue(new RunCommand(() ->
                 // coralSubsystem.pickup(), coralSubsystem))
                 // .onFalse(new SequentialCommandGroup(

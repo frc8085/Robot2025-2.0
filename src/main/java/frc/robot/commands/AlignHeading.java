@@ -46,7 +46,7 @@ public class AlignHeading extends Command {
 
         double thetaInitial = Math.atan(xAbs / baseAbs);
         if ((thetaInitial - thetaFinal) < tolerance) {
-            if (xOffset > 0) {
+            if (xOffset < 0) {
                 drive.drive(maxSpeed, 0, 0, -0.3, false);
             } else {
                 drive.drive(maxSpeed, 0, 0, 0.3, false);
