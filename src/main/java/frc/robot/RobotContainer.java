@@ -239,7 +239,7 @@ public class RobotContainer {
 
                 limelightTrigger2.onTrue(
                                 new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveYellow(driveSubsystem,
-                                                limelight)));
+                                                limelight, elevatorSubsystem, pivotSubsystem)));
 
                 // Driver operations
                 final Trigger ejectCoral = driverController.a();

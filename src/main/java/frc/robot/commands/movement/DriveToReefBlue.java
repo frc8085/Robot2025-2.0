@@ -3,6 +3,7 @@ package frc.robot.commands.movement;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -51,7 +52,7 @@ public class DriveToReefBlue extends Command {
         double tx = limelight.getX("limelight-blue");
         double ty = limelight.getY("limelight-blue");
 
-        xTarget = -2.82 * ty + 16.2 + 8; // Heuristic equation we found
+        xTarget = -2.82 * ty + 16.2 - Constants.LimelightConstants.bluefudge; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);

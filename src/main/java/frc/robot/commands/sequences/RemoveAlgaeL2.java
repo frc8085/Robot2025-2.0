@@ -1,7 +1,7 @@
 package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -36,7 +36,7 @@ public class RemoveAlgaeL2 extends SequentialCommandGroup {
                                                                                 .pivotAtAlgaeReef2DropOffAngle(
                                                                                                 yellow)),
                                                                 new PrintCommand("pivot at algae L2"))),
-                                new ParallelDeadlineGroup(
+                                new ParallelRaceGroup(
                                                 new PickUpAlgae(algaeSubsystem),
                                                 new AutoMoveForwardForTime(driveSubsystem, limelight, yellow,
                                                                 2)),

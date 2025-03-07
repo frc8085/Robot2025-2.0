@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -38,8 +36,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   // get encoder data
   private StatusSignal<Angle> elevatorPosition;
   private StatusSignal<AngularVelocity> elevatorVelocity;
-
-  // private driveState = new DriveState.getInstance();
 
   private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
@@ -91,28 +87,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorPosition = m_elevatorMotor.getPosition();
     elevatorVelocity = m_elevatorEncoder.getVelocity();
 
-    // config.HardwareLimitSwitch.ForwardLimitSource =
-    // ForwardLimitSourceValue.LimitSwitchPin;
-    // config.HardwareLimitSwitch.ForwardLimitRemoteSensorID = 0;
-    // config.HardwareLimitSwitch.ForwardLimitEnable = true;
-    // config.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = false;
-
     // Apply Configs
     m_elevatorMotor.getConfigurator().apply(config);
     m_elevatorMotor.getConfigurator().apply(slot0Configs);
 
   }
 
-  // private double rotationsToMotorPosition(double rotations) {
-  // return rotations * Constants.ElevatorConstants.kElevatorMotorGearRatio;
-  // }
-
-  // private double motorPositionToInches(double motorPosition) {
-  // return motorPosition / Constants.ElevatorConstants.kElevatorMotorGearRatio;
-  // }
-
   // Setting the height of the elevator
-  // public void setPos(double rotations) {
   public void setPos(double rotations) {
 
     // Checks to see if the elevator height is below the minimum, and if it is, set
@@ -134,19 +115,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       ff = ElevatorConstants.kElevatorStage2FF;
     }
 
-    // motionMagicControl.Position = rotationsToMotorPosition(rotations);
     motionMagicPositionControl.Position = rotations;
     motionMagicVelocityControl.FeedForward = ff;
     m_elevatorMotor.setControl(motionMagicPositionControl);
-    // SmartDashboard.putNumber("height value", rotations);
-    // SmartDashboard.putNumber("motor value", rotationsToMotorPosition(rotations));
   }
-
-  // set the zero value of the motor encoder
-  // public void zero(double rotations) {
-  // m_elevatorMotor.setPosition(
-  // rotations * Constants.ElevatorConstants.kElevatorMotorGearRatio);
-  // }
 
   public void zero() {
     m_elevatorMotor.setPosition(
@@ -164,12 +136,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorVelocity.refresh();
     return elevatorVelocity.getValueAsDouble();
   }
-
-  // // translate the current elevator encoder position into elevator height
-  // public double getCurrentHeight() {
-  // // return (motorPositionToInches(getCurrentMotorPosition()));
-  // return getCurrentMotorPosition();
-  // }
 
   public boolean targetInDangerZone(double target_position) {
     return target_position < (Constants.ElevatorConstants.kElevatorSafeHeightMax);

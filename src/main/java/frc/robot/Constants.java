@@ -205,7 +205,7 @@ public final class Constants {
     public static double kElevatorCoralDropOff1Height = 40 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
-    public static double kElevatorCoralDropOff4Height = 130 * ropeAdjustmentFactor;
+    public static double kElevatorCoralDropOff4Height = 118; // changed from 130
     // Drop off 4 was 130 before but 120 seems to be our max height
     public static double kElevatorAlgaePickUpFloorHeight = 11;
     public static double kElevatorReef2Height = 40 * ropeAdjustmentFactor;
@@ -213,14 +213,14 @@ public final class Constants {
     public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
     public static double kElevatorReef2FlipHeight = 30;
     public static double kElevatorReef3FlipHeight = 45;
-    public static double kElevatorNetHeight = 120;
+    public static double kElevatorNetHeight = 118; // changed from 120
 
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 0; // adjusting for climber
     public static final double kElevatorStage1Height = 41; // zero position value
-    public static final double kElevatorStage2Height = 85;
-    public static final double kElevatorMax = 130; // 140 hard max
+    public static final double kElevatorStage2Height = 85 * ropeAdjustmentFactor;
+    public static final double kElevatorMax = 120; // 120 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
     public static final double kElevatorSafeHeightMax = 55;
@@ -392,7 +392,7 @@ public final class Constants {
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
     // TEMPORARY VALUES
-    public static double kAlgaeP = 2.5;
+    public static double kAlgaeP = 1.25;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
     public static double kAlgaeFF = 0.0;
@@ -426,7 +426,8 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    public static double bluefudge = 8;
+    // negative moves it right (I think)
+    public static double bluefudge = -4;
     public static double yellowfudge = 0;
   }
 }

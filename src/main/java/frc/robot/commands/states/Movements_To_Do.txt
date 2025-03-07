@@ -1,9 +1,0 @@
-Go Home
-Pick Up Coral 
-Coral Drop Off Sequence
-    Move to Coral Drop Off position
-    Eject Coral
-    Return to Home
-
-Algae PickUp Sequence ()
-Move to Algae PickUp
