@@ -199,10 +199,10 @@ public final class Constants {
     // Elevator Heights for different states
     public static double ropeAdjustmentFactor = .93;
     public static double kElevatorHomeHeight = 30;
-    public static double kElevatorAlgaeHoldHeight = 40;
+    public static double kElevatorAlgaeHoldHeight = 47;
     public static double kElevatorCoralPickupHeight = 25;
     public static double kElevatorCoralPickupAlternateHeight = 20;
-    public static double kElevatorCoralDropOff1Height = 40 * ropeAdjustmentFactor;
+    public static double kElevatorCoralDropOff1Height = 12;
     public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff4Height = 118; // changed from 130
@@ -275,6 +275,7 @@ public final class Constants {
     public static final double kPivotHome = 45;
     public static final double kPivotClimb = 90;
     public static final double kPivotCoralPickup = 120;
+    public static final double kPivotCoralDropOff1 = -95;
     public static final double kPivotCoralDropOff = -72;
     public static final double kPivotCoralDropOff4 = -52;
     public static final double kPivotAlgaePickUpFloor = 116;
@@ -301,7 +302,7 @@ public final class Constants {
 
       // coral dropoff happens on both sides
       CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height,
-          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff), true),
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff1), true),
       CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff), true),
       CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height,
@@ -392,7 +393,7 @@ public final class Constants {
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
     // TEMPORARY VALUES
-    public static double kAlgaeP = 1.25;
+    public static double kAlgaeP = 0.9;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
     public static double kAlgaeFF = 0.0;

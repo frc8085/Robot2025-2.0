@@ -97,6 +97,13 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     // Pivot angle checks
+    public boolean pivotAtHomeAngle() {
+        return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotHome
+                + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotHome
+                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+    }
+
     public boolean pivotAtCoralDropOffAngle(boolean yellow) {
         if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
@@ -107,6 +114,20 @@ public class PivotSubsystem extends SubsystemBase {
             return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff
                     + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        }
+    }
+
+    public boolean pivotAtCoral1DropOffAngle(boolean yellow) {
+        if (!yellow) {
+            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff1
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff1
+                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+        } else {
+            return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff1
+                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff1
                             - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
         }
     }

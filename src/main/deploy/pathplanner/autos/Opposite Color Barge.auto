@@ -80,19 +80,19 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoYLimelightRight"
+            "name": "AutoBLimelightRight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYMoveForward"
+            "name": "AutoBMoveForward"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYCoral4"
+            "name": "AutoBCoral4"
           }
         },
         {
@@ -128,19 +128,19 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoYLimelightLeft"
+            "name": "AutoBLimelightLeft"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYMoveForward"
+            "name": "AutoBMoveForward"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYCoral4"
+            "name": "AutoBCoral4"
           }
         }
       ]

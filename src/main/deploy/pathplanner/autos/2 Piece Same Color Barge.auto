@@ -42,22 +42,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "20 to Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoCoralSource"
-                }
-              }
-            ]
+            "pathName": "20 to Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveTowardSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCoralSource"
           }
         },
         {
@@ -69,38 +68,61 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoYLimelightRight"
+            "name": "AutoBLimelightRight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYMoveForward"
+            "name": "AutoBMoveForward"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYCoral4"
+            "name": "AutoBCoral4"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "19 to Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoCoralSource"
-                }
-              }
-            ]
+            "pathName": "19 to Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveTowardSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCoralSource"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source to 19"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBLimelightLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBMoveForward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBCoral4"
           }
         }
       ]

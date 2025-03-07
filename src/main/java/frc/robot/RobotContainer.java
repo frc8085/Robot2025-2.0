@@ -120,14 +120,22 @@ public class RobotContainer {
                                 new AutoCoral3(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
                 NamedCommands.registerCommand("AutoYCoral4",
                                 new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                NamedCommands.registerCommand("AutoBCoral4",
+                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
                 NamedCommands.registerCommand("AutoCoralSource",
                                 new AutoCoralSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
                 NamedCommands.registerCommand("AutoYLimelightRight",
                                 new AutoLimelightPosition(driveSubsystem, limelight, true, true));
                 NamedCommands.registerCommand("AutoYLimelightLeft",
                                 new AutoLimelightPosition(driveSubsystem, limelight, false, true));
+                NamedCommands.registerCommand("AutoBLimelightRight",
+                                new AutoLimelightPosition(driveSubsystem, limelight, true, false));
+                NamedCommands.registerCommand("AutoBLimelightLeft",
+                                new AutoLimelightPosition(driveSubsystem, limelight, false, false));
                 NamedCommands.registerCommand("AutoYMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
+                NamedCommands.registerCommand("AutoBMoveForward",
+                                new AutoMoveForwardForTime(driveSubsystem, limelight, false, 1));
                 NamedCommands.registerCommand("WaitUntilSafeToMove",
                                 new WaitUntilElevatorBelowSafeTravelHeight(elevatorSubsystem));
                 NamedCommands.registerCommand("ZeroHeading",

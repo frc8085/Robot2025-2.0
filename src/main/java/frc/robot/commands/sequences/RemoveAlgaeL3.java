@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.commands.PickUpAlgae;
 import frc.robot.commands.Windmill;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
+import frc.robot.commands.scoring.ScoreCoralL3;
 import frc.robot.commands.states.ToAlgaeL3;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -42,7 +43,7 @@ public class RemoveAlgaeL3 extends SequentialCommandGroup {
                                                                 3)),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.Home,
+                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
                                                 false));
 
         }
