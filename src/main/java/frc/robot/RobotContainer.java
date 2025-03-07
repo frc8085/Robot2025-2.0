@@ -124,12 +124,16 @@ public class RobotContainer {
                                 new AutoCoralSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
                 NamedCommands.registerCommand("AutoYLimelightRight",
                                 new AutoLimelightPosition(driveSubsystem, limelight, true, true));
+                NamedCommands.registerCommand("AutoYLimelightLeft",
+                                new AutoLimelightPosition(driveSubsystem, limelight, false, true));
                 NamedCommands.registerCommand("AutoYMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
                 NamedCommands.registerCommand("WaitUntilSafeToMove",
                                 new WaitUntilElevatorBelowSafeTravelHeight(elevatorSubsystem));
                 NamedCommands.registerCommand("ZeroHeading",
                                 new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
+                NamedCommands.registerCommand("AutoYMoveTowardSource",
+                                new AutoPositionForTime(driveSubsystem, limelight, true, true, 0.5));
         }
 
         // The driver's controller
