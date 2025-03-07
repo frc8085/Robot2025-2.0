@@ -197,17 +197,19 @@ public final class Constants {
     public static double kElevatorMMJerk = 1600;
 
     // Elevator Heights for different states
+    public static double ropeAdjustmentFactor = .93;
     public static double kElevatorHomeHeight = 30;
     public static double kElevatorAlgaeHoldHeight = 40;
     public static double kElevatorCoralPickupHeight = 25;
     public static double kElevatorCoralPickupAlternateHeight = 20;
-    public static double kElevatorCoralDropOff1Height = 40;
-    public static double kElevatorCoralDropOff2Height = 47;
-    public static double kElevatorCoralDropOff3Height = 75;
-    public static double kElevatorCoralDropOff4Height = 130;
+    public static double kElevatorCoralDropOff1Height = 40 * ropeAdjustmentFactor;
+    public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor;
+    public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
+    public static double kElevatorCoralDropOff4Height = 130 * ropeAdjustmentFactor;
+    // Drop off 4 was 130 before but 120 seems to be our max height
     public static double kElevatorAlgaePickUpFloorHeight = 11;
-    public static double kElevatorReef2Height = 40;
-    public static double kElevatorReef3Height = 70;
+    public static double kElevatorReef2Height = 40 * ropeAdjustmentFactor;
+    public static double kElevatorReef3Height = 70 * ropeAdjustmentFactor;
     public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
     public static double kElevatorReef2FlipHeight = 30;
     public static double kElevatorReef3FlipHeight = 45;
@@ -423,4 +425,8 @@ public final class Constants {
     public static double kMoveSpeed = 0.5;
   }
 
+  public static final class LimelightConstants {
+    public static double bluefudge = 8;
+    public static double yellowfudge = 0;
+  }
 }

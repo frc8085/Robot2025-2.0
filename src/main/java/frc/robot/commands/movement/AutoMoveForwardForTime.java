@@ -12,12 +12,12 @@ public class AutoMoveForwardForTime extends SequentialCommandGroup {
             addCommands(
                     new ParallelDeadlineGroup(
                             new WaitCommand(time),
-                            new AutoDriveMeters(drive, 0, -.5, 0.1))); // move forward for yellow;
+                            new AutoDriveMeters(drive, 0, -1, 0.2))); // move forward for yellow;
         } else {
             addCommands(
                     new ParallelDeadlineGroup(
                             new WaitCommand(time),
-                            new AutoDriveMeters(drive, 0, .5, 0.1))); // move forward for blue;
+                            new AutoDriveMeters(drive, 0, 1, 0.2))); // move forward for blue;
 
         }
     }

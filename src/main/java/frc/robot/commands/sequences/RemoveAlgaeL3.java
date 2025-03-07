@@ -39,10 +39,10 @@ public class RemoveAlgaeL3 extends SequentialCommandGroup {
                                 new ParallelDeadlineGroup(
                                                 new PickUpAlgae(algaeSubsystem),
                                                 new AutoMoveForwardForTime(driveSubsystem, limelight, yellow,
-                                                                0.5)),
+                                                                3)),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
+                                                Constants.Windmill.WindmillState.Home,
                                                 false));
 
         }

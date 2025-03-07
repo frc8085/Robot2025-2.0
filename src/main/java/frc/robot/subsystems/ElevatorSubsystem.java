@@ -180,6 +180,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         - Constants.ElevatorConstants.kElevatorTolerance);
   }
 
+  public boolean elevatorBelowSafeTravelHeight() {
+    return (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff1Height
+        + Constants.ElevatorConstants.kElevatorTolerance));
+  }
+
   public boolean elevatorAtCoralDropOff1Height() {
     return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff1Height
         - Constants.ElevatorConstants.kElevatorTolerance))

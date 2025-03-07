@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "InitializePE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Drop Off"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYCoral1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drop Off - Source"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

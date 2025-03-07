@@ -55,6 +55,7 @@ import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.automated.AlignAndDriveBlue;
 import frc.robot.commands.automated.AlignAndDriveYellow;
+import frc.robot.commands.movement.AlignToAprilTagBlue;
 import frc.robot.commands.movement.AlignToAprilTagYellow;
 import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
@@ -65,10 +66,10 @@ import frc.robot.commands.scoring.ScoreAlgaeNetBlue;
 import frc.robot.commands.scoring.ScoreAlgaeNetYellow;
 import frc.robot.commands.scoring.ScoreCoralL4;
 import frc.robot.commands.DeployClimb;
-import frc.robot.commands.sequences.MoveAndScoreCoralL1;
-import frc.robot.commands.sequences.MoveAndScoreCoralL2;
-import frc.robot.commands.sequences.MoveAndScoreCoralL3;
-import frc.robot.commands.sequences.MoveAndScoreCoralL4;
+import frc.robot.commands.scoring.ScoreCoralL1;
+import frc.robot.commands.scoring.ScoreCoralL2;
+import frc.robot.commands.scoring.ScoreCoralL3;
+import frc.robot.commands.scoring.ScoreCoralL4;
 import frc.robot.commands.sequences.RemoveAlgaeL2;
 import frc.robot.commands.sequences.RemoveAlgaeL3;
 import frc.robot.commands.sequences.RemoveAlgaeL3ScoreL3;
@@ -125,6 +126,10 @@ public class RobotContainer {
                                 new AutoLimelightPosition(driveSubsystem, limelight, true, true));
                 NamedCommands.registerCommand("AutoYMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
+                NamedCommands.registerCommand("WaitUntilSafeToMove",
+                                new WaitUntilElevatorBelowSafeTravelHeight(elevatorSubsystem));
+                NamedCommands.registerCommand("ZeroHeading",
+                                new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
         }
 
         // The driver's controller
@@ -215,6 +220,15 @@ public class RobotContainer {
                 final Trigger limelightTrigger1 = driverController.x();
                 final Trigger limelightTrigger2 = driverController.b();
 
+                // limelightTrigger1.onTrue(
+                // new ParallelRaceGroup(new WaitCommand(1), new
+                // AlignToAprilTagBlue(driveSubsystem,
+                // limelight)));
+
+                // limelightTrigger2.onTrue(
+                // new ParallelRaceGroup(new WaitCommand(4), new
+                // AlignToAprilTagYellow(driveSubsystem,
+                // limelight)));
                 limelightTrigger1.onTrue(
                                 new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveBlue(driveSubsystem,
                                                 limelight)));
@@ -224,9 +238,9 @@ public class RobotContainer {
                                                 limelight)));
 
                 // Driver operations
-                final Trigger ejectCoral = driverController.y();
+                final Trigger ejectCoral = driverController.a();
                 final Trigger pickUpCoral = driverController.leftTrigger();
-                final Trigger ejectAlgae = driverController.a();
+                final Trigger ejectAlgae = driverController.y();
                 final Trigger shootAlgaeNetBlue = driverController.leftBumper();
                 final Trigger shootAlgaeNetYellow = driverController.rightBumper();
                 final Trigger raiseClimber = driverController.povRight();
@@ -325,17 +339,13 @@ public class RobotContainer {
 
                 algaeProcessor.onTrue(new ToAlgaeGround(elevatorSubsystem, pivotSubsystem));
 
-                coralDropOff1.onTrue(new MoveAndScoreCoralL1(driveSubsystem, elevatorSubsystem, limelight,
-                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
+                coralDropOff1.onTrue(new ScoreCoralL1(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
-                coralDropOff2.onTrue(new MoveAndScoreCoralL2(driveSubsystem, elevatorSubsystem, limelight,
-                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
+                coralDropOff2.onTrue(new ScoreCoralL2(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
-                coralDropOff3.onTrue(new MoveAndScoreCoralL3(driveSubsystem, elevatorSubsystem, limelight,
-                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
+                coralDropOff3.onTrue(new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
-                coralDropOff4.onTrue(new MoveAndScoreCoralL4(driveSubsystem, elevatorSubsystem, limelight,
-                                pivotSubsystem, algaeSubsystem, coralSubsystem, false));
+                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
                 algaeReef2.and(altPositionRight).onTrue(new RemoveAlgaeL2(driveSubsystem, elevatorSubsystem, limelight,
                                 pivotSubsystem, algaeSubsystem, coralSubsystem, true));
@@ -344,17 +354,13 @@ public class RobotContainer {
                                                 algaeSubsystem, coralSubsystem, true));
 
                 coralDropOff1.and(altPositionRight)
-                                .onTrue(new MoveAndScoreCoralL1(driveSubsystem, elevatorSubsystem, limelight,
-                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
+                                .onTrue(new ScoreCoralL1(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
                 coralDropOff2.and(altPositionRight)
-                                .onTrue(new MoveAndScoreCoralL2(driveSubsystem, elevatorSubsystem, limelight,
-                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
+                                .onTrue(new ScoreCoralL2(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
                 coralDropOff3.and(altPositionRight)
-                                .onTrue(new MoveAndScoreCoralL3(driveSubsystem, elevatorSubsystem, limelight,
-                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
+                                .onTrue(new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
                 coralDropOff4.and(altPositionRight)
-                                .onTrue(new MoveAndScoreCoralL4(driveSubsystem, elevatorSubsystem, limelight,
-                                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
+                                .onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
 
                 // Set Left Joystick for manual elevator/pivot movement
                 final Trigger raiseElevator = operatorController.axisLessThan(1, -0.25);

@@ -51,7 +51,7 @@ public class DriveToReefBlue extends Command {
         double tx = limelight.getX("limelight-blue");
         double ty = limelight.getY("limelight-blue");
 
-        xTarget = -2.82 * ty + 16.2 - 4; // Heuristic equation we found
+        xTarget = -2.82 * ty + 16.2 + 8; // Heuristic equation we found
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);

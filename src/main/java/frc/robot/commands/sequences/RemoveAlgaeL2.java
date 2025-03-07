@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.commands.PickUpAlgae;
 import frc.robot.commands.Windmill;
+import frc.robot.commands.movement.AutoDriveMeters;
+import frc.robot.commands.movement.AutoMoveForward;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.states.ToAlgaeL2;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -38,10 +40,10 @@ public class RemoveAlgaeL2 extends SequentialCommandGroup {
                                 new ParallelDeadlineGroup(
                                                 new PickUpAlgae(algaeSubsystem),
                                                 new AutoMoveForwardForTime(driveSubsystem, limelight, yellow,
-                                                                0.5)),
+                                                                2)),
                                 new WaitCommand(.25),
-                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
+                                new AutoMoveForward(driveSubsystem, limelight, yellow),
+                                new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
                                                 false));
 
         }

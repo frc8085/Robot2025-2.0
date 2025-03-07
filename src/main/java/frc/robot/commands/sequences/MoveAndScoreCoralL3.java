@@ -17,7 +17,7 @@ public class MoveAndScoreCoralL3 extends SequentialCommandGroup {
                         boolean yellow) {
                 addCommands(
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, yellow,
-                                                0.5),
+                                                2),
                                 new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, yellow));
 
         }

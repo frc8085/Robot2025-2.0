@@ -1,6 +1,8 @@
 package frc.robot.commands.movement;
 
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -16,22 +18,30 @@ public class AutoPositionLeftRight extends SequentialCommandGroup {
             if (yellow) {
                 addCommands(
                         // move right for yellow
-                        new AutoDriveMeters(drive, 0.17, 0, 0.1));
+                        new ParallelRaceGroup(
+                                new AutoDriveMeters(drive, -0.17, 0, 0.1),
+                                new WaitCommand(2)));
             } else {
                 addCommands(
                         // move right for blue
-                        new AutoDriveMeters(drive, -0.17, 0, 0.1));
+                        new ParallelRaceGroup(
+                                new AutoDriveMeters(drive, 0.17, 0, 0.1),
+                                new WaitCommand(2)));
 
             }
         } else {
             if (yellow) {
                 addCommands(
                         // move left for yellow
-                        new AutoDriveMeters(drive, -0.17, 0, 0.1));
+                        new ParallelRaceGroup(
+                                new AutoDriveMeters(drive, 0.17, 0, 0.1),
+                                new WaitCommand(2)));
             } else {
                 addCommands(
                         // move left for blue
-                        new AutoDriveMeters(drive, 0.17, 0, 0.1));
+                        new ParallelRaceGroup(
+                                new AutoDriveMeters(drive, -0.17, 0, 0.1),
+                                new WaitCommand(2)));
 
             }
 
