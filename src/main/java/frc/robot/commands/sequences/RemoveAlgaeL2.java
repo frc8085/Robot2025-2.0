@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.commands.PickUpAlgae;
 import frc.robot.commands.Windmill;
-import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.movement.AutoMoveForward;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.states.ToAlgaeL2;
