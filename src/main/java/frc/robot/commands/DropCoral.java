@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -18,7 +17,7 @@ public class DropCoral extends SequentialCommandGroup {
                                 new PrintCommand("Coral DropOff Started"),
                                 new RunCommand(() -> coralSubsystem.drop(), coralSubsystem).withTimeout(1),
                                 new InstantCommand(coralSubsystem::stop),
-                                new WaitCommand(0.25),
+                                // new WaitCommand(0.25),
                                 new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));
 
         }
