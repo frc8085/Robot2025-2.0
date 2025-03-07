@@ -54,22 +54,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "22 to Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoCoralSource"
-                }
-              }
-            ]
+            "pathName": "22 to Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveTowardSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCoralSource"
           }
         },
         {
@@ -103,22 +102,45 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "17 to Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoCoralSource"
-                }
-              }
-            ]
+            "pathName": "17 to Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveTowardSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCoralSource"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source to 17"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYLimelightLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveForward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYCoral4"
           }
         }
       ]
