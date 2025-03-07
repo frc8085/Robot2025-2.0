@@ -61,6 +61,9 @@ public class DriveSubsystem extends SubsystemBase {
   // This section was copied from 2024 code, I think for auto
   public Field2d field = new Field2d();
 
+  // Copied from 6616 - PID Controller for orientation to supplied angle
+  private final PIDController orientationController;
+
   // Odometry class for tracking robot pose
   // SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
   // DriveConstants.kDriveKinematics,
@@ -112,6 +115,11 @@ public class DriveSubsystem extends SubsystemBase {
       e.printStackTrace();
     }
 
+    // from 6616
+    orientationController = new PIDController(AutoConstants.ANGLE_PID.kP, AutoConstants.ANGLE_PID.kI,
+        AutoConstants.ANGLE_PID.kD);
+    orientationController.enableContinuousInput(-180, 180);
+
   }
 
   @Override
@@ -123,6 +131,46 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("robot heading", getHeading());
     SmartDashboard.putNumber("robot wrapped heading", getHeadingWrappedDegrees());
 
+  }
+
+  // Copying code from 6616 for limelight and orienting
+  /**
+   * Method to drive the robot while it adjusts to a specified orientation.
+   *
+   * @param xSpeed
+   *                  Speed of the robot in the x direction (forward).
+   * @param ySpeed
+   *                  Speed of the robot in the y direction (sideways).
+   * @param direction
+   *                  Direction to orient front of robot towards.
+   */
+  public void driveAndOrient(double speed, double xSpeed, double ySpeed, Direction direction) {
+    this.driveAndOrient(speed, xSpeed, ySpeed,
+        SwerveUtils.normalizeAngle(SwerveUtils.directionToAngle(direction, this.getHeading())));
+  }
+
+  /**
+   * Method to drive the robot while it adjusts to a specified orientation.
+   *
+   * @param xSpeed
+   *                      Speed of the robot in the x direction (forward).
+   * @param ySpeed
+   *                      Speed of the robot in the y direction (sideways).
+   * @param targetHeading
+   *                      Target heading (angle) robot should face
+   */
+  public void driveAndOrient(double speed, double xSpeed, double ySpeed, double target) {
+    double currentHeading = this.getHeading();
+    double targetHeading = SwerveUtils.normalizeAngle(target);
+
+    // The left stick controls translation of the robot.
+    // Automatically turn to face the supplied heading
+    this.drive(
+        speed,
+        xSpeed,
+        ySpeed,
+        this.orientationController.calculate(currentHeading, targetHeading),
+        true);
   }
 
   // This next set of statements was copied from 2024 code
@@ -298,6 +346,58 @@ public class DriveSubsystem extends SubsystemBase {
   // return
   // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()).getDegrees();
   // }
+
+  // more from 6616
+  /**
+   * Drives the robot to achieve the specified offsets relative to a detected
+   * AprilTag.
+   * It computes the current forward and lateral distances to the tag using
+   * limelightTy and limelightTx,
+   * constructs a current relative pose, and then uses the path following
+   * controller's
+   * calculateRobotRelativeSpeeds method to determine the required robot-relative
+   * speeds.
+   *
+   * @param desiredXOffset Desired forward distance (in meters) from the tag.
+   * @param desiredYOffset Desired lateral distance (in meters) from the tag.
+   * @param limelightTx    Horizontal offset from the tag (in degrees).
+   * @param limelightTy    Vertical offset from the tag (in degrees).
+   */
+  public void driveToTagOffset(double speed, double desiredXOffset, double desiredYOffset, double limelightTx,
+      double limelightTy) {
+    // Calculate the current forward distance (x) from the tag using the vertical
+    // offset.
+    double currentXOffset = (AutoConstants.REEF_APRILTAG_HEIGHT - AutoConstants.LIMELIGHT_HEIGHT_METERS)
+        / Math.tan(AutoConstants.LIMELIGHT_MOUNTING_ANGLE_RADIANS + Math.toRadians(limelightTy));
+
+    // Calculate the current lateral distance (y) from the camera center using the
+    // horizontal offset.
+    double currentYOffset = currentXOffset * Math.tan(Math.toRadians(limelightTx));
+
+    // Construct the current relative pose.
+    // The rotation is set from limelightTx so that zero means the limelight is
+    // directly facing the tag.
+    Pose2d currentRelativePose = new Pose2d(currentXOffset, currentYOffset, Rotation2d.fromDegrees(limelightTx));
+
+    // The desired relative pose has the desired offsets with zero rotation error
+    // (directly facing the tag).
+    Pose2d desiredRelativePose = new Pose2d(desiredXOffset, desiredYOffset, new Rotation2d(0));
+
+    // Create a target trajectory state using the desired relative pose.
+    PathPlannerTrajectoryState targetState = new PathPlannerTrajectoryState();
+    targetState.pose = desiredRelativePose;
+
+    // Calculate the robot-relative speeds using the path following controller.
+    ChassisSpeeds robotRelativeSpeeds = AutoConstants.PP_CONTROLLER
+        .calculateRobotRelativeSpeeds(currentRelativePose, targetState);
+
+    double normalizedX = robotRelativeSpeeds.vxMetersPerSecond / ModuleConstants.kDriveWheelFreeSpeedRps;
+    double normalizedY = robotRelativeSpeeds.vyMetersPerSecond / ModuleConstants.kDriveWheelFreeSpeedRps;
+    double normalizedRot = robotRelativeSpeeds.omegaRadiansPerSecond / DriveConstants.kMaxAngularSpeed;
+
+    // Command the drivetrain using field-relative control.
+    drive(speed, normalizedX, normalizedY, normalizedRot, true);
+  }
 
   /**
    * Returns the turn rate of the robot.

@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-// negative sideways numbers moves it towards the yellow side
 public class AutoMoveForwardForTime extends SequentialCommandGroup {
     public AutoMoveForwardForTime(DriveSubsystem drive, LimelightSubsystem limelight, boolean yellow, double time) {
         if (yellow) {

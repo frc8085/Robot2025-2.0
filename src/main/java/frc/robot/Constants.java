@@ -131,7 +131,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 4.12;
+    public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
@@ -148,9 +148,9 @@ public final class Constants {
     public static final double ROBOT_MOI = 8.66;
     public static final double WHEEL_COF = 0.0484;
 
-    // TODO: Tune these values - this doesn't seem to be used.
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0, 0, 0);
-    public static final PIDConstants ANGLE_PID = new PIDConstants(.01, 0, 0);
+    // TODO: Tune these values
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants ANGLE_PID = new PIDConstants(0.01, 0, 0);
 
     public static final PathFollowingController PP_CONTROLLER = new PPHolonomicDriveController(
         TRANSLATION_PID, // new PIDConstants(5, 0.0, 0.0), // Translation PID constants
