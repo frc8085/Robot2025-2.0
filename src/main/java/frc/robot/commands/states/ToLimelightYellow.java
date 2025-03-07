@@ -6,6 +6,7 @@ import frc.robot.commands.Windmill;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
+// Used to make sure that the coral flags are not blocking the april tag / camera
 public class ToLimelightYellow extends SequentialCommandGroup {
     public ToLimelightYellow(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
         addCommands(
