@@ -8,6 +8,8 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoMoveForwardForTime extends SequentialCommandGroup {
     public AutoMoveForwardForTime(DriveSubsystem drive, LimelightSubsystem limelight, boolean yellow, double time) {
+// negative sideways numbers moves it towards the yellow side
+
         if (yellow) {
             addCommands(
                     new ParallelDeadlineGroup(
