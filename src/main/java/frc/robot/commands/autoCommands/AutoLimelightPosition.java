@@ -1,5 +1,6 @@
 package frc.robot.commands.autoCommands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.movement.AlignToAprilTagBlue;
 import frc.robot.commands.movement.AlignToAprilTagYellow;
@@ -12,15 +13,21 @@ public class AutoLimelightPosition extends SequentialCommandGroup {
         if (yellow) {
             addCommands(
                     new AlignToAprilTagYellow(drive, limelight),
+                    new PrintCommand("Angle to Reef"),
                     new AutoDriveToReefYellow(drive, limelight),
-                    new AlignToAprilTagYellow(drive, limelight),
-                    new NewAutoMoveOnReef(drive, limelight, right));
+                    new PrintCommand("Align to Reef"),
+                    new NewAutoMoveOnReef(drive, limelight, right),
+                    new PrintCommand("Move to left"));
         } else {
             addCommands(
                     new AlignToAprilTagBlue(drive, limelight),
+                    new PrintCommand("Angle to Reef"),
                     new AutoDriveToReefBlue(drive, limelight),
+                    new PrintCommand("Align to Reef"),
                     new AlignToAprilTagBlue(drive, limelight),
-                    new NewAutoMoveOnReef(drive, limelight, !right));
+                    new PrintCommand("Angle to Reef"),
+                    new NewAutoMoveOnReef(drive, limelight, !right),
+                    new PrintCommand("Move to side"));
         }
 
     }

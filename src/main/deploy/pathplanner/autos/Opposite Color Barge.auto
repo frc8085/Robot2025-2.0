@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "ZeroHeading"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -30,15 +24,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoYLimelightLeft"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoYLimelightLeft"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoYMoveForward"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoYMoveForward"
+                }
+              }
+            ]
           }
         },
         {
@@ -51,6 +71,12 @@
           "type": "named",
           "data": {
             "name": "WaitUntilSafeToMove"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartedMove"
           }
         },
         {
@@ -72,21 +98,53 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StartedMove"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Source to 17"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoBLimelightLeft"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBLimelightLeft"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoBMoveForward"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBMoveForward"
+                }
+              }
+            ]
           }
         },
         {
@@ -96,9 +154,28 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitUntilSafeToMove"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "WaitUntilSafeToMove"
+            "name": "StartedMove"
           }
         },
         {
@@ -120,21 +197,53 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StartedMove"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Source to 17"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoBLimelightLeft"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBLimelightRight"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoBMoveForward"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBMoveForward"
+                }
+              }
+            ]
           }
         },
         {

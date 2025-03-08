@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -62,6 +63,7 @@ import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.movement.AutoPositionLeftRight;
 import frc.robot.commands.movement.DriveToReefBlue;
 import frc.robot.commands.movement.DriveToReefYellow;
+import frc.robot.commands.movement.NewAutoMoveOnReef;
 import frc.robot.commands.scoring.ScoreAlgaeNetBlue;
 import frc.robot.commands.scoring.ScoreAlgaeNetYellow;
 import frc.robot.commands.scoring.ScoreCoralL4;
@@ -142,6 +144,12 @@ public class RobotContainer {
                                 new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
                 NamedCommands.registerCommand("AutoYMoveTowardSource",
                                 new AutoPositionForTime(driveSubsystem, limelight, true, true, 0.5));
+                NamedCommands.registerCommand("StartedMove", new PrintCommand("Startedmove"));
+                NamedCommands.registerCommand("AutoYMoveRight", new NewAutoMoveOnReef(driveSubsystem, limelight, true));
+                NamedCommands.registerCommand("AutoYMoveLeft", new NewAutoMoveOnReef(driveSubsystem, limelight, false));
+                NamedCommands.registerCommand("AutoBMoveRight",
+                                new NewAutoMoveOnReef(driveSubsystem, limelight, false));
+                NamedCommands.registerCommand("AutoBMoveLeft", new NewAutoMoveOnReef(driveSubsystem, limelight, true));
         }
 
         // The driver's controller

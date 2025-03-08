@@ -59,6 +59,15 @@ public final class Constants {
 
   }
 
+  public static final class TuningModeConstants {
+    public static boolean kLimelightTuning = false;
+    public static boolean kAlgaeTuning = false;
+    public static boolean kCoralTuning = false;
+    public static boolean kElevatorTuning = true;
+    public static boolean kPivotTuning = true;
+    public static boolean kClimberTuning = true;
+  }
+
   public static final class DriveConstants {
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.12; // Rev stated max speed
@@ -411,15 +420,6 @@ public final class Constants {
     public static double kWinchFF = 0;
     public static double kWinchMinOutput = 0;
     public static double kWinchMaxOutput = 1;
-  }
-
-  public static final class TuningModeConstants {
-    public static boolean kLimelightTuning = false;
-    public static boolean kAlgaeTuning = false;
-    public static boolean kCoralTuning = false;
-    public static boolean kElevatorTuning = true;
-    public static boolean kPivotTuning = true;
-    public static boolean kClimberTuning = false;
   }
 
   public static final class CommandScoreConstants {
