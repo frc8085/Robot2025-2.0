@@ -150,6 +150,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoBMoveRight",
                                 new NewAutoMoveOnReef(driveSubsystem, limelight, false));
                 NamedCommands.registerCommand("AutoBMoveLeft", new NewAutoMoveOnReef(driveSubsystem, limelight, true));
+                NamedCommands.registerCommand("IsElevatorInSafePosition", new AutoPrintElevatorSafe(elevatorSubsystem));
         }
 
         // The driver's controller
@@ -310,10 +311,9 @@ public class RobotContainer {
                                 new ToCoralSource(elevatorSubsystem, pivotSubsystem, false),
                                 new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
                                 .onFalse(new SequentialCommandGroup(
-                                                new InstantCommand(coralSubsystem::stop),
+                                                new InstantCommand(() -> coralSubsystem.stop(), coralSubsystem),
                                                 new WaitCommand(0.25),
-                                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                Constants.Windmill.WindmillState.Home, false)));
+                                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem)));
 
                 manualAlgae.onTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
                                 .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));

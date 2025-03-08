@@ -13,14 +13,14 @@ public class NewAutoMoveOnReef extends SequentialCommandGroup {
             addCommands(
                     // move in direction of climber
                     new ParallelRaceGroup(
-                            new AutoDriveMeters(drive, -0.17, 0, 0.1),
+                            new AutoDriveMeters(drive, -0.22, 0, 0.1),
                             new WaitCommand(2)),
                     new PrintCommand("Moved toward Climber"));
         } else {
             addCommands(
                     // move in direction away from climber
                     new ParallelRaceGroup(
-                            new AutoDriveMeters(drive, 0.17, 0, 0.1),
+                            new AutoDriveMeters(drive, 0.12, 0, 0.1),
                             new WaitCommand(2)),
                     new PrintCommand("Moved Away From Climber"));
 
