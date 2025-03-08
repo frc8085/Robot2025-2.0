@@ -5,15 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "InitializePE"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "InitializePE"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Testing Move"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Testing Move"
+            "name": "AutoYLimelightLeft"
           }
         }
       ]

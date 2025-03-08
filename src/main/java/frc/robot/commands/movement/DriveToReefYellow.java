@@ -26,8 +26,8 @@ public class DriveToReefYellow extends Command {
     double kIY = 0;
     double kDY = 0;
     double tolerance = .2;
-    double xTarget = -9.49;
-    double yTarget = 1;
+    double xTarget = -2.612;
+    double yTarget = 4.8;
 
     public DriveToReefYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
