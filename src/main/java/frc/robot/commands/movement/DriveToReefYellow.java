@@ -26,8 +26,8 @@ public class DriveToReefYellow extends Command {
     double kIY = 0;
     double kDY = 0;
     double tolerance = .2;
-    double xTarget = 6.32;
-    double yTarget = 4;
+    double xTarget = -9.49;
+    double yTarget = 1;
 
     public DriveToReefYellow(DriveSubsystem drive, LimelightSubsystem limelight) {
         this.drive = drive;
@@ -53,7 +53,9 @@ public class DriveToReefYellow extends Command {
         double tx = limelight.getX("limelight-yellow");
         double ty = limelight.getY("limelight-yellow");
 
-        xTarget = 2.76 * ty - 4.72; // Heuristic equation we found
+        // xTarget = 2.76 * ty - 4.72; // Heuristic equation we found
+        // Waterbury tuning
+        xTarget = 1.81 * ty - 11.3;
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * xPid.calculate(tx);
