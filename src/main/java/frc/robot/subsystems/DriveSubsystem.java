@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.FakeConstants;
 import frc.robot.Constants.DriveConstants.Direction;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.AutoConstants;
@@ -130,6 +131,7 @@ public class DriveSubsystem extends SubsystemBase {
         getModulePositions());
     SmartDashboard.putNumber("robot heading", getHeading());
     SmartDashboard.putNumber("robot wrapped heading", getHeadingWrappedDegrees());
+    SmartDashboard.putBoolean("fieldRelative", FakeConstants.fieldRelative);
 
   }
 

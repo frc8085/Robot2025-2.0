@@ -437,4 +437,8 @@ public final class Constants {
     public static double bluefudge = -4;
     public static double yellowfudge = 0;
   }
+
+  public static final class FakeConstants {
+    public static boolean fieldRelative = true;
+  }
 }

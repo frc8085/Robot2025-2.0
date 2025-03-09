@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.FakeConstants;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -224,7 +225,7 @@ public class RobotContainer {
                                                                                 Math.pow(driverController.getRightX(),
                                                                                                 3),
                                                                                 OIConstants.kTurnDeadband),
-                                                                true),
+                                                                FakeConstants.fieldRelative),
                                                 driveSubsystem));
 
                 // Another option that allows you to specify the default auto by its name
@@ -278,7 +279,6 @@ public class RobotContainer {
                 // AlignToAprilTagYellow(driveSubsystem,
                 // limelight)));
                 limelightTrigger1.onTrue(new AlignToAprilTagBlue(driveSubsystem, limelight));
-
                 limelightTrigger2.onTrue(
                                 new AlignToAprilTagYellow(driveSubsystem, limelight));
 
@@ -293,7 +293,15 @@ public class RobotContainer {
                 final Trigger altButton = driverController.back();
                 final Trigger left = driverController.povDown();
                 final Trigger right = driverController.povUp();
+                final Trigger goroborelative = driverController.leftStick();
 
+                goroborelative.onTrue(new InstantCommand(() -> {
+                        if (FakeConstants.fieldRelative) {
+                                FakeConstants.fieldRelative = false;
+                        } else {
+                                FakeConstants.fieldRelative = true;
+                        }
+                }));
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
                                 pivotSubsystem, driveSubsystem));
