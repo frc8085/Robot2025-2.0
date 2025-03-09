@@ -55,7 +55,7 @@ public class DriveToReefBlue extends Command {
         // xTarget = -2.82 * ty + 16.2 - Constants.LimelightConstants.bluefudge; //
         // Heuristic equation we found
         // Data for Waterbury
-        xTarget = -1.91 * ty + 17.5;
+        xTarget = -1.91 * ty + 17.5 - 10;
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * -xPid.calculate(tx);

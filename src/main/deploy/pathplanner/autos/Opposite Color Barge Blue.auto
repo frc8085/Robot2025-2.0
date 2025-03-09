@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Barge to 20"
+                  "pathName": "Barge to 22"
                 }
               }
             ]
@@ -49,26 +49,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoYMoveLeft"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.5
                 }
               },
               {
@@ -91,15 +72,120 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitUntilSafeToMove"
+                }
+              },
+              {
                 "type": "wait",
                 "data": {
                   "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IsElevatorInSafePosition"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartedMove"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "22 to Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoYMoveTowardSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCoralSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartedMove"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source to 17"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
                 }
               },
               {
                 "type": "named",
                 "data": {
+                  "name": "AutoBLimelightLeft"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBMoveForward"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBCoral4"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
                   "name": "WaitUntilSafeToMove"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -114,7 +200,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "20 to Source"
+            "pathName": "17 to Source"
           }
         },
         {
@@ -130,63 +216,53 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Source to 19"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "AutoBLimelightRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoBMoveForward"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoBCoral4"
+            "name": "StartedMove"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "19 to Source"
+            "pathName": "Source to 17"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoYMoveTowardSource"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBLimelightRight"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutoCoralSource"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source to 19"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoBLimelightLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoBMoveForward"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoBMoveForward"
+                }
+              }
+            ]
           }
         },
         {

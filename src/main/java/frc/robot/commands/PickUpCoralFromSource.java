@@ -23,7 +23,7 @@ public class PickUpCoralFromSource extends SequentialCommandGroup {
                 } else {
                         addCommands(
                                         new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                        Constants.Windmill.WindmillState.CoralPickup, false),
+                                                        Constants.Windmill.WindmillState.CoralPickupHigher, false),
                                         new PickUpCoral(coralSubsystem),
                                         new WaitCommand(0.25),
                                         new Windmill(elevatorSubsystem, pivotSubsystem,

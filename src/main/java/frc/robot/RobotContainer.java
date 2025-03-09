@@ -46,6 +46,7 @@ import frc.robot.commands.DropCoral;
 import frc.robot.commands.EjectCoral;
 import frc.robot.commands.InitializePivotAndElevator;
 import frc.robot.commands.LockPivotAndElevatorCommand;
+import frc.robot.commands.PickUpAlgae;
 import frc.robot.commands.PickUpAlgaeFromGround;
 import frc.robot.commands.PickUpCoralFromSource;
 import frc.robot.commands.Pivot;
@@ -60,6 +61,7 @@ import frc.robot.commands.movement.AlignToAprilTagBlue;
 import frc.robot.commands.movement.AlignToAprilTagYellow;
 import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
+import frc.robot.commands.movement.AutoMoveForwardForTimeFaster;
 import frc.robot.commands.movement.AutoPositionLeftRight;
 import frc.robot.commands.movement.DriveToReefBlue;
 import frc.robot.commands.movement.DriveToReefYellow;
@@ -77,11 +79,14 @@ import frc.robot.commands.sequences.RemoveAlgaeL3;
 import frc.robot.commands.sequences.RemoveAlgaeL3ScoreL3;
 import frc.robot.commands.PickUpAlgaeFromReef;
 import frc.robot.commands.states.ToAlgaeGround;
+import frc.robot.commands.states.ToAlgaeL2;
+import frc.robot.commands.states.ToAlgaeL3;
 import frc.robot.commands.states.ToCoralDropOff1;
 import frc.robot.commands.states.ToCoralDropOff2;
 import frc.robot.commands.states.ToCoralDropOff3;
 import frc.robot.commands.states.ToCoralDropOff4;
 import frc.robot.commands.states.ToCoralSource;
+import frc.robot.commands.states.ToCoralSourceManual;
 import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -134,8 +139,20 @@ public class RobotContainer {
                                 new AutoLimelightPosition(driveSubsystem, limelight, true, false));
                 NamedCommands.registerCommand("AutoBLimelightLeft",
                                 new AutoLimelightPosition(driveSubsystem, limelight, false, false));
+                NamedCommands.registerCommand("AutoYLimelight",
+                                new AutoLimelight(driveSubsystem, limelight, true, true));
+                NamedCommands.registerCommand("AutoBLimelight",
+                                new AutoLimelight(driveSubsystem, limelight, false, false));
                 NamedCommands.registerCommand("AutoYMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
+                NamedCommands.registerCommand("AutoYMoveForwardFaster",
+                                new AutoMoveForwardForTimeFaster(driveSubsystem, limelight, true, 1, 0.3));
+                NamedCommands.registerCommand("MoveToYCoral1",
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.CoralDropOff1,
+                                                true));
+                NamedCommands.registerCommand("DropCoral",
+                                new DropCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
                 NamedCommands.registerCommand("AutoBMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, false, 1));
                 NamedCommands.registerCommand("WaitUntilSafeToMove",
@@ -308,7 +325,7 @@ public class RobotContainer {
                 final Trigger manualAlgae = operatorController.leftTrigger();
 
                 manualCoral.onTrue(new SequentialCommandGroup(
-                                new ToCoralSource(elevatorSubsystem, pivotSubsystem, false),
+                                new ToCoralSourceManual(elevatorSubsystem, pivotSubsystem, false),
                                 new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
                                 .onFalse(new SequentialCommandGroup(
                                                 new InstantCommand(() -> coralSubsystem.stop(), coralSubsystem),
@@ -352,10 +369,16 @@ public class RobotContainer {
 
                 algaeGround.onTrue(new PickUpAlgaeFromGround(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
 
-                algaeReef2.onTrue(new RemoveAlgaeL2(driveSubsystem, elevatorSubsystem, limelight, pivotSubsystem,
-                                algaeSubsystem, coralSubsystem, false));
-                algaeReef3.onTrue(new RemoveAlgaeL3(driveSubsystem, elevatorSubsystem, limelight, pivotSubsystem,
-                                algaeSubsystem, coralSubsystem, false));
+                algaeReef2.onTrue(new SequentialCommandGroup(new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, false),
+                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.Home,
+                                                false)));
+                algaeReef3.onTrue(new SequentialCommandGroup(new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, false),
+                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
+                                                false)));
 
                 algaeProcessor.onTrue(new ToAlgaeGround(elevatorSubsystem, pivotSubsystem));
 
@@ -367,11 +390,19 @@ public class RobotContainer {
 
                 coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
-                algaeReef2.and(altPositionRight).onTrue(new RemoveAlgaeL2(driveSubsystem, elevatorSubsystem, limelight,
-                                pivotSubsystem, algaeSubsystem, coralSubsystem, true));
+                algaeReef2.and(altPositionRight)
+                                .onTrue(new SequentialCommandGroup(
+                                                new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, true),
+                                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
+                                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                                Constants.Windmill.WindmillState.Home,
+                                                                true)));
                 algaeReef3.and(altPositionRight).onTrue(
-                                new RemoveAlgaeL3(driveSubsystem, elevatorSubsystem, limelight, pivotSubsystem,
-                                                algaeSubsystem, coralSubsystem, true));
+                                new SequentialCommandGroup(new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, true),
+                                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
+                                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
+                                                                true)));
 
                 coralDropOff1.and(altPositionRight)
                                 .onTrue(new ScoreCoralL1(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));

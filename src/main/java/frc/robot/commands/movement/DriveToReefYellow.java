@@ -55,7 +55,7 @@ public class DriveToReefYellow extends Command {
 
         // xTarget = 2.76 * ty - 4.72; // Heuristic equation we found
         // Waterbury tuning
-        xTarget = 1.81 * ty - 11.3;
+        xTarget = 1.81 * ty - 11.3 + 8;
         xPid.setSetpoint(xTarget);
 
         double xSpeed = maxSpeed * xPid.calculate(tx);

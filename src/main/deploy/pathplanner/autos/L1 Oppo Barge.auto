@@ -5,91 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "InitializePE"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Barge to 22"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoYLimelightLeft"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoYMoveForward"
-                }
-              }
-            ]
+            "name": "InitializePE"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoYCoral4"
+            "name": "MoveToYCoral1"
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "WaitUntilSafeToMove"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
+            "pathName": "Barge to 22 L1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.25
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IsElevatorInSafePosition"
+            "name": "DropCoral"
           }
         },
         {
@@ -101,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "22 to Source"
+            "pathName": "22 to Source L1"
           }
         },
         {
@@ -125,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source to 17"
+            "pathName": "Source to 17 L1"
           }
         },
         {
@@ -135,13 +77,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 3.0
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoBLimelightLeft"
+                  "name": "AutoBLimelight"
                 }
               }
             ]
@@ -154,7 +96,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 1.25
                 }
               },
               {

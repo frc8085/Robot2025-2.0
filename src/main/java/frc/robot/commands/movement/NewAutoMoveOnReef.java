@@ -20,7 +20,8 @@ public class NewAutoMoveOnReef extends SequentialCommandGroup {
             addCommands(
                     // move in direction away from climber
                     new ParallelRaceGroup(
-                            new AutoDriveMeters(drive, 0.12, 0, 0.1),
+                            // .12 on blue .10 on red
+                            new AutoDriveMeters(drive, 0.10, 0, 0.1),
                             new WaitCommand(2)),
                     new PrintCommand("Moved Away From Climber"));
 
