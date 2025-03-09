@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.EjectCoral;
 import frc.robot.commands.states.ToCoralDropOff2;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class AutoCoral2 extends SequentialCommandGroup {
         public AutoCoral2(CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
-                        PivotSubsystem pivotSubsystem, boolean yellow) {
+                        PivotSubsystem pivotSubsystem, DriveSubsystem driveSubsystem, boolean yellow) {
                 addCommands(
                                 new ToCoralDropOff2(elevatorSubsystem, pivotSubsystem, yellow),
                                 new ParallelCommandGroup(
@@ -24,6 +25,6 @@ public class AutoCoral2 extends SequentialCommandGroup {
                                                                 () -> pivotSubsystem.pivotAtCoralDropOffAngle(yellow)),
                                                                 new PrintCommand("At Pivot Drop Off"))),
                                 new WaitCommand(0.5),
-                                new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                                new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem));
         }
 }

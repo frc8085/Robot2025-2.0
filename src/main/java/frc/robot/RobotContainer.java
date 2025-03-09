@@ -120,15 +120,20 @@ public class RobotContainer {
                 NamedCommands.registerCommand("InitializePE",
                                 new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
                 NamedCommands.registerCommand("AutoYCoral1",
-                                new AutoCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                                new AutoCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                                true));
                 NamedCommands.registerCommand("AutoYCoral2",
-                                new AutoCoral2(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                                new AutoCoral2(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                                true));
                 NamedCommands.registerCommand("AutoYCoral3",
-                                new AutoCoral3(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                                new AutoCoral3(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                                true));
                 NamedCommands.registerCommand("AutoYCoral4",
-                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, true));
+                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                                true));
                 NamedCommands.registerCommand("AutoBCoral4",
-                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
+                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                                false));
                 NamedCommands.registerCommand("AutoCoralSource",
                                 new AutoCoralSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
                 NamedCommands.registerCommand("AutoYLimelightRight",
@@ -152,7 +157,7 @@ public class RobotContainer {
                                                 Constants.Windmill.WindmillState.CoralDropOff1,
                                                 true));
                 NamedCommands.registerCommand("DropCoral",
-                                new DropCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                                new DropCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem));
                 NamedCommands.registerCommand("AutoBMoveForward",
                                 new AutoMoveForwardForTime(driveSubsystem, limelight, false, 1));
                 NamedCommands.registerCommand("WaitUntilSafeToMove",
@@ -168,6 +173,8 @@ public class RobotContainer {
                                 new NewAutoMoveOnReef(driveSubsystem, limelight, false));
                 NamedCommands.registerCommand("AutoBMoveLeft", new NewAutoMoveOnReef(driveSubsystem, limelight, true));
                 NamedCommands.registerCommand("IsElevatorInSafePosition", new AutoPrintElevatorSafe(elevatorSubsystem));
+                NamedCommands.registerCommand("AutoAlgaeL2", new AutoAlgaeL2(driveSubsystem, coralSubsystem,
+                                algaeSubsystem, elevatorSubsystem, pivotSubsystem));
         }
 
         // The driver's controller
@@ -242,6 +249,8 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
 
+                final Trigger altPositionRight = operatorController.rightBumper();
+
                 // Manual Zero buttons for elevator and pivot
                 // final Trigger zeroElevator = operatorController.start();
                 final Trigger zeroPivot = operatorController.start();
@@ -249,6 +258,7 @@ public class RobotContainer {
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
                 // zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
                 zeroPivot.onTrue(new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
+                zeroPivot.and(altPositionRight).onTrue(new ZeroElevator(elevatorSubsystem));
 
                 // Reset heading of robot for field relative drive
                 final Trigger zeroHeadingButton = driverController.start();
@@ -267,13 +277,10 @@ public class RobotContainer {
                 // new ParallelRaceGroup(new WaitCommand(4), new
                 // AlignToAprilTagYellow(driveSubsystem,
                 // limelight)));
-                limelightTrigger1.onTrue(
-                                new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveBlue(driveSubsystem,
-                                                limelight)));
+                limelightTrigger1.onTrue(new AlignToAprilTagBlue(driveSubsystem, limelight));
 
                 limelightTrigger2.onTrue(
-                                new ParallelRaceGroup(new WaitCommand(4), new AlignAndDriveYellow(driveSubsystem,
-                                                limelight, elevatorSubsystem, pivotSubsystem)));
+                                new AlignToAprilTagYellow(driveSubsystem, limelight));
 
                 // Driver operations
                 final Trigger ejectCoral = driverController.a();
@@ -289,9 +296,9 @@ public class RobotContainer {
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
-                                pivotSubsystem));
+                                pivotSubsystem, driveSubsystem));
                 ejectCoral.and(altButton).onTrue(new DropCoral(coralSubsystem,
-                                elevatorSubsystem, pivotSubsystem));
+                                elevatorSubsystem, pivotSubsystem, driveSubsystem));
                 pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem,
                                 elevatorSubsystem, pivotSubsystem, false));
                 pickUpCoral.and(altButton)
@@ -360,7 +367,6 @@ public class RobotContainer {
                 final Trigger coralDropOff3 = operatorController.x();
                 final Trigger coralDropOff2 = operatorController.b();
                 final Trigger coralDropOff1 = operatorController.a();
-                final Trigger altPositionRight = operatorController.rightBumper();
 
                 // initializeInputs.onTrue(new ResetOperatorInputs());
 
@@ -388,7 +394,8 @@ public class RobotContainer {
 
                 coralDropOff3.onTrue(new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
 
-                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
+                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, driveSubsystem,
+                                false));
 
                 algaeReef2.and(altPositionRight)
                                 .onTrue(new SequentialCommandGroup(
@@ -411,7 +418,8 @@ public class RobotContainer {
                 coralDropOff3.and(altPositionRight)
                                 .onTrue(new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
                 coralDropOff4.and(altPositionRight)
-                                .onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
+                                .onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem,
+                                                driveSubsystem, true));
 
                 // Set Left Joystick for manual elevator/pivot movement
                 final Trigger raiseElevator = operatorController.axisLessThan(1, -0.25);

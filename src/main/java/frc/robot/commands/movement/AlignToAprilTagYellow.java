@@ -104,12 +104,13 @@ public class AlignToAprilTagYellow extends Command {
     }
 
     public void end(boolean interrupted) {
-        drive.drive(0, 0, 0, 0, true);
+        drive.drive(0, 0, 0, 0, false);
+
     }
 
     public boolean isFinished() {
         // TODO: Add a condition that allows the driver/operator to exit this command.
-        return (turnPID.atSetpoint() || !this.limelight.hasTarget("limelight-yellow"));
+        return (false);
     }
 
 }

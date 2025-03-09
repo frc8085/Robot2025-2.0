@@ -51,7 +51,8 @@ public class RemoveAlgaeL3ScoreL3 extends SequentialCommandGroup {
                                                                         elevatorSubsystem::elevatorAtCoralDropOff3Height),
                                                         new WaitUntilCommand(() -> pivotSubsystem
                                                                         .pivotAtCoralDropOffAngle(yellow))),
-                                        new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                                        new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem,
+                                                        driveSubsystem));
                 } else {
                         addCommands(
                                         new ParallelCommandGroup(
@@ -80,7 +81,8 @@ public class RemoveAlgaeL3ScoreL3 extends SequentialCommandGroup {
                                                                         elevatorSubsystem::elevatorAtCoralDropOff3Height),
                                                         new WaitUntilCommand(() -> pivotSubsystem
                                                                         .pivotAtCoralDropOffAngle(yellow))),
-                                        new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                                        new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem,
+                                                        driveSubsystem));
 
                 }
         }

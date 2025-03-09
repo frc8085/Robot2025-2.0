@@ -16,13 +16,13 @@ public class AutoPositionForTime extends SequentialCommandGroup {
                                 addCommands(
                                                 new ParallelDeadlineGroup(
                                                                 new WaitCommand(time),
-                                                                new AutoDriveMeters(drive, 0, 1, 0.2)),
+                                                                new AutoDriveMeters(drive, 0, -1, 0.2)),
                                                 new PrintCommand("Moved right")); // move toward yellow;
                         } else {
                                 addCommands(
                                                 new ParallelDeadlineGroup(
                                                                 new WaitCommand(time),
-                                                                new AutoDriveMeters(drive, 0, -1, 0.2)),
+                                                                new AutoDriveMeters(drive, 0, 1, 0.2)),
                                                 new PrintCommand("Moved left")); // move toward blue;
 
                         }
