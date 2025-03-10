@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.manipulator;
 
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;

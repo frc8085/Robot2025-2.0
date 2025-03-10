@@ -1,18 +1,21 @@
-package frc.robot.commands;
+package frc.robot.commands.manipulator.algae;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.states.ToAlgaeGround;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.commands.windmill.Windmill;
 
-public class PickUpAlgaeAndReturnToHome extends SequentialCommandGroup {
-        public PickUpAlgaeAndReturnToHome(
+public class PickUpAlgaeFromGround extends SequentialCommandGroup {
+        public PickUpAlgaeFromGround(
                         AlgaeSubsystem algaeSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem) {
 
                 addCommands(
+                                new ToAlgaeGround(elevatorSubsystem, pivotSubsystem),
                                 new PickUpAlgae(algaeSubsystem),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,

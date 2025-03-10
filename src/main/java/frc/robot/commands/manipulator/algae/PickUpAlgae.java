@@ -57,7 +57,7 @@ public class PickUpAlgae extends Command {
 
 }
 */
-package frc.robot.commands;
+package frc.robot.commands.manipulator.algae;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;

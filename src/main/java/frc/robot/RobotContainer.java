@@ -4,96 +4,27 @@
 
 package frc.robot;
 
-import java.util.List;
-import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.FakeConstants;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.DropCoral;
-import frc.robot.commands.EjectCoral;
-import frc.robot.commands.InitializePivotAndElevator;
-import frc.robot.commands.LockPivotAndElevatorCommand;
-import frc.robot.commands.PickUpAlgae;
-import frc.robot.commands.PickUpAlgaeFromGround;
-import frc.robot.commands.PickUpCoralFromSource;
-import frc.robot.commands.Pivot;
-import frc.robot.commands.RetractClimb;
-import frc.robot.commands.EjectAlgae;
-import frc.robot.commands.Windmill;
-import frc.robot.commands.ZeroElevator;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.manipulator.coral.*;
+import frc.robot.commands.windmill.Windmill;
 import frc.robot.commands.autoCommands.*;
-import frc.robot.commands.automated.AlignAndDriveBlue;
-import frc.robot.commands.automated.AlignAndDriveYellow;
-import frc.robot.commands.movement.AlignToAprilTagBlue;
-import frc.robot.commands.movement.AlignToAprilTagYellow;
-import frc.robot.commands.movement.AutoDriveMeters;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.movement.AutoMoveForwardForTimeFaster;
-import frc.robot.commands.movement.AutoPositionLeftRight;
-import frc.robot.commands.movement.DriveToReefBlue;
-import frc.robot.commands.movement.DriveToReefYellow;
 import frc.robot.commands.movement.NewAutoMoveOnReef;
-import frc.robot.commands.scoring.ScoreAlgaeNetBlue;
-import frc.robot.commands.scoring.ScoreAlgaeNetYellow;
-import frc.robot.commands.scoring.ScoreCoralL4;
-import frc.robot.commands.DeployClimb;
-import frc.robot.commands.scoring.ScoreCoralL1;
-import frc.robot.commands.scoring.ScoreCoralL2;
-import frc.robot.commands.scoring.ScoreCoralL3;
-import frc.robot.commands.scoring.ScoreCoralL4;
-import frc.robot.commands.sequences.RemoveAlgaeL2;
-import frc.robot.commands.sequences.RemoveAlgaeL3;
-import frc.robot.commands.sequences.RemoveAlgaeL3ScoreL3;
-import frc.robot.commands.PickUpAlgaeFromReef;
-import frc.robot.commands.states.ToAlgaeGround;
-import frc.robot.commands.states.ToAlgaeL2;
-import frc.robot.commands.states.ToAlgaeL3;
-import frc.robot.commands.states.ToCoralDropOff1;
-import frc.robot.commands.states.ToCoralDropOff2;
-import frc.robot.commands.states.ToCoralDropOff3;
-import frc.robot.commands.states.ToCoralDropOff4;
-import frc.robot.commands.states.ToCoralSource;
-import frc.robot.commands.states.ToCoralSourceManual;
-import frc.robot.commands.states.ToHomeCommand;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.commands.windmill.InitializePivotAndElevator;
+import frc.robot.commands.drivetrain.SwerveDriveTeleop;
+import frc.robot.io.IO;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -103,13 +34,6 @@ import frc.robot.subsystems.PivotSubsystem;
  */
 public class RobotContainer {
         // The robot's subsystems
-        private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
-        private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-        private final CoralSubsystem coralSubsystem = new CoralSubsystem();
-        private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-        private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-        private final AlgaeSubsystem algaeSubsystem = new AlgaeSubsystem();
-        private final LimelightSubsystem limelight = new LimelightSubsystem(driveSubsystem);
 
         private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
@@ -119,76 +43,98 @@ public class RobotContainer {
         // Register Named Commands for PathPlanner
         private void configureAutoCommands() {
                 NamedCommands.registerCommand("InitializePE",
-                                new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
+                                new InitializePivotAndElevator(RobotSubsystems.pivot, RobotSubsystems.elevator));
                 NamedCommands.registerCommand("AutoYCoral1",
-                                new AutoCoral1(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                new AutoCoral1(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                                RobotSubsystems.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoYCoral2",
-                                new AutoCoral2(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                new AutoCoral2(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                                RobotSubsystems.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoYCoral3",
-                                new AutoCoral3(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                new AutoCoral3(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                                RobotSubsystems.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoYCoral4",
-                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                new AutoCoral4(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                                RobotSubsystems.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoBCoral4",
-                                new AutoCoral4(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem,
+                                new AutoCoral4(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                                RobotSubsystems.drivetrain,
                                                 false));
                 NamedCommands.registerCommand("AutoCoralSource",
-                                new AutoCoralSource(coralSubsystem, elevatorSubsystem, pivotSubsystem, false));
+                                new AutoCoralSource(RobotSubsystems.coral, RobotSubsystems.elevator,
+                                                RobotSubsystems.pivot, false));
                 NamedCommands.registerCommand("AutoYLimelightRight",
-                                new AutoLimelightPosition(driveSubsystem, limelight, true, true));
+                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                                true));
                 NamedCommands.registerCommand("AutoYLimelightLeft",
-                                new AutoLimelightPosition(driveSubsystem, limelight, false, true));
+                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false,
+                                                true));
                 NamedCommands.registerCommand("AutoBLimelightRight",
-                                new AutoLimelightPosition(driveSubsystem, limelight, true, false));
+                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                                false));
                 NamedCommands.registerCommand("AutoBLimelightLeft",
-                                new AutoLimelightPosition(driveSubsystem, limelight, false, false));
+                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false,
+                                                false));
                 NamedCommands.registerCommand("AutoYLimelight",
-                                new AutoLimelight(driveSubsystem, limelight, true, true));
+                                new AutoLimelight(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true, true));
                 NamedCommands.registerCommand("AutoBLimelight",
-                                new AutoLimelight(driveSubsystem, limelight, false, false));
+                                new AutoLimelight(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false, false));
                 NamedCommands.registerCommand("AutoYMoveForward",
-                                new AutoMoveForwardForTime(driveSubsystem, limelight, true, 1));
+                                new AutoMoveForwardForTime(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                                1));
                 NamedCommands.registerCommand("AutoYMoveForwardFaster",
-                                new AutoMoveForwardForTimeFaster(driveSubsystem, limelight, true, 1, 0.3));
+                                new AutoMoveForwardForTimeFaster(RobotSubsystems.drivetrain, RobotSubsystems.limelight,
+                                                true, 1, 0.3));
                 NamedCommands.registerCommand("MoveToYCoral1",
-                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                new Windmill(RobotSubsystems.elevator, RobotSubsystems.pivot,
                                                 Constants.Windmill.WindmillState.CoralDropOff1,
                                                 true));
                 NamedCommands.registerCommand("DropCoral",
-                                new DropCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem));
+                                new DropCoral(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                                RobotSubsystems.drivetrain));
                 NamedCommands.registerCommand("AutoBMoveForward",
-                                new AutoMoveForwardForTime(driveSubsystem, limelight, false, 1));
+                                new AutoMoveForwardForTime(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false,
+                                                1));
                 NamedCommands.registerCommand("WaitUntilSafeToMove",
-                                new WaitUntilElevatorBelowSafeTravelHeight(elevatorSubsystem));
+                                new WaitUntilElevatorBelowSafeTravelHeight(RobotSubsystems.elevator));
                 NamedCommands.registerCommand("ZeroHeading",
-                                new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
+                                new InstantCommand(() -> RobotSubsystems.drivetrain.zeroHeading(),
+                                                RobotSubsystems.drivetrain));
                 NamedCommands.registerCommand("AutoYMoveTowardSource",
-                                new AutoPositionForTime(driveSubsystem, limelight, true, true, 0.5));
+                                new AutoPositionForTime(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                                true, 0.5));
                 NamedCommands.registerCommand("StartedMove", new PrintCommand("Startedmove"));
-                NamedCommands.registerCommand("AutoYMoveRight", new NewAutoMoveOnReef(driveSubsystem, limelight, true));
-                NamedCommands.registerCommand("AutoYMoveLeft", new NewAutoMoveOnReef(driveSubsystem, limelight, false));
+                NamedCommands.registerCommand("AutoYMoveRight",
+                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true));
+                NamedCommands.registerCommand("AutoYMoveLeft",
+                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false));
                 NamedCommands.registerCommand("AutoBMoveRight",
-                                new NewAutoMoveOnReef(driveSubsystem, limelight, false));
-                NamedCommands.registerCommand("AutoBMoveLeft", new NewAutoMoveOnReef(driveSubsystem, limelight, true));
-                NamedCommands.registerCommand("IsElevatorInSafePosition", new AutoPrintElevatorSafe(elevatorSubsystem));
-                NamedCommands.registerCommand("AutoAlgaeL2", new AutoAlgaeL2(driveSubsystem, coralSubsystem,
-                                algaeSubsystem, elevatorSubsystem, pivotSubsystem));
+                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false));
+                NamedCommands.registerCommand("AutoBMoveLeft",
+                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true));
+                NamedCommands.registerCommand("IsElevatorInSafePosition",
+                                new AutoPrintElevatorSafe(RobotSubsystems.elevator));
+                NamedCommands.registerCommand("AutoAlgaeL2",
+                                new AutoAlgaeL2(RobotSubsystems.drivetrain, RobotSubsystems.coral,
+                                                RobotSubsystems.algae, RobotSubsystems.elevator,
+                                                RobotSubsystems.pivot));
         }
 
         // The driver's controller
-        CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-        CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
-        GenericHID driverControllerRumble = driverController.getHID();
-        GenericHID operatorControllerRumble = operatorController.getHID();
+        // CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+        // CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
+        // GenericHID driverControllerRumble = driverController.getHID();
+        // GenericHID operatorControllerRumble = operatorController.getHID();
 
-        public void adjustJoystickValues() {
-                double rawX = driverController.getLeftX();
-                double rawY = driverController.getLeftY();
+        // public void adjustJoystickValues() {
+        //         double rawX = driverController.getLeftX();
+        //         double rawY = driverController.getLeftY();
 
-        }
+        // }
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -201,33 +147,19 @@ public class RobotContainer {
                 configureAutoCommands();
 
                 // testing alternate drive
-                // MoveCommand moveCommand = new MoveCommand(this.driveSubsystem,
+                // MoveCommand moveCommand = new MoveCommand(this.RobotSubsystems.drivetrain,
                 // driverController);
-                // driveSubsystem.setDefaultCommand(moveCommand);
+                // RobotSubsystems.drivetrain.setDefaultCommand(moveCommand);
 
                 // Configure default commands
-                driveSubsystem.setDefaultCommand(
+                RobotSubsystems.drivetrain.setDefaultCommand(
+                        // IMPLEMENT DEFAULT COMMAND
+                        new SwerveDriveTeleop(RobotSubsystems.drivetrain)
+                        );
                                 // The right trigger controls the speed of the robot.
                                 // The left stick controls translation of the robot.
                                 // Turning is controlled by the X axis of the right stick.
-                                new RunCommand(
-                                                () -> driveSubsystem.drive(
-                                                                MathUtil.applyDeadband(
-                                                                                Math.pow(driverController
-                                                                                                .getRightTriggerAxis(),
-                                                                                                2),
-                                                                                0),
-                                                                -MathUtil.applyDeadband(driverController.getLeftY(),
-                                                                                OIConstants.kDriveDeadband),
-                                                                -MathUtil.applyDeadband(driverController.getLeftX(),
-                                                                                OIConstants.kDriveDeadband),
-                                                                -MathUtil.applyDeadband(
-                                                                                Math.pow(driverController.getRightX(),
-                                                                                                3),
-                                                                                OIConstants.kTurnDeadband),
-                                                                FakeConstants.fieldRelative),
-                                                driveSubsystem));
-
+                                
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
 
@@ -250,213 +182,9 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
 
-                final Trigger altPositionRight = operatorController.rightBumper();
+                IO io = new IO();
 
-                // Manual Zero buttons for elevator and pivot
-                // final Trigger zeroElevator = operatorController.start();
-                final Trigger zeroPivot = operatorController.start();
-
-                // Zero elevator - carriage must be below stage 1 or it will zero where it is
-                // zeroElevator.onTrue(new ZeroElevator(elevatorSubsystem));
-                zeroPivot.onTrue(new InitializePivotAndElevator(pivotSubsystem, elevatorSubsystem));
-                zeroPivot.and(altPositionRight).onTrue(new ZeroElevator(elevatorSubsystem));
-
-                // Reset heading of robot for field relative drive
-                final Trigger zeroHeadingButton = driverController.start();
-                zeroHeadingButton.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading(), driveSubsystem));
-
-                // // Limelight Buttons
-                final Trigger limelightTrigger1 = driverController.x();
-                final Trigger limelightTrigger2 = driverController.b();
-
-                // limelightTrigger1.onTrue(
-                // new ParallelRaceGroup(new WaitCommand(1), new
-                // AlignToAprilTagBlue(driveSubsystem,
-                // limelight)));
-
-                // limelightTrigger2.onTrue(
-                // new ParallelRaceGroup(new WaitCommand(4), new
-                // AlignToAprilTagYellow(driveSubsystem,
-                // limelight)));
-                limelightTrigger1.onTrue(new AlignToAprilTagBlue(driveSubsystem, limelight));
-                limelightTrigger2.onTrue(
-                                new AlignToAprilTagYellow(driveSubsystem, limelight));
-
-                // Driver operations
-                final Trigger ejectCoral = driverController.a();
-                final Trigger pickUpCoral = driverController.leftTrigger();
-                final Trigger ejectAlgae = driverController.y();
-                final Trigger shootAlgaeNetBlue = driverController.leftBumper();
-                final Trigger shootAlgaeNetYellow = driverController.rightBumper();
-                final Trigger raiseClimber = driverController.povRight();
-                final Trigger lowerClimber = driverController.povLeft();
-                final Trigger altButton = driverController.back();
-                final Trigger left = driverController.povDown();
-                final Trigger right = driverController.povUp();
-                final Trigger goroborelative = driverController.leftStick();
-
-                goroborelative.onTrue(new InstantCommand(() -> {
-                        if (FakeConstants.fieldRelative) {
-                                FakeConstants.fieldRelative = false;
-                        } else {
-                                FakeConstants.fieldRelative = true;
-                        }
-                }));
-                // commands that go with driver operations
-                ejectCoral.onTrue(new EjectCoral(coralSubsystem, elevatorSubsystem,
-                                pivotSubsystem, driveSubsystem));
-                ejectCoral.and(altButton).onTrue(new DropCoral(coralSubsystem,
-                                elevatorSubsystem, pivotSubsystem, driveSubsystem));
-                pickUpCoral.onTrue(new PickUpCoralFromSource(coralSubsystem,
-                                elevatorSubsystem, pivotSubsystem, false));
-                pickUpCoral.and(altButton)
-                                .onTrue(new PickUpCoralFromSource(coralSubsystem, elevatorSubsystem,
-                                                pivotSubsystem,
-                                                true));
-
-                ejectAlgae.onTrue(new EjectAlgae(algaeSubsystem));
-                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(algaeSubsystem,
-                                elevatorSubsystem, pivotSubsystem,
-                                coralSubsystem));
-                shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(algaeSubsystem,
-                                elevatorSubsystem, pivotSubsystem,
-                                coralSubsystem));
-
-                left.onTrue(new AutoPositionLeftRight(driveSubsystem, limelight, false,
-                                (limelight.hasTarget("limelight-yellow"))));
-                right.onTrue(new AutoPositionLeftRight(driveSubsystem, limelight, true,
-                                (limelight.hasTarget("limelight-yellow"))));
-                raiseClimber.onTrue(new RunCommand(() -> climberSubsystem.moveUp(),
-                                climberSubsystem))
-                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                                                climberSubsystem));
-                lowerClimber.onTrue(new RunCommand(() -> climberSubsystem.moveDown(),
-                                climberSubsystem))
-                                .onFalse(new RunCommand(() -> climberSubsystem.stop(),
-                                                climberSubsystem));
-
-                // Operator Controls
-                final Trigger manualCoral = operatorController.rightTrigger();
-                final Trigger manualAlgae = operatorController.leftTrigger();
-
-                manualCoral.onTrue(new SequentialCommandGroup(
-                                new ToCoralSourceManual(elevatorSubsystem, pivotSubsystem, false),
-                                new RunCommand(() -> coralSubsystem.pickup(), coralSubsystem)))
-                                .onFalse(new SequentialCommandGroup(
-                                                new InstantCommand(() -> coralSubsystem.stop(), coralSubsystem),
-                                                new WaitCommand(0.25),
-                                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem)));
-
-                manualAlgae.onTrue(new RunCommand(() -> algaeSubsystem.pickup(), algaeSubsystem))
-                                .onFalse(new InstantCommand(algaeSubsystem::holdAlgae));
-
-                // climber control
-                final Trigger toggleClimber = operatorController.back();
-
-                toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new DeployClimb(climberSubsystem),
-                                new RetractClimb(climberSubsystem),
-                                climberSubsystem::climberAtHomePosition));
-
-                toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new LockPivotAndElevatorCommand(elevatorSubsystem,
-                                                pivotSubsystem).withTimeout(15)
-                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem),
-                                climberSubsystem::climberAtHomePosition));
-
-                // position controls
-                final Trigger home = operatorController.leftBumper();
-                final Trigger algaeGround = operatorController.povDown();
-                final Trigger algaeReef2 = operatorController.povRight();
-                final Trigger algaeReef3 = operatorController.povUp();
-                final Trigger algaeProcessor = operatorController.povLeft();
-                final Trigger coralDropOff4 = operatorController.y();
-                final Trigger coralDropOff3 = operatorController.x();
-                final Trigger coralDropOff2 = operatorController.b();
-                final Trigger coralDropOff1 = operatorController.a();
-
-                // initializeInputs.onTrue(new ResetOperatorInputs());
-
-                home.onTrue(new Windmill(elevatorSubsystem, pivotSubsystem, Constants.Windmill.WindmillState.Home,
-                                false));
-
-                algaeGround.onTrue(new PickUpAlgaeFromGround(algaeSubsystem, elevatorSubsystem, pivotSubsystem));
-
-                algaeReef2.onTrue(new SequentialCommandGroup(new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, false),
-                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
-                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.Home,
-                                                false)));
-                algaeReef3.onTrue(new SequentialCommandGroup(new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, false),
-                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
-                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
-                                                false)));
-
-                algaeProcessor.onTrue(new ToAlgaeGround(elevatorSubsystem, pivotSubsystem));
-
-                coralDropOff1.onTrue(new ScoreCoralL1(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
-
-                coralDropOff2.onTrue(new ScoreCoralL2(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
-
-                coralDropOff3.onTrue(new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, false));
-
-                coralDropOff4.onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem, driveSubsystem,
-                                false));
-
-                algaeReef2.and(altPositionRight)
-                                .onTrue(new SequentialCommandGroup(
-                                                new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, true),
-                                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
-                                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                Constants.Windmill.WindmillState.Home,
-                                                                true)));
-                algaeReef3.and(altPositionRight).onTrue(
-                                new SequentialCommandGroup(new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, true),
-                                                new PickUpAlgae(algaeSubsystem), new WaitCommand(.25),
-                                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
-                                                                true)));
-
-                coralDropOff1.and(altPositionRight)
-                                .onTrue(new ScoreCoralL1(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
-                coralDropOff2.and(altPositionRight)
-                                .onTrue(new ScoreCoralL2(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
-                coralDropOff3.and(altPositionRight)
-                                .onTrue(new ScoreCoralL3(elevatorSubsystem, pivotSubsystem, coralSubsystem, true));
-                coralDropOff4.and(altPositionRight)
-                                .onTrue(new ScoreCoralL4(elevatorSubsystem, pivotSubsystem, coralSubsystem,
-                                                driveSubsystem, true));
-
-                // Set Left Joystick for manual elevator/pivot movement
-                final Trigger raiseElevator = operatorController.axisLessThan(1, -0.25);
-                final Trigger lowerElevator = operatorController.axisGreaterThan(1, 0.25);
-                final Trigger pivotClockwise = operatorController.axisGreaterThan(4, 0.25);
-                final Trigger pivotCounterClockwise = operatorController.axisLessThan(4,
-                                -0.25);
-
-                // commands that go with manual elevator/pivot movement
-                pivotClockwise
-                                .onTrue(new InstantCommand(pivotSubsystem::start, pivotSubsystem))
-                                .onFalse(new InstantCommand(pivotSubsystem::holdPivotArmManual, pivotSubsystem));
-                pivotCounterClockwise.onTrue(new InstantCommand(pivotSubsystem::reverse, pivotSubsystem))
-                                .onFalse(new InstantCommand(pivotSubsystem::holdPivotArmManual, pivotSubsystem));
-                raiseElevator.whileTrue(
-                                new InstantCommand(elevatorSubsystem::moveUp, elevatorSubsystem)
-                                                .andThen(new WaitUntilCommand(
-                                                                () -> elevatorSubsystem.ElevatorRaiseLimitHit()))
-                                                .andThen(new InstantCommand(elevatorSubsystem::holdHeight,
-                                                                elevatorSubsystem)))
-                                .onFalse(new InstantCommand(elevatorSubsystem::holdHeight, elevatorSubsystem));
-                lowerElevator.whileTrue(
-                                new InstantCommand(elevatorSubsystem::moveDown, elevatorSubsystem)
-                                                .andThen(new WaitUntilCommand(
-                                                                () -> elevatorSubsystem.ElevatorLowerLimitHit()))
-                                                .andThen(new InstantCommand(elevatorSubsystem::holdHeight,
-                                                                elevatorSubsystem)))
-                                .onFalse(new InstantCommand(elevatorSubsystem::holdHeight,
-                                                elevatorSubsystem));
+                io.init();
 
         }
 
@@ -494,33 +222,34 @@ public class RobotContainer {
         // SwerveControllerCommand swerveControllerCommand = new
         // SwerveControllerCommand(
         // exampleTrajectory,
-        // driveSubsystem::getPose, // Functional interface to feed supplier
+        // RobotSubsystems.drivetrain::getPose, // Functional interface to feed supplier
         // DriveConstants.kDriveKinematics,
 
         // // Position controllers
         // new PIDController(AutoConstants.kPXController, 0, 0),
         // new PIDController(AutoConstants.kPYController, 0, 0),
         // thetaController,
-        // driveSubsystem::setModuleStates,
-        // driveSubsystem);
+        // RobotSubsystems.drivetrain::setModuleStates,
+        // RobotSubsystems.drivetrain);
 
         // // Run path following command, then stop at the end.
-        // return swerveControllerCommand.andThen(() -> driveSubsystem.drive(0, 0, 0, 0,
+        // return swerveControllerCommand.andThen(() ->
+        // RobotSubsystems.drivetrain.drive(0, 0, 0, 0,
         // false));
         // }
 
-        public Command rumbleDriverCommand() {
-                return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(() -> stopRumbleDriverCtrl());
-        }
+        // public Command rumbleDriverCommand() {
+        //         return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(() -> stopRumbleDriverCtrl());
+        // }
 
-        public void rumbleDriverCtrl() {
-                driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-                operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-        }
+        // public void rumbleDriverCtrl() {
+        //         driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        //         operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        // }
 
-        public void stopRumbleDriverCtrl() {
-                driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-                operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-        }
+        // public void stopRumbleDriverCtrl() {
+        //         driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        //         operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        // }
 
 }

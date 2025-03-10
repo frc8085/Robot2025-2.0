@@ -1,7 +1,7 @@
 package frc.robot.commands.automated;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.PickUpAlgae;
+import frc.robot.commands.manipulator.algae.PickUpAlgae;
 import frc.robot.commands.states.ToAlgaeL2;
 import frc.robot.commands.states.ToAlgaeL3;
 import frc.robot.subsystems.AlgaeSubsystem;

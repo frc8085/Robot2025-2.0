@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.manipulator.coral;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -6,6 +6,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.commands.windmill.Windmill;
 
 public class PickUpCoralFromSource extends SequentialCommandGroup {
         public PickUpCoralFromSource(
