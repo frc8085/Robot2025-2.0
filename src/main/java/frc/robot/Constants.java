@@ -209,10 +209,10 @@ public final class Constants {
     public static double ropeAdjustmentFactor = .93;
     public static double kElevatorHomeHeight = 30;
     public static double kElevatorAlgaeHoldHeight = 47;
-    public static double kElevatorCoralPickupHeight = 29;
-    public static double kElevatorCoralPickupAlternateHeight = 24;
-    public static double kElevatorCoralPickupHigher = 29;
-    public static double kElevatorCoralPickupAltHigher = 24;
+    public static double kElevatorCoralPickupHeight = 27;
+    public static double kElevatorCoralPickupAlternateHeight = 22;
+    public static double kElevatorCoralPickupHigher = 27;
+    public static double kElevatorCoralPickupAltHigher = 22;
     public static double kElevatorCoralDropOff1Height = 17;
     public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
@@ -408,7 +408,7 @@ public final class Constants {
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
     // TEMPORARY VALUES
-    public static double kAlgaeP = 0.9;
+    public static double kAlgaeP = 2;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
     public static double kAlgaeFF = 0.0;

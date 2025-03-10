@@ -44,7 +44,7 @@ public class AutoAlgaeL2 extends SequentialCommandGroup {
                                                                 new AutoDriveMeters(driveSubsystem, 0, 1.7, 0.4),
                                                                 new AutoDriveMeters(driveSubsystem, 0, .5, 0.2))),
                                 // Wait X time until algae has cleared the reef
-                                new WaitCommand(1.5),
+                                new WaitCommand(1),
                                 // Go to Coral Drop Off 3
                                 new ToCoralDropOff3(elevatorSubsystem, pivotSubsystem, false),
                                 // Wait until it's at the correct height and angle for L3
@@ -54,8 +54,6 @@ public class AutoAlgaeL2 extends SequentialCommandGroup {
                                                                 new PrintCommand("At Elevator Drop Off")),
                                                 new SequentialCommandGroup(new WaitUntilCommand(
                                                                 () -> pivotSubsystem.pivotAtCoralDropOffAngle(false)),
-                                                                new PrintCommand("At Pivot Drop Off"))),
-                                // eject the coral
-                                new AutoEjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
+                                                                new PrintCommand("At Pivot Drop Off"))));
         }
 }
