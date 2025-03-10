@@ -10,5 +10,5 @@ public class RobotSubsystems {
         public static final ElevatorSubsystem elevator = new ElevatorSubsystem();
         public static final ClimberSubsystem climber = new ClimberSubsystem();
         public static final AlgaeSubsystem algae = new AlgaeSubsystem();
-        public static final LimelightSubsystem limelight = new LimelightSubsystem(drivetrain);
+        public static final LimelightSubsystem limelight = new LimelightSubsystem();
 }

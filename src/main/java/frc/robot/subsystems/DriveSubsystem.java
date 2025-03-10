@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Vector;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
@@ -19,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.CanIdConstants;
@@ -33,6 +36,8 @@ import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.wpilibj.Timer;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -71,10 +76,10 @@ public class DriveSubsystem extends SubsystemBase {
   // getYaw(),
   // getModulePositions(),
   // new Pose2d(0, 0, new Rotation2d(0)));
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(getGyroOrientation()),
-      getModulePositions());
+      getModulePositions(), new Pose2d());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -123,16 +128,78 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
+  public void inputCameraPoses(String[] limelightNames) {
+    LimelightSubsystem limelight = new LimelightSubsystem();
+    for (String limelightName : limelightNames) {
+      if (limelight.hasTarget(limelightName)) {
+        Pose2d pose = limelight.getBotPoseBlue(limelightName);
+        double visionTime = Timer.getFPGATimestamp() - limelight.getVisionTime(limelightName);
+        int tagCount = limelight.getTagCount(limelightName);
+        int primaryId = limelight.getPrimaryId(limelightName);
+        double distanceToTarget = limelight.getDistanceToTarget(limelightName);
+        addVisionPose(pose, visionTime, tagCount, primaryId, distanceToTarget);
+      }
+    }
+  }
+
+  public void addVisionPose(Pose2d pose, double visionTime, int tagCount, int primaryId, double distanceToTarget) {
+
+    double stdDev = 2;
+
+    boolean primaryReef = false;
+    if (6 <= primaryId && primaryId <= 11) {
+      primaryReef = true;
+    } else if (17 <= primaryId && primaryId <= 22) {
+      primaryReef = true;
+    }
+
+    if (tagCount == 0) {
+      return;
+    }
+
+    if (tagCount == 1) {
+      if (distanceToTarget > 2.5) { // meters
+        return;
+      }
+      if (primaryReef && (distanceToTarget <= 1.5)) {
+        stdDev = 0.25;
+        if (distanceToTarget <= 0.75) {
+          stdDev = 0.1;
+          if (DriverStation.isTeleop()) {
+            this.m_odometry.addVisionMeasurement(pose, visionTime, VecBuilder.fill(stdDev, stdDev, stdDev));
+            return;
+          }
+        }
+      }
+    }
+
+    if (tagCount >= 2) {
+      stdDev = 0.7;
+      if (primaryReef && (distanceToTarget <= 0.5)) {
+        stdDev = 0.5;
+        if (distanceToTarget <= 0.25) {
+          stdDev = 0.25;
+        }
+      }
+    }
+
+    this.m_odometry.addVisionMeasurement(new Pose2d(pose.getTranslation(), this.getYaw()), visionTime,
+        VecBuilder.fill(stdDev, stdDev, 50.0));
+    return;
+  }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(getGyroOrientation()),
         getModulePositions());
+
+    this.inputCameraPoses(new String[] { "limelight-blue", "limelight-yellow" });
+    
     SmartDashboard.putNumber("robot heading", getHeading());
     SmartDashboard.putNumber("robot wrapped heading", getHeadingWrappedDegrees());
     SmartDashboard.putBoolean("fieldRelative", FakeConstants.fieldRelative);
-
   }
 
   // Copying code from 6616 for limelight and orienting
@@ -226,7 +293,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public Pose2d getPose() {
     // return m_odometry.getPoseMeters(); // this was using PoseEstimator
-    return m_odometry.getPoseMeters();
+    return m_odometry.getEstimatedPosition();
   }
 
   /**

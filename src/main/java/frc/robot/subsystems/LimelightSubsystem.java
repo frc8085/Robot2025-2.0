@@ -8,18 +8,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.LimelightHelpers;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 public class LimelightSubsystem extends SubsystemBase {
     private boolean TUNING_MODE = TuningModeConstants.kLimelightTuning;
 
     /** Creates a new LimelightSubsystem. */
-    DriveSubsystem m_drive;
+    // DriveSubsystem m_drive;
 
     private boolean m_visionMode;
 
-    public LimelightSubsystem(
-            DriveSubsystem drive) {
-        m_drive = drive;
+    public LimelightSubsystem() {
+        // m_drive = drive;
 
     }
 
@@ -63,6 +64,28 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public int getID(String limelightName) {
         return (int) LimelightHelpers.getFiducialID(limelightName);
+    }
+
+    public Pose2d getBotPoseBlue(String limelightName) {
+        return LimelightHelpers.getBotPose2d_wpiBlue(limelightName);
+    }
+
+    public double getVisionTime(String limelightName) {
+        return LimelightHelpers.getLatency_Pipeline(limelightName);
+    }
+
+    public int getTagCount(String limelightName) {
+        return LimelightHelpers.getTargetCount(limelightName);
+    }
+
+
+
+    public int getPrimaryId(String limelightName) {
+        return (int) LimelightHelpers.getFiducialID(limelightName);
+    }
+
+    public double getDistanceToTarget(String limelightName) {
+        return LimelightHelpers.getTargetPose3d_RobotSpace(limelightName).getTranslation().getDistance(new Translation3d());
     }
 
     /**
