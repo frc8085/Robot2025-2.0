@@ -24,7 +24,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private StatusSignal<Angle> climberPosition;
 
     // Limit Switches
-    DigitalInput climberLimitSwitch = new DigitalInput(5);
+    DigitalInput climberLimitSwitch = new DigitalInput(9);
 
     public ClimberSubsystem() {
 
@@ -42,7 +42,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public boolean climberAtHomePosition() {
 
-        return climberLimitSwitch.get();
+        return !climberLimitSwitch.get();
 
     }
 
@@ -54,18 +54,41 @@ public class ClimberSubsystem extends SubsystemBase {
         return climberPosition.getValueAsDouble();
     }
 
+    public void zeroAtLimitSwitch() {
+        if (climberAtHomePosition()) {
+            m_climberMotor.setPosition(0);
+        }
+    }
+
+    public boolean climberDeployed() {
+        return (getCurrentMotorPosition() >= 150);
+    }
+
     // turn off climber
     public void stop() {
         m_climberMotor.set(0);
     }
 
+    // deploy climber move
+    public void deploy() {
+        m_climberMotor.set(1);
+    }
+
     // open loop move climber up & down
     public void moveDown() {
-        m_climberMotor.set(-kSpeed);
+        if (climberAtHomePosition()) {
+            m_climberMotor.set(0);
+        } else {
+            m_climberMotor.set(-kSpeed);
+        }
     }
 
     public void moveUp() {
-        m_climberMotor.set(1);
+        if (climberAtHomePosition()) {
+            m_climberMotor.set(0);
+        } else {
+            m_climberMotor.set(1);
+        }
     }
 
     public void periodic() {
