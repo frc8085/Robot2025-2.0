@@ -25,7 +25,7 @@ import frc.robot.commands.windmill.elevator.*;
 
 public class IO {
 
-    public void init() {
+    public void init(RobotContainer robotContainer) {
 
 
         // Additional Buttons to allow for alternate button pushes
@@ -78,28 +78,28 @@ public class IO {
                 
         //Initialization
         // Zero elevator - carriage must be below stage 1 or it will zero where it is
-        // zeroElevator.onTrue(new ZeroElevator(RobotContainer.elevator));
-                zeroArm.onTrue(new ZeroElevator(RobotContainer.elevator));
-                zeroArm.and(altButtonOperator).onTrue(new InitializePivotAndElevator(RobotContainer.pivot, RobotContainer.elevator));
+        // zeroElevator.onTrue(new ZeroElevator(robotContainer.elevator));
+                zeroArm.onTrue(new ZeroElevator(robotContainer.elevator));
+                zeroArm.and(altButtonOperator).onTrue(new InitializePivotAndElevator(robotContainer.pivot, robotContainer.elevator));
 
                 // Reset heading of robot for field relative drive
-                zeroHeadingButton.onTrue(new InstantCommand(() -> RobotContainer.drivetrain.zeroHeading(), RobotContainer.drivetrain));
+                zeroHeadingButton.onTrue(new InstantCommand(() -> robotContainer.drivetrain.zeroHeading(), robotContainer.drivetrain));
 
                 // // Limelight Buttons
 
 
-                // RobotContainer.limelightTrigger1.onTrue(
+                // robotContainer.limelightTrigger1.onTrue(
                 // new ParallelRaceGroup(new WaitCommand(1), new
-                // AlignToAprilTagBlue(RobotContainer.drivetrain,
-                // RobotContainer.limelight)));
+                // AlignToAprilTagBlue(robotContainer.drivetrain,
+                // robotContainer.limelight)));
 
-                // RobotContainer.limelightTrigger2.onTrue(
+                // robotContainer.limelightTrigger2.onTrue(
                 // new ParallelRaceGroup(new WaitCommand(4), new
-                // AlignToAprilTagYellow(RobotContainer.drivetrain,
-                // RobotContainer.limelight)));
-                limelightTrigger1.onTrue(new AlignToAprilTagBlue(RobotContainer.drivetrain, RobotContainer.limelight));
+                // AlignToAprilTagYellow(robotContainer.drivetrain,
+                // robotContainer.limelight)));
+                limelightTrigger1.onTrue(new AlignToAprilTagBlue(robotContainer.drivetrain, robotContainer.limelight));
                 limelightTrigger2.onTrue(
-                                new AlignToAprilTagYellow(RobotContainer.drivetrain, RobotContainer.limelight));
+                                new AlignToAprilTagYellow(robotContainer.drivetrain, robotContainer.limelight));
 
 
                 gorobotrelative.onTrue(new InstantCommand(() -> {
@@ -110,136 +110,136 @@ public class IO {
                         }
                 }));
                 // commands that go with driver operations
-                ejectCoral.onTrue(new EjectCoral(RobotContainer.coral, RobotContainer.elevator,
-                                RobotContainer.pivot, RobotContainer.drivetrain));
-                ejectCoral.and(altButtonDriver).onTrue(new DropCoral(RobotContainer.coral,
-                                RobotContainer.elevator, RobotContainer.pivot, RobotContainer.drivetrain));
-                pickUpCoral.onTrue(new PickUpCoralFromSource(RobotContainer.coral,
-                                RobotContainer.elevator, RobotContainer.pivot, false));
+                ejectCoral.onTrue(new EjectCoral(robotContainer.coral, robotContainer.elevator,
+                                robotContainer.pivot, robotContainer.drivetrain));
+                ejectCoral.and(altButtonDriver).onTrue(new DropCoral(robotContainer.coral,
+                                robotContainer.elevator, robotContainer.pivot, robotContainer.drivetrain));
+                pickUpCoral.onTrue(new PickUpCoralFromSource(robotContainer.coral,
+                                robotContainer.elevator, robotContainer.pivot, false));
                 pickUpCoral.and(altButtonDriver)
-                                .onTrue(new PickUpCoralFromSource(RobotContainer.coral, RobotContainer.elevator,
-                                                RobotContainer.pivot,
+                                .onTrue(new PickUpCoralFromSource(robotContainer.coral, robotContainer.elevator,
+                                                robotContainer.pivot,
                                                 true));
 
-                ejectAlgae.onTrue(new EjectAlgae(RobotContainer.algae));
-                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(RobotContainer.algae,
-                                RobotContainer.elevator, RobotContainer.pivot,
-                                RobotContainer.coral));
-                shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(RobotContainer.algae,
-                                RobotContainer.elevator, RobotContainer.pivot,
-                                RobotContainer.coral));
+                ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
+                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
+                                robotContainer.elevator, robotContainer.pivot,
+                                robotContainer.coral));
+                shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(robotContainer.algae,
+                                robotContainer.elevator, robotContainer.pivot,
+                                robotContainer.coral));
 
-                left.onTrue(new AutoPositionLeftRight(RobotContainer.drivetrain, RobotContainer.limelight, false,
-                                (RobotContainer.limelight.hasTarget("RobotContainer.limelight-yellow"))));
-                right.onTrue(new AutoPositionLeftRight(RobotContainer.drivetrain, RobotContainer.limelight, true,
-                                (RobotContainer.limelight.hasTarget("RobotContainer.limelight-yellow"))));
-                raiseClimber.onTrue(new RunCommand(() -> RobotContainer.climber.moveUp(),
-                                RobotContainer.climber))
-                                .onFalse(new RunCommand(() -> RobotContainer.climber.stop(),
-                                                RobotContainer.climber));
-                lowerClimber.onTrue(new RunCommand(() -> RobotContainer.climber.moveDown(),
-                                RobotContainer.climber))
-                                .onFalse(new RunCommand(() -> RobotContainer.climber.stop(),
-                                                RobotContainer.climber));
+                left.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, false,
+                                (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
+                right.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, true,
+                                (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
+                raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
+                                robotContainer.climber))
+                                .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
+                                                robotContainer.climber));
+                lowerClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveDown(),
+                                robotContainer.climber))
+                                .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
+                                                robotContainer.climber));
 
                 manualCoral.onTrue(new SequentialCommandGroup(
-                                new ToCoralSourceManual(RobotContainer.elevator, RobotContainer.pivot, false),
-                                new RunCommand(() -> RobotContainer.coral.pickup(), RobotContainer.coral)))
+                                new ToCoralSourceManual(robotContainer.elevator, robotContainer.pivot, false),
+                                new RunCommand(() -> robotContainer.coral.pickup(), robotContainer.coral)))
                                 .onFalse(new SequentialCommandGroup(
-                                                new InstantCommand(() -> RobotContainer.coral.stop(), RobotContainer.coral),
+                                                new InstantCommand(() -> robotContainer.coral.stop(), robotContainer.coral),
                                                 new WaitCommand(0.25),
-                                                new ToHomeCommand(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral)));
+                                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot, robotContainer.coral)));
 
-                manualAlgae.onTrue(new RunCommand(() -> RobotContainer.algae.pickup(), RobotContainer.algae))
-                                .onFalse(new InstantCommand(RobotContainer.algae::holdAlgae));
+                manualAlgae.onTrue(new RunCommand(() -> robotContainer.algae.pickup(), robotContainer.algae))
+                                .onFalse(new InstantCommand(robotContainer.algae::holdAlgae));
 
-
-                toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new DeployClimb(RobotContainer.climber),
-                                new RetractClimb(RobotContainer.climber),
-                                RobotContainer.climber::climberAtHomePosition));
 
                 toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new LockPivotAndElevatorCommand(RobotContainer.elevator,
-                                                RobotContainer.pivot).withTimeout(15)
+                                new DeployClimb(robotContainer.climber),
+                                new RetractClimb(robotContainer.climber),
+                                robotContainer.climber::climberAtHomePosition));
+
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
+                                new LockPivotAndElevatorCommand(robotContainer.elevator,
+                                                robotContainer.pivot).withTimeout(15)
                                                 .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                                new ToHomeCommand(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral),
-                                RobotContainer.climber::climberAtHomePosition));
+                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot, robotContainer.coral),
+                                robotContainer.climber::climberAtHomePosition));
 
                 // initializeInputs.onTrue(new ResetOperatorInputs());
 
-                home.onTrue(new Windmill(RobotContainer.elevator, RobotContainer.pivot, Constants.Windmill.WindmillState.Home,
+                home.onTrue(new Windmill(robotContainer.elevator, robotContainer.pivot, Constants.Windmill.WindmillState.Home,
                                 false));
 
-                algaeGround.onTrue(new PickUpAlgaeFromGround(RobotContainer.algae, RobotContainer.elevator, RobotContainer.pivot));
+                algaeGround.onTrue(new PickUpAlgaeFromGround(robotContainer.algae, robotContainer.elevator, robotContainer.pivot));
 
-                algaeReef2.onTrue(new SequentialCommandGroup(new ToAlgaeL2(RobotContainer.elevator, RobotContainer.pivot, false),
-                                new PickUpAlgae(RobotContainer.algae), new WaitCommand(.25),
-                                new Windmill(RobotContainer.elevator, RobotContainer.pivot,
+                algaeReef2.onTrue(new SequentialCommandGroup(new ToAlgaeL2(robotContainer.elevator, robotContainer.pivot, false),
+                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                 Constants.Windmill.WindmillState.Home,
                                                 false)));
-                algaeReef3.onTrue(new SequentialCommandGroup(new ToAlgaeL3(RobotContainer.elevator, RobotContainer.pivot, false),
-                                new PickUpAlgae(RobotContainer.algae), new WaitCommand(.25),
-                                new Windmill(RobotContainer.elevator, RobotContainer.pivot,
+                algaeReef3.onTrue(new SequentialCommandGroup(new ToAlgaeL3(robotContainer.elevator, robotContainer.pivot, false),
+                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                 Constants.Windmill.WindmillState.AlgaeHoldHeight,
                                                 false)));
 
-                algaeProcessor.onTrue(new ToAlgaeGround(RobotContainer.elevator, RobotContainer.pivot));
+                algaeProcessor.onTrue(new ToAlgaeGround(robotContainer.elevator, robotContainer.pivot));
 
-                coralDropOff1.onTrue(new ScoreCoralL1(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, false));
+                coralDropOff1.onTrue(new ScoreCoralL1(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
 
-                coralDropOff2.onTrue(new ScoreCoralL2(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, false));
+                coralDropOff2.onTrue(new ScoreCoralL2(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
 
-                coralDropOff3.onTrue(new ScoreCoralL3(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, false));
+                coralDropOff3.onTrue(new ScoreCoralL3(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
 
-                coralDropOff4.onTrue(new ScoreCoralL4(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, RobotContainer.drivetrain,
+                coralDropOff4.onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, robotContainer.drivetrain,
                                 false));
 
                 algaeReef2.and(altButtonOperator)
                                 .onTrue(new SequentialCommandGroup(
-                                                new ToAlgaeL2(RobotContainer.elevator, RobotContainer.pivot, true),
-                                                new PickUpAlgae(RobotContainer.algae), new WaitCommand(.25),
-                                                new Windmill(RobotContainer.elevator, RobotContainer.pivot,
+                                                new ToAlgaeL2(robotContainer.elevator, robotContainer.pivot, true),
+                                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                                 Constants.Windmill.WindmillState.Home,
                                                                 true)));
                 algaeReef3.and(altButtonOperator).onTrue(
-                                new SequentialCommandGroup(new ToAlgaeL3(RobotContainer.elevator, RobotContainer.pivot, true),
-                                                new PickUpAlgae(RobotContainer.algae), new WaitCommand(.25),
-                                                new Windmill(RobotContainer.elevator, RobotContainer.pivot,
+                                new SequentialCommandGroup(new ToAlgaeL3(robotContainer.elevator, robotContainer.pivot, true),
+                                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                                 Constants.Windmill.WindmillState.AlgaeHoldHeight,
                                                                 true)));
 
                 coralDropOff1.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL1(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, true));
+                                .onTrue(new ScoreCoralL1(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, true));
                 coralDropOff2.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL2(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, true));
+                                .onTrue(new ScoreCoralL2(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, true));
                 coralDropOff3.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL3(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral, true));
+                                .onTrue(new ScoreCoralL3(robotContainer.elevator, robotContainer.pivot, robotContainer.coral, true));
                 coralDropOff4.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL4(RobotContainer.elevator, RobotContainer.pivot, RobotContainer.coral,
-                                                RobotContainer.drivetrain, true));
+                                .onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
+                                                robotContainer.drivetrain, true));
 
 
                 // commands that go with manual elevator/pivot movement
                 pivotClockwise
-                                .onTrue(new InstantCommand(RobotContainer.pivot::start, RobotContainer.pivot))
-                                .onFalse(new InstantCommand(RobotContainer.pivot::holdPivotArmManual, RobotContainer.pivot));
-                pivotCounterClockwise.onTrue(new InstantCommand(RobotContainer.pivot::reverse, RobotContainer.pivot))
-                                .onFalse(new InstantCommand(RobotContainer.pivot::holdPivotArmManual, RobotContainer.pivot));
+                                .onTrue(new InstantCommand(robotContainer.pivot::start, robotContainer.pivot))
+                                .onFalse(new InstantCommand(robotContainer.pivot::holdPivotArmManual, robotContainer.pivot));
+                pivotCounterClockwise.onTrue(new InstantCommand(robotContainer.pivot::reverse, robotContainer.pivot))
+                                .onFalse(new InstantCommand(robotContainer.pivot::holdPivotArmManual, robotContainer.pivot));
                 raiseElevator.whileTrue(
-                                new InstantCommand(RobotContainer.elevator::moveUp, RobotContainer.elevator)
+                                new InstantCommand(robotContainer.elevator::moveUp, robotContainer.elevator)
                                                 .andThen(new WaitUntilCommand(
-                                                                () -> RobotContainer.elevator.ElevatorRaiseLimitHit()))
-                                                .andThen(new InstantCommand(RobotContainer.elevator::holdHeight,
-                                                                RobotContainer.elevator)))
-                                .onFalse(new InstantCommand(RobotContainer.elevator::holdHeight, RobotContainer.elevator));
+                                                                () -> robotContainer.elevator.ElevatorRaiseLimitHit()))
+                                                .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                                robotContainer.elevator)))
+                                .onFalse(new InstantCommand(robotContainer.elevator::holdHeight, robotContainer.elevator));
                 lowerElevator.whileTrue(
-                                new InstantCommand(RobotContainer.elevator::moveDown, RobotContainer.elevator)
+                                new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator)
                                                 .andThen(new WaitUntilCommand(
-                                                                () -> RobotContainer.elevator.ElevatorLowerLimitHit()))
-                                                .andThen(new InstantCommand(RobotContainer.elevator::holdHeight,
-                                                                RobotContainer.elevator)))
-                                .onFalse(new InstantCommand(RobotContainer.elevator::holdHeight,
-                                                RobotContainer.elevator));
+                                                                () -> robotContainer.elevator.ElevatorLowerLimitHit()))
+                                                .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                                robotContainer.elevator)))
+                                .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                robotContainer.elevator));
     }
 }

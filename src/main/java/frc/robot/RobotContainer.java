@@ -36,13 +36,13 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
         // The robot's subsystems
 
-        public static final PivotSubsystem pivot = new PivotSubsystem();
-        public static final DriveSubsystem drivetrain = new DriveSubsystem();
-        public static final CoralSubsystem coral = new CoralSubsystem();
-        public static final ElevatorSubsystem elevator = new ElevatorSubsystem();
-        public static final ClimberSubsystem climber = new ClimberSubsystem();
-        public static final AlgaeSubsystem algae = new AlgaeSubsystem();
-        public static final LimelightSubsystem limelight = new LimelightSubsystem();
+        public final PivotSubsystem pivot = new PivotSubsystem();
+        public final DriveSubsystem drivetrain = new DriveSubsystem();
+        public final CoralSubsystem coral = new CoralSubsystem();
+        public final ElevatorSubsystem elevator = new ElevatorSubsystem();
+        public final ClimberSubsystem climber = new ClimberSubsystem();
+        public final AlgaeSubsystem algae = new AlgaeSubsystem();
+        public final LimelightSubsystem limelight = new LimelightSubsystem();
 
         private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
@@ -193,7 +193,7 @@ public class RobotContainer {
 
                 IO io = new IO();
 
-                io.init();
+                io.init(this);
 
         }
 
