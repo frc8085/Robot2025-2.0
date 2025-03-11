@@ -25,6 +25,7 @@ import frc.robot.commands.movement.NewAutoMoveOnReef;
 import frc.robot.commands.windmill.InitializePivotAndElevator;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
 import frc.robot.io.IO;
+import frc.robot.subsystems.*;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,6 +36,14 @@ import frc.robot.io.IO;
 public class RobotContainer {
         // The robot's subsystems
 
+        public static final PivotSubsystem pivot = new PivotSubsystem();
+        public static final DriveSubsystem drivetrain = new DriveSubsystem();
+        public static final CoralSubsystem coral = new CoralSubsystem();
+        public static final ElevatorSubsystem elevator = new ElevatorSubsystem();
+        public static final ClimberSubsystem climber = new ClimberSubsystem();
+        public static final AlgaeSubsystem algae = new AlgaeSubsystem();
+        public static final LimelightSubsystem limelight = new LimelightSubsystem();
+
         private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
 
@@ -43,85 +52,85 @@ public class RobotContainer {
         // Register Named Commands for PathPlanner
         private void configureAutoCommands() {
                 NamedCommands.registerCommand("InitializePE",
-                                new InitializePivotAndElevator(RobotSubsystems.pivot, RobotSubsystems.elevator));
+                                new InitializePivotAndElevator(this.pivot, this.elevator));
                 NamedCommands.registerCommand("AutoYCoral1",
-                                new AutoCoral1(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
-                                                RobotSubsystems.drivetrain,
+                                new AutoCoral1(this.coral, this.elevator, this.pivot,
+                                                this.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoYCoral2",
-                                new AutoCoral2(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
-                                                RobotSubsystems.drivetrain,
+                                new AutoCoral2(this.coral, this.elevator, this.pivot,
+                                                this.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoYCoral3",
-                                new AutoCoral3(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
-                                                RobotSubsystems.drivetrain,
+                                new AutoCoral3(this.coral, this.elevator, this.pivot,
+                                                this.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoYCoral4",
-                                new AutoCoral4(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
-                                                RobotSubsystems.drivetrain,
+                                new AutoCoral4(this.coral, this.elevator, this.pivot,
+                                                this.drivetrain,
                                                 true));
                 NamedCommands.registerCommand("AutoBCoral4",
-                                new AutoCoral4(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
-                                                RobotSubsystems.drivetrain,
+                                new AutoCoral4(this.coral, this.elevator, this.pivot,
+                                                this.drivetrain,
                                                 false));
                 NamedCommands.registerCommand("AutoCoralSource",
-                                new AutoCoralSource(RobotSubsystems.coral, RobotSubsystems.elevator,
-                                                RobotSubsystems.pivot, false));
+                                new AutoCoralSource(this.coral, this.elevator,
+                                                this.pivot, false));
                 NamedCommands.registerCommand("AutoYLimelightRight",
-                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                new AutoLimelightPosition(this.drivetrain, this.limelight, true,
                                                 true));
                 NamedCommands.registerCommand("AutoYLimelightLeft",
-                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false,
+                                new AutoLimelightPosition(this.drivetrain, this.limelight, false,
                                                 true));
                 NamedCommands.registerCommand("AutoBLimelightRight",
-                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                new AutoLimelightPosition(this.drivetrain, this.limelight, true,
                                                 false));
                 NamedCommands.registerCommand("AutoBLimelightLeft",
-                                new AutoLimelightPosition(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false,
+                                new AutoLimelightPosition(this.drivetrain, this.limelight, false,
                                                 false));
                 NamedCommands.registerCommand("AutoYLimelight",
-                                new AutoLimelight(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true, true));
+                                new AutoLimelight(this.drivetrain, this.limelight, true, true));
                 NamedCommands.registerCommand("AutoBLimelight",
-                                new AutoLimelight(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false, false));
+                                new AutoLimelight(this.drivetrain, this.limelight, false, false));
                 NamedCommands.registerCommand("AutoYMoveForward",
-                                new AutoMoveForwardForTime(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                new AutoMoveForwardForTime(this.drivetrain, this.limelight, true,
                                                 1));
                 NamedCommands.registerCommand("AutoYMoveForwardFaster",
-                                new AutoMoveForwardForTimeFaster(RobotSubsystems.drivetrain, RobotSubsystems.limelight,
+                                new AutoMoveForwardForTimeFaster(this.drivetrain, this.limelight,
                                                 true, 1, 0.3));
                 NamedCommands.registerCommand("MoveToYCoral1",
-                                new Windmill(RobotSubsystems.elevator, RobotSubsystems.pivot,
+                                new Windmill(this.elevator, this.pivot,
                                                 Constants.Windmill.WindmillState.CoralDropOff1,
                                                 true));
                 NamedCommands.registerCommand("DropCoral",
-                                new DropCoral(RobotSubsystems.coral, RobotSubsystems.elevator, RobotSubsystems.pivot,
-                                                RobotSubsystems.drivetrain));
+                                new DropCoral(this.coral, this.elevator, this.pivot,
+                                                this.drivetrain));
                 NamedCommands.registerCommand("AutoBMoveForward",
-                                new AutoMoveForwardForTime(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false,
+                                new AutoMoveForwardForTime(this.drivetrain, this.limelight, false,
                                                 1));
                 NamedCommands.registerCommand("WaitUntilSafeToMove",
-                                new WaitUntilElevatorBelowSafeTravelHeight(RobotSubsystems.elevator));
+                                new WaitUntilElevatorBelowSafeTravelHeight(this.elevator));
                 NamedCommands.registerCommand("ZeroHeading",
-                                new InstantCommand(() -> RobotSubsystems.drivetrain.zeroHeading(),
-                                                RobotSubsystems.drivetrain));
+                                new InstantCommand(() -> this.drivetrain.zeroHeading(),
+                                                this.drivetrain));
                 NamedCommands.registerCommand("AutoYMoveTowardSource",
-                                new AutoPositionForTime(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true,
+                                new AutoPositionForTime(this.drivetrain, this.limelight, true,
                                                 true, 0.5));
                 NamedCommands.registerCommand("StartedMove", new PrintCommand("Startedmove"));
                 NamedCommands.registerCommand("AutoYMoveRight",
-                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true));
+                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, true));
                 NamedCommands.registerCommand("AutoYMoveLeft",
-                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false));
+                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, false));
                 NamedCommands.registerCommand("AutoBMoveRight",
-                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, false));
+                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, false));
                 NamedCommands.registerCommand("AutoBMoveLeft",
-                                new NewAutoMoveOnReef(RobotSubsystems.drivetrain, RobotSubsystems.limelight, true));
+                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, true));
                 NamedCommands.registerCommand("IsElevatorInSafePosition",
-                                new AutoPrintElevatorSafe(RobotSubsystems.elevator));
+                                new AutoPrintElevatorSafe(this.elevator));
                 NamedCommands.registerCommand("AutoAlgaeL2",
-                                new AutoAlgaeL2(RobotSubsystems.drivetrain, RobotSubsystems.coral,
-                                                RobotSubsystems.algae, RobotSubsystems.elevator,
-                                                RobotSubsystems.pivot));
+                                new AutoAlgaeL2(this.drivetrain, this.coral,
+                                                this.algae, this.elevator,
+                                                this.pivot));
         }
 
         // The driver's controller
@@ -147,14 +156,14 @@ public class RobotContainer {
                 configureAutoCommands();
 
                 // testing alternate drive
-                // MoveCommand moveCommand = new MoveCommand(this.RobotSubsystems.drivetrain,
+                // MoveCommand moveCommand = new MoveCommand(this.this.drivetrain,
                 // driverController);
-                // RobotSubsystems.drivetrain.setDefaultCommand(moveCommand);
+                // this.drivetrain.setDefaultCommand(moveCommand);
 
                 // Configure default commands
-                RobotSubsystems.drivetrain.setDefaultCommand(
+                this.drivetrain.setDefaultCommand(
                         // IMPLEMENT DEFAULT COMMAND
-                        new SwerveDriveTeleop(RobotSubsystems.drivetrain)
+                        new SwerveDriveTeleop(this.drivetrain)
                         );
                                 // The right trigger controls the speed of the robot.
                                 // The left stick controls translation of the robot.
@@ -222,19 +231,19 @@ public class RobotContainer {
         // SwerveControllerCommand swerveControllerCommand = new
         // SwerveControllerCommand(
         // exampleTrajectory,
-        // RobotSubsystems.drivetrain::getPose, // Functional interface to feed supplier
+        // this.drivetrain::getPose, // Functional interface to feed supplier
         // DriveConstants.kDriveKinematics,
 
         // // Position controllers
         // new PIDController(AutoConstants.kPXController, 0, 0),
         // new PIDController(AutoConstants.kPYController, 0, 0),
         // thetaController,
-        // RobotSubsystems.drivetrain::setModuleStates,
-        // RobotSubsystems.drivetrain);
+        // this.drivetrain::setModuleStates,
+        // this.drivetrain);
 
         // // Run path following command, then stop at the end.
         // return swerveControllerCommand.andThen(() ->
-        // RobotSubsystems.drivetrain.drive(0, 0, 0, 0,
+        // this.drivetrain.drive(0, 0, 0, 0,
         // false));
         // }
 
