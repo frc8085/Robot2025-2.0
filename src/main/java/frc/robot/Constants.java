@@ -375,16 +375,14 @@ public final class Constants {
     public static final double kCoralSpeed = 1;
     public static final double kCoralSlowSpeed = .5;
 
-    // TEMPORARY VALUES
+    // open loop motor values
     public static double kCoralMinOutput = -0.25;
     public static double kCoralMaxOutput = 0.25;
 
-    // TEMPORARY VALUES
+    // direction motor runs
     public static boolean kCoralInverted = true;
-    // TEMPORARY VALUES
-    public static int kCoralPositionConversionFactor = 1000;
-    public static int kCoralVelocityConversionFactor = 1000;
-    // TEMPORARY VALUES
+
+    // PID not used
     public static double kCoralP = 0.5;
     public static double kCoralI = 0.0;
     public static double kCoralD = 0.0;
@@ -392,6 +390,9 @@ public final class Constants {
 
     // Beam Break Sensor
     public static int kIRPort = 3;
+
+    // Current Limit for Coral Stall
+    public static double kCoralCurrentLimit = 20;
   }
 
   public static final class AlgaeConstants {

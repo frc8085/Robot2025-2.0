@@ -41,6 +41,10 @@ public class CoralSubsystem extends SubsystemBase {
 
   }
 
+  public double getCurrent() {
+    return m_coralMotor.getOutputCurrent();
+  }
+
   public Boolean isCoralDetected() {
     return lightSensor.get();
   }
