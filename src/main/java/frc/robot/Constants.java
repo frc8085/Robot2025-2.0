@@ -417,6 +417,9 @@ public final class Constants {
     // Beam Break Sensor
     public static int kIRPort = 4;
 
+    // Current Limit for Coral Stall
+    public static double kAlgaeCurrentLimit = 20;
+
   }
 
   public static final class ClimberConstants {

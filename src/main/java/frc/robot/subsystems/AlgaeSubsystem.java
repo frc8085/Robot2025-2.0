@@ -50,6 +50,10 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   }
 
+  public double getCurrent() {
+    return m_algaeMotor.getOutputCurrent();
+  }
+
   public void pickup() {
     m_algaeEncoder.setPosition(0);
     m_algaeMotor.set(-AlgaeConstants.kAlgaeSpeed);
