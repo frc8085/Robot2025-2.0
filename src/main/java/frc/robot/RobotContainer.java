@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -134,14 +133,16 @@ public class RobotContainer {
         }
 
         // The driver's controller
-        // CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-        // CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperaterControllerPort);
+        // CommandXboxController driverController = new
+        // CommandXboxController(OIConstants.kDriverControllerPort);
+        // CommandXboxController operatorController = new
+        // CommandXboxController(OIConstants.kOperaterControllerPort);
         // GenericHID driverControllerRumble = driverController.getHID();
         // GenericHID operatorControllerRumble = operatorController.getHID();
 
         // public void adjustJoystickValues() {
-        //         double rawX = driverController.getLeftX();
-        //         double rawY = driverController.getLeftY();
+        // double rawX = driverController.getLeftX();
+        // double rawY = driverController.getLeftY();
 
         // }
 
@@ -162,13 +163,12 @@ public class RobotContainer {
 
                 // Configure default commands
                 this.drivetrain.setDefaultCommand(
-                        // IMPLEMENT DEFAULT COMMAND
-                        new SwerveDriveTeleop(this.drivetrain)
-                        );
-                                // The right trigger controls the speed of the robot.
-                                // The left stick controls translation of the robot.
-                                // Turning is controlled by the X axis of the right stick.
-                                
+                                // IMPLEMENT DEFAULT COMMAND
+                                new SwerveDriveTeleop(this.drivetrain));
+                // The right trigger controls the speed of the robot.
+                // The left stick controls translation of the robot.
+                // Turning is controlled by the X axis of the right stick.
+
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
 
@@ -248,17 +248,18 @@ public class RobotContainer {
         // }
 
         // public Command rumbleDriverCommand() {
-        //         return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(() -> stopRumbleDriverCtrl());
+        // return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(()
+        // -> stopRumbleDriverCtrl());
         // }
 
         // public void rumbleDriverCtrl() {
-        //         driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-        //         operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        // driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        // operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
         // }
 
         // public void stopRumbleDriverCtrl() {
-        //         driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-        //         operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        // driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        // operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
         // }
 
 }

@@ -38,6 +38,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.LimelightHelpers;
+import edu.wpi.first.math.geometry.Translation3d;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -129,15 +131,24 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void inputCameraPoses(String[] limelightNames) {
-    LimelightSubsystem limelight = new LimelightSubsystem();
     for (String limelightName : limelightNames) {
-      if (limelight.hasTarget(limelightName)) {
-        Pose2d pose = limelight.getBotPoseBlue(limelightName);
-        double visionTime = Timer.getFPGATimestamp() - limelight.getVisionTime(limelightName);
-        int tagCount = limelight.getTagCount(limelightName);
-        int primaryId = limelight.getPrimaryId(limelightName);
-        double distanceToTarget = limelight.getDistanceToTarget(limelightName);
-        addVisionPose(pose, visionTime, tagCount, primaryId, distanceToTarget);
+      if (LimelightHelpers.getTV(limelightName)) {
+        // Pose2d pose = limelight.getBotPoseBlue(limelightName);
+        Pose2d pose = LimelightHelpers.getBotPose2d_wpiBlue(limelightName);
+        double[] limelightArrayData = { pose.getX(), pose.getY(),
+            pose.getRotation().getRadians() };
+        SmartDashboard.putNumberArray(limelightName, limelightArrayData);
+        // System.out.println("Limelight pose: " + pose);
+        // double visionTime = Timer.getFPGATimestamp() -
+        // limelight.getVisionTime(limelightName);
+        double visionTime = Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Pipeline(limelightName) / 1000;
+        // int tagCount = limelight.getTagCount(limelightName);
+        int tagCount = LimelightHelpers.getTargetCount(limelightName);
+        // int primaryId = limelight.getPrimaryId(limelightName);
+        int primaryId = (int) LimelightHelpers.getFiducialID(limelightName);
+        double distanceToTarget = LimelightHelpers.getTargetPose3d_RobotSpace(limelightName).getTranslation()
+            .getDistance(new Translation3d());
+        this.addVisionPose(pose, visionTime, tagCount, primaryId, distanceToTarget);
       }
     }
   }
@@ -166,7 +177,8 @@ public class DriveSubsystem extends SubsystemBase {
         if (distanceToTarget <= 0.75) {
           stdDev = 0.1;
           if (DriverStation.isTeleop()) {
-            this.m_odometry.addVisionMeasurement(pose, visionTime, VecBuilder.fill(stdDev, stdDev, stdDev));
+            this.m_odometry.addVisionMeasurement(pose, visionTime,
+                VecBuilder.fill(stdDev, stdDev, stdDev));
             return;
           }
         }
@@ -183,23 +195,33 @@ public class DriveSubsystem extends SubsystemBase {
       }
     }
 
-    this.m_odometry.addVisionMeasurement(new Pose2d(pose.getTranslation(), this.getYaw()), visionTime,
-        VecBuilder.fill(stdDev, stdDev, 50.0));
+    // System.out.println("Adding vision measurement");
+
+    this.m_odometry.addVisionMeasurement(
+        // new Pose2d(pose.getTranslation(),
+        // Rotation2d.fromDegrees(getGyroOrientation())),
+        pose,
+        visionTime,
+        VecBuilder.fill(stdDev, stdDev, 25.0)
+    // VecBuilder.fill(0.1, 0.1, 0.1)
+    );
     return;
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(
+    m_odometry.updateWithTime(Timer.getFPGATimestamp(),
         Rotation2d.fromDegrees(getGyroOrientation()),
-        getModulePositions());
+        this.getModulePositions());
 
     this.inputCameraPoses(new String[] { "limelight-blue", "limelight-yellow" });
-    
+
     SmartDashboard.putNumber("robot heading", getHeading());
     SmartDashboard.putNumber("robot wrapped heading", getHeadingWrappedDegrees());
     SmartDashboard.putBoolean("fieldRelative", FakeConstants.fieldRelative);
+    double[] poseData = { this.getPose().getX(), this.getPose().getY(), this.getPose().getRotation().getRadians() };
+    SmartDashboard.putNumberArray("Robot Pose", poseData);
   }
 
   // Copying code from 6616 for limelight and orienting
