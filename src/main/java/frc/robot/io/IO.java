@@ -2,9 +2,6 @@
 
 package frc.robot.io;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
-import frc.robot.io.Keymap;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -12,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.Constants.FakeConstants;
 import frc.robot.Constants;
 import frc.robot.RobotSubsystems;
@@ -20,13 +16,10 @@ import frc.robot.commands.windmill.*;
 import frc.robot.commands.scoring.*;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.manipulator.algae.*;
-import frc.robot.commands.sequences.*;
 import frc.robot.commands.movement.*;
 import frc.robot.commands.states.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.windmill.elevator.*;
-import frc.robot.commands.windmill.pivot.*;
-import frc.robot.commands.autoCommands.*;
 
 
 
