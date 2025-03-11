@@ -61,7 +61,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public boolean climberDeployed() {
-        return (getCurrentMotorPosition() >= 150);
+        return (getCurrentMotorPosition() >= 100);
     }
 
     // turn off climber

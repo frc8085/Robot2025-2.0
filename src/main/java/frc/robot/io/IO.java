@@ -175,13 +175,13 @@ public class IO {
 
                 algaeReef2.onTrue(new SequentialCommandGroup(
                                 new ToAlgaeL2(robotContainer.elevator, robotContainer.pivot, false),
-                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
                                 new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                 Constants.Windmill.WindmillState.Home,
                                                 false)));
                 algaeReef3.onTrue(new SequentialCommandGroup(
                                 new ToAlgaeL3(robotContainer.elevator, robotContainer.pivot, false),
-                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
                                 new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                 Constants.Windmill.WindmillState.AlgaeHoldHeight,
                                                 false)));
@@ -204,14 +204,14 @@ public class IO {
                 algaeReef2.and(altButtonOperator)
                                 .onTrue(new SequentialCommandGroup(
                                                 new ToAlgaeL2(robotContainer.elevator, robotContainer.pivot, true),
-                                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
                                                 new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                                 Constants.Windmill.WindmillState.Home,
                                                                 true)));
                 algaeReef3.and(altButtonOperator).onTrue(
                                 new SequentialCommandGroup(
                                                 new ToAlgaeL3(robotContainer.elevator, robotContainer.pivot, true),
-                                                new PickUpAlgae(robotContainer.algae), new WaitCommand(.25),
+                                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
                                                 new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                                 Constants.Windmill.WindmillState.AlgaeHoldHeight,
                                                                 true)));
