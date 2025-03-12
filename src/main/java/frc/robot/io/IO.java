@@ -20,6 +20,7 @@ import frc.robot.commands.manipulator.algae.*;
 import frc.robot.commands.movement.*;
 import frc.robot.commands.states.*;
 import frc.robot.commands.climber.*;
+import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.windmill.elevator.*;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -96,9 +97,15 @@ public class IO {
                 // new ParallelRaceGroup(new WaitCommand(4), new
                 // AlignToAprilTagYellow(robotContainer.drivetrain,
                 // robotContainer.limelight)));
-                limelightTrigger1.onTrue(new AlignToAprilTagBlue(robotContainer.drivetrain, robotContainer.limelight));
+                // limelightTrigger1.onTrue(new AlignToAprilTagBlue(robotContainer.drivetrain,
+                // robotContainer.limelight));
+                limelightTrigger1.onTrue(
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, true));
+                // limelightTrigger2.onTrue(
+                // new AlignToAprilTagYellow(robotContainer.drivetrain,
+                // robotContainer.limelight));
                 limelightTrigger2.onTrue(
-                                new AlignToAprilTagYellow(robotContainer.drivetrain, robotContainer.limelight));
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, false));
 
                 gorobotrelative.onTrue(new InstantCommand(() -> {
                         if (FakeConstants.fieldRelative) {
