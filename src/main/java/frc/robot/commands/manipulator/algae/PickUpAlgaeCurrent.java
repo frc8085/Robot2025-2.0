@@ -9,7 +9,8 @@ import frc.robot.subsystems.AlgaeSubsystem;
 // if command is interrupted before algae is picked up, kill command
 public class PickUpAlgaeCurrent extends Command {
         AlgaeSubsystem algaeSubsystem;
-        Debouncer debouncer = new Debouncer(.5, Debouncer.DebounceType.kRising);
+        Debouncer debouncer = new Debouncer(Constants.AlgaeConstants.kAlgaeCurrentDebouncerTime,
+                        Debouncer.DebounceType.kRising);
         private boolean algaePickedUp;
 
         public PickUpAlgaeCurrent(

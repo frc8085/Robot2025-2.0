@@ -33,6 +33,7 @@ public class AngleToBarge extends Command {
     public void initialize() {
         target = 30;
         turnPID.setSetpoint(target);
+        turnPID.enableContinuousInput(-180, 180);
     }
 
     // X setpoint changes with distance, so we update it in execute

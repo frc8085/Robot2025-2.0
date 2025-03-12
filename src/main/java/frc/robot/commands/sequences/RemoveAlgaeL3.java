@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
-import frc.robot.commands.manipulator.algae.PickUpAlgaeCurrent;
 import frc.robot.commands.windmill.Windmill;
+import frc.robot.commands.manipulator.algae.PickUpAlgae;
 import frc.robot.commands.states.ToAlgaeL3;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -18,7 +18,7 @@ public class RemoveAlgaeL3 extends SequentialCommandGroup {
                         boolean yellow) {
                 addCommands(
                                 new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, yellow),
-                                new PickUpAlgaeCurrent(algaeSubsystem),
+                                new PickUpAlgae(algaeSubsystem),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                 Constants.Windmill.WindmillState.AlgaeHoldHeight, yellow),
