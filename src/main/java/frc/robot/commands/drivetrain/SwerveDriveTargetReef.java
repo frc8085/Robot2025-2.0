@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -22,14 +23,16 @@ public class SwerveDriveTargetReef extends Command {
     private double kXYP = 0.35;
     private double kXYI = 0;
     private double kXYD = 0;
-    private double kRotP = 0.01;
+    private double kRotP = 0.015;
     private double kRotI = 0;
-    private double kRotD = 0;
+    private double kRotD = 0.0015;
     // x pid, y pid, and rotation pid
 
     private PIDController xPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
     private PIDController yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
-    private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
+    // private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
+    private TrapezoidProfile.Constraints rotConstraints = new TrapezoidProfile.Constraints(60, 30);
+    private ProfiledPIDController rotPid = new ProfiledPIDController(kRotP, kRotI, kRotD, rotConstraints, 0.02);
 
     List<AprilTag> tagPoses = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField().getTags();
 
@@ -71,7 +74,7 @@ public class SwerveDriveTargetReef extends Command {
                 this.targetPose.getRotation().getRadians() };
 
         SmartDashboard.putNumberArray("Target Align Pose", targetPoseArray);
-        this.rotPid.reset();
+        // this.rotPid.reset()
         this.xPid.reset();
         this.yPid.reset();
         this.rotPid.enableContinuousInput(-180, 180);
@@ -98,7 +101,7 @@ public class SwerveDriveTargetReef extends Command {
         // double rotRate = Math.max(Math.min(((1 - 0) / (20 - 90)) * rotError, 1), 0);
         // forward *= rotRate;
         // right *= rotRate;
-        if (rotError > 20) {
+        if (rotError > 5) {
             forward = 0;
             right = 0;
         }
