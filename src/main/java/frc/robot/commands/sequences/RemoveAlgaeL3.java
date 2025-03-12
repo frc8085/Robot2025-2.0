@@ -1,50 +1,30 @@
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
-import frc.robot.commands.manipulator.algae.PickUpAlgae;
+import frc.robot.commands.manipulator.algae.PickUpAlgaeCurrent;
 import frc.robot.commands.windmill.Windmill;
-import frc.robot.commands.movement.AutoMoveForwardForTime;
-import frc.robot.commands.scoring.ScoreCoralL3;
 import frc.robot.commands.states.ToAlgaeL3;
 import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class RemoveAlgaeL3 extends SequentialCommandGroup {
-        public RemoveAlgaeL3(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem,
-                        LimelightSubsystem limelight,
-                        PivotSubsystem pivotSubsystem, AlgaeSubsystem algaeSubsystem, CoralSubsystem coralSubsystem,
+        public RemoveAlgaeL3(ElevatorSubsystem elevatorSubsystem,
+                        PivotSubsystem pivotSubsystem, AlgaeSubsystem algaeSubsystem,
                         boolean yellow) {
                 addCommands(
-
                                 new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, yellow),
-                                new ParallelCommandGroup(
-                                                new SequentialCommandGroup(
-                                                                new WaitUntilCommand(() -> elevatorSubsystem
-                                                                                .elevatorAtAlgaeReefL3(yellow)),
-                                                                new PrintCommand("elevator at Algae L3")),
-                                                new SequentialCommandGroup(
-                                                                new WaitUntilCommand(() -> pivotSubsystem
-                                                                                .pivotAtAlgaeReef3DropOffAngle(
-                                                                                                yellow)),
-                                                                new PrintCommand("pivot at algae L3"))),
-                                new ParallelRaceGroup(
-                                                new PickUpAlgae(algaeSubsystem),
-                                                new AutoMoveForwardForTime(driveSubsystem, limelight, yellow,
-                                                                3)),
+                                new PickUpAlgaeCurrent(algaeSubsystem),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
-                                                false));
+                                                Constants.Windmill.WindmillState.AlgaeHoldHeight, yellow),
+                                new WaitUntilCommand(() -> pivotSubsystem
+                                                .pivotAtHomeAngle()),
+                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                Constants.Windmill.WindmillState.CoralDropOff3, yellow));
 
         }
 }

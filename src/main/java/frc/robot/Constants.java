@@ -224,7 +224,7 @@ public final class Constants {
     public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
     public static double kElevatorReef2FlipHeight = 25;
     public static double kElevatorReef3FlipHeight = 45;
-    public static double kElevatorNetHeight = 118; // changed from 120
+    public static double kElevatorNetHeight = 110; // changed from 120
 
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
@@ -294,6 +294,7 @@ public final class Constants {
     public static final double kPivotAlgaePickUpFloorFlip = 90;
     public static final double kPivotReef2Flip = -35;
     public static final double kPivotReef3Flip = -25;
+    // increase in angle is
     public static final double kPivotAlgaeNetBlue = 60;
     public static final double kPivotAlgaeNetYellow = 0;
   }
@@ -397,7 +398,8 @@ public final class Constants {
 
   public static final class AlgaeConstants {
     public static final int algaeCurrentLimit = 20;
-    public static final double kAlgaeSpeed = 1;
+    public static final double kAlgaeEjectSpeed = .5;
+    public static final double kAlgaeIntakeSpeed = 1;
 
     // TEMPORARY VALUES
     public static double kAlgaeMinOutput = -0.25;
@@ -418,7 +420,7 @@ public final class Constants {
     public static int kIRPort = 4;
 
     // Current Limit for Coral Stall
-    public static double kAlgaeCurrentLimit = 20;
+    public static double kAlgaeCurrentLimit = 10;
 
   }
 

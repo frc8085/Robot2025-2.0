@@ -86,6 +86,7 @@ public class PivotSubsystem extends SubsystemBase {
         }
     }
 
+    // Pivot Angle Checks
     public boolean pivotAtAlgaeYellowScorePosition() {
         return getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetYellow
                 + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
@@ -96,7 +97,6 @@ public class PivotSubsystem extends SubsystemBase {
                 + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
-    // Pivot angle checks
     public boolean pivotAtHomeAngle() {
         return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotHome
                 + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&

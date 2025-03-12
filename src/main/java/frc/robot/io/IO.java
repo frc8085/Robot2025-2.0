@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.windmill.*;
 import frc.robot.commands.scoring.*;
+import frc.robot.commands.sequences.RemoveAlgaeL3;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.manipulator.algae.*;
 import frc.robot.commands.movement.*;
@@ -21,6 +22,7 @@ import frc.robot.commands.states.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.windmill.elevator.*;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class IO {
 
@@ -110,9 +112,9 @@ public class IO {
                                 robotContainer.pivot, robotContainer.drivetrain));
                 ejectCoral.and(altButtonDriver).onTrue(new DropCoral(robotContainer.coral,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.drivetrain));
-                pickUpCoral.onTrue(new PickUpCoralCurrent(robotContainer.coral));
-                // pickUpCoral.onTrue(new PickUpCoralFromSource(robotContainer.coral,
-                // robotContainer.elevator, robotContainer.pivot, false));
+                // pickUpCoral.onTrue(new PickUpCoralCurrent(robotContainer.coral));
+                pickUpCoral.onTrue(new PickUpCoralFromSource(robotContainer.coral,
+                                robotContainer.elevator, robotContainer.pivot, false));
                 pickUpCoral.and(altButtonDriver)
                                 .onTrue(new PickUpCoralFromSource(robotContainer.coral, robotContainer.elevator,
                                                 robotContainer.pivot,
@@ -121,7 +123,7 @@ public class IO {
                 ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral));
+                                robotContainer.coral, robotContainer.drivetrain));
                 shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.coral));
@@ -179,12 +181,8 @@ public class IO {
                                 new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                 Constants.Windmill.WindmillState.Home,
                                                 false)));
-                algaeReef3.onTrue(new SequentialCommandGroup(
-                                new ToAlgaeL3(robotContainer.elevator, robotContainer.pivot, false),
-                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
-                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
-                                                false)));
+                algaeReef3.onTrue(new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
+                                false));
 
                 algaeProcessor.onTrue(new ToAlgaeGround(robotContainer.elevator, robotContainer.pivot));
 

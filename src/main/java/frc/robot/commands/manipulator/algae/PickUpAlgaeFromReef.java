@@ -23,7 +23,7 @@ public class PickUpAlgaeFromReef extends SequentialCommandGroup {
                                                 new PickUpAlgae(algaeSubsystem),
                                                 new WaitCommand(.25),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
+                                                                Constants.Windmill.WindmillState.CoralDropOff3,
                                                                 false));
                         } else {
                                 addCommands(
@@ -31,7 +31,7 @@ public class PickUpAlgaeFromReef extends SequentialCommandGroup {
                                                 new PickUpAlgae(algaeSubsystem),
                                                 new WaitCommand(.25),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
+                                                                Constants.Windmill.WindmillState.CoralDropOff3,
                                                                 false));
 
                         }

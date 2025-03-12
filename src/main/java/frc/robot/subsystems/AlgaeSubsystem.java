@@ -56,7 +56,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   public void pickup() {
     m_algaeEncoder.setPosition(0);
-    m_algaeMotor.set(-AlgaeConstants.kAlgaeSpeed);
+    m_algaeMotor.set(-AlgaeConstants.kAlgaeIntakeSpeed);
   }
 
   public void stop() {
@@ -64,7 +64,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public void eject() {
-    m_algaeMotor.set(AlgaeConstants.kAlgaeSpeed);
+    m_algaeMotor.set(AlgaeConstants.kAlgaeEjectSpeed);
   }
 
   /** Resets the Intake encoder to currently read a position of 0. */
@@ -84,10 +84,11 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   /* When a algae is picked up, it's in the robot */
   public void algaeStatus() {
-    if (lightSensor.get()){
-    algaeTrue = true;
+    if (lightSensor.get()) {
+      algaeTrue = true;
+    } else {
+      algaeTrue = false;
     }
-    else{algaeTrue=false;}
   }
 
   /* Give us a state when the note is in robot */
