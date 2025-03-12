@@ -117,7 +117,7 @@ public class IO {
                 }));
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(robotContainer.coral, robotContainer.elevator,
-                                robotContainer.pivot, robotContainer.drivetrain));
+                                robotContainer.pivot));
                 ejectCoral.and(altButtonDriver).onTrue(new DropCoral(robotContainer.coral,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.drivetrain));
                 // pickUpCoral.onTrue(new PickUpCoralCurrent(robotContainer.coral));
@@ -141,13 +141,8 @@ public class IO {
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
                 right.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, true,
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
-                raiseClimber.onTrue(
-                                new ConditionalCommand(
-                                                new RunCommand(() -> robotContainer.climber.moveUp(false),
-                                                                robotContainer.climber),
-                                                new RunCommand(() -> robotContainer.climber.moveUp(true),
-                                                                robotContainer.climber),
-                                                robotContainer.climber::climberAtHomePosition))
+                raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
+                                robotContainer.climber))
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
                                                 robotContainer.climber));
                 lowerClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveDown(),

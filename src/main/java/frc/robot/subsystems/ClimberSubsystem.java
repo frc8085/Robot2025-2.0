@@ -81,13 +81,9 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
-    public void moveUp(boolean deployed) {
-        if (!deployed) {
-            if (climberAtHomePosition()) {
-                m_climberMotor.set(0);
-            } else {
-                m_climberMotor.set(1);
-            }
+    public void moveUp() {
+        if (climberAtHomePosition()) {
+            m_climberMotor.set(0);
         } else {
             m_climberMotor.set(1);
         }

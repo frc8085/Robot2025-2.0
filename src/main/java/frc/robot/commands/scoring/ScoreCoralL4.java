@@ -20,6 +20,6 @@ public class ScoreCoralL4 extends SequentialCommandGroup {
                                 new WaitUntilCommand(elevatorSubsystem::elevatorAtCoralDropOff4Height),
                                 new WaitUntilCommand(() -> pivotSubsystem.pivotAtCoral4DropOffAngle(yellow)),
                                 new WaitCommand(.5),
-                                new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem));
+                                new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
         }
 }

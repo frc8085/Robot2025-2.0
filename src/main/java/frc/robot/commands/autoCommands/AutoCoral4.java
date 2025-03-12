@@ -25,6 +25,6 @@ public class AutoCoral4 extends SequentialCommandGroup {
                                                                 () -> pivotSubsystem.pivotAtCoral4DropOffAngle(yellow)),
                                                                 new PrintCommand("At Pivot Drop Off"))),
                                 new WaitCommand(0.5),
-                                new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem, driveSubsystem));
+                                new EjectCoral(coralSubsystem, elevatorSubsystem, pivotSubsystem));
         }
 }

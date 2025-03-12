@@ -20,7 +20,6 @@ public class DeployClimb extends Command {
     @Override
     public void initialize() {
         climberSubsystem.zeroAtLimitSwitch();
-
     }
 
     @Override
