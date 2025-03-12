@@ -22,7 +22,7 @@ public class SwerveDriveTargetReef extends Command {
     private double kXYP = 0.35;
     private double kXYI = 0;
     private double kXYD = 0;
-    private double kRotP = 0.35;
+    private double kRotP = 0.01;
     private double kRotI = 0;
     private double kRotD = 0;
     // x pid, y pid, and rotation pid
@@ -89,21 +89,25 @@ public class SwerveDriveTargetReef extends Command {
         double vrot = this.rotPid.calculate(currentPose.getRotation().getDegrees(),
                 targetPose.getRotation().getDegrees());
 
-        double speedVal = Math.sqrt(vx * vx + vy * vy) * 2;
+        double speedVal = Math.sqrt(vx * vx + vy * vy);
         double forward = -vy / speedVal;
-        double Right = vx / speedVal;
-        double Rotation = vrot;
+        double right = vx / speedVal;
+        double rotation = vrot;
 
-        double rotError = this.rotPid.getPositionError();
+        double rotError = Math.abs(this.rotPid.getPositionError());
+        // double rotRate = Math.max(Math.min(((1 - 0) / (20 - 90)) * rotError, 1), 0);
+        // forward *= rotRate;
+        // right *= rotRate;
         if (rotError > 20) {
-            speedVal = 0;
+            forward = 0;
+            right = 0;
         }
 
         this.driveSubsystem.drive(
                 speedVal,
                 forward,
-                Right,
-                Rotation,
+                right,
+                rotation,
                 true);
     }
 

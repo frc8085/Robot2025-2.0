@@ -175,8 +175,8 @@ public final class Constants {
 
     public static final double REEF_APRILTAG_HEIGHT = 0.324;
 
-    public static final Pose2d leftReefAlignPose = new Pose2d(0.29, -0.35, Rotation2d.fromDegrees(90));
-    public static final Pose2d rightReefAlignPose = new Pose2d(0.29, 0.35, Rotation2d.fromDegrees(-90));
+    public static final Pose2d leftReefAlignPose = new Pose2d(0.29, -0.33, Rotation2d.fromDegrees(90));
+    public static final Pose2d rightReefAlignPose = new Pose2d(0.29, 0.33, Rotation2d.fromDegrees(-90));
 
   }
 
@@ -223,7 +223,7 @@ public final class Constants {
     public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff4Height = 118; // changed from 130
     // Drop off 4 was 130 before but 120 seems to be our max height
-    public static double kElevatorAlgaePickUpFloorHeight = 11;
+    public static double kElevatorAlgaePickUpFloorHeight = 25;
     public static double kElevatorReef2Height = 40 * ropeAdjustmentFactor;
     public static double kElevatorReef3Height = 70 * ropeAdjustmentFactor;
     public static double kElevatorAlgaePickUpFloorFlipHeight = 6;

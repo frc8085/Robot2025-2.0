@@ -202,7 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
         // Rotation2d.fromDegrees(getGyroOrientation())),
         pose,
         visionTime,
-        VecBuilder.fill(stdDev, stdDev, 25.0)
+        VecBuilder.fill(stdDev, stdDev, 10.0)
     // VecBuilder.fill(0.1, 0.1, 0.1)
     );
     return;

@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.windmill.*;
 import frc.robot.commands.scoring.*;
+import frc.robot.commands.sequences.RemoveAlgaeL2;
 import frc.robot.commands.sequences.RemoveAlgaeL3;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.manipulator.algae.*;
@@ -183,12 +184,9 @@ public class IO {
                 algaeGround.onTrue(new PickUpAlgaeFromGround(robotContainer.algae, robotContainer.elevator,
                                 robotContainer.pivot));
 
-                algaeReef2.onTrue(new SequentialCommandGroup(
-                                new ToAlgaeL2(robotContainer.elevator, robotContainer.pivot, false),
-                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
-                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                Constants.Windmill.WindmillState.Home,
-                                                false)));
+                algaeReef2.onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
+                                false));
+
                 algaeReef3.onTrue(new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
                                 false));
 
@@ -208,12 +206,9 @@ public class IO {
                                 false));
 
                 algaeReef2.and(altButtonOperator)
-                                .onTrue(new SequentialCommandGroup(
-                                                new ToAlgaeL2(robotContainer.elevator, robotContainer.pivot, true),
-                                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
-                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                                Constants.Windmill.WindmillState.Home,
-                                                                true)));
+                                .onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot,
+                                                robotContainer.algae,
+                                                true));
                 algaeReef3.and(altButtonOperator).onTrue(
                                 new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
                                                 true));
