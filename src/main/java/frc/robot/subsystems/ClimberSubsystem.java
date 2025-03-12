@@ -55,13 +55,11 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void zeroAtLimitSwitch() {
-        if (climberAtHomePosition()) {
-            m_climberMotor.setPosition(0);
-        }
+        m_climberMotor.setPosition(0);
     }
 
     public boolean climberDeployed() {
-        return (getCurrentMotorPosition() >= 100);
+        return (getCurrentMotorPosition() >= Constants.ClimberConstants.kWinchDeployPosition);
     }
 
     // turn off climber
@@ -83,9 +81,13 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
-    public void moveUp() {
-        if (climberAtHomePosition()) {
-            m_climberMotor.set(0);
+    public void moveUp(boolean deployed) {
+        if (!deployed) {
+            if (climberAtHomePosition()) {
+                m_climberMotor.set(0);
+            } else {
+                m_climberMotor.set(1);
+            }
         } else {
             m_climberMotor.set(1);
         }

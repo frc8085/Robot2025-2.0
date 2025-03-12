@@ -299,7 +299,6 @@ public final class Constants {
     public static final double kPivotAlgaePickUpFloorFlip = 90;
     public static final double kPivotReef2Flip = -35;
     public static final double kPivotReef3Flip = -25;
-    // increase in angle is
     public static final double kPivotAlgaeNetBlue = 60;
     public static final double kPivotAlgaeNetYellow = 0;
   }
@@ -424,8 +423,9 @@ public final class Constants {
     // Beam Break Sensor
     public static int kIRPort = 4;
 
-    // Current Limit for Coral Stall
-    public static double kAlgaeCurrentLimit = 10;
+    // Current Limit for Algae Stall
+    public static double kAlgaeCurrentLimit = 15;
+    public static double kAlgaeCurrentDebouncerTime = .2;
 
   }
 
@@ -437,6 +437,7 @@ public final class Constants {
     public static double kWinchFF = 0;
     public static double kWinchMinOutput = 0;
     public static double kWinchMaxOutput = 1;
+    public static double kWinchDeployPosition = 150;
   }
 
   public static final class CommandScoreConstants {

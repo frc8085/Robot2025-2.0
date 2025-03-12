@@ -141,8 +141,13 @@ public class IO {
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
                 right.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, true,
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
-                raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
-                                robotContainer.climber))
+                raiseClimber.onTrue(
+                                new ConditionalCommand(
+                                                new RunCommand(() -> robotContainer.climber.moveUp(false),
+                                                                robotContainer.climber),
+                                                new RunCommand(() -> robotContainer.climber.moveUp(true),
+                                                                robotContainer.climber),
+                                                robotContainer.climber::climberAtHomePosition))
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
                                                 robotContainer.climber));
                 lowerClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveDown(),
