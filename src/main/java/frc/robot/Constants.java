@@ -19,6 +19,8 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -172,6 +174,9 @@ public final class Constants {
         .toRadians(AutoConstants.LIMELIGHT_MOUNTING_ANGLE_DEGREES);
 
     public static final double REEF_APRILTAG_HEIGHT = 0.324;
+
+    public static final Pose2d leftReefAlignPose = new Pose2d(0.29, -0.35, Rotation2d.fromDegrees(90));
+    public static final Pose2d rightReefAlignPose = new Pose2d(0.29, 0.35, Rotation2d.fromDegrees(-90));
 
   }
 

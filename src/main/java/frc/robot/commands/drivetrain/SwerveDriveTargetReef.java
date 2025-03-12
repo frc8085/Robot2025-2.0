@@ -10,21 +10,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.*;
 
 public class SwerveDriveTargetReef extends Command {
 
     private DriveSubsystem driveSubsystem;
     private boolean isLeft;
     private Pose2d targetPose;
-    private double kXYP = 0;
+    private double kXYP = 0.6;
     private double kXYI = 0;
     private double kXYD = 0;
-    private double kRotP = 0;
+    private double kRotP = 0.6;
     private double kRotI = 0;
     private double kRotD = 0;
     // x pid, y pid, and rotation pid
 
-    private PIDController xPid, yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
+    private PIDController xPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
+    private PIDController yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
     private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
 
     List<AprilTag> tagPoses = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField().getTags();
@@ -53,16 +57,24 @@ public class SwerveDriveTargetReef extends Command {
         Pose2d relativePose;
         // if the target is on the left side of the robot
         if (this.isLeft) {
-            relativePose = new Pose2d();
+            relativePose = AutoConstants.leftReefAlignPose;
         } else {
-            relativePose = new Pose2d();
+            relativePose = AutoConstants.rightReefAlignPose;
         }
+        // need to rotate the relative pose by the rotation of the focusPoseAprilTag
+        Pose2d newRelativePose = relativePose.rotateAround(new Translation2d(), focusPoseAprilTag.getRotation());
 
-        this.targetPose = new Pose2d(relativePose.getTranslation().plus(focusPoseAprilTag.getTranslation()),
-                relativePose.getRotation().plus(focusPoseAprilTag.getRotation()));
+        this.targetPose = new Pose2d(newRelativePose.getTranslation().plus(focusPoseAprilTag.getTranslation()),
+                newRelativePose.getRotation());
 
-        // add the poses together *
+        double[] targetPoseArray = { this.targetPose.getTranslation().getX(), this.targetPose.getTranslation().getY(),
+                this.targetPose.getRotation().getRadians() };
 
+        SmartDashboard.putNumberArray("Target Align Pose", targetPoseArray);
+        this.rotPid.reset();
+        this.xPid.reset();
+        this.yPid.reset();
+        this.rotPid.enableContinuousInput(-180, 180);
     }
 
     @Override
@@ -74,13 +86,18 @@ public class SwerveDriveTargetReef extends Command {
 
         double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
         double vy = this.yPid.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
-        double vrot = this.rotPid.calculate(currentPose.getRotation().getRadians(),
-                targetPose.getRotation().getRadians());
+        double vrot = this.rotPid.calculate(currentPose.getRotation().getDegrees(),
+                targetPose.getRotation().getDegrees());
 
         double speedVal = Math.sqrt(vx * vx + vy * vy);
-        double forward = vx / speedVal;
-        double Right = vy / speedVal;
+        double forward = -vy / speedVal;
+        double Right = vx / speedVal;
         double Rotation = vrot;
+
+        double rotError = this.rotPid.getPositionError();
+        if (rotError > 20) {
+            speedVal = 0;
+        }
 
         this.driveSubsystem.drive(
                 speedVal,

@@ -39,7 +39,7 @@ public class PickUpCoralCurrent extends Command {
                         coralSubsystem.stop();
                         System.out.println("Coral PickUp Interrupted");
                 } else {
-                        Commands.waitSeconds(.25);
+                        Commands.waitSeconds(.5);
                         coralSubsystem.stop();
                         System.out.println("Coral Picked Up");
                 }

@@ -109,7 +109,7 @@ public class AlignToAprilTagBlue extends Command {
 
     public boolean isFinished() {
         // TODO: Add a condition that allows the driver/operator to exit this command.
-        return (false);
+        return ((drive.getHeading() >= target - tolerance) && (drive.getHeading() <= target + tolerance));
     }
 
 }

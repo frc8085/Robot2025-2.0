@@ -22,15 +22,13 @@ import frc.robot.commands.states.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.windmill.elevator.*;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 
 public class IO {
 
         public void init(RobotContainer robotContainer) {
 
                 // Additional Buttons to allow for alternate button pushes
-                final Trigger altButtonDriver = Keymap.Layout.driverBackButton;
+                final Trigger altButtonDriver = Keymap.Layout.driverRightBumper;
                 final Trigger altButtonOperator = Keymap.Layout.operatorRightBumper;
 
                 // Initialization
@@ -46,7 +44,7 @@ public class IO {
                 final Trigger pickUpCoral = Keymap.Layout.driverLeftTriggerButton;
                 final Trigger ejectAlgae = Keymap.Layout.driverYButton;
                 final Trigger shootAlgaeNetBlue = Keymap.Layout.driverLeftBumper;
-                final Trigger shootAlgaeNetYellow = Keymap.Layout.driverRightBumper;
+                // final Trigger shootAlgaeNetYellow = Keymap.Layout.driverRightBumper;
                 final Trigger left = Keymap.Layout.driverDownButton;
                 final Trigger right = Keymap.Layout.driverUpButton;
                 final Trigger gorobotrelative = Keymap.Controllers.driverController.leftStick();
@@ -56,7 +54,7 @@ public class IO {
                 // Operator Controls
                 final Trigger manualCoral = Keymap.Layout.operatorRightTriggerButton;
                 final Trigger manualAlgae = Keymap.Layout.operatorLeftTriggerButton;
-                final Trigger toggleClimber = Keymap.Layout.operatorBackButton;
+                final Trigger toggleClimber = Keymap.Layout.driverBackButton;
 
                 // Operator Set Position Controls
                 final Trigger home = Keymap.Layout.operatorLeftBumper;
@@ -100,12 +98,14 @@ public class IO {
                 // limelightTrigger1.onTrue(new AlignToAprilTagBlue(robotContainer.drivetrain,
                 // robotContainer.limelight));
                 limelightTrigger1.onTrue(
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, true));
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, true)).onFalse(
+                                                new SwerveDriveTeleop(robotContainer.drivetrain));
                 // limelightTrigger2.onTrue(
                 // new AlignToAprilTagYellow(robotContainer.drivetrain,
                 // robotContainer.limelight));
                 limelightTrigger2.onTrue(
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, false));
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, false)).onFalse(
+                                                new SwerveDriveTeleop(robotContainer.drivetrain));
 
                 gorobotrelative.onTrue(new InstantCommand(() -> {
                         if (FakeConstants.fieldRelative) {
@@ -131,9 +131,10 @@ public class IO {
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.coral, robotContainer.drivetrain));
-                shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(robotContainer.algae,
-                                robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral));
+                // only shoot from blue
+                // shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(robotContainer.algae,
+                // robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.coral));
 
                 left.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, false,
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
@@ -214,12 +215,8 @@ public class IO {
                                                                 Constants.Windmill.WindmillState.Home,
                                                                 true)));
                 algaeReef3.and(altButtonOperator).onTrue(
-                                new SequentialCommandGroup(
-                                                new ToAlgaeL3(robotContainer.elevator, robotContainer.pivot, true),
-                                                new PickUpAlgaeCurrent(robotContainer.algae), new WaitCommand(.25),
-                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                                Constants.Windmill.WindmillState.AlgaeHoldHeight,
-                                                                true)));
+                                new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
+                                                true));
 
                 coralDropOff1.and(altButtonOperator)
                                 .onTrue(new ScoreCoralL1(robotContainer.elevator, robotContainer.pivot,
