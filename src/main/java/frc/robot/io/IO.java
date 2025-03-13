@@ -194,17 +194,14 @@ public class IO {
 
                 algaeProcessor.onTrue(new ToAlgaeGround(robotContainer.elevator, robotContainer.pivot));
 
-                coralDropOff1.onTrue(new ScoreCoralL1(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral, false));
+                coralDropOff1.onTrue(new ToCoralDropOff1(robotContainer.elevator, robotContainer.pivot, false));
 
-                coralDropOff2.onTrue(new ScoreCoralL2(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral, false));
+                coralDropOff2.onTrue(new ToCoralDropOff2(robotContainer.elevator, robotContainer.pivot, false));
 
-                coralDropOff3.onTrue(new ScoreCoralL3(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral, false));
+                coralDropOff3.onTrue(new ToCoralDropOff3(robotContainer.elevator, robotContainer.pivot, false));
 
                 coralDropOff4.onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral, robotContainer.drivetrain,
+                                robotContainer.coral,
                                 false));
 
                 algaeReef2.and(altButtonOperator)
@@ -227,7 +224,7 @@ public class IO {
                 coralDropOff4.and(altButtonOperator)
                                 .onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot,
                                                 robotContainer.coral,
-                                                robotContainer.drivetrain, true));
+                                                true));
 
                 // commands that go with manual elevator/pivot movement
                 pivotClockwise
