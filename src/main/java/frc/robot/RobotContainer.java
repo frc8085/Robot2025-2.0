@@ -14,12 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.windmill.Windmill;
-import frc.robot.commands.aautoCommands.AutoDriveAlignBarge;
-import frc.robot.commands.aautoCommands.AutoRemoveAndShootAlgaeL2;
-import frc.robot.commands.aautoCommands.AutoScoreAlgaeNetBlue;
 import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.movement.AutoMoveForwardForTimeFaster;
@@ -55,10 +53,8 @@ public class RobotContainer {
         private void configureAutoCommands() {
                 NamedCommands.registerCommand("InitializePE",
                                 new InitializePivotAndElevator(this.pivot, this.elevator));
-                NamedCommands.registerCommand("IsElevatorInSafePosition",
-                                new AutoPrintElevatorSafe(this.elevator));
-                // NamedCommands.registerCommand("AutoLimelightLeft"); //need to get this
-                // working for positioning
+                NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
+                                new WaitUntilElevatorBelowSafeTravelHeight(this.elevator));
                 NamedCommands.registerCommand("AutoAlgaeL2",
                                 new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
                 NamedCommands.registerCommand("AutoMoveToBarge", new AutoDriveAlignBarge(this.drivetrain));
