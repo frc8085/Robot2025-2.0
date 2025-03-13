@@ -223,17 +223,17 @@ public final class Constants {
     public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff4Height = 118; // changed from 130
     // Drop off 4 was 130 before but 120 seems to be our max height
-    public static double kElevatorAlgaePickUpFloorHeight = 25;
+    public static double kElevatorAlgaePickUpFloorHeight = 15;
     public static double kElevatorReef2Height = 40 * ropeAdjustmentFactor;
     public static double kElevatorReef3Height = 70 * ropeAdjustmentFactor;
-    public static double kElevatorAlgaePickUpFloorFlipHeight = 6;
+    public static double kElevatorAlgaePickUpFloorFlipHeight = 15;
     public static double kElevatorReef2FlipHeight = 25;
     public static double kElevatorReef3FlipHeight = 45;
     public static double kElevatorNetHeight = 110; // changed from 120
 
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
-    public static final double kElevatorMin = 0; // adjusting for climber
+    public static final double kElevatorMin = 15; // adjusting for climber
     public static final double kElevatorStage1Height = 41; // zero position value
     public static final double kElevatorStage2Height = 85 * ropeAdjustmentFactor;
     public static final double kElevatorMax = 120; // 120 hard max
