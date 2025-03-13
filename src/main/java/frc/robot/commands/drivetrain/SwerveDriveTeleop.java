@@ -23,8 +23,10 @@ public class SwerveDriveTeleop extends Command {
     public void execute() {
         double speedVal = Math.pow(Controllers.driverController.getRightTriggerAxis(), 2);
 
-        double leftX = Controllers.driverController.getLeftX();
-        double leftY = -Controllers.driverController.getLeftY();
+        double invert = this.driveSubsystem.invertForAlliance();
+
+        double leftX = Controllers.driverController.getLeftX() * invert;
+        double leftY = -Controllers.driverController.getLeftY() * invert;
         double rightX = -Math.pow(Controllers.driverController.getRightX(), 3);
 
         this.driveSubsystem.drive(

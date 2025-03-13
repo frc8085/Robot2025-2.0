@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.States.DriveState;
 import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.VecBuilder;
@@ -422,7 +423,25 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    m_gyro.reset();
+    m_gyro.setYaw(addForAlliance());
+  }
+
+  // Inverts the joystick direction if on red alliance
+  public double invertForAlliance() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+      return -1;
+    }
+    return 1;
+  }
+
+  // Adds 180 degrees if on red alliance
+  private double addForAlliance() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+      return 180;
+    }
+    return 0;
   }
 
   /**

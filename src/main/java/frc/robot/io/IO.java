@@ -132,10 +132,12 @@ public class IO {
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.coral, robotContainer.drivetrain));
-                // only shoot from blue
-                // shootAlgaeNetYellow.onTrue(new ScoreAlgaeNetYellow(robotContainer.algae,
+                // shootAlgaeNetBlue
+                // .onTrue(new SequentialCommandGroup(new
+                // SwerveDriveAlignBarge(robotContainer.drivetrain),
+                // new ScoreAlgaeNetBlue(robotContainer.algae,
                 // robotContainer.elevator, robotContainer.pivot,
-                // robotContainer.coral));
+                // robotContainer.coral)));
 
                 left.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, false,
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
