@@ -204,10 +204,11 @@ public class IO {
                                 robotContainer.coral,
                                 false));
 
-                algaeReef2.and(altButtonOperator)
-                                .onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot,
-                                                robotContainer.algae,
-                                                true));
+                                // algae reef 2 doesn't work on yellow
+                // algaeReef2.and(altButtonOperator)
+                //                 .onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot,
+                //                                 robotContainer.algae,
+                //                                 true));
                 algaeReef3.and(altButtonOperator).onTrue(
                                 new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
                                                 true));
