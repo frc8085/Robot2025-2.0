@@ -23,20 +23,24 @@ public class SwerveDriveTargetReef extends Command {
     private double kXYP = 0.5;
     private double kXYI = 0;
     private double kXYD = 0.1;
-    private double kRotP = 0.015;
+    private double kRotP = 3;
     private double kRotI = 0;
-    private double kRotD = 0.0015;
+    private double kRotD = 0.05;
     // x pid, y pid, and rotation pid
 
     private PIDController xPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
     private PIDController yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
-    // private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
-    private TrapezoidProfile.Constraints rotConstraints = new TrapezoidProfile.Constraints(30, 20);
-    private ProfiledPIDController rotPid = new ProfiledPIDController(kRotP, kRotI, kRotD, rotConstraints, 0.02);
+    private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
+
+    // private TrapezoidProfile.Constraints rotConstraints = new
+    // TrapezoidProfile.Constraints(30, 20);
+    // private ProfiledPIDController rotPid = new ProfiledPIDController(kRotP,
+    // kRotI, kRotD, rotConstraints, 0.02);
 
     List<AprilTag> tagPoses = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField().getTags();
 
     public SwerveDriveTargetReef(DriveSubsystem driveSubsystem, boolean isLeft) {
+        this.rotPid.enableContinuousInput(Math.toRadians(-180), Math.toRadians(180));
         this.driveSubsystem = driveSubsystem;
         this.isLeft = isLeft;
         addRequirements(driveSubsystem);
@@ -74,10 +78,18 @@ public class SwerveDriveTargetReef extends Command {
                 this.targetPose.getRotation().getRadians() };
 
         SmartDashboard.putNumberArray("Target Align Pose", targetPoseArray);
-        // this.rotPid.reset()
+        // this.rotPid.reset(currentPose.getRotation().getDegrees());
+        this.rotPid.reset();
         this.xPid.reset();
         this.yPid.reset();
-        this.rotPid.enableContinuousInput(-180, 180);
+    }
+
+    public double boundAngle(double degrees) {
+        degrees = degrees % 360;
+        if (degrees > 180) {
+            degrees -= 360;
+        }
+        return degrees;
     }
 
     @Override
@@ -87,16 +99,18 @@ public class SwerveDriveTargetReef extends Command {
         // use the current pose of the robot as the input
         Pose2d currentPose = this.driveSubsystem.getPose();
 
+        double currentRotation = this.boundAngle(currentPose.getRotation().getDegrees());
+        double targetRotation = this.boundAngle(this.targetPose.getRotation().getDegrees());
+
         double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
         double vy = this.yPid.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
-        double vrot = this.rotPid.calculate(currentPose.getRotation().getDegrees(),
-                targetPose.getRotation().getDegrees());
+        double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
 
         double speedVal = Math.sqrt(vx * vx + vy * vy);
-        // double forward = vx / speedVal;
-        double forward = 0;
-        // double right = vy / speedVal;
-        double right = 0;
+        double forward = vx / speedVal;
+        // double forward = 0;
+        double right = vy / speedVal;
+        // double right = 0;
         double rotation = vrot;
 
         double rotError = Math.abs(this.rotPid.getPositionError());
