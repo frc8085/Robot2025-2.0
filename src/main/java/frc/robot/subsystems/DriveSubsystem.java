@@ -158,6 +158,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     double stdDev = 2;
 
+    pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
+
     boolean primaryReef = false;
     if (6 <= primaryId && primaryId <= 11) {
       primaryReef = true;

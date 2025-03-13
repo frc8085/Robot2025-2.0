@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.windmill.Windmill;
+import frc.robot.commands.aautoCommands.AutoDriveAlignBarge;
+import frc.robot.commands.aautoCommands.AutoRemoveAndShootAlgaeL2;
+import frc.robot.commands.aautoCommands.AutoScoreAlgaeNetBlue;
 import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.movement.AutoMoveForwardForTimeFaster;
@@ -52,84 +55,16 @@ public class RobotContainer {
         private void configureAutoCommands() {
                 NamedCommands.registerCommand("InitializePE",
                                 new InitializePivotAndElevator(this.pivot, this.elevator));
-                NamedCommands.registerCommand("AutoYCoral1",
-                                new AutoCoral1(this.coral, this.elevator, this.pivot,
-                                                this.drivetrain,
-                                                true));
-                NamedCommands.registerCommand("AutoYCoral2",
-                                new AutoCoral2(this.coral, this.elevator, this.pivot,
-                                                this.drivetrain,
-                                                true));
-                NamedCommands.registerCommand("AutoYCoral3",
-                                new AutoCoral3(this.coral, this.elevator, this.pivot,
-                                                this.drivetrain,
-                                                true));
-                NamedCommands.registerCommand("AutoYCoral4",
-                                new AutoCoral4(this.coral, this.elevator, this.pivot,
-                                                this.drivetrain,
-                                                true));
-                NamedCommands.registerCommand("AutoBCoral4",
-                                new AutoCoral4(this.coral, this.elevator, this.pivot,
-                                                this.drivetrain,
-                                                false));
-                NamedCommands.registerCommand("AutoCoralSource",
-                                new AutoCoralSource(this.coral, this.elevator,
-                                                this.pivot, false));
-                NamedCommands.registerCommand("AutoYLimelightRight",
-                                new AutoLimelightPosition(this.drivetrain, this.limelight, true,
-                                                true));
-                NamedCommands.registerCommand("AutoYLimelightLeft",
-                                new AutoLimelightPosition(this.drivetrain, this.limelight, false,
-                                                true));
-                NamedCommands.registerCommand("AutoBLimelightRight",
-                                new AutoLimelightPosition(this.drivetrain, this.limelight, true,
-                                                false));
-                NamedCommands.registerCommand("AutoBLimelightLeft",
-                                new AutoLimelightPosition(this.drivetrain, this.limelight, false,
-                                                false));
-                NamedCommands.registerCommand("AutoYLimelight",
-                                new AutoLimelight(this.drivetrain, this.limelight, true, true));
-                NamedCommands.registerCommand("AutoBLimelight",
-                                new AutoLimelight(this.drivetrain, this.limelight, false, false));
-                NamedCommands.registerCommand("AutoYMoveForward",
-                                new AutoMoveForwardForTime(this.drivetrain, this.limelight, true,
-                                                1));
-                NamedCommands.registerCommand("AutoYMoveForwardFaster",
-                                new AutoMoveForwardForTimeFaster(this.drivetrain, this.limelight,
-                                                true, 1, 0.3));
-                NamedCommands.registerCommand("MoveToYCoral1",
-                                new Windmill(this.elevator, this.pivot,
-                                                Constants.Windmill.WindmillState.CoralDropOff1,
-                                                true));
-                NamedCommands.registerCommand("DropCoral",
-                                new DropCoral(this.coral, this.elevator, this.pivot,
-                                                this.drivetrain));
-                NamedCommands.registerCommand("AutoBMoveForward",
-                                new AutoMoveForwardForTime(this.drivetrain, this.limelight, false,
-                                                1));
-                NamedCommands.registerCommand("WaitUntilSafeToMove",
-                                new WaitUntilElevatorBelowSafeTravelHeight(this.elevator));
-                NamedCommands.registerCommand("ZeroHeading",
-                                new InstantCommand(() -> this.drivetrain.zeroHeading(),
-                                                this.drivetrain));
-                NamedCommands.registerCommand("AutoYMoveTowardSource",
-                                new AutoPositionForTime(this.drivetrain, this.limelight, true,
-                                                true, 0.5));
-                NamedCommands.registerCommand("StartedMove", new PrintCommand("Startedmove"));
-                NamedCommands.registerCommand("AutoYMoveRight",
-                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, true));
-                NamedCommands.registerCommand("AutoYMoveLeft",
-                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, false));
-                NamedCommands.registerCommand("AutoBMoveRight",
-                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, false));
-                NamedCommands.registerCommand("AutoBMoveLeft",
-                                new NewAutoMoveOnReef(this.drivetrain, this.limelight, true));
                 NamedCommands.registerCommand("IsElevatorInSafePosition",
                                 new AutoPrintElevatorSafe(this.elevator));
+                // NamedCommands.registerCommand("AutoLimelightLeft"); //need to get this
+                // working for positioning
                 NamedCommands.registerCommand("AutoAlgaeL2",
-                                new AutoAlgaeL2(this.drivetrain, this.coral,
-                                                this.algae, this.elevator,
-                                                this.pivot));
+                                new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
+                NamedCommands.registerCommand("AutoMoveToBarge", new AutoDriveAlignBarge(this.drivetrain));
+                NamedCommands.registerCommand("AutoAlgaeNetBlue",
+                                new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
+
         }
 
         // The driver's controller

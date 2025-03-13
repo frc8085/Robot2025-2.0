@@ -160,7 +160,7 @@ public final class Constants {
     public static final double WHEEL_COF = 0.0484;
 
     // TODO: Tune these values
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(5, 0, 0);
     public static final PIDConstants ANGLE_PID = new PIDConstants(0.01, 0, 0);
 
     public static final PathFollowingController PP_CONTROLLER = new PPHolonomicDriveController(

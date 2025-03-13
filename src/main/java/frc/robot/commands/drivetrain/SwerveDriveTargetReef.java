@@ -20,9 +20,9 @@ public class SwerveDriveTargetReef extends Command {
     private DriveSubsystem driveSubsystem;
     private boolean isLeft;
     private Pose2d targetPose;
-    private double kXYP = 0.35;
+    private double kXYP = 0.5;
     private double kXYI = 0;
-    private double kXYD = 0;
+    private double kXYD = 0.1;
     private double kRotP = 0.015;
     private double kRotI = 0;
     private double kRotD = 0.0015;
@@ -31,7 +31,7 @@ public class SwerveDriveTargetReef extends Command {
     private PIDController xPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
     private PIDController yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
     // private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
-    private TrapezoidProfile.Constraints rotConstraints = new TrapezoidProfile.Constraints(60, 30);
+    private TrapezoidProfile.Constraints rotConstraints = new TrapezoidProfile.Constraints(30, 20);
     private ProfiledPIDController rotPid = new ProfiledPIDController(kRotP, kRotI, kRotD, rotConstraints, 0.02);
 
     List<AprilTag> tagPoses = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField().getTags();
@@ -93,18 +93,21 @@ public class SwerveDriveTargetReef extends Command {
                 targetPose.getRotation().getDegrees());
 
         double speedVal = Math.sqrt(vx * vx + vy * vy);
-        double forward = -vy / speedVal;
-        double right = vx / speedVal;
+        // double forward = vx / speedVal;
+        double forward = 0;
+        // double right = vy / speedVal;
+        double right = 0;
         double rotation = vrot;
 
         double rotError = Math.abs(this.rotPid.getPositionError());
         // double rotRate = Math.max(Math.min(((1 - 0) / (20 - 90)) * rotError, 1), 0);
         // forward *= rotRate;
         // right *= rotRate;
-        if (rotError > 5) {
-            forward = 0;
-            right = 0;
-        }
+        // if (rotError > 5) {
+        // forward = 0;
+        // right = 0;
+        // speedVal = 0;
+        // }
 
         this.driveSubsystem.drive(
                 speedVal,

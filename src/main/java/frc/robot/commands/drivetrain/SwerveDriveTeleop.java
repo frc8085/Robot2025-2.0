@@ -25,15 +25,15 @@ public class SwerveDriveTeleop extends Command {
 
         double invert = this.driveSubsystem.invertForAlliance();
 
-        double leftX = Controllers.driverController.getLeftX() * invert;
+        double leftX = -Controllers.driverController.getLeftX() * invert;
         double leftY = -Controllers.driverController.getLeftY() * invert;
         double rightX = -Math.pow(Controllers.driverController.getRightX(), 3);
 
         this.driveSubsystem.drive(
                 speedVal,
-                leftX,
-                leftY,
-                rightX,
+                leftY, // forward-backward
+                leftX, // left-right
+                rightX, // rotation
                 true);
 
     }
