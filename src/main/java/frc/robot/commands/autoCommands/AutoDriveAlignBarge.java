@@ -1,4 +1,4 @@
-package frc.robot.commands.aautoCommands;
+package frc.robot.commands.autoCommands;
 
 import java.util.List;
 import java.util.ArrayList;

@@ -20,16 +20,19 @@ public class SwerveDriveTargetReef extends Command {
     private DriveSubsystem driveSubsystem;
     private boolean isLeft;
     private Pose2d targetPose;
-    private double kXYP = 0.5;
-    private double kXYI = 0;
-    private double kXYD = 0.1;
-    private double kRotP = 3;
+    private double kXP = .5; // 0.5
+    private double kXI = 0;
+    private double kXD = 0; // 0.1
+    private double kYP = .5; // 0.5
+    private double kYI = 0;
+    private double kYD = 0; // 0.1
+    private double kRotP = 1.5; // 3
     private double kRotI = 0;
-    private double kRotD = 0.05;
+    private double kRotD = 0.0; // 0.5
     // x pid, y pid, and rotation pid
 
-    private PIDController xPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
-    private PIDController yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
+    private PIDController xPid = new PIDController(kXP, kXI, kXD, 0.02);
+    private PIDController yPid = new PIDController(kYP, kYI, kYD, 0.02);
     private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
 
     // private TrapezoidProfile.Constraints rotConstraints = new
@@ -82,6 +85,8 @@ public class SwerveDriveTargetReef extends Command {
         this.rotPid.reset();
         this.xPid.reset();
         this.yPid.reset();
+
+        this.yPid.setTolerance(0.05);
     }
 
     public double boundAngle(double degrees) {
@@ -102,18 +107,51 @@ public class SwerveDriveTargetReef extends Command {
         double currentRotation = this.boundAngle(currentPose.getRotation().getDegrees());
         double targetRotation = this.boundAngle(this.targetPose.getRotation().getDegrees());
 
-        double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
-        double vy = this.yPid.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
-        double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
+        if (this.isLeft) {
+            double YOffset = .2;
+            double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
+            double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
+                    targetPose.getTranslation().getY() + YOffset);
+            double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
+            double speedVal = Math.sqrt(vx * vx + vy * vy);
+            // double forward = vx / speedVal;
+            double forward = Math.pow(vx, 3);
+            // double right = vy / speedVal;
+            double right = Math.pow(vy, 3);
+            double rotation = vrot;
 
-        double speedVal = Math.sqrt(vx * vx + vy * vy);
-        double forward = vx / speedVal;
-        // double forward = 0;
-        double right = vy / speedVal;
-        // double right = 0;
-        double rotation = vrot;
+            double rotError = Math.abs(this.rotPid.getPositionError());
+            this.driveSubsystem.drive(
+                    speedVal,
+                    forward,
+                    right,
+                    rotation,
+                    true);
 
-        double rotError = Math.abs(this.rotPid.getPositionError());
+        } else {
+            double YOffset = 0;
+            double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
+            double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
+                    targetPose.getTranslation().getY() + YOffset);
+            double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
+            double speedVal = Math.sqrt(vx * vx + vy * vy);
+            // double forward = vx / speedVal;
+            double forward = Math.pow(vx, 3);
+            // double right = vy / speedVal;
+            double right = Math.pow(vy, 3);
+            double rotation = vrot;
+
+            double rotError = Math.abs(this.rotPid.getPositionError());
+
+            this.driveSubsystem.drive(
+                    speedVal,
+                    forward,
+                    right,
+                    rotation,
+                    true);
+
+        }
+
         // double rotRate = Math.max(Math.min(((1 - 0) / (20 - 90)) * rotError, 1), 0);
         // forward *= rotRate;
         // right *= rotRate;
@@ -123,12 +161,6 @@ public class SwerveDriveTargetReef extends Command {
         // speedVal = 0;
         // }
 
-        this.driveSubsystem.drive(
-                speedVal,
-                forward,
-                right,
-                rotation,
-                true);
     }
 
     @Override
