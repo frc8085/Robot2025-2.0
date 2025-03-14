@@ -23,7 +23,7 @@ public class SwerveDriveTeleopRoboRelativeSlow extends Command {
 
     @Override
     public void execute() {
-        double speedVal = Constants.DriveConstants.kMinSpeedMetersPerSecondMaxElevatorHeight;
+        double speedVal = Constants.DriveConstants.kSlowDrive;
 
         double invert = this.driveSubsystem.invertForAlliance();
 

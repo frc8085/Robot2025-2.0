@@ -78,6 +78,7 @@ public final class Constants {
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeightMul = 0.025;
 
     public static final double kMinSpeedMetersPerSecondMaxElevatorHeight = 0.2;
+    public static final double kSlowDrive = 0.1;
 
     // if you want to slow down the rotation speed, change the adjustment factor
     public static final double kAngularSpeedAdjustment = 1;

@@ -3,6 +3,7 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -29,7 +30,7 @@ public class IO {
         public void init(RobotContainer robotContainer) {
 
                 // Additional Buttons to allow for alternate button pushes
-                final Trigger altButtonDriver = Keymap.Layout.driverRightBumper;
+                final Trigger altButtonDriver = Keymap.Layout.driverBackButton;
                 final Trigger altButtonOperator = Keymap.Layout.operatorRightBumper;
 
                 // Initialization
@@ -50,7 +51,7 @@ public class IO {
                 final Trigger gorobotrelative = Keymap.Controllers.driverController.leftStick();
                 final Trigger raiseClimber = Keymap.Layout.driverRightButton;
                 final Trigger lowerClimber = Keymap.Layout.driverLeftButton;
-                final Trigger goSlow = Keymap.Layout.driverBackButton;
+                final Trigger goSlow = Keymap.Layout.driverRightBumper;
 
                 // Operator Controls
                 final Trigger manualCoral = Keymap.Layout.operatorRightTriggerButton;
@@ -87,11 +88,17 @@ public class IO {
 
                 // // Limelight Buttons
 
-                limelightTrigger1.onTrue(
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, true)).onFalse(
+                limelightTrigger1.onTrue(new SequentialCommandGroup(
+                                new ParallelRaceGroup(new WaitCommand(2),
+                                                new AlignToAprilTagBlue(robotContainer.drivetrain,
+                                                                robotContainer.limelight)),
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, true))).onFalse(
                                                 new SwerveDriveTeleop(robotContainer.drivetrain));
-                limelightTrigger2.onTrue(
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, false)).onFalse(
+                limelightTrigger2.onTrue(new SequentialCommandGroup(
+                                new ParallelRaceGroup(new WaitCommand(2),
+                                                new AlignToAprilTagYellow(robotContainer.drivetrain,
+                                                                robotContainer.limelight)),
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, false))).onFalse(
                                                 new SwerveDriveTeleop(robotContainer.drivetrain));
 
                 gorobotrelative.onTrue(new InstantCommand(() -> {
@@ -102,8 +109,8 @@ public class IO {
                         }
                 }));
 
-                goSlow.toggleOnTrue(new SwerveDriveTeleopRoboRelativeSlow(robotContainer.drivetrain)).toggleOnFalse(
-                                new SwerveDriveTeleop(robotContainer.drivetrain));
+                goSlow.onTrue(new SwerveDriveTeleopRoboRelativeSlow(robotContainer.drivetrain))
+                                .onFalse(new SwerveDriveTeleop(robotContainer.drivetrain));
 
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(robotContainer.coral, robotContainer.elevator,
@@ -118,10 +125,9 @@ public class IO {
                                                 robotContainer.pivot, true));
 
                 ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
-                shootAlgaeNetBlue.onTrue(new SwerveDriveAlignBarge(robotContainer.drivetrain));
-                shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNet(robotContainer.algae,
-                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
-
+                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNet(robotContainer.algae,
+                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
+                                robotContainer.drivetrain, false));
                 raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
                                 robotContainer.climber))
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
@@ -185,18 +191,14 @@ public class IO {
                                                 true));
 
                 coralDropOff1.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL1(robotContainer.elevator, robotContainer.pivot,
-                                                robotContainer.coral, true));
+                                .onTrue(new ToCoralDropOff1(robotContainer.elevator, robotContainer.pivot, true));
                 coralDropOff2.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL2(robotContainer.elevator, robotContainer.pivot,
-                                                robotContainer.coral, true));
+                                .onTrue(new ToCoralDropOff2(robotContainer.elevator, robotContainer.pivot, true));
                 coralDropOff3.and(altButtonOperator)
-                                .onTrue(new ScoreCoralL3(robotContainer.elevator, robotContainer.pivot,
-                                                robotContainer.coral, true));
+                                .onTrue(new ToCoralDropOff3(robotContainer.elevator, robotContainer.pivot, true));
                 coralDropOff4.and(altButtonOperator)
                                 .onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot,
-                                                robotContainer.coral,
-                                                true));
+                                                robotContainer.coral, true));
 
                 // commands that go with manual elevator/pivot movement
                 pivotClockwise

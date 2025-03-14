@@ -12,6 +12,9 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.*;
+import edu.wpi.first.math.MathUtil;
+import frc.robot.io.Keymap.Controllers;
+import frc.robot.Constants.OIConstants;
 
 public class SwerveDriveTargetReef extends Command {
 
@@ -24,18 +27,18 @@ public class SwerveDriveTargetReef extends Command {
     private double kYP = .5; // 0.5
     private double kYI = 0;
     private double kYD = 0; // 0.1
-    private double kRotP = 1.5; // 3
-    private double kRotI = 0;
-    private double kRotD = 0.0; // 0.5
+    // private double kRotP = 1.5; // 3
+    // private double kRotI = 0;
+    // private double kRotD = 0.0; // 0.5
 
     private PIDController xPid = new PIDController(kXP, kXI, kXD, 0.02);
     private PIDController yPid = new PIDController(kYP, kYI, kYD, 0.02);
-    private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
+    // private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
 
     List<AprilTag> tagPoses = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField().getTags();
 
     public SwerveDriveTargetReef(DriveSubsystem driveSubsystem, boolean isLeft) {
-        this.rotPid.enableContinuousInput(Math.toRadians(-180), Math.toRadians(180));
+        // this.rotPid.enableContinuousInput(Math.toRadians(-180), Math.toRadians(180));
         this.driveSubsystem = driveSubsystem;
         this.isLeft = isLeft;
         addRequirements(driveSubsystem);
@@ -75,20 +78,20 @@ public class SwerveDriveTargetReef extends Command {
 
         SmartDashboard.putNumberArray("Target Align Pose", targetPoseArray);
         // this.rotPid.reset(currentPose.getRotation().getDegrees());
-        this.rotPid.reset();
+        // this.rotPid.reset();
         this.xPid.reset();
         this.yPid.reset();
 
         this.yPid.setTolerance(0.05);
     }
 
-    public double boundAngle(double degrees) {
-        degrees = degrees % 360;
-        if (degrees > 180) {
-            degrees -= 360;
-        }
-        return degrees;
-    }
+    // public double boundAngle(double degrees) {
+    // degrees = degrees % 360;
+    // if (degrees > 180) {
+    // degrees -= 360;
+    // }
+    // return degrees;
+    // }
 
     @Override
     public void execute() {
@@ -97,19 +100,25 @@ public class SwerveDriveTargetReef extends Command {
         // use the current pose of the robot as the input
         Pose2d currentPose = this.driveSubsystem.getPose();
 
-        double currentRotation = this.boundAngle(currentPose.getRotation().getDegrees());
-        double targetRotation = this.boundAngle(this.targetPose.getRotation().getDegrees());
+        // double currentRotation =
+        // this.boundAngle(currentPose.getRotation().getDegrees());
+        // double targetRotation =
+        // this.boundAngle(this.targetPose.getRotation().getDegrees());
 
         double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
         double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
                 targetPose.getTranslation().getY());
-        double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
+        // double vrot = this.rotPid.calculate(Math.toRadians(currentRotation),
+        // Math.toRadians(targetRotation));
         double speedVal = Math.sqrt(vx * vx + vy * vy);
         // double forward = vx / speedVal;
         double forward = Math.pow(vx, 3);
         // double right = vy / speedVal;
         double right = Math.pow(vy, 3);
-        double rotation = vrot;
+        // double rotation = vrot;
+        // double rotation = 0;
+        double rotation = MathUtil.applyDeadband(-Math.pow(Controllers.driverController.getRightX(), 3),
+                OIConstants.kTurnDeadband);
 
         // double rotError = Math.abs(this.rotPid.getPositionError());
         this.driveSubsystem.drive(
@@ -123,7 +132,7 @@ public class SwerveDriveTargetReef extends Command {
     @Override
     public boolean isFinished() {
         // return if the Pid controller is at the target pose
-        return this.xPid.atSetpoint() && this.yPid.atSetpoint() && this.rotPid.atSetpoint();
+        return this.xPid.atSetpoint() && this.yPid.atSetpoint();
     }
 
     @Override
