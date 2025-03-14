@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.io.Keymap.Controllers;
 
-public class SwerveDriveTeleop extends Command {
+public class SwerveDriveMoveRobotRelative extends Command {
 
     DriveSubsystem driveSubsystem;
 
-    public SwerveDriveTeleop(DriveSubsystem driveSubsystem) {
+    public SwerveDriveMoveRobotRelative(DriveSubsystem driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
         addRequirements(driveSubsystem);
     }

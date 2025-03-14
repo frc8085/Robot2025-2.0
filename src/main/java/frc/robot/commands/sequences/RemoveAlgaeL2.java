@@ -9,14 +9,9 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.commands.manipulator.algae.PickUpAlgae;
 import frc.robot.commands.windmill.Windmill;
-import frc.robot.commands.movement.AutoMoveForward;
-import frc.robot.commands.movement.AutoMoveForwardForTime;
 import frc.robot.commands.states.ToAlgaeL2;
 import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class RemoveAlgaeL2 extends SequentialCommandGroup {
