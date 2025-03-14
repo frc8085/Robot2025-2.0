@@ -16,10 +16,9 @@ import frc.robot.subsystems.PivotSubsystem;
 public class ScoreAlgaeNet extends SequentialCommandGroup {
         public ScoreAlgaeNet(
                         AlgaeSubsystem algaeSubsystem, ElevatorSubsystem elevatorSubsystem,
-                        PivotSubsystem pivotSubsystem, CoralSubsystem coralSubsystem, DriveSubsystem driveSubsystem,
+                        PivotSubsystem pivotSubsystem, CoralSubsystem coralSubsystem,
                         boolean yellow) {
                 addCommands(
-                                new AngleToBarge(driveSubsystem),
                                 new ToAlgaeNet(elevatorSubsystem, pivotSubsystem, yellow),
                                 new WaitUntilCommand(elevatorSubsystem::elevatorAtAlgaeScoreHeight),
                                 new EjectAlgae(algaeSubsystem),
