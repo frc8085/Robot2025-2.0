@@ -45,17 +45,17 @@ public class IO {
                 final Trigger pickUpCoral = Keymap.Layout.driverLeftTriggerButton;
                 final Trigger ejectAlgae = Keymap.Layout.driverYButton;
                 final Trigger shootAlgaeNetBlue = Keymap.Layout.driverLeftBumper;
-                // final Trigger shootAlgaeNetYellow = Keymap.Layout.driverRightBumper;
-                final Trigger left = Keymap.Layout.driverDownButton;
-                final Trigger right = Keymap.Layout.driverUpButton;
+                // final Trigger left = Keymap.Layout.driverDownButton;
+                // final Trigger right = Keymap.Layout.driverUpButton;
                 final Trigger gorobotrelative = Keymap.Controllers.driverController.leftStick();
                 final Trigger raiseClimber = Keymap.Layout.driverRightButton;
                 final Trigger lowerClimber = Keymap.Layout.driverLeftButton;
+                final Trigger goSlow = Keymap.Layout.driverBackButton;
 
                 // Operator Controls
                 final Trigger manualCoral = Keymap.Layout.operatorRightTriggerButton;
                 final Trigger manualAlgae = Keymap.Layout.operatorLeftTriggerButton;
-                final Trigger toggleClimber = Keymap.Layout.driverBackButton;
+                final Trigger toggleClimber = Keymap.Layout.operatorBackButton;
 
                 // Operator Set Position Controls
                 final Trigger home = Keymap.Layout.operatorLeftBumper;
@@ -102,6 +102,9 @@ public class IO {
                         }
                 }));
 
+                goSlow.toggleOnTrue(new SwerveDriveTeleopRoboRelativeSlow(robotContainer.drivetrain)).toggleOnFalse(
+                                new SwerveDriveTeleop(robotContainer.drivetrain));
+
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(robotContainer.coral, robotContainer.elevator,
                                 robotContainer.pivot));
@@ -119,10 +122,6 @@ public class IO {
                 shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNet(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
 
-                left.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, false,
-                                (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
-                right.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, true,
-                                (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
                 raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
                                 robotContainer.climber))
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),

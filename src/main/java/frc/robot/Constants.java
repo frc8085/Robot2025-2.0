@@ -447,12 +447,6 @@ public final class Constants {
     public static double kMoveSpeed = 0.5;
   }
 
-  public static final class LimelightConstants {
-    // negative moves it right (I think)
-    public static double bluefudge = -4;
-    public static double yellowfudge = 0;
-  }
-
   public static final class FakeConstants {
     public static boolean fieldRelative = true;
   }
