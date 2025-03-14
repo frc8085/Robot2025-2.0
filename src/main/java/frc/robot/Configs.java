@@ -58,13 +58,13 @@ public final class Configs {
         }
 
         public static final class CoralManipulator {
-                public static final SparkMaxConfig coralConfig = new SparkMaxConfig();
+                public static final SparkFlexConfig coralConfig = new SparkFlexConfig();
 
                 static {
 
                         coralConfig
                                         .idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoCurrentLimit);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoVortexCurrentLimit);
                 }
         }
 

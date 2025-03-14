@@ -132,6 +132,10 @@ public class IO {
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNet(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
                                 robotContainer.drivetrain, false));
+                shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNetNoTurn(robotContainer.algae,
+                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
+                                false));
+
                 raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
                                 robotContainer.climber))
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),

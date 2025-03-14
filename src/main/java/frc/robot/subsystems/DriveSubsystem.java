@@ -171,9 +171,9 @@ public class DriveSubsystem extends SubsystemBase {
       return;
     }
 
-    if (distanceToTarget > 3.0) {
-      return;
-    }
+    // if (distanceToTarget > 3.0) {
+    // return;
+    // }
 
     if (primaryReef) {
       if (distanceToTarget <= 1.25) {
@@ -181,7 +181,7 @@ public class DriveSubsystem extends SubsystemBase {
       } else if (distanceToTarget <= 1.75) {
         stdDev = 0.5;
       } else {
-        return;
+        stdDev = 0.7;
       }
     }
 
