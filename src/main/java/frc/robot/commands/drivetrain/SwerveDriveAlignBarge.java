@@ -18,10 +18,10 @@ public class SwerveDriveAlignBarge extends Command {
 
     private DriveSubsystem driveSubsystem;
     private Pose2d targetPose;
-    private double kXYP = 0.35;
+    private double kXYP = 0.5;
     private double kXYI = 0;
     private double kXYD = 0;
-    private double kRotP = 0.01;
+    private double kRotP = 1.5;
     private double kRotI = 0;
     private double kRotD = 0;
     // x pid, y pid, and rotation pid
@@ -38,11 +38,11 @@ public class SwerveDriveAlignBarge extends Command {
     @Override
     public void initialize() {
         Pose2d currentPose = this.driveSubsystem.getPose(); // get the current pose of the robot
-        double targetX = 7.25; // Enter in the target X -- where we want the robot to end up - replace with
-                               // correct number
-        Rotation2d targetRot = Rotation2d.fromDegrees(30); // This is the final rotation we want to be at
+        double targetX = 7.4; // Enter in the target X -- where we want the robot to end up - replace with
+                              // correct number
+        Rotation2d targetRot = Rotation2d.fromDegrees(-30); // This is the final rotation we want to be at
 
-        // We want to go to specified Y and current X
+        // We want to go to specified X and current Y
         this.targetPose = new Pose2d(targetX, currentPose.getTranslation().getY(), targetRot);
 
         double[] targetPoseArray = { this.targetPose.getTranslation().getX(), this.targetPose.getTranslation().getY(),
@@ -56,6 +56,14 @@ public class SwerveDriveAlignBarge extends Command {
 
     }
 
+    public double boundAngle(double degrees) {
+        degrees = degrees % 360;
+        if (degrees > 180) {
+            degrees -= 360;
+        }
+        return degrees;
+    }
+
     @Override
     public void execute() {
         // run the Pid controllers using the targetpose we generated earlier
@@ -63,17 +71,18 @@ public class SwerveDriveAlignBarge extends Command {
         // use the current pose of the robot as the input
         Pose2d currentPose = this.driveSubsystem.getPose();
 
-        double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
-        // double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
-        // targetPose.getTranslation().getY());
-        double vrot = this.rotPid.calculate(currentPose.getRotation().getDegrees(),
-                targetPose.getRotation().getDegrees());
+        double currentRotation = this.boundAngle(currentPose.getRotation().getDegrees());
+        double targetRotation = this.boundAngle(this.targetPose.getRotation().getDegrees());
 
-        // double speedVal = Math.sqrt(vx * vx + vy * vy);
-        double speedVal = Math.abs(vx);
-        // double forward = -vy / speedVal;
-        double forward = 0;
-        double right = vx / speedVal;
+        double vx = this.xPid.calculate(currentPose.getTranslation().getX(),
+                targetPose.getTranslation().getX());
+        double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
+                targetPose.getTranslation().getY());
+        double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
+
+        double speedVal = Math.sqrt(vx * vx + vy * vy);
+        double forward = Math.pow(vx, 3);
+        double right = Math.pow(vy, 3);
         double rotation = vrot;
 
         this.driveSubsystem.drive(

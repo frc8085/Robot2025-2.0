@@ -29,16 +29,10 @@ public class SwerveDriveTargetReef extends Command {
     private double kRotP = 1.5; // 3
     private double kRotI = 0;
     private double kRotD = 0.0; // 0.5
-    // x pid, y pid, and rotation pid
 
     private PIDController xPid = new PIDController(kXP, kXI, kXD, 0.02);
     private PIDController yPid = new PIDController(kYP, kYI, kYD, 0.02);
     private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
-
-    // private TrapezoidProfile.Constraints rotConstraints = new
-    // TrapezoidProfile.Constraints(30, 20);
-    // private ProfiledPIDController rotPid = new ProfiledPIDController(kRotP,
-    // kRotI, kRotD, rotConstraints, 0.02);
 
     List<AprilTag> tagPoses = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField().getTags();
 
@@ -107,60 +101,24 @@ public class SwerveDriveTargetReef extends Command {
         double currentRotation = this.boundAngle(currentPose.getRotation().getDegrees());
         double targetRotation = this.boundAngle(this.targetPose.getRotation().getDegrees());
 
-        if (this.isLeft) {
-            double YOffset = .2;
-            double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
-            double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
-                    targetPose.getTranslation().getY() + YOffset);
-            double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
-            double speedVal = Math.sqrt(vx * vx + vy * vy);
-            // double forward = vx / speedVal;
-            double forward = Math.pow(vx, 3);
-            // double right = vy / speedVal;
-            double right = Math.pow(vy, 3);
-            double rotation = vrot;
+        double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
+        double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
+                targetPose.getTranslation().getY());
+        double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
+        double speedVal = Math.sqrt(vx * vx + vy * vy);
+        // double forward = vx / speedVal;
+        double forward = Math.pow(vx, 3);
+        // double right = vy / speedVal;
+        double right = Math.pow(vy, 3);
+        double rotation = vrot;
 
-            double rotError = Math.abs(this.rotPid.getPositionError());
-            this.driveSubsystem.drive(
-                    speedVal,
-                    forward,
-                    right,
-                    rotation,
-                    true);
-
-        } else {
-            double YOffset = 0;
-            double vx = this.xPid.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
-            double vy = this.yPid.calculate(currentPose.getTranslation().getY(),
-                    targetPose.getTranslation().getY() + YOffset);
-            double vrot = this.rotPid.calculate(Math.toRadians(currentRotation), Math.toRadians(targetRotation));
-            double speedVal = Math.sqrt(vx * vx + vy * vy);
-            // double forward = vx / speedVal;
-            double forward = Math.pow(vx, 3);
-            // double right = vy / speedVal;
-            double right = Math.pow(vy, 3);
-            double rotation = vrot;
-
-            double rotError = Math.abs(this.rotPid.getPositionError());
-
-            this.driveSubsystem.drive(
-                    speedVal,
-                    forward,
-                    right,
-                    rotation,
-                    true);
-
-        }
-
-        // double rotRate = Math.max(Math.min(((1 - 0) / (20 - 90)) * rotError, 1), 0);
-        // forward *= rotRate;
-        // right *= rotRate;
-        // if (rotError > 5) {
-        // forward = 0;
-        // right = 0;
-        // speedVal = 0;
-        // }
-
+        // double rotError = Math.abs(this.rotPid.getPositionError());
+        this.driveSubsystem.drive(
+                speedVal,
+                forward,
+                right,
+                rotation,
+                true);
     }
 
     @Override

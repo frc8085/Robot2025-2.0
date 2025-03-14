@@ -22,6 +22,36 @@
               }
             ]
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBCoral4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "22-Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-17L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "17L-Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-17R"
+          }
         }
       ]
     }
