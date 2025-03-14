@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.commands.windmill.Windmill;
 import frc.robot.commands.manipulator.algae.PickUpAlgae;
+import frc.robot.commands.manipulator.coral.DropCoral;
 import frc.robot.commands.manipulator.coral.EjectCoral;
 import frc.robot.commands.states.ToAlgaeL2;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -20,7 +21,15 @@ public class AutoRemoveAndShootAlgaeL2 extends SequentialCommandGroup {
                         PivotSubsystem pivotSubsystem, AlgaeSubsystem algaeSubsystem, CoralSubsystem coralSubsystem) {
                 addCommands(
                                 new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, false),
-                                new PickUpAlgae(algaeSubsystem),
+                                new ParallelRaceGroup(new PickUpAlgae(algaeSubsystem),
+                                                new SequentialCommandGroup(
+                                                                new WaitCommand(5),
+                                                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                                                Constants.Windmill.WindmillState.CoralDropOff1,
+                                                                                false),
+                                                                new WaitCommand(1),
+                                                                new DropCoral(coralSubsystem, elevatorSubsystem,
+                                                                                pivotSubsystem))),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                 Constants.Windmill.WindmillState.Home, false),

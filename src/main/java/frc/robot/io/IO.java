@@ -120,7 +120,7 @@ public class IO {
                 ejectCoral.onTrue(new EjectCoral(robotContainer.coral, robotContainer.elevator,
                                 robotContainer.pivot));
                 ejectCoral.and(altButtonDriver).onTrue(new DropCoral(robotContainer.coral,
-                                robotContainer.elevator, robotContainer.pivot, robotContainer.drivetrain));
+                                robotContainer.elevator, robotContainer.pivot));
 
                 pickUpCoral.onTrue(new PickUpCoralFromSource(robotContainer.coral,
                                 robotContainer.elevator, robotContainer.pivot, false));

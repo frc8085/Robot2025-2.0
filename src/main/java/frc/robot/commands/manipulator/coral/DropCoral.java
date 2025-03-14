@@ -13,7 +13,7 @@ import frc.robot.subsystems.PivotSubsystem;
 public class DropCoral extends SequentialCommandGroup {
         public DropCoral(
                         CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
-                        PivotSubsystem pivotSubsystem, DriveSubsystem driveSubsystem) {
+                        PivotSubsystem pivotSubsystem) {
                 addCommands(
                                 new PrintCommand("Coral Drop Started"),
                                 new RunCommand(() -> coralSubsystem.drop(), coralSubsystem).withTimeout(1),
