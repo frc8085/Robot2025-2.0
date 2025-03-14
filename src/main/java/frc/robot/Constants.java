@@ -214,7 +214,6 @@ public final class Constants {
     public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
-    public static double kElevatorAdjustment = -2;
     // Elevator Heights for different states
     public static double ropeAdjustmentFactor = .93;
     public static double kElevatorHomeHeight = 30;
@@ -224,8 +223,8 @@ public final class Constants {
     public static double kElevatorCoralPickupHigher = 25;
     public static double kElevatorCoralPickupAltHigher = 20;
     public static double kElevatorCoralDropOff1Height = 17;
-    public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor + kElevatorAdjustment;
-    public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor + kElevatorAdjustment;
+    public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor;
+    public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff4Height = 118; // changed from 130
     // Drop off 4 was 130 before but 120 seems to be our max height
     public static double kElevatorAlgaePickUpFloorHeight = 15;
@@ -450,7 +449,6 @@ public final class Constants {
   }
 
   public static final class FakeConstants {
-    // constants that arn't actually constant
     public static boolean fieldRelative = true;
   }
 }

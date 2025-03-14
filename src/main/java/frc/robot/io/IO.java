@@ -130,7 +130,8 @@ public class IO {
 
                 ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNet(robotContainer.algae,
-                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
+                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
+                                robotContainer.drivetrain, false));
                 raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
                                 robotContainer.climber))
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),

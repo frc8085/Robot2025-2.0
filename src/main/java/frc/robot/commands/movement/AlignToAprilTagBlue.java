@@ -80,6 +80,8 @@ public class AlignToAprilTagBlue extends Command {
         SmartDashboard.putNumber("target", target);
     }
 
+    // X setpoint changes with distance, so we update it in execute
+
     @Override
     public void execute() {
         double heading = drive.getHeading();
