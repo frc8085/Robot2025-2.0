@@ -156,7 +156,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void addVisionPose(Pose2d pose, double visionTime, int tagCount, int primaryId, double distanceToTarget) {
 
-    double stdDev = 1.5;
+    double stdDev = 2;
 
     pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
 
@@ -171,17 +171,30 @@ public class DriveSubsystem extends SubsystemBase {
       return;
     }
 
-    // if (distanceToTarget > 3.0) {
-    // return;
-    // }
+    if (tagCount == 1) {
+      if (distanceToTarget > 2.5) { // meters
+        return;
+      }
+      if (primaryReef && (distanceToTarget <= 1.5)) {
+        stdDev = 0.25;
+        if (distanceToTarget <= 0.75) {
+          stdDev = 0.1;
+          if (DriverStation.isTeleop()) {
+            this.m_odometry.addVisionMeasurement(pose, visionTime,
+                VecBuilder.fill(stdDev, stdDev, stdDev));
+            return;
+          }
+        }
+      }
+    }
 
-    if (primaryReef) {
-      if (distanceToTarget <= 1.25) {
-        stdDev = 0.1;
-      } else if (distanceToTarget <= 1.75) {
+    if (tagCount >= 2) {
+      stdDev = 0.7;
+      if (primaryReef && (distanceToTarget <= 0.5)) {
         stdDev = 0.5;
-      } else {
-        stdDev = 0.7;
+        if (distanceToTarget <= 0.25) {
+          stdDev = 0.25;
+        }
       }
     }
 
