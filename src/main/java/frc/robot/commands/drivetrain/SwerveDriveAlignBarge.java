@@ -30,6 +30,7 @@ public class SwerveDriveAlignBarge extends Command {
 
     @Override
     public void initialize() {
+        System.out.println("Started Align Barge");
         Pose2d currentPose = this.driveSubsystem.getPose(); // get the current pose of the robot
         double targetX = 7.4; // Enter in the target X -- where we want the robot to end up - replace with
                               // correct number
@@ -94,6 +95,7 @@ public class SwerveDriveAlignBarge extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("Align Barge Completed");
 
     }
 

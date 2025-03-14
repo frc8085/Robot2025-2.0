@@ -24,7 +24,7 @@ public class PickUpAlgaeCurrent extends Command {
 
         @Override
         public void initialize() {
-                System.out.println("Algae PickUp Starting");
+                System.out.println("Algae PickUp Started");
                 algaePickedUp = false;
 
         }
@@ -43,7 +43,7 @@ public class PickUpAlgaeCurrent extends Command {
                         Commands.waitSeconds(.5);
                         algaeSubsystem.holdAlgae();
                         algaePickedUp = true;
-                        System.out.println("Algae PickedUp");
+                        System.out.println("Algae PickUp Completed");
                 }
         }
 

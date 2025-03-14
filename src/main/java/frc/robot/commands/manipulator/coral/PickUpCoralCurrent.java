@@ -22,7 +22,7 @@ public class PickUpCoralCurrent extends Command {
 
         @Override
         public void initialize() {
-                System.out.println("Coral PickUp Starting");
+                System.out.println("Coral PickUp Started");
                 coralPickedUp = false;
         }
 
@@ -40,7 +40,7 @@ public class PickUpCoralCurrent extends Command {
                 } else {
                         Commands.waitSeconds(.5);
                         coralSubsystem.stop();
-                        System.out.println("Coral Picked Up");
+                        System.out.println("Coral PickUp Completed");
                 }
         }
 

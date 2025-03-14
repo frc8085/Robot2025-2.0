@@ -23,7 +23,7 @@ public class PickUpAlgae extends Command {
 
         @Override
         public void initialize() {
-
+                System.out.println("Algae Pickup Started");
         }
 
         @Override
@@ -35,9 +35,11 @@ public class PickUpAlgae extends Command {
         public void end(boolean interrupted) {
                 if (interrupted) {
                         algaeSubsystem.stop();
+                        System.out.println("Algae PickUp Interrupted");
                 } else {
                         Commands.waitSeconds(.25);
                         algaeSubsystem.holdAlgae();
+                        System.out.println("Algae PickUp Completed");
                 }
         }
 

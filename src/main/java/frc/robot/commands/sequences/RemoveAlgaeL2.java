@@ -19,6 +19,7 @@ public class RemoveAlgaeL2 extends SequentialCommandGroup {
                         AlgaeSubsystem algaeSubsystem,
                         boolean yellow) {
                 addCommands(
+                                new PrintCommand("Remove Algae L2 Started"),
                                 new ToAlgaeL2(elevatorSubsystem, pivotSubsystem, yellow),
                                 new PickUpAlgae(algaeSubsystem),
                                 new WaitCommand(.25),
@@ -27,7 +28,8 @@ public class RemoveAlgaeL2 extends SequentialCommandGroup {
                                 new ParallelRaceGroup(new WaitUntilCommand(() -> pivotSubsystem
                                                 .pivotAtHomeAngle()), new WaitCommand(.5)),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.CoralDropOff3, yellow));
+                                                Constants.Windmill.WindmillState.CoralDropOff3, yellow),
+                                new PrintCommand("Remove Algae L2 Completed"));
 
         }
 }

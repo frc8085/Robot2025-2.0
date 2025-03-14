@@ -15,7 +15,7 @@ public class DropCoral extends SequentialCommandGroup {
                         CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem,
                         PivotSubsystem pivotSubsystem, DriveSubsystem driveSubsystem) {
                 addCommands(
-                                new PrintCommand("Coral DropOff Started"),
+                                new PrintCommand("Coral Drop Started"),
                                 new RunCommand(() -> coralSubsystem.drop(), coralSubsystem).withTimeout(1),
                                 new InstantCommand(coralSubsystem::stop),
                                 new ToHomeCommand(elevatorSubsystem, pivotSubsystem));

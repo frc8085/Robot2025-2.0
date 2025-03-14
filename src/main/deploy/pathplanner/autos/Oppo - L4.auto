@@ -30,9 +30,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "22-Source"
+            "name": "AutoToHome"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitUntilSafeToMove"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoCoralSource"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "22-Source"
+                }
+              }
+            ]
           }
         },
         {
@@ -42,15 +67,58 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "17L-Source"
+            "name": "AutoBCoral4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoToHome"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitUntilSafeToMove"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoCoralSource"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "17L-Source"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Source-17R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoBCoral4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoToHome"
           }
         }
       ]

@@ -18,7 +18,7 @@ public class SwerveDriveTeleopRoboRelativeSlow extends Command {
 
     @Override
     public void initialize() {
-
+        System.out.println("Drive Robot Relative Slow");
     }
 
     @Override

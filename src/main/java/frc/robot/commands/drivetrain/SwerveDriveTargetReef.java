@@ -43,6 +43,7 @@ public class SwerveDriveTargetReef extends Command {
 
     @Override
     public void initialize() {
+        System.out.println("Starting Target Reef");
         Pose2d currentPose = this.driveSubsystem.getPose();
         // an array of the 16 apriltag poses of the reef
         List<Pose2d> reefPoses = new ArrayList<Pose2d>();
@@ -127,7 +128,7 @@ public class SwerveDriveTargetReef extends Command {
 
     @Override
     public void end(boolean interrupted) {
-
+        System.out.println("Target Reef Completed");
     }
 
 }

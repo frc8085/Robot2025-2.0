@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.windmill.InitializePivotAndElevator;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
+import frc.robot.commands.scoring.ScoreCoralL4WithWheelLock;
 import frc.robot.io.IO;
 import frc.robot.subsystems.*;
 
@@ -52,6 +53,12 @@ public class RobotContainer {
                                 new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
                 NamedCommands.registerCommand("AutoAlgaeNetBlue",
                                 new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
+                NamedCommands.registerCommand("AutoBCoral4",
+                                new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
+                                                this.drivetrain, false));
+                NamedCommands.registerCommand("AutoToHome", new AutoToHomeCommand(this.elevator, pivot));
+                NamedCommands.registerCommand("AutoCoralSource",
+                                new AutoCoralPickup(this.elevator, this.pivot, this.coral));
 
         }
 

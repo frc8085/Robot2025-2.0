@@ -1,6 +1,7 @@
 package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -17,6 +18,7 @@ public class RemoveAlgaeL3 extends SequentialCommandGroup {
                         PivotSubsystem pivotSubsystem, AlgaeSubsystem algaeSubsystem,
                         boolean yellow) {
                 addCommands(
+                                new PrintCommand("Remove Algae L3 Started"),
                                 new ToAlgaeL3(elevatorSubsystem, pivotSubsystem, yellow),
                                 new PickUpAlgae(algaeSubsystem),
                                 new WaitCommand(.25),
@@ -25,7 +27,8 @@ public class RemoveAlgaeL3 extends SequentialCommandGroup {
                                 new ParallelRaceGroup(new WaitUntilCommand(() -> pivotSubsystem
                                                 .pivotAtHomeAngle()), new WaitCommand(.5)),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                Constants.Windmill.WindmillState.CoralDropOff3, yellow));
+                                                Constants.Windmill.WindmillState.CoralDropOff3, yellow),
+                                new PrintCommand("Remove Algae L3 Completed"));
 
         }
 }

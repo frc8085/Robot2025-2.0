@@ -17,7 +17,7 @@ public class SwerveDriveTeleop extends Command {
 
     @Override
     public void initialize() {
-
+        System.out.println("Normal Drive Started");
     }
 
     @Override
