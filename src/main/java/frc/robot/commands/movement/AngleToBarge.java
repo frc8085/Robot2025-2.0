@@ -30,7 +30,7 @@ public class AngleToBarge extends Command {
 
     @Override
     public void initialize() {
-        target = -30;
+        target = 150;
         turnPID.setSetpoint(target);
         turnPID.enableContinuousInput(-180, 180);
     }
