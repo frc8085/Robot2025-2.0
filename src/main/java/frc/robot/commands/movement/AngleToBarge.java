@@ -31,7 +31,7 @@ public class AngleToBarge extends Command {
 
     @Override
     public void initialize() {
-        target = 30;
+        target = -30;
         turnPID.setSetpoint(target);
         turnPID.enableContinuousInput(-180, 180);
     }
@@ -47,11 +47,6 @@ public class AngleToBarge extends Command {
         if (turnPID.atSetpoint()) {
             angularSpeed = 0;
         }
-
-        // if (!limelight.hasTarget("limelight-yellow")) {
-        // angularSpeed = 0;
-        // lostTarget = true;
-        // }
 
         drive.drive(0, 0, 0, angularSpeed, false);
 

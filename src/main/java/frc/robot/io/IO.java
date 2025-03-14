@@ -87,23 +87,9 @@ public class IO {
 
                 // // Limelight Buttons
 
-                // robotContainer.limelightTrigger1.onTrue(
-                // new ParallelRaceGroup(new WaitCommand(1), new
-                // AlignToAprilTagBlue(robotContainer.drivetrain,
-                // robotContainer.limelight)));
-
-                // robotContainer.limelightTrigger2.onTrue(
-                // new ParallelRaceGroup(new WaitCommand(4), new
-                // AlignToAprilTagYellow(robotContainer.drivetrain,
-                // robotContainer.limelight)));
-                // limelightTrigger1.onTrue(new AlignToAprilTagBlue(robotContainer.drivetrain,
-                // robotContainer.limelight));
                 limelightTrigger1.onTrue(
                                 new SwerveDriveTargetReef(robotContainer.drivetrain, true)).onFalse(
                                                 new SwerveDriveTeleop(robotContainer.drivetrain));
-                // limelightTrigger2.onTrue(
-                // new AlignToAprilTagYellow(robotContainer.drivetrain,
-                // robotContainer.limelight));
                 limelightTrigger2.onTrue(
                                 new SwerveDriveTargetReef(robotContainer.drivetrain, false)).onFalse(
                                                 new SwerveDriveTeleop(robotContainer.drivetrain));
@@ -115,29 +101,23 @@ public class IO {
                                 FakeConstants.fieldRelative = true;
                         }
                 }));
+
                 // commands that go with driver operations
                 ejectCoral.onTrue(new EjectCoral(robotContainer.coral, robotContainer.elevator,
                                 robotContainer.pivot));
                 ejectCoral.and(altButtonDriver).onTrue(new DropCoral(robotContainer.coral,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.drivetrain));
-                // pickUpCoral.onTrue(new PickUpCoralCurrent(robotContainer.coral));
+
                 pickUpCoral.onTrue(new PickUpCoralFromSource(robotContainer.coral,
                                 robotContainer.elevator, robotContainer.pivot, false));
                 pickUpCoral.and(altButtonDriver)
                                 .onTrue(new PickUpCoralFromSource(robotContainer.coral, robotContainer.elevator,
-                                                robotContainer.pivot,
-                                                true));
+                                                robotContainer.pivot, true));
 
                 ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
-                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
-                                robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral, robotContainer.drivetrain));
-                // shootAlgaeNetBlue
-                // .onTrue(new SequentialCommandGroup(new
-                // SwerveDriveAlignBarge(robotContainer.drivetrain),
-                // new ScoreAlgaeNetBlue(robotContainer.algae,
-                // robotContainer.elevator, robotContainer.pivot,
-                // robotContainer.coral)));
+                shootAlgaeNetBlue.onTrue(new SwerveDriveAlignBarge(robotContainer.drivetrain));
+                shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
+                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral));
 
                 left.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, false,
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
@@ -177,8 +157,7 @@ public class IO {
                                 new ToHomeCommand(robotContainer.elevator, robotContainer.pivot, robotContainer.coral),
                                 robotContainer.climber::climberAtHomePosition));
 
-                // initializeInputs.onTrue(new ResetOperatorInputs());
-
+                // Set Move to Positions
                 home.onTrue(new Windmill(robotContainer.elevator, robotContainer.pivot,
                                 Constants.Windmill.WindmillState.Home,
                                 false));
@@ -201,14 +180,13 @@ public class IO {
                 coralDropOff3.onTrue(new ToCoralDropOff3(robotContainer.elevator, robotContainer.pivot, false));
 
                 coralDropOff4.onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.coral,
-                                false));
+                                robotContainer.coral, false));
 
-                                // algae reef 2 doesn't work on yellow
+                // algae reef 2 doesn't work on yellow
                 // algaeReef2.and(altButtonOperator)
-                //                 .onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot,
-                //                                 robotContainer.algae,
-                //                                 true));
+                // .onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.algae,
+                // true));
                 algaeReef3.and(altButtonOperator).onTrue(
                                 new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
                                                 true));

@@ -32,6 +32,7 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.AutoConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.States.DriveState;
+import frc.robot.utils.MAXSwerveModule;
 import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;

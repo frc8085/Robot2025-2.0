@@ -217,10 +217,10 @@ public final class Constants {
     public static double ropeAdjustmentFactor = .93;
     public static double kElevatorHomeHeight = 30;
     public static double kElevatorAlgaeHoldHeight = 47;
-    public static double kElevatorCoralPickupHeight = 27;
-    public static double kElevatorCoralPickupAlternateHeight = 22;
-    public static double kElevatorCoralPickupHigher = 27;
-    public static double kElevatorCoralPickupAltHigher = 22;
+    public static double kElevatorCoralPickupHeight = 25;
+    public static double kElevatorCoralPickupAlternateHeight = 20;
+    public static double kElevatorCoralPickupHigher = 25;
+    public static double kElevatorCoralPickupAltHigher = 20;
     public static double kElevatorCoralDropOff1Height = 17;
     public static double kElevatorCoralDropOff2Height = 47 * ropeAdjustmentFactor;
     public static double kElevatorCoralDropOff3Height = 75 * ropeAdjustmentFactor;

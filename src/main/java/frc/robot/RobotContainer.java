@@ -13,15 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.manipulator.coral.*;
-import frc.robot.commands.windmill.Windmill;
 import frc.robot.commands.autoCommands.*;
-import frc.robot.commands.movement.AutoMoveForwardForTime;
-import frc.robot.commands.movement.AutoMoveForwardForTimeFaster;
-import frc.robot.commands.movement.NewAutoMoveOnReef;
 import frc.robot.commands.windmill.InitializePivotAndElevator;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
 import frc.robot.io.IO;
@@ -62,20 +55,6 @@ public class RobotContainer {
                                 new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
 
         }
-
-        // The driver's controller
-        // CommandXboxController driverController = new
-        // CommandXboxController(OIConstants.kDriverControllerPort);
-        // CommandXboxController operatorController = new
-        // CommandXboxController(OIConstants.kOperaterControllerPort);
-        // GenericHID driverControllerRumble = driverController.getHID();
-        // GenericHID operatorControllerRumble = operatorController.getHID();
-
-        // public void adjustJoystickValues() {
-        // double rawX = driverController.getLeftX();
-        // double rawY = driverController.getLeftY();
-
-        // }
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
