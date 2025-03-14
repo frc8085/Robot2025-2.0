@@ -1,7 +1,6 @@
 package frc.robot.commands.windmill;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -11,7 +10,6 @@ import frc.robot.subsystems.PivotSubsystem;
 public class LockPivotAndElevatorCommand extends Command {
     ElevatorSubsystem elevatorSubsystem;
     PivotSubsystem pivotSubsystem;
-    private boolean enableArm;
 
     public LockPivotAndElevatorCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
 
@@ -24,9 +22,6 @@ public class LockPivotAndElevatorCommand extends Command {
     @Override
     public void initialize() {
         SequentialCommandGroup commands = new SequentialCommandGroup();
-
-        enableArm = false;
-        // SmartDashboard.putBoolean("Enable Arm", enableArm);
         commands.addCommands(new Windmill(elevatorSubsystem, pivotSubsystem,
                 Constants.Windmill.WindmillState.Home, false));
         elevatorSubsystem.setPos(Constants.ElevatorConstants.kElevatorStage1Height);
@@ -36,7 +31,6 @@ public class LockPivotAndElevatorCommand extends Command {
 
     @Override
     public void execute() {
-        // displayDisableSystem();
     }
 
     @Override
@@ -46,11 +40,8 @@ public class LockPivotAndElevatorCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return enableArm;
+        return false;
 
     }
 
-    public void displayDisableSystem() {
-        enableArm = SmartDashboard.getBoolean("Enable Arm", false);
-    }
 }

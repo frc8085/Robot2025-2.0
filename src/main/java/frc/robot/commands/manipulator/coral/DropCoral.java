@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.movement.DriveFieldRelative;
 import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -19,7 +18,6 @@ public class DropCoral extends SequentialCommandGroup {
                                 new PrintCommand("Coral DropOff Started"),
                                 new RunCommand(() -> coralSubsystem.drop(), coralSubsystem).withTimeout(1),
                                 new InstantCommand(coralSubsystem::stop),
-                                new DriveFieldRelative(driveSubsystem),
-                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));
+                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem));
         }
 }

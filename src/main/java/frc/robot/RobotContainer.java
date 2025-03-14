@@ -47,10 +47,9 @@ public class RobotContainer {
                 NamedCommands.registerCommand("InitializePE",
                                 new InitializePivotAndElevator(this.pivot, this.elevator));
                 NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
-                                new WaitUntilElevatorBelowSafeTravelHeight(this.elevator));
+                                new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
                 NamedCommands.registerCommand("AutoAlgaeL2",
                                 new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
-                NamedCommands.registerCommand("AutoMoveToBarge", new AutoDriveAlignBarge(this.drivetrain));
                 NamedCommands.registerCommand("AutoAlgaeNetBlue",
                                 new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
 

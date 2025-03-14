@@ -3,7 +3,6 @@ package frc.robot.commands.manipulator.coral;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.CoralSubsystem;
 

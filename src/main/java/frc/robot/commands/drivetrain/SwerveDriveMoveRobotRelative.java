@@ -1,7 +1,9 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.OIConstants;
 import frc.robot.io.Keymap.Controllers;
 
 public class SwerveDriveMoveRobotRelative extends Command {
@@ -20,13 +22,16 @@ public class SwerveDriveMoveRobotRelative extends Command {
 
     @Override
     public void execute() {
-        double speedVal = Math.pow(Controllers.driverController.getRightTriggerAxis(), 2);
+        double speedVal = MathUtil.applyDeadband(Math.pow(Controllers.driverController.getRightTriggerAxis(), 2), 0);
 
         double invert = this.driveSubsystem.invertForAlliance();
 
-        double leftX = -Controllers.driverController.getLeftX() * invert;
-        double leftY = -Controllers.driverController.getLeftY() * invert;
-        double rightX = -Math.pow(Controllers.driverController.getRightX(), 3);
+        double leftX = MathUtil.applyDeadband(-Controllers.driverController.getLeftX() * invert,
+                OIConstants.kDriveDeadband);
+        double leftY = MathUtil.applyDeadband(-Controllers.driverController.getLeftY() * invert,
+                OIConstants.kDriveDeadband);
+        double rightX = MathUtil.applyDeadband(-Math.pow(Controllers.driverController.getRightX(), 3),
+                OIConstants.kTurnDeadband);
 
         this.driveSubsystem.drive(
                 speedVal,

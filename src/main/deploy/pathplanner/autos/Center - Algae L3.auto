@@ -40,6 +40,18 @@
           "data": {
             "name": "AutoAlgaeNetBlue"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitUntilSafeToMove"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Barge-20"
+          }
         }
       ]
     }

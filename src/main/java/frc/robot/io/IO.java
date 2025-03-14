@@ -116,8 +116,8 @@ public class IO {
 
                 ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
                 shootAlgaeNetBlue.onTrue(new SwerveDriveAlignBarge(robotContainer.drivetrain));
-                shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNetBlue(robotContainer.algae,
-                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral));
+                shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNet(robotContainer.algae,
+                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral, false));
 
                 left.onTrue(new AutoPositionLeftRight(robotContainer.drivetrain, robotContainer.limelight, false,
                                 (robotContainer.limelight.hasTarget("robotContainer.limelight-yellow"))));
@@ -139,8 +139,7 @@ public class IO {
                                                 new InstantCommand(() -> robotContainer.coral.stop(),
                                                                 robotContainer.coral),
                                                 new WaitCommand(0.25),
-                                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot,
-                                                                robotContainer.coral)));
+                                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot)));
 
                 manualAlgae.onTrue(new RunCommand(() -> robotContainer.algae.pickup(), robotContainer.algae))
                                 .onFalse(new InstantCommand(robotContainer.algae::holdAlgae));
@@ -154,7 +153,7 @@ public class IO {
                                 new LockPivotAndElevatorCommand(robotContainer.elevator,
                                                 robotContainer.pivot).withTimeout(15)
                                                 .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot, robotContainer.coral),
+                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot),
                                 robotContainer.climber::climberAtHomePosition));
 
                 // Set Move to Positions
@@ -182,11 +181,6 @@ public class IO {
                 coralDropOff4.onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.coral, false));
 
-                // algae reef 2 doesn't work on yellow
-                // algaeReef2.and(altButtonOperator)
-                // .onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot,
-                // robotContainer.algae,
-                // true));
                 algaeReef3.and(altButtonOperator).onTrue(
                                 new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
                                                 true));

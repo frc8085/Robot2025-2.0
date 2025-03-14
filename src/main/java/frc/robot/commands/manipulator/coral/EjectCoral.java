@@ -17,7 +17,7 @@ public class EjectCoral extends SequentialCommandGroup {
                                 new PrintCommand("Coral Eject Started"),
                                 new RunCommand(() -> coralSubsystem.eject(), coralSubsystem).withTimeout(1),
                                 new InstantCommand(coralSubsystem::stop),
-                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem, coralSubsystem));
+                                new ToHomeCommand(elevatorSubsystem, pivotSubsystem));
 
         }
 }

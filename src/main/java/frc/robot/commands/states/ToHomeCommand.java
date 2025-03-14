@@ -1,26 +1,17 @@
 package frc.robot.commands.states;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants;
 import frc.robot.commands.windmill.Windmill;
-import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 
 public class ToHomeCommand extends ParallelCommandGroup {
-    public ToHomeCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
-            CoralSubsystem coralSubsystem) {
+    public ToHomeCommand(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem) {
         addCommands(
-                // Switch to a transition state
-
-                // Turn off Coral Motor
-                new RunCommand(() -> coralSubsystem.stop(), coralSubsystem).withTimeout(0.25),
-
-                // go home
+                new PrintCommand("Move to Home"),
                 new Windmill(elevatorSubsystem, pivotSubsystem,
                         Constants.Windmill.WindmillState.Home, false));
-
-        // Switch to target state.
     }
 }

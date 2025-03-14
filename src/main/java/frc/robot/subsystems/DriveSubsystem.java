@@ -20,7 +20,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -28,7 +27,6 @@ import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FakeConstants;
 import frc.robot.Constants.DriveConstants.Direction;
-import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.AutoConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.States.DriveState;
@@ -40,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import edu.wpi.first.math.geometry.Translation3d;
 
@@ -441,62 +440,6 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return SwerveUtils.normalizeAngle(getGyroOrientation());
-  }
-  // public double getHeading() {
-  // return
-  // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()).getDegrees();
-  // }
-
-  // more from 6616
-  /**
-   * Drives the robot to achieve the specified offsets relative to a detected
-   * AprilTag.
-   * It computes the current forward and lateral distances to the tag using
-   * limelightTy and limelightTx,
-   * constructs a current relative pose, and then uses the path following
-   * controller's
-   * calculateRobotRelativeSpeeds method to determine the required robot-relative
-   * speeds.
-   *
-   * @param desiredXOffset Desired forward distance (in meters) from the tag.
-   * @param desiredYOffset Desired lateral distance (in meters) from the tag.
-   * @param limelightTx    Horizontal offset from the tag (in degrees).
-   * @param limelightTy    Vertical offset from the tag (in degrees).
-   */
-  public void driveToTagOffset(double speed, double desiredXOffset, double desiredYOffset, double limelightTx,
-      double limelightTy) {
-    // Calculate the current forward distance (x) from the tag using the vertical
-    // offset.
-    double currentXOffset = (AutoConstants.REEF_APRILTAG_HEIGHT - AutoConstants.LIMELIGHT_HEIGHT_METERS)
-        / Math.tan(AutoConstants.LIMELIGHT_MOUNTING_ANGLE_RADIANS + Math.toRadians(limelightTy));
-
-    // Calculate the current lateral distance (y) from the camera center using the
-    // horizontal offset.
-    double currentYOffset = currentXOffset * Math.tan(Math.toRadians(limelightTx));
-
-    // Construct the current relative pose.
-    // The rotation is set from limelightTx so that zero means the limelight is
-    // directly facing the tag.
-    Pose2d currentRelativePose = new Pose2d(currentXOffset, currentYOffset, Rotation2d.fromDegrees(limelightTx));
-
-    // The desired relative pose has the desired offsets with zero rotation error
-    // (directly facing the tag).
-    Pose2d desiredRelativePose = new Pose2d(desiredXOffset, desiredYOffset, new Rotation2d(0));
-
-    // Create a target trajectory state using the desired relative pose.
-    PathPlannerTrajectoryState targetState = new PathPlannerTrajectoryState();
-    targetState.pose = desiredRelativePose;
-
-    // Calculate the robot-relative speeds using the path following controller.
-    ChassisSpeeds robotRelativeSpeeds = AutoConstants.PP_CONTROLLER
-        .calculateRobotRelativeSpeeds(currentRelativePose, targetState);
-
-    double normalizedX = robotRelativeSpeeds.vxMetersPerSecond / ModuleConstants.kDriveWheelFreeSpeedRps;
-    double normalizedY = robotRelativeSpeeds.vyMetersPerSecond / ModuleConstants.kDriveWheelFreeSpeedRps;
-    double normalizedRot = robotRelativeSpeeds.omegaRadiansPerSecond / DriveConstants.kMaxAngularSpeed;
-
-    // Command the drivetrain using field-relative control.
-    drive(speed, normalizedX, normalizedY, normalizedRot, true);
   }
 
   /**
