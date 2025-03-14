@@ -178,7 +178,7 @@ public final class Constants {
 
     // X offset, Y offset, Rotation offset
     public static final double leftYOffset = 0;
-    public static final double rightYOffset = 0;
+    public static final double rightYOffset = -.05;
     public static final Pose2d leftReefAlignPose = new Pose2d(0.29, -0.33 + leftYOffset, Rotation2d.fromDegrees(90));
     public static final Pose2d rightReefAlignPose = new Pose2d(0.29, 0.30 + rightYOffset, Rotation2d.fromDegrees(-90));
 

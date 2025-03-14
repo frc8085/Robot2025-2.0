@@ -87,19 +87,23 @@ public class IO {
                                 robotContainer.drivetrain));
 
                 // // Limelight Buttons
-
-                limelightTrigger1.onTrue(new SequentialCommandGroup(
-                                new ParallelRaceGroup(new WaitCommand(2),
-                                                new AlignToAprilTagBlue(robotContainer.drivetrain,
-                                                                robotContainer.limelight)),
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, true))).onFalse(
+                limelightTrigger1.onTrue(new SwerveDriveTargetReef(robotContainer.drivetrain, true)).onFalse(
+                                new SwerveDriveTeleop(robotContainer.drivetrain));
+                limelightTrigger2.onTrue(
+                                new SwerveDriveTargetReef(robotContainer.drivetrain, false)).onFalse(
                                                 new SwerveDriveTeleop(robotContainer.drivetrain));
-                limelightTrigger2.onTrue(new SequentialCommandGroup(
-                                new ParallelRaceGroup(new WaitCommand(2),
-                                                new AlignToAprilTagYellow(robotContainer.drivetrain,
-                                                                robotContainer.limelight)),
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, false))).onFalse(
-                                                new SwerveDriveTeleop(robotContainer.drivetrain));
+                // limelightTrigger1.onTrue(new SequentialCommandGroup(
+                // new ParallelRaceGroup(new WaitCommand(2),
+                // new AlignToAprilTagBlue(robotContainer.drivetrain,
+                // robotContainer.limelight)),
+                // new SwerveDriveTargetReef(robotContainer.drivetrain, true))).onFalse(
+                // new SwerveDriveTeleop(robotContainer.drivetrain));
+                // limelightTrigger2.onTrue(new SequentialCommandGroup(
+                // new ParallelRaceGroup(new WaitCommand(2),
+                // new AlignToAprilTagYellow(robotContainer.drivetrain,
+                // robotContainer.limelight)),
+                // new SwerveDriveTargetReef(robotContainer.drivetrain, false))).onFalse(
+                // new SwerveDriveTeleop(robotContainer.drivetrain));
 
                 gorobotrelative.onTrue(new InstantCommand(() -> {
                         if (FakeConstants.fieldRelative) {
