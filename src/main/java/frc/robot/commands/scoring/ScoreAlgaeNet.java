@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.manipulator.algae.EjectAlgae;
 import frc.robot.commands.movement.AngleToBarge;
 import frc.robot.commands.states.ToAlgaeNet;
+import frc.robot.commands.states.ToAlgaeNetRaise;
 import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -19,8 +20,10 @@ public class ScoreAlgaeNet extends SequentialCommandGroup {
                         PivotSubsystem pivotSubsystem, CoralSubsystem coralSubsystem, DriveSubsystem driveSubsystem,
                         boolean yellow) {
                 addCommands(
+                                new ToAlgaeNetRaise(elevatorSubsystem, pivotSubsystem),
                                 new AngleToBarge(driveSubsystem),
                                 new ToAlgaeNet(elevatorSubsystem, pivotSubsystem, yellow),
+                                new WaitUntilCommand(pivotSubsystem::pivotAtAlgaeBlueScorePosition),
                                 new WaitUntilCommand(elevatorSubsystem::elevatorAtAlgaeScoreHeight),
                                 new EjectAlgae(algaeSubsystem),
                                 new WaitCommand(0.25),

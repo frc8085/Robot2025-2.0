@@ -306,6 +306,7 @@ public final class Constants {
     public static final double kPivotReef3Flip = -25;
     public static final double kPivotAlgaeNetBlue = 60;
     public static final double kPivotAlgaeNetYellow = 0;
+    public static final double kPivotAlgaeNetRaise = 25;
   }
 
   public static final class Windmill {
@@ -347,7 +348,9 @@ public final class Constants {
           Rotation2d.fromDegrees(PivotArmConstants.kPivotReef3Flip)),
       AlgaeNetBlue(ElevatorConstants.kElevatorNetHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaeNetBlue)),
       AlgaeNetYellow(ElevatorConstants.kElevatorNetHeight,
-          Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaeNetYellow));
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaeNetYellow)),
+      AlgaeNetRaise(ElevatorConstants.kElevatorNetHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaeNetRaise));
 
       private double kElevatorHeight;
       private Rotation2d kPivotArmAngle;
@@ -395,7 +398,7 @@ public final class Constants {
     public static int kAlgaePositionConversionFactor = 1000;
     public static int kAlgaeVelocityConversionFactor = 1000;
     // TEMPORARY VALUES
-    public static double kAlgaeP = 2;
+    public static double kAlgaeP = 4;
     public static double kAlgaeI = 0.0;
     public static double kAlgaeD = 0.0;
     public static double kAlgaeFF = 0.0;
