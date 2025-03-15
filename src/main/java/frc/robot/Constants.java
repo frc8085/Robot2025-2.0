@@ -214,7 +214,7 @@ public final class Constants {
     public static double kElevatorMMAcc = 140;
     public static double kElevatorMMJerk = 1600;
 
-    public static double kElevatorAdjustment = -2;
+    public static double kElevatorAdjustment = -3;
     // Elevator Heights for different states
     public static double ropeAdjustmentFactor = .93;
     public static double kElevatorHomeHeight = 30;
