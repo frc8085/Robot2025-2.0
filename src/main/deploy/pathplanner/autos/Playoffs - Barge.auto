@@ -1,0 +1,74 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "InitializePE"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Oppo - Algae L3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAlgaeL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae L3 - Barge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAlgaeNetBlue"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Barge - Algae L2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAlgaeL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae L2 - Barge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAlgaeNetBlue"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
