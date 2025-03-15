@@ -52,7 +52,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoAlgaeL2",
                                 new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
                 NamedCommands.registerCommand("AutoAlgaeNetBlue",
-                                new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
+                                new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral,
+                                                this.drivetrain));
                 NamedCommands.registerCommand("AutoBCoral4",
                                 new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
                                                 this.drivetrain, false));

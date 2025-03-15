@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.65372513457095,
-        "y": 3.507003597151588
+        "x": 5.662326743803696,
+        "y": 3.4724666311253922
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 5.5
       },
       "prevControl": {
-        "x": 7.691380765823608,
-        "y": 5.8046954941121935
+        "x": 7.5712951348418756,
+        "y": 5.695060060960792
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -70.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Center - Algae L3",
