@@ -16,7 +16,9 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.windmill.*;
 import frc.robot.commands.scoring.*;
 import frc.robot.commands.sequences.RemoveAlgaeL2;
+import frc.robot.commands.sequences.RemoveAlgaeL2noCoral;
 import frc.robot.commands.sequences.RemoveAlgaeL3;
+import frc.robot.commands.sequences.RemoveAlgaeL3noCoral;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.manipulator.algae.*;
 import frc.robot.commands.movement.*;
@@ -132,9 +134,10 @@ public class IO {
                 shootAlgaeNetBlue.onTrue(new ScoreAlgaeNet(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
                                 robotContainer.drivetrain, false));
-                shootAlgaeNetBlue.and(altButtonDriver).onTrue(new ScoreAlgaeNetNoTurn(robotContainer.algae,
-                                robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
-                                false));
+                // shootAlgaeNetBlue.and(altButtonDriver).onTrue(new
+                // ScoreAlgaeNetNoTurn(robotContainer.algae,
+                // robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
+                // false));
 
                 raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
                                 robotContainer.climber))
@@ -177,10 +180,12 @@ public class IO {
                 algaeGround.onTrue(new PickUpAlgaeFromGround(robotContainer.algae, robotContainer.elevator,
                                 robotContainer.pivot));
 
-                algaeReef2.onTrue(new RemoveAlgaeL2(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
+                algaeReef2.onTrue(new RemoveAlgaeL2noCoral(robotContainer.elevator, robotContainer.pivot,
+                                robotContainer.algae,
                                 false));
 
-                algaeReef3.onTrue(new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
+                algaeReef3.onTrue(new RemoveAlgaeL3noCoral(robotContainer.elevator, robotContainer.pivot,
+                                robotContainer.algae,
                                 false));
 
                 algaeProcessor.onTrue(new ToAlgaeGround(robotContainer.elevator, robotContainer.pivot));
@@ -195,7 +200,8 @@ public class IO {
                                 robotContainer.coral, false));
 
                 algaeReef3.and(altButtonOperator).onTrue(
-                                new RemoveAlgaeL3(robotContainer.elevator, robotContainer.pivot, robotContainer.algae,
+                                new RemoveAlgaeL3noCoral(robotContainer.elevator, robotContainer.pivot,
+                                                robotContainer.algae,
                                                 true));
 
                 coralDropOff1.and(altButtonOperator)
