@@ -48,6 +48,10 @@ public final class Constants {
     public static final int kElevatorCancoderCanID = 33;
     public static final int kPivotArmCancoderCanID = 35;
 
+    public static final int kIntakeLiftCanId = 0;
+    public static final int kIntakeOuterCanId = 0;
+    public static final int kIntakeInnerCanId = 0;
+
     // Drive SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1;
     public static final int kRearLeftDrivingCanId = 3;
@@ -430,6 +434,34 @@ public final class Constants {
     public static double kAlgaeCurrentLimit = 15;
     public static double kAlgaeCurrentDebouncerTime = .2;
 
+  }
+
+  public static final class IntakeConstants {
+    public static int kIRPort1 = 4;
+    public static int kIRPort2 = 5;
+
+    public static double kLiftSpeed = 0; // Intake up and down
+    public static double kLiftP = 0;
+    public static double kLiftI = 0;
+    public static double kLiftD = 0;
+    public static double kLiftFF = 0;
+    public static double kLiftMinOutput = 0;
+    public static double kLiftMaxOutput = 0;
+
+    public static double kLiftDownPosition = 0;
+    public static double kLiftUpPosition = 0;
+
+    public static boolean kInOutInverted = false;
+
+    public static double kOuterSpeed = 0; // Outer intake motors
+    // public static double kOuterP = 0;
+    // public static double kOuterI = 0;
+    // public static double kOuterD = 0;
+
+    public static double kInnerSpeed = 0; // Inner intake motors
+    // public static double kInnerP = 0;
+    // public static double kInnerI = 0;
+    // public static double kInnerD = 0;
   }
 
   public static final class ClimberConstants {

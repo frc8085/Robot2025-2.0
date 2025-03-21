@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.IntakeConstants;
 
 public final class Configs {
         public static final class MAXSwerveModule {
@@ -85,6 +86,38 @@ public final class Configs {
                                         .pidf(AlgaeConstants.kAlgaeP, AlgaeConstants.kAlgaeI, AlgaeConstants.kAlgaeD,
                                                         AlgaeConstants.kAlgaeFF);
                 }
+        }
+
+        public static final class IntakeConfigs {
+                public static final SparkMaxConfig liftConfig = new SparkMaxConfig();
+
+                static {
+                        liftConfig.idleMode(IdleMode.kBrake)
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoCurrentLimit);
+
+                        liftConfig.closedLoop
+                                        .outputRange(IntakeConstants.kLiftMinOutput, IntakeConstants.kLiftMaxOutput)
+                                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                                        .pidf(IntakeConstants.kLiftP, IntakeConstants.kLiftI, IntakeConstants.kLiftD,
+                                                        IntakeConstants.kLiftFF);
+                }
+                public static final SparkMaxConfig outerConfig = new SparkMaxConfig();
+
+                static {
+
+                        outerConfig
+                                        .idleMode(IdleMode.kBrake)
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoCurrentLimit);
+                }
+                public static final SparkMaxConfig innerConfig = new SparkMaxConfig();
+
+                static {
+
+                        innerConfig
+                                        .idleMode(IdleMode.kBrake)
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoCurrentLimit);
+                }
+
         }
 
         public static final class Climber {
