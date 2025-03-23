@@ -40,7 +40,6 @@ public class SwerveDriveTargetReef extends Command {
     List<Pose2d> reefPoses = new ArrayList<Pose2d>();
 
     public SwerveDriveTargetReef(DriveSubsystem driveSubsystem, boolean isLeft) {
-        // this.rotPid.enableContinuousInput(Math.toRadians(-180), Math.toRadians(180));
         this.driveSubsystem = driveSubsystem;
         this.isLeft = isLeft;
 
@@ -104,6 +103,7 @@ public class SwerveDriveTargetReef extends Command {
         // this.rotPid.reset();
         this.xPid.reset();
         this.yPid.reset();
+        this.rotPid.enableContinuousInput(Math.toRadians(-180), Math.toRadians(180));
 
         this.yPid.setTolerance(0.05);
         this.rotPid.setTolerance(0.5);

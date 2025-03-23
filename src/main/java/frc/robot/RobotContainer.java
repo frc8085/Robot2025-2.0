@@ -62,7 +62,6 @@ public class RobotContainer {
                                 new AutoRemoveAlgaeL3(this.elevator, this.pivot, this.algae));
                 NamedCommands.registerCommand("AutoRemoveAlgaeL2",
                                 new AutoRemoveAlgaeL2(this.elevator, this.pivot, this.algae));
-
         }
 
         /**
@@ -82,6 +81,7 @@ public class RobotContainer {
 
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
+                autoChooser.addOption("Simple Auto", new AutoSimple(this.drivetrain));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 

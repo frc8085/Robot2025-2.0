@@ -38,6 +38,7 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.States.DriveState;
 import frc.robot.utils.MAXSwerveModule;
 import frc.robot.utils.SwerveUtils;
+import choreo.trajectory.SwerveSample;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -60,6 +61,21 @@ public class DriveSubsystem extends SubsystemBase {
       CanIdConstants.kRearRightDrivingCanId,
       CanIdConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
+
+  // Drive PIDS
+  private double kXP = 0.75; // 0.5
+  private double kXI = 0;
+  private double kXD = 0.1; // 0.1
+  private double kYP = 0.75; // 0.5
+  private double kYI = 0;
+  private double kYD = 0.1; // 0.1
+  private double kRotP = 1.7; // 3
+  private double kRotI = 0;
+  private double kRotD = 0.25; // 0.5
+
+  private PIDController xController = new PIDController(kXP, kXI, kXD, 0.02);
+  private PIDController yController = new PIDController(kYP, kYI, kYD, 0.02);
+  private PIDController headingController = new PIDController(kRotP, kRotI, kRotD, 0.02);
 
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(CanIdConstants.kGyroCanId);
@@ -86,6 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     // configurePathPlanner();
+    headingController.enableContinuousInput(-Math.PI, Math.PI);
 
     RobotConfig config;
     try {
@@ -169,10 +186,11 @@ public class DriveSubsystem extends SubsystemBase {
   public void addVisionPose(Pose2d pose, double visionTime, int tagCount, int primaryId, double distanceToTarget,
       boolean isMegaTag2) {
 
-    double stdDev = 2;
+    double stdDev = 0.4;
+    double stdDevRot = 10.0;
 
-    if (!isMegaTag2) {
-      pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
+    if (tagCount == 0) {
+      return;
     }
 
     boolean primaryReef = false;
@@ -182,45 +200,52 @@ public class DriveSubsystem extends SubsystemBase {
       primaryReef = true;
     }
 
-    if (tagCount == 0) {
-      return;
-    }
+    if (!isMegaTag2) {
+      stdDev = 2;
+      pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
 
-    if (tagCount == 1) {
-      if (distanceToTarget > 2.5) { // meters
-        return;
-      }
-      if (primaryReef && (distanceToTarget <= 1.5)) {
-        stdDev = 0.25;
-        if (distanceToTarget <= 0.75) {
-          stdDev = 0.1;
-          if (DriverStation.isTeleop()) {
-            this.m_odometry.addVisionMeasurement(pose, visionTime,
-                VecBuilder.fill(stdDev, stdDev, stdDev));
-            return;
+      if (tagCount == 1) {
+        if (distanceToTarget > 2.5) { // meters
+          return;
+        }
+        if (primaryReef && (distanceToTarget <= 1.5)) {
+          stdDev = 0.25;
+          if (distanceToTarget <= 0.75) {
+            stdDev = 0.1;
+            if (DriverStation.isTeleop()) {
+              this.m_odometry.addVisionMeasurement(pose, visionTime,
+                  VecBuilder.fill(stdDev, stdDev, stdDev));
+              return;
+            }
           }
         }
       }
-    }
 
-    if (tagCount >= 2) {
-      stdDev = 0.7;
-      if (primaryReef && (distanceToTarget <= 0.5)) {
-        stdDev = 0.5;
-        if (distanceToTarget <= 0.25) {
-          stdDev = 0.25;
+      if (tagCount >= 2) {
+        stdDev = 0.7;
+        if (primaryReef && (distanceToTarget <= 0.5)) {
+          stdDev = 0.5;
+          if (distanceToTarget <= 0.25) {
+            stdDev = 0.25;
+          }
         }
       }
-    }
 
-    // System.out.println("Adding vision measurement");
+    } else {
+      if ((tagCount > 1) || (distanceToTarget < 2) || (primaryReef && (distanceToTarget < 1))) {
+        stdDev = 0.25;
+
+      }
+      stdDevRot = 5;
+
+    }
 
     this.m_odometry.addVisionMeasurement(
         // new Pose2d(pose.getTranslation(),
         // Rotation2d.fromDegrees(getGyroOrientation())),
         pose,
         visionTime,
-        VecBuilder.fill(stdDev, stdDev, 10.0)
+        VecBuilder.fill(stdDev, stdDev, stdDevRot)
     // VecBuilder.fill(0.1, 0.1, 0.1)
     );
     return;
@@ -289,6 +314,22 @@ public class DriveSubsystem extends SubsystemBase {
         : Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble());
   }
 
+  public void followTrajectory(SwerveSample sample) {
+    // Get the current pose of the robot
+    Pose2d pose = getPose();
+
+    double invert = this.invertForAlliance();
+
+    // Generate the next speeds for the robot
+    ChassisSpeeds speeds = new ChassisSpeeds(
+        invert * -(sample.vx + xController.calculate(pose.getX(), sample.x)),
+        invert * -(sample.vy + yController.calculate(pose.getY(), sample.y)),
+        sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading));
+
+    // Apply the generated speeds
+    this.drive(speeds);
+  }
+
   /**
    * Drive in a robot relative direction.
    * Accepts ChassisSpeeds object for path planner integration.
@@ -344,10 +385,12 @@ public class DriveSubsystem extends SubsystemBase {
    *             The pose to which to set the odometry.
    */
   public void updatePose(Pose2d pose) {
-    m_odometry.resetPosition(
-        Rotation2d.fromDegrees(getGyroOrientation()),
-        getModulePositions(),
-        pose);
+    // m_gyro.setYaw(pose.getRotation().getDegrees());
+    // m_odometry.resetPosition(
+    // Rotation2d.fromDegrees(getGyroOrientation()),
+    // getModulePositions(),
+    // new Pose2d(pose.getTranslation(), Rotation2d.kZero));
+    m_odometry.resetPose(pose);
   }
 
   // // This was using the PoseEstimator
@@ -399,12 +442,18 @@ public class DriveSubsystem extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
+    // SwerveDriveKinematics.desaturateWheelSpeeds(
+    // swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    // m_frontRight.setDesiredState(swerveModuleStates[1]);
+    // m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    // m_rearRight.setDesiredState(swerveModuleStates[3]);
+    this.setModuleStates(swerveModuleStates);
+  }
+
+  private void drive(ChassisSpeeds speeds) {
+    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    setModuleStates(moduleStates);
   }
 
   /**
