@@ -44,35 +44,12 @@ public class RobotContainer {
 
         private final Field2d field;
 
-        // Register Named Commands for PathPlanner
-        private void configureAutoCommands() {
-                NamedCommands.registerCommand("InitializePE",
-                                new InitializePivotAndElevator(this.pivot, this.elevator));
-                NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
-                                new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
-                NamedCommands.registerCommand("AutoAlgaeL2",
-                                new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
-                NamedCommands.registerCommand("AutoAlgaeNetBlue",
-                                new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral,
-                                                this.drivetrain));
-                NamedCommands.registerCommand("AutoToHome", new AutoToHomeCommand(this.elevator, pivot));
-                NamedCommands.registerCommand("AutoCoralSource",
-                                new AutoCoralPickup(this.elevator, this.pivot, this.coral));
-                NamedCommands.registerCommand("AutoRemoveAlgaeL3",
-                                new AutoRemoveAlgaeL3(this.elevator, this.pivot, this.algae));
-                NamedCommands.registerCommand("AutoRemoveAlgaeL2",
-                                new AutoRemoveAlgaeL2(this.elevator, this.pivot, this.algae));
-        }
-
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
                 // Configure the button bindings
                 configureButtonBindings();
-
-                // Register Named Commands for Pathplanner
-                configureAutoCommands();
 
                 // Configure default commands
                 this.drivetrain.setDefaultCommand(
@@ -81,7 +58,7 @@ public class RobotContainer {
 
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
-                autoChooser.addOption("Simple Auto", new AutoSimple(this.drivetrain));
+                autoChooser.addOption("Simple Auto", new ChoreoAutoSimple(this.drivetrain));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 

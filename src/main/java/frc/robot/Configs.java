@@ -69,11 +69,11 @@ public final class Configs {
         }
 
         public static final class AlgaeManipulator {
-                public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
+                public static final SparkFlexConfig algaeConfig = new SparkFlexConfig();
 
                 static {
                         algaeConfig.idleMode(IdleMode.kBrake)
-                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.Neo550CurrentLimit);
+                                        .smartCurrentLimit(Constants.MotorDefaultsConstants.NeoVortexCurrentLimit);
 
                         algaeConfig.encoder
                                         .positionConversionFactor(AlgaeConstants.kAlgaePositionConversionFactor)

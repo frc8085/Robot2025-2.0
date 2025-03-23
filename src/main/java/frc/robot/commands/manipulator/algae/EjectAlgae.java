@@ -12,7 +12,7 @@ public class EjectAlgae extends SequentialCommandGroup {
                         AlgaeSubsystem algaeSubsystem) {
                 addCommands(
                                 new PrintCommand("Eject Algae Started"),
-                                new RunCommand(() -> algaeSubsystem.eject(), algaeSubsystem).withTimeout(0.5),
+                                new RunCommand(() -> algaeSubsystem.eject(), algaeSubsystem).withTimeout(.5),
                                 new InstantCommand(algaeSubsystem::stop));
         }
 

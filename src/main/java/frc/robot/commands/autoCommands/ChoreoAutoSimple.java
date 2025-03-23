@@ -17,8 +17,8 @@ import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
 import choreo.Choreo;
 import choreo.trajectory.SwerveSample;
 
-public class AutoSimple extends SequentialCommandGroup {
-    public AutoSimple(DriveSubsystem driveSubsystem) {
+public class ChoreoAutoSimple extends SequentialCommandGroup {
+    public ChoreoAutoSimple(DriveSubsystem driveSubsystem) {
 
         addCommands(
                 new SwerveDriveChoreoFollow(

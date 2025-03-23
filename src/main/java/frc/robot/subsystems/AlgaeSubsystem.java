@@ -12,18 +12,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 public class AlgaeSubsystem extends SubsystemBase {
 
   private boolean TUNING_MODE = TuningModeConstants.kAlgaeTuning;
 
   // import motor id
-  private final SparkMax m_algaeMotor = new SparkMax(CanIdConstants.kAlgaeCanId,
-      MotorDefaultsConstants.Neo550MotorType);
-  SparkMaxConfig config = new SparkMaxConfig();
+  private final SparkFlex m_algaeMotor = new SparkFlex(CanIdConstants.kAlgaeCanId,
+      MotorDefaultsConstants.NeoVortexMotorType);
+  SparkFlexConfig config = new SparkFlexConfig();
   private RelativeEncoder m_algaeEncoder;
   private SparkClosedLoopController m_algaePIDController;
 
