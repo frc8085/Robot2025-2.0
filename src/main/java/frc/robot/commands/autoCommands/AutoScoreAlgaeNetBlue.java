@@ -20,7 +20,7 @@ public class AutoScoreAlgaeNetBlue extends SequentialCommandGroup {
                         PivotSubsystem pivotSubsystem, CoralSubsystem coralSubsystem, DriveSubsystem driveSubsystem) {
                 addCommands(
                                 new ToAlgaeNetRaise(elevatorSubsystem, pivotSubsystem),
-                                new AngleToBarge(driveSubsystem),
+                                // new AngleToBarge(driveSubsystem),
                                 new ToAlgaeNet(elevatorSubsystem, pivotSubsystem, false),
                                 new WaitUntilCommand(pivotSubsystem::pivotAtAlgaeBlueScorePosition),
                                 new WaitUntilCommand(elevatorSubsystem::elevatorAtAlgaeScoreHeight),

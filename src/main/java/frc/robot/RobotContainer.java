@@ -20,6 +20,7 @@ import frc.robot.commands.windmill.InitializePivotAndElevator;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
 import frc.robot.io.IO;
 import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -87,6 +88,8 @@ public class RobotContainer {
                 field = new Field2d();
                 SmartDashboard.putData("Field", field);
 
+                DataLogManager.start();
+                DataLogManager.logNetworkTables(true);
         }
 
         /**

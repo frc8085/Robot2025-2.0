@@ -179,8 +179,15 @@ public final class Constants {
     // X offset, Y offset, Rotation offset
     public static final double leftYOffset = 0;
     public static final double rightYOffset = -.05;
-    public static final Pose2d leftReefAlignPose = new Pose2d(0.29, -0.33 + leftYOffset, Rotation2d.fromDegrees(90));
-    public static final Pose2d rightReefAlignPose = new Pose2d(0.29, 0.30 + rightYOffset, Rotation2d.fromDegrees(-90));
+    // for offsets, x positive is backwards from the apriltag, y positive is to the
+    // right of the apriltag
+    // so for example, and x of 1 and a y of 1 would be 1 meter back and 1 meter to
+    // the right of the apriltag
+    public static final Pose2d leftReefAlignPose = new Pose2d(0.4, -0.30 + leftYOffset, Rotation2d.kZero);
+    public static final Pose2d rightReefAlignPose = new Pose2d(0.4, 0.30 + rightYOffset, Rotation2d.kZero);
+
+    public static final Rotation2d rotationBlue = Rotation2d.fromDegrees(90);
+    public static final Rotation2d rotationYellow = Rotation2d.fromDegrees(-90);
 
   }
 

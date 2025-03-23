@@ -4,43 +4,40 @@
 
 package frc.robot.subsystems;
 
-import java.util.Vector;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.FakeConstants;
 import frc.robot.Constants.DriveConstants.Direction;
-import frc.robot.Constants.AutoConstants;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FakeConstants;
+import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.States.DriveState;
 import frc.robot.utils.MAXSwerveModule;
 import frc.robot.utils.SwerveUtils;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
-import edu.wpi.first.math.geometry.Translation3d;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -129,36 +126,54 @@ public class DriveSubsystem extends SubsystemBase {
         AutoConstants.ANGLE_PID.kD);
     orientationController.enableContinuousInput(-180, 180);
 
+    SmartDashboard.putBoolean("useMegatag2", true);
+
   }
 
   public void inputCameraPoses(String[] limelightNames) {
     for (String limelightName : limelightNames) {
+
+      LimelightHelpers.SetRobotOrientation(limelightName, this.getGyroOrientation(),
+          m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 0, 0, 0, 0);
+
       if (LimelightHelpers.getTV(limelightName)) {
         // Pose2d pose = limelight.getBotPoseBlue(limelightName);
-        Pose2d pose = LimelightHelpers.getBotPose2d_wpiBlue(limelightName);
+        PoseEstimate poseEstimate;
+
+        boolean megatag2 = SmartDashboard.getBoolean("useMegatag2", true);
+
+        if (megatag2) { // REMEMBER TO CHANGE THIS BACK
+          poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+        } else {
+          // pose = LimelightHelpers.getBotPose2d_wpiBlue(limelightName);
+          poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+        }
+        Pose2d pose = poseEstimate.pose;
         double[] limelightArrayData = { pose.getX(), pose.getY(),
             pose.getRotation().getRadians() };
         SmartDashboard.putNumberArray(limelightName, limelightArrayData);
         // System.out.println("Limelight pose: " + pose);
         // double visionTime = Timer.getFPGATimestamp() -
         // limelight.getVisionTime(limelightName);
-        double visionTime = Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Pipeline(limelightName) / 1000;
+        double visionTime = Timer.getFPGATimestamp() - poseEstimate.latency / 1000;
         // int tagCount = limelight.getTagCount(limelightName);
-        int tagCount = LimelightHelpers.getTargetCount(limelightName);
+        int tagCount = poseEstimate.tagCount;
         // int primaryId = limelight.getPrimaryId(limelightName);
         int primaryId = (int) LimelightHelpers.getFiducialID(limelightName);
-        double distanceToTarget = LimelightHelpers.getTargetPose3d_RobotSpace(limelightName).getTranslation()
-            .getDistance(new Translation3d());
-        this.addVisionPose(pose, visionTime, tagCount, primaryId, distanceToTarget);
+        double distanceToTarget = poseEstimate.avgTagDist;
+        this.addVisionPose(pose, visionTime, tagCount, primaryId, distanceToTarget, poseEstimate.isMegaTag2);
       }
     }
   }
 
-  public void addVisionPose(Pose2d pose, double visionTime, int tagCount, int primaryId, double distanceToTarget) {
+  public void addVisionPose(Pose2d pose, double visionTime, int tagCount, int primaryId, double distanceToTarget,
+      boolean isMegaTag2) {
 
     double stdDev = 2;
 
-    pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
+    if (!isMegaTag2) {
+      pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
+    }
 
     boolean primaryReef = false;
     if (6 <= primaryId && primaryId <= 11) {
@@ -213,6 +228,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     // Update the odometry in the periodic block
     m_odometry.updateWithTime(Timer.getFPGATimestamp(),
         Rotation2d.fromDegrees(getGyroOrientation()),
