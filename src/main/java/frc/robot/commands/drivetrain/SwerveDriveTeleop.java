@@ -22,7 +22,7 @@ public class SwerveDriveTeleop extends Command {
 
     @Override
     public void execute() {
-        double speedVal = MathUtil.applyDeadband(Math.pow(Controllers.driverController.getRightTriggerAxis(), 2), 0);
+        double speedVal = 0.5;
 
         double invert = this.driveSubsystem.invertForAlliance();
 

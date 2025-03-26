@@ -56,7 +56,7 @@ public class RobotContainer {
                                 new SwerveDriveTeleop(this.drivetrain));
 
                 // Preload trajectories for Choreo
-                trajMap = loadTrajectories();
+                // trajMap = loadTrajectories();
 
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
