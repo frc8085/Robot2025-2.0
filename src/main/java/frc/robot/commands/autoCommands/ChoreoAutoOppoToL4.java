@@ -3,6 +3,7 @@ package frc.robot.commands.autoCommands;
 import choreo.Choreo;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -25,7 +26,7 @@ public class ChoreoAutoOppoToL4 extends SequentialCommandGroup {
                                                 isScheduled()),
                                 new AutoToHomeCommand(elevatorSubsystem, pivotSubsystem),
                                 new AutoWaitUntilElevatorBelowSafeTravelHeight(elevatorSubsystem),
-                                new ParallelCommandGroup(
+                                new ParallelDeadlineGroup(
                                                 new AutoCoralPickup(elevatorSubsystem, pivotSubsystem, coralSubsystem),
                                                 new SwerveDriveChoreoFollow(
                                                                 driveSubsystem,

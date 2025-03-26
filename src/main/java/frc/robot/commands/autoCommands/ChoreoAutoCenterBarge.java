@@ -9,10 +9,10 @@ import choreo.trajectory.Trajectory;
 
 import java.util.Optional;
 
-public class ChoreoAutoSimple extends SequentialCommandGroup {
-    public ChoreoAutoSimple(DriveSubsystem driveSubsystem) {
+public class ChoreoAutoCenterBarge extends SequentialCommandGroup {
+    public ChoreoAutoCenterBarge(DriveSubsystem driveSubsystem) {
 
-        Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory("SIMPLEAUTO1");
+        Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory("CenterBargeToReef21");
 
         addCommands(
                 new SwerveDriveChoreoFollow(

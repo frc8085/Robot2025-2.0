@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autoCommands.*;
-import frc.robot.commands.autoCommands.AutoRemoveAlgaeL3;
 import frc.robot.commands.windmill.InitializePivotAndElevator;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
 import frc.robot.io.IO;
@@ -56,9 +55,12 @@ public class RobotContainer {
                                 // IMPLEMENT DEFAULT COMMAND
                                 new SwerveDriveTeleop(this.drivetrain));
 
+                // Preload trajectories for Choreo
+                trajMap = loadTrajectories();
+
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
-                autoChooser.addOption("Simple Auto", new ChoreoAutoSimple(this.drivetrain));
+                autoChooser.addOption("CenterBarge", new ChoreoAutoCenterBarge(this.drivetrain));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
