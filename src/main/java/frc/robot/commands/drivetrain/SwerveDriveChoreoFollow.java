@@ -27,7 +27,6 @@ public class SwerveDriveChoreoFollow extends Command {
         this.trajectory = trajectory;
         this.moveToStartPose = moveToStartPose;
         addRequirements(driveSubsystem);
-
     }
 
     @Override
@@ -48,24 +47,25 @@ public class SwerveDriveChoreoFollow extends Command {
 
         Optional<Pose2d> initialPose = this.trajectory.get().getInitialPose(this.isRedAlliance);
         if (initialPose.isPresent() && this.moveToStartPose) {
-            this.driveSubsystem.updatePose(initialPose.get());
+            this.driveSubsystem.resetOdometry(initialPose.get());
         }
 
         double[] poses = new double[this.trajectory.get().getPoses().length * 3];
         Trajectory<SwerveSample> traj = this.trajectory.get();
+
         if (this.isRedAlliance) {
             traj = traj.flipped();
         }
+
         for (int i = 0; i < this.trajectory.get().getPoses().length; i++) {
             poses[i * 3] = traj.getPoses()[i].getTranslation().getX();
             poses[i * 3 + 1] = traj.getPoses()[i].getTranslation().getY();
-            poses[i * 3 + 2] = traj.getPoses()[i].getRotation().getDegrees();
+            poses[i * 3 + 2] = traj.getPoses()[i].getRotation().getRadians();
         }
 
         SmartDashboard.putNumberArray("Choreo Traj", poses);
 
-        timer.reset();
-        timer.start();
+        timer.restart();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SwerveDriveChoreoFollow extends Command {
             Pose2d currentPose = currentSample.get().getPose();
 
             SmartDashboard.putNumberArray("Choreo Path", new double[] { currentPose.getTranslation().getX(),
-                    currentPose.getTranslation().getY(), currentPose.getRotation().getDegrees() });
+                    currentPose.getTranslation().getY(), currentPose.getRotation().getRadians() });
 
             this.driveSubsystem.followTrajectory(currentSample.get());
         }
@@ -92,5 +92,10 @@ public class SwerveDriveChoreoFollow extends Command {
     @Override
     public boolean isFinished() {
         return isFinished;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        System.out.println("Auto Path Ended");
     }
 }

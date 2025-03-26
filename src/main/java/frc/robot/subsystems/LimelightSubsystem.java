@@ -14,14 +14,22 @@ import frc.robot.LimelightHelpers;
 public class LimelightSubsystem extends SubsystemBase {
     private boolean TUNING_MODE = TuningModeConstants.kLimelightTuning;
 
+    enum Color {
+        BLUE, YELLOW
+    }
+
     /** Creates a new LimelightSubsystem. */
     // DriveSubsystem m_drive;
 
     private boolean m_visionMode;
 
-    public LimelightSubsystem() {
-        // m_drive = drive;
+    private String m_limelightBlue = "limelight-blue";
+    private String m_limelightYellow = "limelight-yellow";
 
+    public LimelightSubsystem() {
+        // Setting up the limelight pose
+        LimelightHelpers.setCameraPose_RobotSpace(m_limelightBlue, 0.2703, -.146, 0.2413, 0, 0, 110);
+        LimelightHelpers.setCameraPose_RobotSpace(m_limelightYellow, 0.2703, .146, 0.2413, 0, 0, -110);
     }
 
     @Override

@@ -63,13 +63,13 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // Drive PIDS
-  private double kXP = 0.75; // 0.5
+  private double kXP = 1.5; // 0.5
   private double kXI = 0;
   private double kXD = 0.1; // 0.1
-  private double kYP = 0.75; // 0.5
+  private double kYP = 1.5; // 0.5
   private double kYI = 0;
   private double kYD = 0.1; // 0.1
-  private double kRotP = 1.7; // 3
+  private double kRotP = 3; // 3
   private double kRotI = 0;
   private double kRotD = 0.25; // 0.5
 
@@ -94,7 +94,7 @@ public class DriveSubsystem extends SubsystemBase {
   // new Pose2d(0, 0, new Rotation2d(0)));
   SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(getGyroOrientation()),
+      this.getGyroOrientation(),
       getModulePositions(), new Pose2d());
 
   /** Creates a new DriveSubsystem. */
@@ -111,7 +111,7 @@ public class DriveSubsystem extends SubsystemBase {
       // Configure AutoBuilder last
       AutoBuilder.configure(
           this::getPose, // Robot pose supplier
-          this::updatePose, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
           this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
           (speeds, feedforwards) ->
 
@@ -150,7 +150,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void inputCameraPoses(String[] limelightNames) {
     for (String limelightName : limelightNames) {
 
-      LimelightHelpers.SetRobotOrientation(limelightName, this.getGyroOrientation(),
+      LimelightHelpers.SetRobotOrientation(limelightName, this.getGyroOrientation().getDegrees(),
           m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 0, 0, 0, 0);
 
       if (LimelightHelpers.getTV(limelightName)) {
@@ -202,7 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     if (!isMegaTag2) {
       stdDev = 2;
-      pose = new Pose2d(pose.getTranslation(), Rotation2d.fromDegrees(this.getGyroOrientation()));
+      pose = new Pose2d(pose.getTranslation(), this.getRotation());
 
       if (tagCount == 1) {
         if (distanceToTarget > 2.5) { // meters
@@ -256,7 +256,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Update the odometry in the periodic block
     m_odometry.updateWithTime(Timer.getFPGATimestamp(),
-        Rotation2d.fromDegrees(getGyroOrientation()),
+        this.getGyroOrientation(),
         this.getModulePositions());
 
     this.inputCameraPoses(new String[] { "limelight-blue", "limelight-yellow" });
@@ -308,26 +308,23 @@ public class DriveSubsystem extends SubsystemBase {
         true);
   }
 
-  // This next set of statements was copied from 2024 code
-  public Rotation2d getYaw() {
-    return (DriveConstants.kGyroReversed) ? Rotation2d.fromDegrees((360 - m_gyro.getYaw().getValueAsDouble()))
-        : Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble());
-  }
-
   public void followTrajectory(SwerveSample sample) {
     // Get the current pose of the robot
-    Pose2d pose = getPose();
-
-    double invert = this.invertForAlliance();
+    Pose2d pose = this.getPose();
 
     // Generate the next speeds for the robot
     ChassisSpeeds speeds = new ChassisSpeeds(
-        invert * -(sample.vx + xController.calculate(pose.getX(), sample.x)),
-        invert * -(sample.vy + yController.calculate(pose.getY(), sample.y)),
-        sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading));
+        (sample.vx + xController.calculate(pose.getX(), sample.x)),
+        // sample.vx,
+        (sample.vy + yController.calculate(pose.getY(), sample.y)),
+        // sample.vy,
+        sample.omega + headingController.calculate(pose.getRotation().getRadians(),
+            sample.heading)
+    // sample.omega
+    );
 
     // Apply the generated speeds
-    this.drive(speeds);
+    this.driveAutoFieldRelative(speeds);
   }
 
   /**
@@ -378,28 +375,36 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getEstimatedPosition();
   }
 
-  /**
-   * Updates the odometry to the specified pose.
-   *
-   * @param pose
-   *             The pose to which to set the odometry.
-   */
-  public void updatePose(Pose2d pose) {
-    // m_gyro.setYaw(pose.getRotation().getDegrees());
-    // m_odometry.resetPosition(
-    // Rotation2d.fromDegrees(getGyroOrientation()),
-    // getModulePositions(),
-    // new Pose2d(pose.getTranslation(), Rotation2d.kZero));
-    m_odometry.resetPose(pose);
+  public Rotation2d getRotation() {
+    return this.getPose().getRotation();
   }
 
-  // // This was using the PoseEstimator
-  public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
-        getYaw(),
-        getModulePositions(),
-        pose);
+  /**
+   * Returns the currently-estimated rotation of the robot bound between -180 and
+   * 180
+   *
+   * @return The rotation
+   */
+  public double getHeading() {
+    // return m_odometry.getPoseMeters(); // this was using PoseEstimator
+    return MathUtil.inputModulus(this.getRotation().getDegrees(), -180, 180);
   }
+
+  public void resetOdometry(Pose2d pose) {
+    // this.m_odometry.resetPosition(this.getGyroOrientation(),
+    // this.getModulePositions(), pose);
+
+    Rotation2d gyroOffset = pose.getRotation().minus(this.getRotation());
+    // this.m_gyro.setYaw(gyroOffset.getDegrees());
+
+    this.m_gyro.setYaw(pose.getRotation().getDegrees());
+    this.m_odometry.resetTranslation(pose.getTranslation());
+  }
+
+  // public void resetOdometryAuto(Pose2d pose) {
+  // this.m_odometry.resetPosition(this.getRotation(), this.getModulePositions(),
+  // pose);
+  // }
 
   /**
    * Method to drive the robot using joystick info.
@@ -440,19 +445,16 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()))
+                // Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble()))
+                this.getGyroOrientation())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    // swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    // m_frontRight.setDesiredState(swerveModuleStates[1]);
-    // m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    // m_rearRight.setDesiredState(swerveModuleStates[3]);
+
     this.setModuleStates(swerveModuleStates);
   }
 
-  private void drive(ChassisSpeeds speeds) {
-    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+  private void driveAutoFieldRelative(ChassisSpeeds speeds) {
+    ChassisSpeeds fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, this.getRotation());
+    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(fieldSpeeds);
     setModuleStates(moduleStates);
   }
 
@@ -493,6 +495,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.setYaw(addForAlliance());
   }
 
+  public void resetGyroBasedOnField() {
+    // grabs the field
+  }
+
   // Inverts the joystick direction if on red alliance
   public double invertForAlliance() {
     var alliance = DriverStation.getAlliance();
@@ -511,30 +517,31 @@ public class DriveSubsystem extends SubsystemBase {
     return 0;
   }
 
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from -180 to 180
-   */
-  public double getHeading() {
-    return SwerveUtils.normalizeAngle(getGyroOrientation());
-  }
+  // /**
+  // * Returns the heading of the robot.
+  // *
+  // * @return the robot's heading in degrees, from -180 to 180
+  // */
+  // public double getHeading() {
+  // return SwerveUtils.normalizeAngle(getGyroOrientation());
+  // }
 
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  public double getTurnRate() {
-    return m_gyro.getAngularVelocityXWorld().getValueAsDouble() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-  }
+  // /**
+  // * Returns the turn rate of the robot.
+  // *
+  // * @return The turn rate of the robot, in degrees per second
+  // */
+  // public double getTurnRate() {
+  // return m_gyro.getAngularVelocityXWorld().getValueAsDouble() *
+  // (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  // }
 
   public double getHeadingWrappedDegrees() {
     return MathUtil.inputModulus(getHeading(), -180, 180);
   }
 
-  public double getGyroOrientation() {
-    return m_gyro.getYaw().getValueAsDouble() + DriveConstants.GYRO_OFFSET;
+  private Rotation2d getGyroOrientation() {
+    return Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble() + DriveConstants.GYRO_OFFSET);
   }
 
 }
