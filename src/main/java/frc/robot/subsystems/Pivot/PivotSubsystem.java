@@ -56,8 +56,8 @@ public class PivotSubsystem extends SubsystemBase {
         // new stuff for Synced Cancoder
         m_pivotMotorConfig.Feedback.FeedbackRemoteSensorID = m_pivotEncoder.getDeviceID();
         m_pivotMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
-        m_pivotMotorConfig.Feedback.SensorToMechanismRatio = 3.0;
-        m_pivotMotorConfig.Feedback.RotorToSensorRatio = 9.0;
+        m_pivotMotorConfig.Feedback.SensorToMechanismRatio = PivotArmConstants.kPivotMotorSensorToMechanismRatio;
+        m_pivotMotorConfig.Feedback.RotorToSensorRatio = PivotArmConstants.kPivotMotorRotorToSensorRatio;
 
         m_pivotMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         m_pivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; //
