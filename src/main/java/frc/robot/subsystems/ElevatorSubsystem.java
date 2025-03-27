@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // CAN ID and CANbus
   private final TalonFX m_elevatorMotor = new TalonFX(Constants.CanIdConstants.kElevatorCanId, "rio");
   TalonFXConfiguration config = new TalonFXConfiguration();
-  private final CANcoder m_elevatorEncoder = new CANcoder(Constants.CanIdConstants.kElevatorCancoderCanID);
+  private final CANcoder m_elevatorEncoder = new CANcoder(Constants.CanIdConstants.kElevatorCancoderCanId);
 
   // get encoder data
   private StatusSignal<Angle> elevatorPosition;

@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
@@ -21,9 +23,13 @@ import frc.robot.Constants.TuningModeConstants;
 
 public class PivotSubsystem extends SubsystemBase {
     private final TalonFX m_pivotMotor = new TalonFX(Constants.CanIdConstants.kPivotArmCanId, "rio");
+    private final CANcoder m_pivotEncoder = new CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanId, "rio");
+
     private StatusSignal<Angle> pivotArmPosition;
     private StatusSignal<AngularVelocity> pivotArmVelocity;
-    TalonFXConfiguration config = new TalonFXConfiguration();
+
+    CANcoderConfiguration m_pivotEncoderConfig = new CANcoderConfiguration();
+    TalonFXConfiguration m_pivotMotorConfig = new TalonFXConfiguration();
 
     // The gyro sensor
     private final Pigeon2 m_pivotGyro = new Pigeon2(CanIdConstants.kPivotGyroCanId);
@@ -34,6 +40,12 @@ public class PivotSubsystem extends SubsystemBase {
 
     public PivotSubsystem() {
 
+        /* Configure CANcoder to zero the magnet appropriately */
+        m_pivotEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        m_pivotEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        m_pivotEncoderConfig.MagnetSensor.MagnetOffset = 0.4;
+        m_pivotEncoder.getConfigurator().apply(m_pivotEncoderConfig);
+
         var slot0Configs = new Slot0Configs();
         slot0Configs.kP = PivotArmConstants.kPivotArmP;
         slot0Configs.kI = PivotArmConstants.kPivotArmI;
@@ -42,17 +54,23 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
         // slot0Configs.kS = PivotArmConstants.kPivotArmS;
 
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake; //
+        // new stuff for Synced Cancoder
+        m_pivotMotorConfig.Feedback.FeedbackRemoteSensorID = m_pivotEncoder.getDeviceID();
+        m_pivotMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+        m_pivotMotorConfig.Feedback.SensorToMechanismRatio = 3.0;
+        m_pivotMotorConfig.Feedback.RotorToSensorRatio = 9.0;
 
-        config.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
-        config.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
-        config.MotionMagic.MotionMagicJerk = Constants.PivotArmConstants.kPivotArmMMJerk;
+        m_pivotMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        m_pivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; //
+
+        m_pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
+        m_pivotMotorConfig.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
+        m_pivotMotorConfig.MotionMagic.MotionMagicJerk = Constants.PivotArmConstants.kPivotArmMMJerk;
 
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
 
-        m_pivotMotor.getConfigurator().apply(config);
+        m_pivotMotor.getConfigurator().apply(m_pivotMotorConfig);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
 
     }

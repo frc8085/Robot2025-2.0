@@ -45,8 +45,8 @@ public final class Constants {
     public static final int kElevatorCanId = 23;
     public static final int kPivotArmCanId = 25;
 
-    public static final int kElevatorCancoderCanID = 33;
-    public static final int kPivotArmCancoderCanID = 35;
+    public static final int kElevatorCancoderCanId = 33;
+    public static final int kPivotArmCancoderCanId = 35;
 
     // Drive SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1;
