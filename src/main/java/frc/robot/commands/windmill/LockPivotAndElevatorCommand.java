@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Elevator.*;
+import frc.robot.subsystems.Pivot.*;
 
 public class LockPivotAndElevatorCommand extends Command {
     ElevatorSubsystem elevatorSubsystem;
@@ -24,7 +24,7 @@ public class LockPivotAndElevatorCommand extends Command {
         SequentialCommandGroup commands = new SequentialCommandGroup();
         commands.addCommands(new Windmill(elevatorSubsystem, pivotSubsystem,
                 Constants.Windmill.WindmillState.Home, false));
-        elevatorSubsystem.setPos(Constants.ElevatorConstants.kElevatorStage1Height);
+        elevatorSubsystem.setPos(ElevatorConstants.kElevatorStage1Height);
         pivotSubsystem.setPos(Rotation2d.fromDegrees(75));
 
     }

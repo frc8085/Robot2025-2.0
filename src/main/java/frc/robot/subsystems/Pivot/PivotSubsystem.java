@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Pivot;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CanIdConstants;
-import frc.robot.Constants.PivotArmConstants;
 import frc.robot.Constants.TuningModeConstants;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -27,6 +26,8 @@ public class PivotSubsystem extends SubsystemBase {
 
     private StatusSignal<Angle> pivotArmPosition;
     private StatusSignal<AngularVelocity> pivotArmVelocity;
+
+    private StatusSignal<Angle> pivotEncoderPosition;
 
     CANcoderConfiguration m_pivotEncoderConfig = new CANcoderConfiguration();
     TalonFXConfiguration m_pivotMotorConfig = new TalonFXConfiguration();
@@ -43,7 +44,7 @@ public class PivotSubsystem extends SubsystemBase {
         /* Configure CANcoder to zero the magnet appropriately */
         m_pivotEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         m_pivotEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        m_pivotEncoderConfig.MagnetSensor.MagnetOffset = 0.4;
+        m_pivotEncoderConfig.MagnetSensor.MagnetOffset = PivotArmConstants.kPivotCancoderOffset;
         m_pivotEncoder.getConfigurator().apply(m_pivotEncoderConfig);
 
         var slot0Configs = new Slot0Configs();
@@ -63,12 +64,13 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         m_pivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; //
 
-        m_pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = Constants.PivotArmConstants.kPivotArmMMVelo;
-        m_pivotMotorConfig.MotionMagic.MotionMagicAcceleration = Constants.PivotArmConstants.kPivotArmMMAcc;
-        m_pivotMotorConfig.MotionMagic.MotionMagicJerk = Constants.PivotArmConstants.kPivotArmMMJerk;
+        m_pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = PivotArmConstants.kPivotArmMMVelo;
+        m_pivotMotorConfig.MotionMagic.MotionMagicAcceleration = PivotArmConstants.kPivotArmMMAcc;
+        m_pivotMotorConfig.MotionMagic.MotionMagicJerk = PivotArmConstants.kPivotArmMMJerk;
 
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
+        pivotEncoderPosition = m_pivotEncoder.getPosition();
 
         m_pivotMotor.getConfigurator().apply(m_pivotMotorConfig);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
@@ -107,107 +109,107 @@ public class PivotSubsystem extends SubsystemBase {
     // Pivot Angle Checks
     public boolean pivotAtAlgaeYellowScorePosition() {
         return getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetYellow
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees();
+                + PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
     public boolean pivotAtAlgaeBlueScorePosition() {
         return (getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetBlue
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees())
+                + PivotArmConstants.kPivotTolerance.getDegrees())
                 && (getCurrentRotation().getDegrees() >= PivotArmConstants.kPivotAlgaeNetBlue
-                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees());
+                        - PivotArmConstants.kPivotTolerance.getDegrees());
     }
 
     public boolean pivotAtHomeAngle() {
         return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotHome
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                 (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotHome
-                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                        - PivotArmConstants.kPivotTolerance.getDegrees())));
     }
 
     public boolean pivotAtCoralDropOffAngle(boolean yellow) {
         if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         } else {
             return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         }
     }
 
     public boolean pivotAtCoral1DropOffAngle(boolean yellow) {
         if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff1
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff1
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         } else {
             return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff1
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff1
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         }
     }
 
     public boolean pivotAtAlgaeReef2DropOffAngle(boolean yellow) {
         if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         } else {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Flip
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef2Flip
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         }
     }
 
     public boolean pivotAtAlgaeReef3DropOffAngle(boolean yellow) {
         if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         } else {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Flip
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef3Flip
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         }
     }
 
     public boolean pivotAtCoral4DropOffAngle(boolean yellow) {
         if (!yellow) {
             return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff4
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff4
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         } else {
             return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff4
-                    + Constants.PivotArmConstants.kPivotTolerance.getDegrees())) &&
+                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
                     (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff4
-                            - Constants.PivotArmConstants.kPivotTolerance.getDegrees())));
+                            - PivotArmConstants.kPivotTolerance.getDegrees())));
         }
     }
 
     private Rotation2d motorPosToAngle(double pos) {
-        return Rotation2d.fromRotations(pos / Constants.PivotArmConstants.kPivotMotorGearRatio);
+        return Rotation2d.fromRotations(pos / PivotArmConstants.kPivotMotorGearRatio);
     }
 
     private double angleToMotorPos(Rotation2d angle) {
-        return angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio;
+        return angle.getRotations() * PivotArmConstants.kPivotMotorGearRatio;
     }
 
     public void setPos(Rotation2d angle) {
 
-        if (angle.getRotations() < Constants.PivotArmConstants.kPivotArmMin.getRotations()) {
-            angle = Constants.PivotArmConstants.kPivotArmMin;
-        } else if (angle.getRotations() > Constants.PivotArmConstants.kPivotArmMax.getRotations()) {
-            angle = Constants.PivotArmConstants.kPivotArmMax;
+        if (angle.getRotations() < PivotArmConstants.kPivotArmMin.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMin;
+        } else if (angle.getRotations() > PivotArmConstants.kPivotArmMax.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMax;
         }
         this.setPosManual(angle);
     }
@@ -215,15 +217,15 @@ public class PivotSubsystem extends SubsystemBase {
     // WARNING: NO BOUNDS ON THIS FUNCTION, ONLY MANUAL USE ONLY, NOT FOR COMMANDS
     public void setPosManual(Rotation2d angle) {
 
-        if (angle.getRotations() < Constants.PivotArmConstants.kPivotArmMinManual.getRotations()) {
-            angle = Constants.PivotArmConstants.kPivotArmMinManual;
-        } else if (angle.getRotations() > Constants.PivotArmConstants.kPivotArmMaxManual.getRotations()) {
-            angle = Constants.PivotArmConstants.kPivotArmMaxManual;
+        if (angle.getRotations() < PivotArmConstants.kPivotArmMinManual.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMinManual;
+        } else if (angle.getRotations() > PivotArmConstants.kPivotArmMaxManual.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMaxManual;
         }
 
         motionMagicPositionControl.Position = angleToMotorPos(angle);
         motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
-                * Constants.PivotArmConstants.kPivotArmFF;
+                * PivotArmConstants.kPivotArmFF;
         m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
 
@@ -234,12 +236,17 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void setAnglePos(Rotation2d angle) {
-        m_pivotMotor.setPosition(angle.getRotations() * Constants.PivotArmConstants.kPivotMotorGearRatio);
+        m_pivotMotor.setPosition(angle.getRotations() * PivotArmConstants.kPivotMotorGearRatio);
     }
 
     public double getCurrentPosition() {
         pivotArmPosition.refresh();
         return pivotArmPosition.getValueAsDouble();
+    }
+
+    public double getCurrentEncoderPosition() {
+        pivotEncoderPosition.refresh();
+        return pivotEncoderPosition.getValueAsDouble();
     }
 
     public double getCurrentVelocity() {
@@ -263,6 +270,7 @@ public class PivotSubsystem extends SubsystemBase {
             // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
             SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
             // SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
+            SmartDashboard.putNumber("CancoderReading", getCurrentEncoderPosition());
         }
 
     }
@@ -290,10 +298,10 @@ public class PivotSubsystem extends SubsystemBase {
     // checks whether the pivot arm is in the danger zone for the elevator at target
     // angle GOOD
     public boolean targetInDangerZone(Rotation2d targetAngle) {
-        return targetAngle.getDegrees() > Constants.PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                + Constants.PivotArmConstants.kPivotTolerance.getDegrees()
-                && targetAngle.getDegrees() < Constants.PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
-                        - Constants.PivotArmConstants.kPivotTolerance.getDegrees();
+        return targetAngle.getDegrees() > PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+                + PivotArmConstants.kPivotTolerance.getDegrees()
+                && targetAngle.getDegrees() < PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
+                        - PivotArmConstants.kPivotTolerance.getDegrees();
     }
 
     public boolean inDangerZone() {

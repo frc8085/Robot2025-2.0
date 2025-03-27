@@ -1,9 +1,8 @@
 package frc.robot.commands.windmill.pivot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants.PivotArmConstants;
+import frc.robot.subsystems.Pivot.*;
 
 public class Pivot extends Command {
     private final Rotation2d m_targetAngle;

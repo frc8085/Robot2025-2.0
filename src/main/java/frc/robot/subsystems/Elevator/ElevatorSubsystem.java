@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Elevator;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.States.DriveState;
 
@@ -79,9 +78,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Setting Motion Magic Configs
-    config.MotionMagic.MotionMagicCruiseVelocity = Constants.ElevatorConstants.kElevatorMMVelo;
-    config.MotionMagic.MotionMagicAcceleration = Constants.ElevatorConstants.kElevatorMMAcc;
-    config.MotionMagic.MotionMagicJerk = Constants.ElevatorConstants.kElevatorMMJerk;
+    config.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kElevatorMMVelo;
+    config.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorMMAcc;
+    config.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorMMJerk;
 
     // get sensor readings
     elevatorPosition = m_elevatorMotor.getPosition();
@@ -101,17 +100,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     // check to see if the elevator height is above the maximum, and if it is, set
     // it to the maximum
 
-    if ((rotations < Constants.ElevatorConstants.kElevatorMin)) {
-      rotations = Constants.ElevatorConstants.kElevatorMin;
-    } else if ((rotations > Constants.ElevatorConstants.kElevatorMax)) {
-      rotations = Constants.ElevatorConstants.kElevatorMax;
+    if ((rotations < ElevatorConstants.kElevatorMin)) {
+      rotations = ElevatorConstants.kElevatorMin;
+    } else if ((rotations > ElevatorConstants.kElevatorMax)) {
+      rotations = ElevatorConstants.kElevatorMax;
     }
 
     // set the feedforward value based on the elevator height
     double ff = 0;
     if (rotations > ElevatorConstants.kElevatorStage2Height) {
       ff = ElevatorConstants.kElevatorStage3FF;
-    } else if (rotations > Constants.ElevatorConstants.kElevatorStage1Height) {
+    } else if (rotations > ElevatorConstants.kElevatorStage1Height) {
       ff = ElevatorConstants.kElevatorStage2FF;
     }
 
@@ -122,7 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void zero() {
     m_elevatorMotor.setPosition(
-        Constants.ElevatorConstants.kElevatorStage1Height);
+        ElevatorConstants.kElevatorStage1Height);
   }
 
   // read the current elevator encoder position
@@ -138,82 +137,82 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean targetInDangerZone(double target_position) {
-    return target_position < (Constants.ElevatorConstants.kElevatorSafeHeightMax);
+    return target_position < (ElevatorConstants.kElevatorSafeHeightMax);
   }
 
   public boolean elevatorAtAlgaeScoreHeight() {
-    return getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorNetHeight
-        - Constants.ElevatorConstants.kElevatorTolerance);
+    return getCurrentMotorPosition() >= (ElevatorConstants.kElevatorNetHeight
+        - ElevatorConstants.kElevatorTolerance);
   }
 
   public boolean elevatorBelowSafeTravelHeight() {
-    return (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorSafeTravelHeight
-        + Constants.ElevatorConstants.kElevatorTolerance));
+    return (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorSafeTravelHeight
+        + ElevatorConstants.kElevatorTolerance));
   }
 
   public boolean elevatorAtCoralDropOff1Height() {
-    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff1Height
-        - Constants.ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff1Height
-            + Constants.ElevatorConstants.kElevatorTolerance)));
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff1Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff1Height
+            + ElevatorConstants.kElevatorTolerance)));
   }
 
   public boolean elevatorAtCoralDropOff2Height() {
-    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff2Height
-        - Constants.ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff2Height
-            + Constants.ElevatorConstants.kElevatorTolerance)));
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff2Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff2Height
+            + ElevatorConstants.kElevatorTolerance)));
   }
 
   public boolean elevatorAtCoralDropOff3Height() {
-    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff3Height
-        - Constants.ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff3Height
-            + Constants.ElevatorConstants.kElevatorTolerance)));
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff3Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff3Height
+            + ElevatorConstants.kElevatorTolerance)));
   }
 
   public boolean elevatorAtCoralDropOff4Height() {
-    return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorCoralDropOff4Height
-        - Constants.ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorCoralDropOff4Height
-            + Constants.ElevatorConstants.kElevatorTolerance)));
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff4Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff4Height
+            + ElevatorConstants.kElevatorTolerance)));
   }
 
   public boolean elevatorAtAlgaeReefL2(boolean yellow) {
     if (!yellow) {
-      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef2Height
-          - Constants.ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef2Height
-              + Constants.ElevatorConstants.kElevatorTolerance)));
+      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef2Height
+          - ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2Height
+              + ElevatorConstants.kElevatorTolerance)));
     } else {
-      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef2FlipHeight
-          - Constants.ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef2FlipHeight
-              + Constants.ElevatorConstants.kElevatorTolerance)));
+      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef2FlipHeight
+          - ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2FlipHeight
+              + ElevatorConstants.kElevatorTolerance)));
     }
   }
 
   public boolean elevatorAtAlgaeReefL3(boolean yellow) {
     if (!yellow) {
-      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef3Height
-          - Constants.ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef3Height
-              + Constants.ElevatorConstants.kElevatorTolerance)));
+      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef3Height
+          - ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3Height
+              + ElevatorConstants.kElevatorTolerance)));
     } else {
-      return ((getCurrentMotorPosition() >= (Constants.ElevatorConstants.kElevatorReef3FlipHeight
-          - Constants.ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (Constants.ElevatorConstants.kElevatorReef3FlipHeight
-              + Constants.ElevatorConstants.kElevatorTolerance)));
+      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef3FlipHeight
+          - ElevatorConstants.kElevatorTolerance))
+          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3FlipHeight
+              + ElevatorConstants.kElevatorTolerance)));
     }
   }
 
   public double minConflictHeight(Rotation2d target_angle) {
     var deg = Math.abs(target_angle.getDegrees());
     var minHeight = -7 * Math.pow(deg, 0.7 / 2) + 50;
-    if (minHeight < Constants.ElevatorConstants.kElevatorSafeHeightMin) {
-      minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMin;
-    } else if (minHeight > Constants.ElevatorConstants.kElevatorSafeHeightMax) {
-      minHeight = Constants.ElevatorConstants.kElevatorSafeHeightMax;
+    if (minHeight < ElevatorConstants.kElevatorSafeHeightMin) {
+      minHeight = ElevatorConstants.kElevatorSafeHeightMin;
+    } else if (minHeight > ElevatorConstants.kElevatorSafeHeightMax) {
+      minHeight = ElevatorConstants.kElevatorSafeHeightMax;
     }
     return minHeight;
   }
