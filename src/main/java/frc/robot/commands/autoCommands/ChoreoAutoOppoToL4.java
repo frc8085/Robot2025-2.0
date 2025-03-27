@@ -1,7 +1,10 @@
 package frc.robot.commands.autoCommands;
 
+import java.util.Optional;
+
 import choreo.Choreo;
 import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,10 +20,16 @@ public class ChoreoAutoOppoToL4 extends SequentialCommandGroup {
                         ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
                         CoralSubsystem coralSubsystem) {
 
+                Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("OppoBargeToReef22");
+                Optional<Trajectory<SwerveSample>> path2 = Choreo.loadTrajectory("Reef22ToSource");
+                Optional<Trajectory<SwerveSample>> path3 = Choreo.loadTrajectory("SourceToReef17L");
+                Optional<Trajectory<SwerveSample>> path4 = Choreo.loadTrajectory("Reef17LToSource");
+                Optional<Trajectory<SwerveSample>> path5 = Choreo.loadTrajectory("SourceToReef17R");
+
                 addCommands(
                                 new SwerveDriveChoreoFollow(
                                                 driveSubsystem,
-                                                Choreo.<SwerveSample>loadTrajectory("OppoBargeToReef22"), true),
+                                                path1, true),
                                 new AutoScoreCoralL4(algaeSubsystem, elevatorSubsystem, pivotSubsystem, coralSubsystem,
                                                 driveSubsystem,
                                                 isScheduled()),
@@ -30,20 +39,19 @@ public class ChoreoAutoOppoToL4 extends SequentialCommandGroup {
                                                 new AutoCoralPickup(elevatorSubsystem, pivotSubsystem, coralSubsystem),
                                                 new SwerveDriveChoreoFollow(
                                                                 driveSubsystem,
-                                                                Choreo.<SwerveSample>loadTrajectory("Reef22ToSource"),
-                                                                false)),
+                                                                path2, false)),
                                 new SwerveDriveChoreoFollow(
                                                 driveSubsystem,
-                                                Choreo.<SwerveSample>loadTrajectory("SourceToReef17L"), false),
+                                                path3, false),
                                 new AutoScoreCoralL4(algaeSubsystem, elevatorSubsystem, pivotSubsystem, coralSubsystem,
                                                 driveSubsystem,
                                                 isScheduled()),
                                 new SwerveDriveChoreoFollow(
                                                 driveSubsystem,
-                                                Choreo.<SwerveSample>loadTrajectory("Reef17LToSource"), false),
+                                                path4, false),
                                 new SwerveDriveChoreoFollow(
                                                 driveSubsystem,
-                                                Choreo.<SwerveSample>loadTrajectory("SourceToReef17R"), false),
+                                                path5, false),
                                 new AutoScoreCoralL4(algaeSubsystem, elevatorSubsystem, pivotSubsystem, coralSubsystem,
                                                 driveSubsystem,
                                                 isScheduled()));

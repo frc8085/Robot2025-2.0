@@ -4,9 +4,17 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -14,12 +22,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.autoCommands.*;
-import frc.robot.commands.windmill.InitializePivotAndElevator;
+import frc.robot.commands.autoCommands.ChoreoAutoCenterBarge;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
 import frc.robot.io.IO;
-import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj.DataLogManager;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -56,7 +68,34 @@ public class RobotContainer {
                                 new SwerveDriveTeleop(this.drivetrain));
 
                 // Preload trajectories for Choreo
-                trajMap = loadTrajectories();
+
+                // private Set<String> listFilesUsingFilesList(String dir) throws IOException {
+                // try (Stream<Path> stream = Files.list(Paths.get(dir))) {
+                // return stream
+                // .filter(file -> !Files.isDirectory(file))
+                // .map(Path::getFileName)
+                // .map(Path::toString)
+                // .collect(Collectors.toSet());
+                // }
+                // }
+                // private Map<String, Optional<Trajectory<SwerveSample>>> loadTrajectories() {
+                // Set<String> trajNames;
+                // try {
+                // if (Robot.isReal()) {
+                // trajNames = listFilesUsingFilesList("/home/lvuser/deploy/choreo");
+                // } else {
+                // trajNames = listFilesUsingFilesList("src/main/deploy/choreo");
+                // }
+                // } catch (IOException e) {
+                // DriverStation.reportError("Invalid Directory! Trajectories failed to load!",
+                // true);
+                // return null;
+                // }
+                // return trajNames.stream().collect(Collectors.toMap(
+                // entry -> entry.replace(".traj", ""),
+                // entry -> Choreo.loadTrajectory(entry.replace(".traj", ""))));
+                // }
+                // trajMap = loadTrajectories();
 
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
