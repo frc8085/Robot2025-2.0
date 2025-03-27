@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.States.DriveState;
 
@@ -28,9 +27,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private boolean TUNING_MODE = TuningModeConstants.kElevatorTuning;
 
   // CAN ID and CANbus
-  private final TalonFX m_elevatorMotor = new TalonFX(Constants.CanIdConstants.kElevatorCanId, "rio");
+  private final TalonFX m_elevatorMotor = new TalonFX(ElevatorConstants.kElevatorCanId, "rio");
   TalonFXConfiguration config = new TalonFXConfiguration();
-  private final CANcoder m_elevatorEncoder = new CANcoder(Constants.CanIdConstants.kElevatorCancoderCanId);
+  private final CANcoder m_elevatorEncoder = new CANcoder(ElevatorConstants.kElevatorCancoderCanId);
 
   // get encoder data
   private StatusSignal<Angle> elevatorPosition;

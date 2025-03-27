@@ -1,10 +1,7 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Algae;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configs;
-import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.MotorDefaultsConstants;
 import frc.robot.Constants.TuningModeConstants;
 
@@ -21,7 +18,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean TUNING_MODE = TuningModeConstants.kAlgaeTuning;
 
   // import motor id
-  private final SparkFlex m_algaeMotor = new SparkFlex(CanIdConstants.kAlgaeCanId,
+  private final SparkFlex m_algaeMotor = new SparkFlex(AlgaeConstants.kAlgaeCanId,
       MotorDefaultsConstants.NeoVortexMotorType);
   SparkFlexConfig config = new SparkFlexConfig();
   private RelativeEncoder m_algaeEncoder;
@@ -45,7 +42,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     // the settings to the SPARK to avoid losing them on a power cycle.
     m_algaeEncoder = m_algaeMotor.getEncoder();
     m_algaePIDController = m_algaeMotor.getClosedLoopController();
-    m_algaeMotor.configure(Configs.AlgaeManipulator.algaeConfig, ResetMode.kResetSafeParameters,
+    m_algaeMotor.configure(AlgaeConfig.algaeConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
   }

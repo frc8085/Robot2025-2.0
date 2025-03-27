@@ -3,13 +3,12 @@ package frc.robot.commands.manipulator.algae;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants;
-import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.Algae.*;
 
 // if command is interrupted before algae is picked up, kill command
 public class PickUpAlgaeCurrent extends Command {
         AlgaeSubsystem algaeSubsystem;
-        Debouncer debouncer = new Debouncer(Constants.AlgaeConstants.kAlgaeCurrentDebouncerTime,
+        Debouncer debouncer = new Debouncer(AlgaeConstants.kAlgaeCurrentDebouncerTime,
                         Debouncer.DebounceType.kRising);
         private boolean algaePickedUp;
 
@@ -50,7 +49,7 @@ public class PickUpAlgaeCurrent extends Command {
         @Override
         public boolean isFinished() {
                 return (debouncer
-                                .calculate(algaeSubsystem.getCurrent() >= Constants.AlgaeConstants.kAlgaeCurrentLimit));
+                                .calculate(algaeSubsystem.getCurrent() >= AlgaeConstants.kAlgaeCurrentLimit));
         }
 
 }

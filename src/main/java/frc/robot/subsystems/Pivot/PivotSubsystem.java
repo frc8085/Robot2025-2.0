@@ -16,13 +16,11 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.CanIdConstants;
 import frc.robot.Constants.TuningModeConstants;
 
 public class PivotSubsystem extends SubsystemBase {
-    private final TalonFX m_pivotMotor = new TalonFX(Constants.CanIdConstants.kPivotArmCanId, "rio");
-    private final CANcoder m_pivotEncoder = new CANcoder(Constants.CanIdConstants.kPivotArmCancoderCanId, "rio");
+    private final TalonFX m_pivotMotor = new TalonFX(PivotArmConstants.kPivotArmCanId, "rio");
+    private final CANcoder m_pivotEncoder = new CANcoder(PivotArmConstants.kPivotArmCancoderCanId, "rio");
 
     private StatusSignal<Angle> pivotArmPosition;
     private StatusSignal<AngularVelocity> pivotArmVelocity;
@@ -33,7 +31,7 @@ public class PivotSubsystem extends SubsystemBase {
     TalonFXConfiguration m_pivotMotorConfig = new TalonFXConfiguration();
 
     // The gyro sensor
-    private final Pigeon2 m_pivotGyro = new Pigeon2(CanIdConstants.kPivotGyroCanId);
+    private final Pigeon2 m_pivotGyro = new Pigeon2(PivotArmConstants.kPivotGyroCanId);
 
     private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 

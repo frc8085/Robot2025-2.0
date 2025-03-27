@@ -4,6 +4,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public final class PivotArmConstants {
 
+    // CanIDs for Pivot
+    public static final int kPivotGyroCanId = 16;
+    public static final int kPivotArmCanId = 25;
+    public static final int kPivotArmCancoderCanId = 35;
+
     public static final double kPivotMotorGearRatio = 27;
     public static double kPivotArmSpeed = .10;
 

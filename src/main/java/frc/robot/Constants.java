@@ -6,14 +6,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Pivot.*;
 import frc.robot.subsystems.Elevator.*;
-
-import java.text.BreakIterator;
 
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -35,32 +30,6 @@ import edu.wpi.first.math.geometry.Pose2d;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final class CanIdConstants {
-    public static final int kGyroCanId = 15;
-    public static final int kPivotGyroCanId = 16;
-
-    public static final int kCoralCanId = 21;
-    public static final int kAlgaeCanId = 22;
-    public static final int kClimberCanId = 24;
-
-    public static final int kElevatorCanId = 23;
-    public static final int kPivotArmCanId = 25;
-
-    public static final int kElevatorCancoderCanId = 33;
-    public static final int kPivotArmCancoderCanId = 35;
-
-    // Drive SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 3;
-    public static final int kFrontRightDrivingCanId = 2;
-    public static final int kRearRightDrivingCanId = 4;
-
-    public static final int kFrontLeftTurningCanId = 11;
-    public static final int kRearLeftTurningCanId = 13;
-    public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 14;
-
-  }
 
   public static final class TuningModeConstants {
     public static boolean kLimelightTuning = false;
@@ -69,69 +38,6 @@ public final class Constants {
     public static boolean kElevatorTuning = true;
     public static boolean kPivotTuning = true;
     public static boolean kClimberTuning = true;
-  }
-
-  public static final class DriveConstants {
-    // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.12; // Rev stated max speed
-
-    // what is the multiplier for the speed decrease
-    public static final double kMinSpeedMetersPerSecondMaxElevatorHeightMul = 0.025;
-
-    public static final double kMinSpeedMetersPerSecondMaxElevatorHeight = 0.2;
-    public static final double kSlowDrive = 0.1;
-
-    // if you want to slow down the rotation speed, change the adjustment factor
-    public static final double kAngularSpeedAdjustment = 1;
-    public static final double kMaxAngularSpeed = 2 * Math.PI * kAngularSpeedAdjustment; // radians per second
-
-    // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26);
-    // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26);
-    // Distance between front and back wheels on robot
-    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
-
-    // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
-    public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
-    public static final boolean kGyroReversed = false;
-
-    // Copied from 6616
-    // Hold time on motor brakes when disabled
-    public static final double WHEEL_LOCK_TIME = 10; // seconds
-
-    // TODO: Update this value
-    public static final double GYRO_OFFSET = 0;
-
-    // Enum for auto-orienting to field directions
-    public enum Direction {
-      FORWARD, BACKWARD, LEFT, RIGHT
-    }
-  }
-
-  public static final class ModuleConstants {
-    // The MAXSwerve module can be configured with one of three pinion gears: 12T,
-    // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
-    // more teeth will result in a robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 12;
-
-    // Calculations required for driving motor conversion factors and feed forward
-    public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-    public static final double kWheelDiameterMeters = 0.07238;
-    public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
-    // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
-    // teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
-    public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
-        / kDrivingMotorReduction;
   }
 
   public static final class OIConstants {
@@ -192,12 +98,6 @@ public final class Constants {
 
   }
 
-  public static final class NeoMotorConstants {
-    public static final double kFreeSpeedRpm = 5676;
-  }
-
-  // all values with the value 8085 are placeholder as idk what im doing -Frank
-  // THIS IS FROM LAST YEARS CODE MAY NEED UPDATING
   public static final class MotorDefaultsConstants {
     public static final int NeoCurrentLimit = 40;
     public static final int NeoVortexCurrentLimit = 60;
@@ -205,6 +105,8 @@ public final class Constants {
     public static final MotorType NeoMotorType = MotorType.kBrushless;
     public static final MotorType Neo550MotorType = MotorType.kBrushless;
     public static final MotorType NeoVortexMotorType = MotorType.kBrushless;
+    public static final double NeoMotorFreeSpeedRpm = 5676;
+
   }
 
   public static final class Windmill {
@@ -279,71 +181,6 @@ public final class Constants {
       }
 
     }
-  }
-
-  public static final class AlgaeConstants {
-    public static final int algaeCurrentLimit = 20;
-    public static final double kAlgaeEjectSpeed = 1;
-    public static final double kAlgaeIntakeSpeed = 1;
-
-    // TEMPORARY VALUES
-    public static double kAlgaeMinOutput = -0.1;
-    public static double kAlgaeMaxOutput = 0.1;
-
-    // TEMPORARY VALUES
-    public static boolean kAlgaeInverted = true;
-    // TEMPORARY VALUES
-    public static int kAlgaePositionConversionFactor = 1000;
-    public static int kAlgaeVelocityConversionFactor = 1000;
-    // TEMPORARY VALUES
-    public static double kAlgaeP = .0001;
-    public static double kAlgaeI = 0.0;
-    public static double kAlgaeD = 0.0;
-    public static double kAlgaeFF = 0.0;
-
-    // Beam Break Sensor
-    public static int kIRPort = 4;
-
-    // Current Limit for Algae Stall
-    public static double kAlgaeCurrentLimit = 15;
-    public static double kAlgaeCurrentDebouncerTime = .2;
-
-  }
-
-  public static final class CoralConstants {
-    public static final int coralCurrentLimit = 40;
-    public static final double kCoralSpeed = 1;
-    public static final double kCoralSlowSpeed = .5;
-
-    // open loop motor values
-    public static double kCoralMinOutput = -0.25;
-    public static double kCoralMaxOutput = 0.25;
-
-    // direction motor runs
-    public static boolean kCoralInverted = true;
-
-    // PID not used
-    public static double kCoralP = 0.5;
-    public static double kCoralI = 0.0;
-    public static double kCoralD = 0.0;
-    public static double kCoralFF = 0.0;
-
-    // Beam Break Sensor
-    public static int kIRPort = 3;
-
-    // Current Limit for Coral Stall
-    public static double kCoralCurrentLimit = 20;
-  }
-
-  public static final class ClimberConstants {
-    public static double kWinchSpeed = 0.4;
-    public static double kWinchP = 0;
-    public static double kWinchI = 0;
-    public static double kWinchD = 0;
-    public static double kWinchFF = 0;
-    public static double kWinchMinOutput = 0;
-    public static double kWinchMaxOutput = 1;
-    public static double kWinchDeployPosition = 150;
   }
 
   public static final class CommandScoreConstants {

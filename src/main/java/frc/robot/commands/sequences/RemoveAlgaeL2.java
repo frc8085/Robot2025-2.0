@@ -1,6 +1,5 @@
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -10,9 +9,9 @@ import frc.robot.Constants;
 import frc.robot.commands.manipulator.algae.PickUpAlgae;
 import frc.robot.commands.windmill.Windmill;
 import frc.robot.commands.states.ToAlgaeL2;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Algae.AlgaeSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
 
 public class RemoveAlgaeL2 extends SequentialCommandGroup {
         public RemoveAlgaeL2(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Limelight;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -28,8 +28,14 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public LimelightSubsystem() {
         // Setting up the limelight pose
-        LimelightHelpers.setCameraPose_RobotSpace(m_limelightBlue, 0.2703, -.146, 0.2413, 0, 0, 110);
-        LimelightHelpers.setCameraPose_RobotSpace(m_limelightYellow, 0.2703, .146, 0.2413, 0, 0, -110);
+        LimelightHelpers.setCameraPose_RobotSpace(m_limelightBlue, LimelightConstants.limelightBlueForward,
+                LimelightConstants.limelightBlueSide, LimelightConstants.limelightBlueUp,
+                LimelightConstants.limelightBlueRoll, LimelightConstants.limelightBluePitch,
+                LimelightConstants.limelightBlueYaw);
+        LimelightHelpers.setCameraPose_RobotSpace(m_limelightYellow, LimelightConstants.limelightYellowForward,
+                LimelightConstants.limelightYellowSide, LimelightConstants.limelightYellowUp,
+                LimelightConstants.limelightYellowRoll, LimelightConstants.limelightYellowPitch,
+                LimelightConstants.limelightYellowYaw);
     }
 
     @Override

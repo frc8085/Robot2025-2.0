@@ -1,6 +1,11 @@
 package frc.robot.subsystems.Elevator;
 
 public final class ElevatorConstants {
+
+    // Elevator CanIDs
+    public static final int kElevatorCanId = 23;
+    public static final int kElevatorCancoderCanId = 33;
+
     public static final double kElevatorMotorGearRatio = 5;
     public static double kElevatorSpeed = .25;
     public static double kElevatorP = 4;

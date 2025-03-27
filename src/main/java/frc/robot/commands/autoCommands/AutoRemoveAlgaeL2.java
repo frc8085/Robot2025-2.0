@@ -3,12 +3,11 @@ package frc.robot.commands.autoCommands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.windmill.Windmill;
-import frc.robot.commands.manipulator.algae.PickUpAlgae;
 import frc.robot.commands.manipulator.algae.PickUpAlgaeCurrent;
 import frc.robot.commands.states.ToAlgaeL2;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Algae.AlgaeSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
 
 public class AutoRemoveAlgaeL2 extends SequentialCommandGroup {
         public AutoRemoveAlgaeL2(ElevatorSubsystem elevatorSubsystem,

@@ -3,14 +3,12 @@ package frc.robot.commands.manipulator.coral;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants;
-import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.Coral.*;
 
 // if command is interrupted before coral is picked up, kill command
 public class PickUpCoralCurrent extends Command {
         CoralSubsystem coralSubsystem;
         Debouncer debouncer = new Debouncer(.5, Debouncer.DebounceType.kRising);
-        private boolean coralPickedUp;
 
         public PickUpCoralCurrent(CoralSubsystem coralSubsystem) {
 
@@ -23,7 +21,6 @@ public class PickUpCoralCurrent extends Command {
         @Override
         public void initialize() {
                 System.out.println("Coral PickUp Started");
-                coralPickedUp = false;
         }
 
         @Override
@@ -47,7 +44,7 @@ public class PickUpCoralCurrent extends Command {
         @Override
         public boolean isFinished() {
                 return (debouncer
-                                .calculate(coralSubsystem.getCurrent() >= Constants.CoralConstants.kCoralCurrentLimit));
+                                .calculate(coralSubsystem.getCurrent() >= CoralConstants.kCoralCurrentLimit));
         }
 
 }

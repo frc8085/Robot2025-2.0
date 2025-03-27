@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -17,7 +17,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -29,37 +28,31 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.CanIdConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.DriveConstants.Direction;
-import frc.robot.Constants.FakeConstants;
-import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.States.DriveState;
-import frc.robot.utils.MAXSwerveModule;
-import frc.robot.utils.SwerveUtils;
+import frc.robot.subsystems.Limelight.LimelightHelpers;
+import frc.robot.subsystems.Limelight.LimelightHelpers.PoseEstimate;
 import choreo.trajectory.SwerveSample;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
-      CanIdConstants.kFrontLeftDrivingCanId,
-      CanIdConstants.kFrontLeftTurningCanId,
+      DriveConstants.kFrontLeftDrivingCanId,
+      DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
   private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
-      CanIdConstants.kFrontRightDrivingCanId,
-      CanIdConstants.kFrontRightTurningCanId,
+      DriveConstants.kFrontRightDrivingCanId,
+      DriveConstants.kFrontRightTurningCanId,
       DriveConstants.kFrontRightChassisAngularOffset);
 
   private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
-      CanIdConstants.kRearLeftDrivingCanId,
-      CanIdConstants.kRearLeftTurningCanId,
+      DriveConstants.kRearLeftDrivingCanId,
+      DriveConstants.kRearLeftTurningCanId,
       DriveConstants.kBackLeftChassisAngularOffset);
 
   private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
-      CanIdConstants.kRearRightDrivingCanId,
-      CanIdConstants.kRearRightTurningCanId,
+      DriveConstants.kRearRightDrivingCanId,
+      DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
   // Drive PIDS
@@ -78,7 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
   private PIDController headingController = new PIDController(kRotP, kRotI, kRotD, 0.02);
 
   // The gyro sensor
-  private final Pigeon2 m_gyro = new Pigeon2(CanIdConstants.kGyroCanId);
+  private final Pigeon2 m_gyro = new Pigeon2(DriveConstants.kGyroCanId);
 
   // This section was copied from 2024 code, I think for auto
   public Field2d field = new Field2d();
@@ -263,49 +256,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("robot heading", getHeading());
     SmartDashboard.putNumber("robot wrapped heading", getHeadingWrappedDegrees());
-    SmartDashboard.putBoolean("fieldRelative", FakeConstants.fieldRelative);
+    SmartDashboard.putBoolean("fieldRelative", DriveConstants.FakeConstants.fieldRelative);
     double[] poseData = { this.getPose().getX(), this.getPose().getY(), this.getPose().getRotation().getRadians() };
     SmartDashboard.putNumberArray("Robot Pose", poseData);
-  }
-
-  // Copying code from 6616 for limelight and orienting
-  /**
-   * Method to drive the robot while it adjusts to a specified orientation.
-   *
-   * @param xSpeed
-   *                  Speed of the robot in the x direction (forward).
-   * @param ySpeed
-   *                  Speed of the robot in the y direction (sideways).
-   * @param direction
-   *                  Direction to orient front of robot towards.
-   */
-  public void driveAndOrient(double speed, double xSpeed, double ySpeed, Direction direction) {
-    this.driveAndOrient(speed, xSpeed, ySpeed,
-        SwerveUtils.normalizeAngle(SwerveUtils.directionToAngle(direction, this.getHeading())));
-  }
-
-  /**
-   * Method to drive the robot while it adjusts to a specified orientation.
-   *
-   * @param xSpeed
-   *                      Speed of the robot in the x direction (forward).
-   * @param ySpeed
-   *                      Speed of the robot in the y direction (sideways).
-   * @param targetHeading
-   *                      Target heading (angle) robot should face
-   */
-  public void driveAndOrient(double speed, double xSpeed, double ySpeed, double target) {
-    double currentHeading = this.getHeading();
-    double targetHeading = SwerveUtils.normalizeAngle(target);
-
-    // The left stick controls translation of the robot.
-    // Automatically turn to face the supplied heading
-    this.drive(
-        speed,
-        xSpeed,
-        ySpeed,
-        this.orientationController.calculate(currentHeading, targetHeading),
-        true);
   }
 
   public void followTrajectory(SwerveSample sample) {
