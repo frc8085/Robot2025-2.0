@@ -8,11 +8,11 @@ import frc.robot.commands.movement.AngleToBarge;
 import frc.robot.commands.states.ToAlgaeNet;
 import frc.robot.commands.states.ToAlgaeNetRaise;
 import frc.robot.commands.states.ToHomeCommand;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Algae.AlgaeSubsystem;
+import frc.robot.subsystems.Coral.CoralSubsystem;
+import frc.robot.subsystems.Drive.DriveSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
 
 public class ScoreAlgaeNet extends SequentialCommandGroup {
         public ScoreAlgaeNet(

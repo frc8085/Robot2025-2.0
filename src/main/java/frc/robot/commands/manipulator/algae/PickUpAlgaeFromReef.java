@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.states.ToAlgaeL2;
 import frc.robot.commands.states.ToAlgaeL3;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Algae.AlgaeSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
 import frc.robot.commands.windmill.Windmill;
 
 public class PickUpAlgaeFromReef extends SequentialCommandGroup {

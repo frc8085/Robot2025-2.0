@@ -4,12 +4,15 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.*;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
@@ -30,12 +33,11 @@ public class PivotSubsystem extends SubsystemBase {
     CANcoderConfiguration m_pivotEncoderConfig = new CANcoderConfiguration();
     TalonFXConfiguration m_pivotMotorConfig = new TalonFXConfiguration();
 
-    // The gyro sensor
-    private final Pigeon2 m_pivotGyro = new Pigeon2(PivotArmConstants.kPivotGyroCanId);
-
     private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
     private MotionMagicVelocityVoltage motionMagicVelocityControl = new MotionMagicVelocityVoltage(0);
+
+    private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
     public PivotSubsystem() {
 
@@ -66,6 +68,16 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotorConfig.MotionMagic.MotionMagicAcceleration = PivotArmConstants.kPivotArmMMAcc;
         m_pivotMotorConfig.MotionMagic.MotionMagicJerk = PivotArmConstants.kPivotArmMMJerk;
 
+        /* Current Limiting for the arm */
+        m_currentLimits.SupplyCurrentLimit = 30; // Limit to 30 amps
+        m_currentLimits.SupplyCurrentLowerLimit = 50; // If we exceed 50 amps
+        m_currentLimits.SupplyCurrentLowerTime = 0.1; // For at least 0.1 second
+        m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
+
+        m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 60 amps
+        m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
+        m_pivotMotorConfig.CurrentLimits = m_currentLimits;
+
         pivotArmPosition = m_pivotMotor.getPosition();
         pivotArmVelocity = m_pivotMotor.getVelocity();
         pivotEncoderPosition = m_pivotEncoder.getPosition();
@@ -73,35 +85,6 @@ public class PivotSubsystem extends SubsystemBase {
         m_pivotMotor.getConfigurator().apply(m_pivotMotorConfig);
         m_pivotMotor.getConfigurator().apply(slot0Configs);
 
-    }
-
-    public double getPivotArmAngle() {
-        return Rotation2d.fromDegrees(m_pivotGyro.getPitch().getValueAsDouble()).getDegrees();
-    }
-
-    public boolean atHomeAngle() {
-        if ((getPivotArmAngle()) == -25) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean lessThanHomeAngle() {
-        if ((getPivotArmAngle()) < -25) {
-            return true;
-
-        } else {
-            return false;
-        }
-    }
-
-    public boolean moreThanHomeAngle() {
-        if ((getPivotArmAngle()) >= -25) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     // Pivot Angle Checks
@@ -195,11 +178,11 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     private Rotation2d motorPosToAngle(double pos) {
-        return Rotation2d.fromRotations(pos / PivotArmConstants.kPivotMotorGearRatio);
+        return new Rotation2d(pos * PivotArmConstants.MOTOR_POSITION_TO_ANGLE_SCALING_FACTOR);
     }
 
     private double angleToMotorPos(Rotation2d angle) {
-        return angle.getRotations() * PivotArmConstants.kPivotMotorGearRatio;
+        return angle.getRadians() / PivotArmConstants.MOTOR_POSITION_TO_ANGLE_SCALING_FACTOR;
     }
 
     public void setPos(Rotation2d angle) {
@@ -229,14 +212,6 @@ public class PivotSubsystem extends SubsystemBase {
 
     }
 
-    public void setRotorPos(Rotation2d angle) {
-        m_pivotMotor.setPosition(angle.getRotations());
-    }
-
-    public void setAnglePos(Rotation2d angle) {
-        m_pivotMotor.setPosition(angle.getRotations() * PivotArmConstants.kPivotMotorGearRatio);
-    }
-
     public double getCurrentPosition() {
         pivotArmPosition.refresh();
         return pivotArmPosition.getValueAsDouble();
@@ -264,21 +239,11 @@ public class PivotSubsystem extends SubsystemBase {
 
     public void periodic() {
         if (TuningModeConstants.kPivotTuning) {
-            // Get motor readings
-            // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-            SmartDashboard.putNumber("currentAngle", getCurrentRotation().getDegrees());
-            // SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
-            SmartDashboard.putNumber("CancoderReading", getCurrentEncoderPosition());
+            SmartDashboard.putNumber("Pivot Arm Angle", motorPosToAngle(getCurrentPosition()).getDegrees());
+            // SmartDashboard.putNumber("CancoderReading", getCurrentEncoderPosition());
+            // SmartDashboard.putNumber("Motor Position", getCurrentPosition());
         }
 
-    }
-
-    public void zeroStart() {
-        m_pivotMotor.set(0.04);
-    }
-
-    public void zeroReverse() {
-        m_pivotMotor.set(-0.04);
     }
 
     public void start() {
@@ -295,11 +260,18 @@ public class PivotSubsystem extends SubsystemBase {
 
     // checks whether the pivot arm is in the danger zone for the elevator at target
     // angle GOOD
+    // public boolean targetInDangerZone(Rotation2d targetAngle) {
+    // return targetAngle.getDegrees() >
+    // PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
+    // + PivotArmConstants.kPivotTolerance.getDegrees()
+    // && targetAngle.getDegrees() <
+    // PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
+    // - PivotArmConstants.kPivotTolerance.getDegrees();
+    // }
+
+    // attemping new targetInDangerZone
     public boolean targetInDangerZone(Rotation2d targetAngle) {
-        return targetAngle.getDegrees() > PivotArmConstants.kPivotArmSwingThroughMin.getDegrees()
-                + PivotArmConstants.kPivotTolerance.getDegrees()
-                && targetAngle.getDegrees() < PivotArmConstants.kPivotArmSwingThroughMax.getDegrees()
-                        - PivotArmConstants.kPivotTolerance.getDegrees();
+        return Math.abs(targetAngle.getDegrees()) < 5;
     }
 
     public boolean inDangerZone() {

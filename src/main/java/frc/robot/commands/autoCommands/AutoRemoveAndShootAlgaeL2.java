@@ -11,10 +11,10 @@ import frc.robot.commands.manipulator.algae.PickUpAlgae;
 import frc.robot.commands.manipulator.coral.DropCoral;
 import frc.robot.commands.manipulator.coral.EjectCoral;
 import frc.robot.commands.states.ToAlgaeL2;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Algae.AlgaeSubsystem;
+import frc.robot.subsystems.Coral.CoralSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
 
 public class AutoRemoveAndShootAlgaeL2 extends SequentialCommandGroup {
         public AutoRemoveAndShootAlgaeL2(ElevatorSubsystem elevatorSubsystem,
@@ -30,7 +30,7 @@ public class AutoRemoveAndShootAlgaeL2 extends SequentialCommandGroup {
                                                                 new WaitCommand(1),
                                                                 new DropCoral(coralSubsystem, elevatorSubsystem,
                                                                                 pivotSubsystem)),
-                                                                                new WaitCommand(10)),
+                                                new WaitCommand(10)),
                                 new WaitCommand(.25),
                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                 Constants.Windmill.WindmillState.Home, false),

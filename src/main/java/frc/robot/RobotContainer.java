@@ -23,15 +23,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autoCommands.ChoreoAutoCenterBarge;
+import frc.robot.commands.autoCommands.ChoreoAutoOppoToL4;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
 import frc.robot.io.IO;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Algae.AlgaeSubsystem;
+import frc.robot.subsystems.Climber.ClimberSubsystem;
+import frc.robot.subsystems.Coral.CoralSubsystem;
+import frc.robot.subsystems.Drive.DriveSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Limelight.LimelightSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -99,7 +100,11 @@ public class RobotContainer {
 
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
-                autoChooser.addOption("CenterBarge", new ChoreoAutoCenterBarge(this.drivetrain));
+                autoChooser.addOption("CenterBarge",
+                                new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator, this.algae,
+                                                this.coral));
+                autoChooser.addOption("ChoreoOppoBarge", new ChoreoAutoOppoToL4(this.drivetrain, this.algae,
+                                this.elevator, this.pivot, this.coral));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 

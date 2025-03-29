@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TuningModeConstants;
-import frc.robot.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
     private boolean TUNING_MODE = TuningModeConstants.kLimelightTuning;

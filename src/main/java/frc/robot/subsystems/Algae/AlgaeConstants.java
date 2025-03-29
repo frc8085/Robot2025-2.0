@@ -1,6 +1,9 @@
 package frc.robot.subsystems.Algae;
 
 public final class AlgaeConstants {
+
+    public static final int kAlgaeCanId = 22;
+
     public static final int algaeCurrentLimit = 20;
     public static final double kAlgaeEjectSpeed = 1;
     public static final double kAlgaeIntakeSpeed = 1;

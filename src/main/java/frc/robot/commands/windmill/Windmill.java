@@ -127,10 +127,12 @@ public class Windmill extends Command {
 
                 else {
                         commands.addCommands(
-                                        new SequentialCommandGroup(
+                                        new ParallelCommandGroup(
                                                         new Elevator(elevatorSubsystem, targetHeight),
-                                                        new WaitUntilCommand(() -> !elevatorSubsystem.inDangerZone()),
-                                                        new Pivot(pivotSubsystem, targetAngle)));
+                                                        new SequentialCommandGroup(
+                                                                        new WaitUntilCommand(
+                                                                                        elevatorSubsystem::isSafeToPivot),
+                                                                        new Pivot(pivotSubsystem, targetAngle))));
 
                 }
 

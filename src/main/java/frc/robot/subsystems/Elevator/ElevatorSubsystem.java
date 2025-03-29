@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Elevator;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -28,7 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // CAN ID and CANbus
   private final TalonFX m_elevatorMotor = new TalonFX(ElevatorConstants.kElevatorCanId, "rio");
-  TalonFXConfiguration config = new TalonFXConfiguration();
+  TalonFXConfiguration m_elevatorMotorConfig = new TalonFXConfiguration();
   private final CANcoder m_elevatorEncoder = new CANcoder(ElevatorConstants.kElevatorCancoderCanId);
 
   // get encoder data
@@ -38,6 +39,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
   private MotionMagicVelocityVoltage motionMagicVelocityControl = new MotionMagicVelocityVoltage(0);
+
+  private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
   // Limit Switches
   DigitalInput topLimitSwitch = new DigitalInput(0);
@@ -71,22 +74,34 @@ public class ElevatorSubsystem extends SubsystemBase {
     slot0Configs.kD = ElevatorConstants.kElevatorD;
     slot0Configs.kV = ElevatorConstants.kElevatorV;
     slot0Configs.kA = ElevatorConstants.kElevatorA;
+    slot0Configs.kG = ElevatorConstants.kElevatorG;
+    slot0Configs.kS = ElevatorConstants.kElevatorS;
 
     // Setting Motor Configs
-    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    m_elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    m_elevatorMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Setting Motion Magic Configs
-    config.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kElevatorMMVelo;
-    config.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorMMAcc;
-    config.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorMMJerk;
+    m_elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kElevatorMMVelo;
+    m_elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorMMAcc;
+    m_elevatorMotorConfig.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorMMJerk;
+
+    /* Current Limiting for the elevator */
+    m_currentLimits.SupplyCurrentLimit = 30; // Limit to 30 amps
+    m_currentLimits.SupplyCurrentLowerLimit = 50; // If we exceed 50 amps
+    m_currentLimits.SupplyCurrentLowerTime = 0.1; // For at least 0.1 second
+    m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
+
+    m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 60 amps
+    m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
+    m_elevatorMotorConfig.CurrentLimits = m_currentLimits;
 
     // get sensor readings
     elevatorPosition = m_elevatorMotor.getPosition();
     elevatorVelocity = m_elevatorEncoder.getVelocity();
 
     // Apply Configs
-    m_elevatorMotor.getConfigurator().apply(config);
+    m_elevatorMotor.getConfigurator().apply(m_elevatorMotorConfig);
     m_elevatorMotor.getConfigurator().apply(slot0Configs);
 
   }
@@ -137,6 +152,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean targetInDangerZone(double target_position) {
     return target_position < (ElevatorConstants.kElevatorSafeHeightMax);
+  }
+
+  public boolean isSafeToPivot() {
+    return getCurrentMotorPosition() >= 50;
   }
 
   public boolean elevatorAtAlgaeScoreHeight() {

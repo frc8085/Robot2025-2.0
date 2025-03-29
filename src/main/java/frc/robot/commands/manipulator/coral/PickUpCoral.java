@@ -1,7 +1,7 @@
 package frc.robot.commands.manipulator.coral;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.Coral.CoralSubsystem;
 
 // if command is interrupted before coral is picked up, kill command
 public class PickUpCoral extends Command {

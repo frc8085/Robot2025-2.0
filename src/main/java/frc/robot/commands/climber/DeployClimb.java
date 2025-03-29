@@ -1,7 +1,7 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.Climber.ClimberSubsystem;
 
 // if command is interrupted before algae is picked up, kill command
 public class DeployClimb extends Command {

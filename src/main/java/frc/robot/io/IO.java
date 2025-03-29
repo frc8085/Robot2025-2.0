@@ -3,29 +3,25 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.FakeConstants;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.windmill.*;
 import frc.robot.commands.scoring.*;
-import frc.robot.commands.sequences.RemoveAlgaeL2;
 import frc.robot.commands.sequences.RemoveAlgaeL2noCoral;
-import frc.robot.commands.sequences.RemoveAlgaeL3;
 import frc.robot.commands.sequences.RemoveAlgaeL3noCoral;
 import frc.robot.commands.manipulator.coral.*;
 import frc.robot.commands.manipulator.algae.*;
-import frc.robot.commands.movement.*;
 import frc.robot.commands.states.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.windmill.elevator.*;
+import frc.robot.subsystems.Drive.DriveConstants;
 
 public class IO {
 
@@ -92,8 +88,12 @@ public class IO {
                 limelightTrigger1.onTrue(new SwerveDriveTargetReef(robotContainer.drivetrain, true)).onFalse(
                                 new SwerveDriveTeleop(robotContainer.drivetrain));
                 limelightTrigger2.onTrue(
-                                new SwerveDriveTargetReef(robotContainer.drivetrain, false)).onFalse(
+                                new SwerveDriveAlignBarge(robotContainer.drivetrain)).onFalse(
                                                 new SwerveDriveTeleop(robotContainer.drivetrain));
+
+                // limelightTrigger2.onTrue(
+                // new SwerveDriveTargetReef(robotContainer.drivetrain, false)).onFalse(
+                // new SwerveDriveTeleop(robotContainer.drivetrain));
                 // limelightTrigger1.onTrue(new SequentialCommandGroup(
                 // new ParallelRaceGroup(new WaitCommand(2),
                 // new AlignToAprilTagBlue(robotContainer.drivetrain,
@@ -108,10 +108,10 @@ public class IO {
                 // new SwerveDriveTeleop(robotContainer.drivetrain));
 
                 gorobotrelative.onTrue(new InstantCommand(() -> {
-                        if (FakeConstants.fieldRelative) {
-                                FakeConstants.fieldRelative = false;
+                        if (DriveConstants.FakeConstants.fieldRelative) {
+                                DriveConstants.FakeConstants.fieldRelative = false;
                         } else {
-                                FakeConstants.fieldRelative = true;
+                                DriveConstants.FakeConstants.fieldRelative = true;
                         }
                 }));
 
@@ -131,9 +131,9 @@ public class IO {
                                                 robotContainer.pivot, true));
 
                 ejectAlgae.onTrue(new EjectAlgae(robotContainer.algae));
-                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNet(robotContainer.algae,
+                shootAlgaeNetBlue.onTrue(new ScoreAlgaeNetNoTurn(robotContainer.algae,
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
-                                robotContainer.drivetrain, false));
+                                false));
                 // shootAlgaeNetBlue.and(altButtonDriver).onTrue(new
                 // ScoreAlgaeNetNoTurn(robotContainer.algae,
                 // robotContainer.elevator, robotContainer.pivot, robotContainer.coral,
@@ -158,7 +158,8 @@ public class IO {
                                                 new ToHomeCommand(robotContainer.elevator, robotContainer.pivot)));
 
                 manualAlgae.onTrue(new RunCommand(() -> robotContainer.algae.pickup(), robotContainer.algae))
-                                .onFalse(new InstantCommand(robotContainer.algae::holdAlgae));
+                                .onFalse(new InstantCommand(() -> robotContainer.algae.holdAlgae(),
+                                                robotContainer.algae));
 
                 toggleClimber.toggleOnTrue(new ConditionalCommand(
                                 new DeployClimb(robotContainer.climber),
@@ -196,7 +197,10 @@ public class IO {
 
                 coralDropOff3.onTrue(new ToCoralDropOff3(robotContainer.elevator, robotContainer.pivot, false));
 
-                coralDropOff4.onTrue(new ScoreCoralL4(robotContainer.elevator, robotContainer.pivot,
+                // coralDropOff4.onTrue(new ToCoralDropOff4(robotContainer.elevator,
+                // robotContainer.pivot, false));
+                coralDropOff4.onTrue(new ScoreCoralL4(robotContainer.elevator,
+                                robotContainer.pivot,
                                 robotContainer.coral, false));
 
                 algaeReef3.and(altButtonOperator).onTrue(
