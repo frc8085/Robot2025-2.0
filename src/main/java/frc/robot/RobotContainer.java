@@ -32,11 +32,12 @@ public class RobotContainer {
 
         public final PivotSubsystem pivot = new PivotSubsystem();
         public final DriveSubsystem drivetrain = new DriveSubsystem();
-        public final CoralSubsystem coral = new CoralSubsystem();
-        public final ElevatorSubsystem elevator = new ElevatorSubsystem();
-        public final ClimberSubsystem climber = new ClimberSubsystem();
-        public final AlgaeSubsystem algae = new AlgaeSubsystem();
-        public final LimelightSubsystem limelight = new LimelightSubsystem();
+        // public final CoralSubsystem coral = new CoralSubsystem();
+        // public final ElevatorSubsystem elevator = new ElevatorSubsystem();
+        // public final ClimberSubsystem climber = new ClimberSubsystem();
+        // public final AlgaeSubsystem algae = new AlgaeSubsystem();
+        // public final LimelightSubsystem limelight = new LimelightSubsystem();
+        public final IntakeSubsystem intake = new IntakeSubsystem();
 
         private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
@@ -44,23 +45,23 @@ public class RobotContainer {
         private final Field2d field;
 
         // Register Named Commands for PathPlanner
-        private void configureAutoCommands() {
-                NamedCommands.registerCommand("InitializePE",
-                                new InitializePivotAndElevator(this.pivot, this.elevator));
-                NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
-                                new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
-                NamedCommands.registerCommand("AutoAlgaeL2",
-                                new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
-                NamedCommands.registerCommand("AutoAlgaeNetBlue",
-                                new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
-                NamedCommands.registerCommand("AutoBCoral4",
-                                new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
-                                                this.drivetrain, false));
-                NamedCommands.registerCommand("AutoToHome", new AutoToHomeCommand(this.elevator, pivot));
-                NamedCommands.registerCommand("AutoCoralSource",
-                                new AutoCoralPickup(this.elevator, this.pivot, this.coral));
+        // private void configureAutoCommands() {
+        //         NamedCommands.registerCommand("InitializePE",
+        //                         new InitializePivotAndElevator(this.pivot, this.elevator));
+        //         NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
+        //                         new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
+        //         NamedCommands.registerCommand("AutoAlgaeL2",
+        //                         new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
+        //         NamedCommands.registerCommand("AutoAlgaeNetBlue",
+        //                         new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
+        //         NamedCommands.registerCommand("AutoBCoral4",
+        //                         new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
+        //                                         this.drivetrain, false));
+        //         NamedCommands.registerCommand("AutoToHome", new AutoToHomeCommand(this.elevator, pivot));
+        //         NamedCommands.registerCommand("AutoCoralSource",
+        //                         new AutoCoralPickup(this.elevator, this.pivot, this.coral));
 
-        }
+        // }
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -70,7 +71,7 @@ public class RobotContainer {
                 configureButtonBindings();
 
                 // Register Named Commands for Pathplanner
-                configureAutoCommands();
+                // configureAutoCommands();
 
                 // Configure default commands
                 this.drivetrain.setDefaultCommand(

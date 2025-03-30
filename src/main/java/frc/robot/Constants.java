@@ -48,6 +48,10 @@ public final class Constants {
     public static final int kElevatorCancoderCanID = 33;
     public static final int kPivotArmCancoderCanID = 35;
 
+    public static final int kIntakeDeployCanId = 27;
+    public static final int kIntakeOuterRollerCanId = 28;
+    public static final int kIntakeInnerRollerCanId = 29;
+
     // Drive SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1;
     public static final int kRearLeftDrivingCanId = 3;
@@ -256,6 +260,23 @@ public final class Constants {
 
     // the Elevator tolerance
     public static final double kElevatorTolerance = 5;
+  }
+
+  public static final class IntakeConstants {
+    public static final double kIntakeSpeed = 1;
+    public static final double kIntakeInnerSpeed = 1;
+
+        public static final double kIntakeDeployP = 1.4; // 0.7
+    public static final double kIntakeDeployI = 0; // 0.0
+    public static final double kIntakeDeployD = 0.1; // 0.1
+    public static final double kIntakeDeployS = 0.07;
+    public static final double kIntakeDeployV = 0.2; // 0.2
+    public static final double kIntakeDeployA = 0.015; // 0.015
+
+    public static final Rotation2d kIntakeInAngle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d kIntakeOutAngle = Rotation2d.fromDegrees(180);
+
+    public static final Rotation2d kIntakeTolerance = Rotation2d.fromDegrees(2);
   }
 
   public static final class PivotArmConstants {
