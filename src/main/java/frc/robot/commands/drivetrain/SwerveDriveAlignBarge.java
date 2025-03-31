@@ -4,23 +4,32 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Drive.DriveSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDriveAlignBarge extends Command {
 
     private DriveSubsystem driveSubsystem;
     private Pose2d targetPose;
-    private double kXYP = 0.5;
-    private double kXYI = 0;
-    private double kXYD = 0;
-    private double kRotP = 1.5;
-    private double kRotI = 0;
-    private double kRotD = 0;
+    // private double kXYP = 0.5;
+    // private double kXYI = 0;
+    // private double kXYD = 0;
+    // private double kRotP = 1.5;
+    // private double kRotI = 0;
+    // private double kRotD = 0;
     // x pid, y pid, and rotation pid
+    private double kXP = 0.75; // 0.5
+    private double kXI = 0;
+    private double kXD = 0.1; // 0.1
+    private double kYP = 0.75; // 0.5
+    private double kYI = 0;
+    private double kYD = 0.1; // 0.1
+    private double kRotP = 1.7; // 3
+    private double kRotI = 0;
+    private double kRotD = 0.25; // 0.5
 
-    private PIDController xPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
-    private PIDController yPid = new PIDController(kXYP, kXYI, kXYD, 0.02);
+    private PIDController xPid = new PIDController(kXP, kXI, kXD, 0.02);
+    private PIDController yPid = new PIDController(kXP, kXI, kXD, 0.02);
     private PIDController rotPid = new PIDController(kRotP, kRotI, kRotD, 0.02);
 
     public SwerveDriveAlignBarge(DriveSubsystem driveSubsystem) {
@@ -34,7 +43,7 @@ public class SwerveDriveAlignBarge extends Command {
         Pose2d currentPose = this.driveSubsystem.getPose(); // get the current pose of the robot
         double targetX = 7.4; // Enter in the target X -- where we want the robot to end up - replace with
                               // correct number
-        Rotation2d targetRot = Rotation2d.fromDegrees(-30); // This is the final rotation we want to be at
+        Rotation2d targetRot = Rotation2d.fromDegrees(-80); // This is the final rotation we want to be at
 
         // We want to go to specified X and current Y
         this.targetPose = new Pose2d(targetX, currentPose.getTranslation().getY(), targetRot);

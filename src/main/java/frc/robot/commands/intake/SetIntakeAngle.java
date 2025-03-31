@@ -1,9 +1,9 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 
 public class SetIntakeAngle extends Command {
     private final Rotation2d m_targetAngle;

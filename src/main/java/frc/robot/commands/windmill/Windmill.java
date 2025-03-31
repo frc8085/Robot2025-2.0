@@ -6,15 +6,15 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.commands.windmill.pivot.*;
 import frc.robot.commands.windmill.elevator.*;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.Constants.Windmill.WindmillState;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 public class Windmill extends Command {
 
@@ -106,7 +106,7 @@ public class Windmill extends Command {
                                         new ParallelCommandGroup(
                                                         new Pivot(pivotSubsystem, targetAngle),
                                                         new Elevator(elevatorSubsystem,
-                                                                        Constants.ElevatorConstants.kElevatorSafeHeightMax)),
+                                                                        ElevatorConstants.kElevatorSafeHeightMax)),
                                         new WaitUntilCommand(() -> !pivotSubsystem.inDangerZone()),
                                         new Elevator(elevatorSubsystem, targetHeight));
 
@@ -118,7 +118,7 @@ public class Windmill extends Command {
                         commands.addCommands(
                                         new SequentialCommandGroup(
                                                         new Elevator(elevatorSubsystem,
-                                                                        Constants.ElevatorConstants.kElevatorSafeHeightMax),
+                                                                        ElevatorConstants.kElevatorSafeHeightMax),
                                                         new Pivot(pivotSubsystem, targetAngle),
                                                         new Elevator(elevatorSubsystem, targetHeight)));
                 }

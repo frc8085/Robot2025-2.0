@@ -15,11 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autoCommands.*;
-import frc.robot.commands.windmill.InitializePivotAndElevator;
+// import frc.robot.commands.windmill.InitializePivotAndElevator;
 import frc.robot.commands.drivetrain.SwerveDriveTeleop;
-import frc.robot.commands.scoring.ScoreCoralL4WithWheelLock;
+// import frc.robot.commands.scoring.ScoreCoralL4WithWheelLock;
 import frc.robot.io.IO;
+import frc.robot.subsystems.Pivot.PivotSubsystem;
+import frc.robot.subsystems.Climber.ClimberSubsystem;
+import frc.robot.subsystems.Drive.DriveSubsystem;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.EndEffector.EndEffectorSubsystem;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -33,33 +39,37 @@ public class RobotContainer {
         public final PivotSubsystem pivot = new PivotSubsystem();
         public final DriveSubsystem drivetrain = new DriveSubsystem();
         // public final CoralSubsystem coral = new CoralSubsystem();
-        // public final ElevatorSubsystem elevator = new ElevatorSubsystem();
-        // public final ClimberSubsystem climber = new ClimberSubsystem();
+        public final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
+        public final ElevatorSubsystem elevator = new ElevatorSubsystem();
+        public final ClimberSubsystem climber = new ClimberSubsystem();
         // public final AlgaeSubsystem algae = new AlgaeSubsystem();
         // public final LimelightSubsystem limelight = new LimelightSubsystem();
         public final IntakeSubsystem intake = new IntakeSubsystem();
 
-        private final SendableChooser<Command> autoChooser;
+        // private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
 
         private final Field2d field;
 
         // Register Named Commands for PathPlanner
         // private void configureAutoCommands() {
-        //         NamedCommands.registerCommand("InitializePE",
-        //                         new InitializePivotAndElevator(this.pivot, this.elevator));
-        //         NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
-        //                         new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
-        //         NamedCommands.registerCommand("AutoAlgaeL2",
-        //                         new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae, this.coral));
-        //         NamedCommands.registerCommand("AutoAlgaeNetBlue",
-        //                         new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot, this.coral));
-        //         NamedCommands.registerCommand("AutoBCoral4",
-        //                         new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
-        //                                         this.drivetrain, false));
-        //         NamedCommands.registerCommand("AutoToHome", new AutoToHomeCommand(this.elevator, pivot));
-        //         NamedCommands.registerCommand("AutoCoralSource",
-        //                         new AutoCoralPickup(this.elevator, this.pivot, this.coral));
+        // NamedCommands.registerCommand("InitializePE",
+        // new InitializePivotAndElevator(this.pivot, this.elevator));
+        // NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
+        // new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
+        // NamedCommands.registerCommand("AutoAlgaeL2",
+        // new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae,
+        // this.coral));
+        // NamedCommands.registerCommand("AutoAlgaeNetBlue",
+        // new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot,
+        // this.coral));
+        // NamedCommands.registerCommand("AutoBCoral4",
+        // new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
+        // this.drivetrain, false));
+        // NamedCommands.registerCommand("AutoToHome", new
+        // AutoToHomeCommand(this.elevator, pivot));
+        // NamedCommands.registerCommand("AutoCoralSource",
+        // new AutoCoralPickup(this.elevator, this.pivot, this.coral));
 
         // }
 
@@ -79,9 +89,9 @@ public class RobotContainer {
                                 new SwerveDriveTeleop(this.drivetrain));
 
                 // Another option that allows you to specify the default auto by its name
-                autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
+                // autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
 
-                SmartDashboard.putData("Auto Chooser", autoChooser);
+                // SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 field = new Field2d();
                 SmartDashboard.putData("Field", field);
@@ -111,9 +121,9 @@ public class RobotContainer {
          *
          * @return the command to run in autonomous
          */
-        public Command getAutonomousCommand() {
-                return autoChooser.getSelected();
-        }
+        // public Command getAutonomousCommand() {
+        // return autoChooser.getSelected();
+        // }
 
         // public Command rumbleDriverCommand() {
         // return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(()
