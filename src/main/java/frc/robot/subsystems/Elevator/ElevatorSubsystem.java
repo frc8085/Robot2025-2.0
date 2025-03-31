@@ -168,61 +168,71 @@ public class ElevatorSubsystem extends SubsystemBase {
         + ElevatorConstants.kElevatorTolerance));
   }
 
-  public boolean elevatorAtCoralDropOff1Height() {
-    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff1Height
-        - ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff1Height
-            + ElevatorConstants.kElevatorTolerance)));
-  }
+  // public boolean elevatorAtCoralDropOff1Height() {
+  // return ((getCurrentMotorPosition() >=
+  // (ElevatorConstants.kElevatorCoralDropOff1Height
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <=
+  // (ElevatorConstants.kElevatorCoralDropOff1Height
+  // + ElevatorConstants.kElevatorTolerance)));
+  // }
 
-  public boolean elevatorAtCoralDropOff2Height() {
-    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff2Height
-        - ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff2Height
-            + ElevatorConstants.kElevatorTolerance)));
-  }
+  // public boolean elevatorAtCoralDropOff2Height() {
+  // return ((getCurrentMotorPosition() >=
+  // (ElevatorConstants.kElevatorCoralDropOff2Height
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <=
+  // (ElevatorConstants.kElevatorCoralDropOff2Height
+  // + ElevatorConstants.kElevatorTolerance)));
+  // }
 
-  public boolean elevatorAtCoralDropOff3Height() {
-    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff3Height
-        - ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff3Height
-            + ElevatorConstants.kElevatorTolerance)));
-  }
+  // public boolean elevatorAtCoralDropOff3Height() {
+  // return ((getCurrentMotorPosition() >=
+  // (ElevatorConstants.kElevatorCoralDropOff3Height
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <=
+  // (ElevatorConstants.kElevatorCoralDropOff3Height
+  // + ElevatorConstants.kElevatorTolerance)));
+  // }
 
-  public boolean elevatorAtCoralDropOff4Height() {
-    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff4Height
-        - ElevatorConstants.kElevatorTolerance))
-        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff4Height
-            + ElevatorConstants.kElevatorTolerance)));
-  }
+  // public boolean elevatorAtCoralDropOff4Height() {
+  // return ((getCurrentMotorPosition() >=
+  // (ElevatorConstants.kElevatorCoralDropOff4Height
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <=
+  // (ElevatorConstants.kElevatorCoralDropOff4Height
+  // + ElevatorConstants.kElevatorTolerance)));
+  // }
 
-  public boolean elevatorAtAlgaeReefL2(boolean yellow) {
-    if (!yellow) {
-      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef2Height
-          - ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2Height
-              + ElevatorConstants.kElevatorTolerance)));
-    } else {
-      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef2FlipHeight
-          - ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2FlipHeight
-              + ElevatorConstants.kElevatorTolerance)));
-    }
-  }
+  // public boolean elevatorAtAlgaeReefL2(boolean yellow) {
+  // if (!yellow) {
+  // return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef2Height
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2Height
+  // + ElevatorConstants.kElevatorTolerance)));
+  // } else {
+  // return ((getCurrentMotorPosition() >=
+  // (ElevatorConstants.kElevatorReef2FlipHeight
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2FlipHeight
+  // + ElevatorConstants.kElevatorTolerance)));
+  // }
+  // }
 
-  public boolean elevatorAtAlgaeReefL3(boolean yellow) {
-    if (!yellow) {
-      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef3Height
-          - ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3Height
-              + ElevatorConstants.kElevatorTolerance)));
-    } else {
-      return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef3FlipHeight
-          - ElevatorConstants.kElevatorTolerance))
-          && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3FlipHeight
-              + ElevatorConstants.kElevatorTolerance)));
-    }
-  }
+  // public boolean elevatorAtAlgaeReefL3(boolean yellow) {
+  // if (!yellow) {
+  // return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef3Height
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3Height
+  // + ElevatorConstants.kElevatorTolerance)));
+  // } else {
+  // return ((getCurrentMotorPosition() >=
+  // (ElevatorConstants.kElevatorReef3FlipHeight
+  // - ElevatorConstants.kElevatorTolerance))
+  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3FlipHeight
+  // + ElevatorConstants.kElevatorTolerance)));
+  // }
+  // }
 
   public double minConflictHeight(Rotation2d target_angle) {
     var deg = Math.abs(target_angle.getDegrees());

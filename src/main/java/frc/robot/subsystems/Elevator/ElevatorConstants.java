@@ -28,21 +28,21 @@ public final class ElevatorConstants {
     public static double kElevatorHomeHeight = 30;
     public static double kElevatorAutoTravelHeight = 64;
     public static double kElevatorAlgaeHoldHeight = 47;
-    public static double kElevatorCoralPickupHeight = 25;
-    public static double kElevatorCoralPickupAlternateHeight = 20;
-    public static double kElevatorCoralPickupHigher = 25;
-    public static double kElevatorCoralPickupAltHigher = 20;
+    public static double kElevatorCoralHandoffHeight = 25;
+    // public static double kElevatorCoralPickupAlternateHeight = 20;
+    // public static double kElevatorCoralPickupHigher = 25;
+    // public static double kElevatorCoralPickupAltHigher = 20;
     public static double kElevatorCoralDropOff1Height = 20; // 17
     public static double kElevatorCoralDropOff2Height = 42; // 47 * ropeAdjustmentFactor + kElevatorAdjustment
     public static double kElevatorCoralDropOff3Height = 64; // 75 * ropeAdjustmentFactor + kElevatorAdjustment
     public static double kElevatorCoralDropOff4Height = 105; // changed from 130
     // Drop off 4 was 130 before but 120 seems to be our max height
-    public static double kElevatorAlgaePickUpFloorHeight = 19;
-    public static double kElevatorReef2Height = 40;
-    public static double kElevatorReef3Height = 65;
-    public static double kElevatorAlgaePickUpFloorFlipHeight = 19;
-    public static double kElevatorReef2FlipHeight = 25;
-    public static double kElevatorReef3FlipHeight = 45;
+    // public static double kElevatorAlgaePickUpFloorHeight = 19;
+    public static double kElevatorAlgaeReef2Height = 40;
+    public static double kElevatorAlgaeReef3Height = 65;
+    // public static double kElevatorAlgaePickUpFloorFlipHeight = 19;
+    // public static double kElevatorReef2FlipHeight = 25;
+    // public static double kElevatorReef3FlipHeight = 45;
     public static double kElevatorNetHeight = 99; // changed from 120
 
     // Determine what actual height values these are and/or what encoder readings
@@ -53,11 +53,11 @@ public final class ElevatorConstants {
     public static final double kElevatorMax = 108; // 108 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 50;
+    public static final double kElevatorSafeHeightMax = 40;
     public static final double kElevatorSafeHeightMin = 15;
 
     // The maximum height that the robot can safely travel at
-    public static final double kElevatorSafeTravelHeight = 50;
+    public static final double kElevatorSafeTravelHeight = 40;
     public static final double kElevatorSafeMidSpeedTravelHeight = 50;
     // this variable determines the minimum height at which the drivetrain speed
     // will be

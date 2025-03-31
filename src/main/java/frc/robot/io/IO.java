@@ -30,11 +30,11 @@ public class IO {
         public void init(RobotContainer robotContainer) {
 
                 // Additional Buttons to allow for alternate button pushes
-                final Trigger altButtonDriver = Keymap.Layout.driverRightBumper;
-                final Trigger coralHandOff = Keymap.Layout.operatorRightBumper;
+                // final Trigger altButtonDriver = Keymap.Layout.driverRightBumper;
+                final Trigger scoreLeft = Keymap.Layout.operatorLeftBumper;
+                final Trigger scoreRight = Keymap.Layout.operatorRightBumper;
 
                 // Initialization
-                final Trigger zeroArm = Keymap.Layout.operatorStartButton;
                 final Trigger zeroHeadingButton = Keymap.Layout.driverStartButton;
 
                 // final Trigger zeroElevator = operatorController.start();
@@ -59,7 +59,6 @@ public class IO {
                 final Trigger toggleClimber = Keymap.Layout.operatorBackButton;
 
                 // Operator Set Position Controls
-                final Trigger home = Keymap.Layout.operatorLeftBumper;
                 final Trigger algaeGround = Keymap.Layout.operatorDownButton;
                 final Trigger algaeReef2 = Keymap.Layout.operatorRightButton;
                 final Trigger algaeReef3 = Keymap.Layout.operatorUpButton;
@@ -130,5 +129,22 @@ public class IO {
                 // .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
                 // new ToHomeCommand(robotContainer.elevator, robotContainer.pivot),
                 // robotContainer.climber::climberAtHomePosition));
+
+                raiseElevator.whileTrue(
+                                new InstantCommand(robotContainer.elevator::moveUp, robotContainer.elevator)
+                                                .andThen(new WaitUntilCommand(
+                                                                () -> robotContainer.elevator.ElevatorRaiseLimitHit()))
+                                                .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                                robotContainer.elevator)))
+                                .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                robotContainer.elevator));
+                lowerElevator.whileTrue(
+                                new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator)
+                                                .andThen(new WaitUntilCommand(
+                                                                () -> robotContainer.elevator.ElevatorLowerLimitHit()))
+                                                .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                                robotContainer.elevator)))
+                                .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
+                                                robotContainer.elevator));
         }
 }

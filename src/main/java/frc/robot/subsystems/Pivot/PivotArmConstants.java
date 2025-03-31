@@ -17,7 +17,7 @@ public final class PivotArmConstants {
     public static final double kPivotMotorSensorToMechanismRatio = 3.0;
     public static final double kPivotMotorRotorToSensorRatio = 9.0;
 
-    public static final double kPivotCancoderOffset = .326416015625;
+    public static final double kPivotCancoderOffset = 0.456543;
 
     public static final double kPivotArmP = 15; // 0.7
     public static final double kPivotArmI = 0; // 0.0
@@ -31,8 +31,8 @@ public final class PivotArmConstants {
     public static double kPivotArmMMAcc = 20;
     public static double kPivotArmMMJerk = 1200;
 
-    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-110);
-    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(120);
+    public static final Rotation2d kPivotArmMin = Rotation2d.fromDegrees(-290);
+    public static final Rotation2d kPivotArmMax = Rotation2d.fromDegrees(290);
 
     public static final Rotation2d kPivotArmMaxManual = Rotation2d.fromDegrees(270);
     public static final Rotation2d kPivotArmMinManual = Rotation2d.fromDegrees(-270);
@@ -51,15 +51,15 @@ public final class PivotArmConstants {
     public static final double kPivotClimb = 90;
     public static final double kPivotCoralPickup = 120;
     public static final double kPivotCoralDropOff1 = -100;
-    public static final double kPivotCoralDropOff = -72;
+    public static final double kPivotCoralDropOff2And3 = -72;
     public static final double kPivotCoralDropOff4 = -54;
-    public static final double kPivotAlgaePickUpFloor = 116;
-    public static final double kPivotReef = 102;
-    public static final double kPivotAlgaePickUpFloorFlip = 90;
-    public static final double kPivotReef2Flip = -35;
-    public static final double kPivotReef3Flip = -25;
-    public static final double kPivotAlgaeNetBlue = 60;
-    public static final double kPivotAlgaeNetYellow = 0;
-    public static final double kPivotAlgaeNetRaise = 25;
+    // public static final double kPivotAlgaePickUpFloor = 116;
+    public static final double kPivotAlgaeReef = 180;
+    // public static final double kPivotAlgaePickUpFloorFlip = 90;
+    // public static final double kPivotReef2Flip = -35;
+    // public static final double kPivotReef3Flip = -25;
+    public static final double kPivotAlgaeNet = 180;
+    // public static final double kPivotAlgaeNetYellow = 0;
+    // public static final double kPivotAlgaeNetRaise = 25;
     public static final double kPivotAlgaeProcessor = 108;
 }

@@ -22,7 +22,6 @@ import frc.robot.io.IO;
 import frc.robot.subsystems.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Drive.DriveSubsystem;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffector.EndEffectorSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;

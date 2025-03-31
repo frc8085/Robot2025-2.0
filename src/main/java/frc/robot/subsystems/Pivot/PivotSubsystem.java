@@ -87,81 +87,89 @@ public class PivotSubsystem extends SubsystemBase {
 
     }
 
-    // Pivot Angle Checks
-    public boolean pivotAtAlgaeYellowScorePosition() {
-        return getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetYellow
-                + PivotArmConstants.kPivotTolerance.getDegrees();
-    }
+    // // Pivot Angle Checks
+    // public boolean pivotAtAlgaeYellowScorePosition() {
+    // return getCurrentRotation().getDegrees() <=
+    // PivotArmConstants.kPivotAlgaeNetYellow
+    // + PivotArmConstants.kPivotTolerance.getDegrees();
+    // }
 
-    public boolean pivotAtAlgaeBlueScorePosition() {
-        return (getCurrentRotation().getDegrees() <= PivotArmConstants.kPivotAlgaeNetBlue
-                + PivotArmConstants.kPivotTolerance.getDegrees())
-                && (getCurrentRotation().getDegrees() >= PivotArmConstants.kPivotAlgaeNetBlue
-                        - PivotArmConstants.kPivotTolerance.getDegrees());
-    }
+    // public boolean pivotAtAlgaeBlueScorePosition() {
+    // return (getCurrentRotation().getDegrees() <=
+    // PivotArmConstants.kPivotAlgaeNetBlue
+    // + PivotArmConstants.kPivotTolerance.getDegrees())
+    // && (getCurrentRotation().getDegrees() >= PivotArmConstants.kPivotAlgaeNetBlue
+    // - PivotArmConstants.kPivotTolerance.getDegrees());
+    // }
 
-    public boolean pivotAtHomeAngle() {
-        return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotHome
-                + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotHome
-                        - PivotArmConstants.kPivotTolerance.getDegrees())));
-    }
+    // public boolean pivotAtHomeAngle() {
+    // return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotHome
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotHome
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // }
 
-    public boolean pivotAtCoralDropOffAngle(boolean yellow) {
-        if (!yellow) {
-            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        } else {
-            return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        }
-    }
+    // public boolean pivotAtCoralDropOffAngle(boolean yellow) {
+    // if (!yellow) {
+    // return ((getCurrentRotation().getDegrees() <=
+    // (PivotArmConstants.kPivotCoralDropOff
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // } else {
+    // return ((getCurrentRotation().getDegrees() <=
+    // (-PivotArmConstants.kPivotCoralDropOff
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // }
+    // }
 
-    public boolean pivotAtCoral1DropOffAngle(boolean yellow) {
-        if (!yellow) {
-            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff1
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff1
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        } else {
-            return ((getCurrentRotation().getDegrees() <= (-PivotArmConstants.kPivotCoralDropOff1
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff1
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        }
-    }
+    // public boolean pivotAtCoral1DropOffAngle(boolean yellow) {
+    // if (!yellow) {
+    // return ((getCurrentRotation().getDegrees() <=
+    // (PivotArmConstants.kPivotCoralDropOff1
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotCoralDropOff1
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // } else {
+    // return ((getCurrentRotation().getDegrees() <=
+    // (-PivotArmConstants.kPivotCoralDropOff1
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (-PivotArmConstants.kPivotCoralDropOff1
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // }
+    // }
 
-    public boolean pivotAtAlgaeReef2DropOffAngle(boolean yellow) {
-        if (!yellow) {
-            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        } else {
-            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef2Flip
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef2Flip
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        }
-    }
+    // public boolean pivotAtAlgaeReef2DropOffAngle(boolean yellow) {
+    // if (!yellow) {
+    // return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // } else {
+    // return ((getCurrentRotation().getDegrees() <=
+    // (PivotArmConstants.kPivotReef2Flip
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef2Flip
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // }
+    // }
 
-    public boolean pivotAtAlgaeReef3DropOffAngle(boolean yellow) {
-        if (!yellow) {
-            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        } else {
-            return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef3Flip
-                    + PivotArmConstants.kPivotTolerance.getDegrees())) &&
-                    (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef3Flip
-                            - PivotArmConstants.kPivotTolerance.getDegrees())));
-        }
-    }
+    // public boolean pivotAtAlgaeReef3DropOffAngle(boolean yellow) {
+    // if (!yellow) {
+    // return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotReef
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // } else {
+    // return ((getCurrentRotation().getDegrees() <=
+    // (PivotArmConstants.kPivotReef3Flip
+    // + PivotArmConstants.kPivotTolerance.getDegrees())) &&
+    // (getCurrentRotation().getDegrees() >= (PivotArmConstants.kPivotReef3Flip
+    // - PivotArmConstants.kPivotTolerance.getDegrees())));
+    // }
+    // }
 
     public boolean pivotAtCoral4DropOffAngle() {
         return ((getCurrentRotation().getDegrees() <= (PivotArmConstants.kPivotCoralDropOff4
