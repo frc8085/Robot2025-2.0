@@ -51,9 +51,10 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kP = PivotArmConstants.kPivotArmP;
         slot0Configs.kI = PivotArmConstants.kPivotArmI;
         slot0Configs.kD = PivotArmConstants.kPivotArmD;
+        slot0Configs.kG = PivotArmConstants.kPivotArmG;
+        slot0Configs.kS = PivotArmConstants.kPivotArmS;
         slot0Configs.kV = PivotArmConstants.kPivotArmV;
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
-        // slot0Configs.kS = PivotArmConstants.kPivotArmS;
 
         // new stuff for Synced Cancoder
         m_pivotMotorConfig.Feedback.FeedbackRemoteSensorID = m_pivotEncoder.getDeviceID();

@@ -26,6 +26,7 @@ public final class PivotArmConstants {
     public static final double kPivotArmV = 0.25; // 0.2
     public static final double kPivotArmA = 0.015; // 0.015
     public static final double kPivotArmFF = -0.13;
+    public static final double kPivotArmG = 0;
 
     public static double kPivotArmMMVelo = 40;
     public static double kPivotArmMMAcc = 20;

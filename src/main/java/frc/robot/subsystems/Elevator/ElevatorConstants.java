@@ -8,12 +8,12 @@ public final class ElevatorConstants {
 
     public static final double kElevatorMotorGearRatio = 5;
     public static double kElevatorSpeed = .25; // .25
-    public static double kElevatorP = 0; // 2
+    public static double kElevatorP = 2; // 2
     public static double kElevatorI = 0; // 0
     public static double kElevatorD = 0; // 0
-    public static double kElevatorS = 0; // 0
+    public static double kElevatorS = 0.1; // 0
     public static double kElevatorG = 0; // 0
-    public static double kElevatorV = 0.15; // 0.4
+    public static double kElevatorV = 0.12; // 0.4
     public static double kElevatorA = 0; // 0.02
     public static double kElevatorStage2FF = 0; // 0.19 / .27
 

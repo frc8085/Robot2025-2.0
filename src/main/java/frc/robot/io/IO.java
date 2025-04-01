@@ -1,6 +1,7 @@
 
 package frc.robot.io;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -24,6 +25,7 @@ import frc.robot.commands.intake.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.endEffector.*;
 import frc.robot.commands.windmill.elevator.*;
+import frc.robot.commands.windmill.pivot.Pivot;
 import frc.robot.commands.windmill.LockPivotAndElevatorCommand;
 import frc.robot.Constants.Windmill.WindmillState;
 
@@ -123,10 +125,10 @@ public class IO {
                 dumpCoral.onTrue(new DumpCoral(robotContainer.intake))
                                 .onFalse(new RetractIntake(robotContainer.intake));
 
-                coralDropOff1.onTrue(new Elevator(robotContainer.elevator, 20));
-                coralDropOff2.onTrue(new Elevator(robotContainer.elevator, 30));
-                coralDropOff3.onTrue(new Elevator(robotContainer.elevator, 40));
-                coralDropOff4.onTrue(new Elevator(robotContainer.elevator, 50));
+                coralDropOff1.onTrue(new Pivot(robotContainer.pivot, Rotation2d.fromDegrees(0)));
+                coralDropOff2.onTrue(new Pivot(robotContainer.pivot, Rotation2d.fromDegrees(90)));
+                coralDropOff3.onTrue(new Pivot(robotContainer.pivot, Rotation2d.fromDegrees(180)));
+                coralDropOff4.onTrue(new Pivot(robotContainer.pivot, Rotation2d.fromDegrees(-90)));
 
                 // coralDropOff1.and(scoreLeft).onTrue(
                 // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
@@ -209,6 +211,14 @@ public class IO {
                 // new ToHomeCommand(robotContainer.elevator, robotContainer.pivot),
                 // robotContainer.climber::climberAtHomePosition));
 
+                pivotClockwise
+                                .onTrue(new InstantCommand(robotContainer.pivot::start, robotContainer.pivot))
+                                .onFalse(new InstantCommand(robotContainer.pivot::holdPivotArmManual,
+                                                robotContainer.pivot));
+                pivotCounterClockwise.onTrue(new InstantCommand(robotContainer.pivot::reverse, robotContainer.pivot))
+                                .onFalse(new InstantCommand(robotContainer.pivot::holdPivotArmManual,
+                                                robotContainer.pivot));
+
                 raiseElevator.whileTrue(
                                 new InstantCommand(robotContainer.elevator::moveUp, robotContainer.elevator)
                                                 .andThen(new WaitUntilCommand(
@@ -219,10 +229,6 @@ public class IO {
                                                 robotContainer.elevator));
                 lowerElevator.whileTrue(
                                 new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator))
-                                // .andThen(new WaitUntilCommand(
-                                // () -> robotContainer.elevator.ElevatorLowerLimitHit()))
-                                // .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
-                                // robotContainer.elevator)))
                                 .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
                                                 robotContainer.elevator));
         }
