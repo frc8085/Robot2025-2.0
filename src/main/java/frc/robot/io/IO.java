@@ -17,13 +17,18 @@ import frc.robot.commands.windmill.*;
 // import frc.robot.commands.sequences.RemoveAlgaeL3;
 // import frc.robot.commands.manipulator.coral.*;
 // import frc.robot.commands.manipulator.algae.*;
-import frc.robot.commands.movement.*;
-import frc.robot.commands.states.*;
+// import frc.robot.commands.movement.*;
+// import frc.robot.commands.states.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.endEffector.*;
 import frc.robot.commands.windmill.elevator.*;
+import frc.robot.commands.windmill.LockPivotAndElevatorCommand;
+import frc.robot.Constants.Windmill.WindmillState;
+
+import frc.robot.commands.states.ToCoralDropOff;
+import frc.robot.commands.states.ToHomeCommand;
 
 public class IO {
 
@@ -38,6 +43,7 @@ public class IO {
                 final Trigger zeroHeadingButton = Keymap.Layout.driverStartButton;
 
                 // final Trigger zeroElevator = operatorController.start();
+                final Trigger zeroElevator = Keymap.Layout.operatorStartButton;
                 final Trigger limelightTrigger1 = Keymap.Layout.driverXButton;
                 final Trigger limelightTrigger2 = Keymap.Layout.driverBButton;
 
@@ -59,10 +65,10 @@ public class IO {
                 final Trigger toggleClimber = Keymap.Layout.operatorBackButton;
 
                 // Operator Set Position Controls
-                final Trigger algaeGround = Keymap.Layout.operatorDownButton;
-                final Trigger algaeReef2 = Keymap.Layout.operatorRightButton;
-                final Trigger algaeReef3 = Keymap.Layout.operatorUpButton;
-                final Trigger algaeProcessor = Keymap.Layout.operatorLeftButton;
+                // final Trigger algaeGround = Keymap.Layout.operatorDownButton;
+                // final Trigger algaeReef2 = Keymap.Layout.operatorRightButton;
+                final Trigger coralHandOff = Keymap.Layout.operatorUpButton;
+                // final Trigger algaeProcessor = Keymap.Layout.operatorLeftButton;
                 final Trigger coralDropOff4 = Keymap.Layout.operatorYButton;
                 final Trigger coralDropOff3 = Keymap.Layout.operatorXButton;
                 final Trigger coralDropOff2 = Keymap.Layout.operatorBButton;
@@ -76,7 +82,7 @@ public class IO {
 
                 // Initialization
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
-                // zeroElevator.onTrue(new ZeroElevator(robotContainer.elevator));
+                zeroElevator.onTrue(new ZeroElevator(robotContainer.elevator));
                 // zeroArm.onTrue(new ZeroElevator(robotContainer.elevator));
                 // zeroArm.and(altButtonOperator)
                 // .onTrue(new InitializePivotAndElevator(robotContainer.pivot,
@@ -108,20 +114,93 @@ public class IO {
                 // new SwerveDriveTeleop(robotContainer.drivetrain));
 
                 intakeCoral.onTrue(new DeployIntake(robotContainer.intake)
-                                .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector)))
-                                .onFalse(new RetractIntake(robotContainer.intake).andThen(
-                                                new Handoff(robotContainer.intake, robotContainer.endEffector)));
+                // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
+                )
+                                .onFalse(new RetractIntake(robotContainer.intake)
+                                // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
+                                );
 
                 dumpCoral.onTrue(new DumpCoral(robotContainer.intake))
                                 .onFalse(new RetractIntake(robotContainer.intake));
 
-                // coralHandOff.onTrue(new Handoff(robotContainer.intake,
-                // robotContainer.endEffector));
+                coralDropOff1.onTrue(new Elevator(robotContainer.elevator, 20));
+                coralDropOff2.onTrue(new Elevator(robotContainer.elevator, 30));
+                coralDropOff3.onTrue(new Elevator(robotContainer.elevator, 40));
+                coralDropOff4.onTrue(new Elevator(robotContainer.elevator, 50));
 
-                // toggleClimber.toggleOnTrue(new ConditionalCommand(
-                // new DeployClimb(robotContainer.climber),
-                // new RetractClimb(robotContainer.climber),
-                // robotContainer.climber::climberAtHomePosition));
+                // coralDropOff1.and(scoreLeft).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff1, false)
+                // )
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff1.and(scoreRight).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff1, true))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff2.and(scoreLeft).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff2, false))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff2.and(scoreRight).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff2, true))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff3.and(scoreLeft).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff3, false))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff3.and(scoreRight).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff3, true))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff4.and(scoreLeft).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff4, false))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                // coralDropOff4.and(scoreRight).onTrue(
+                // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake,
+                // robotContainer.endEffector, WindmillState.CoralDropOff4, true))
+                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.CoralHandoff, false));
+
+                coralHandOff.onTrue(new Handoff(robotContainer.intake,
+                                robotContainer.endEffector));
+
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
+                                new DeployClimb(robotContainer.climber),
+                                new RetractClimb(robotContainer.climber),
+                                robotContainer.climber::climberAtHomePosition));
+
+                raiseClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveUp(),
+                                robotContainer.climber))
+                                .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
+                                                robotContainer.climber));
+                lowerClimber.onTrue(new RunCommand(() -> robotContainer.climber.moveDown(),
+                                robotContainer.climber))
+                                .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
+                                                robotContainer.climber));
 
                 // toggleClimber.toggleOnTrue(new ConditionalCommand(
                 // new LockPivotAndElevatorCommand(robotContainer.elevator,
@@ -139,11 +218,11 @@ public class IO {
                                 .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
                                                 robotContainer.elevator));
                 lowerElevator.whileTrue(
-                                new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator)
-                                                .andThen(new WaitUntilCommand(
-                                                                () -> robotContainer.elevator.ElevatorLowerLimitHit()))
-                                                .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
-                                                                robotContainer.elevator)))
+                                new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator))
+                                // .andThen(new WaitUntilCommand(
+                                // () -> robotContainer.elevator.ElevatorLowerLimitHit()))
+                                // .andThen(new InstantCommand(robotContainer.elevator::holdHeight,
+                                // robotContainer.elevator)))
                                 .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
                                                 robotContainer.elevator));
         }

@@ -2,6 +2,8 @@ package frc.robot.commands.states;
 
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.windmill.Windmill;
 import frc.robot.subsystems.Pivot.PivotSubsystem;
@@ -15,18 +17,23 @@ public class ToCoralDropOff extends SequentialCommandGroup {
         public ToCoralDropOff(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
                         IntakeSubsystem intakeSubsystem, EndEffectorSubsystem endEffectorSubsystem, WindmillState state,
                         boolean yellow) {
-                addCommands(
-                                new Windmill(elevatorSubsystem, pivotSubsystem, WindmillState.CoralHandoff, false),
-                                new Handoff(intakeSubsystem, endEffectorSubsystem));
+                // addCommands(
+                // new ConditionalCommand(new WaitCommand(0),
+                // new SequentialCommandGroup(
+                // new PrintCommand("Performing Coral Handoff"),
+                // new Windmill(elevatorSubsystem, pivotSubsystem,
+                // WindmillState.CoralHandoff, false),
+                // new Handoff(intakeSubsystem, endEffectorSubsystem)),
+                // () -> endEffectorSubsystem.coralInRobot()));
                 if (yellow) {
                         addCommands(
-                                        new PrintCommand("Move to Y Coral Drop Off 1"),
+                                        new PrintCommand("Move to Yellow Coral Drop Off"),
                                         new Windmill(elevatorSubsystem, pivotSubsystem,
                                                         state,
                                                         true));
                 } else {
                         addCommands(
-                                        new PrintCommand("Move to B Coral Drop Off 1"),
+                                        new PrintCommand("Move to Blue Coral Drop Off"),
                                         new Windmill(elevatorSubsystem, pivotSubsystem,
                                                         state,
                                                         false));

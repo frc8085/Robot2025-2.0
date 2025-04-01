@@ -29,7 +29,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // DigitalInput lightSensor = new DigitalInput(CoralConstants.kIRPort);
 
   // robot starts with Coral
-  private boolean coralTrue = true;
+  // private boolean coralTrue = true;
 
   public EndEffectorSubsystem() {
 
@@ -39,6 +39,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     this.m_endMotor.configure(CoralConfig.coralConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
+    this.stop();
   }
 
   public double getCurrent() {
@@ -49,19 +50,19 @@ public class EndEffectorSubsystem extends SubsystemBase {
   // return lightSensor.get();
   // }
 
-  /* When a coral is picked up, it's in the robot */
-  public void coralPickedUp() {
-    coralTrue = true;
-  }
+  // /* When a coral is picked up, it's in the robot */
+  // public void coralPickedUp() {
+  // coralTrue = true;
+  // }
 
-  /* Once a note is shot, it's not in robot */
-  public void coralEjected() {
-    coralTrue = false;
-  }
+  // /* Once a note is shot, it's not in robot */
+  // public void coralEjected() {
+  // coralTrue = false;
+  // }
 
   /* Give us a state when the note is in robot */
   public boolean coralInRobot() {
-    return coralTrue;
+    return this.getCurrent() > EndConstants.kEndEffectCurrentLimit;
   }
 
   public void pickup() {
@@ -69,7 +70,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    this.m_endMotor.set(0);
+    this.m_endMotor.set(0.0);
   }
 
   public void eject() {

@@ -126,7 +126,10 @@ public class IntakeSubsystem extends SubsystemBase {
         if (TuningModeConstants.kPivotTuning) {
             // Get motor readings
             // SmartDashboard.putNumber("currentPosition", getCurrentPosition());
-            SmartDashboard.putNumber("currentIntakeAngle", getDeployRotation().getDegrees());
+            SmartDashboard.putNumber("currentIntakeAngle", getDeployRotation().getRotations());
+            SmartDashboard.putBoolean("hasCoral", this.getAnyLightSensor());
+            SmartDashboard.putBoolean("leftCoral", this.getLeftLightSensor());
+            SmartDashboard.putBoolean("rightCoral", this.getRightLightSensor());
             // SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         }
     }

@@ -44,14 +44,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Limit Switches
   DigitalInput topLimitSwitch = new DigitalInput(0);
-  DigitalInput bottomLimitSwitch = new DigitalInput(2);
+  // DigitalInput bottomLimitSwitch = new DigitalInput(2);
   DigitalInput zeroLimitSwitch = new DigitalInput(1);
 
   final DutyCycleOut m_dutyCycle = new DutyCycleOut(0.0);
 
-  public boolean ElevatorLowerLimitHit() {
-    return bottomLimitSwitch.get();
-  }
+  // public boolean ElevatorLowerLimitHit() {
+  // return bottomLimitSwitch.get();
+  // }
 
   public boolean ElevatorRaiseLimitHit() {
     return topLimitSwitch.get();
@@ -61,9 +61,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     return zeroLimitSwitch.get();
   }
 
-  public boolean eitherLimitSwitchPressed() {
-    return topLimitSwitch.get() || bottomLimitSwitch.get();
-  }
+  // public boolean eitherLimitSwitchPressed() {
+  // return topLimitSwitch.get() || bottomLimitSwitch.get();
+  // }
 
   public ElevatorSubsystem() {
 
@@ -120,16 +120,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       rotations = ElevatorConstants.kElevatorMax;
     }
 
-    // set the feedforward value based on the elevator height
-    double ff = 0;
-    if (rotations > ElevatorConstants.kElevatorStage2Height) {
-      ff = ElevatorConstants.kElevatorStage3FF;
-    } else if (rotations > ElevatorConstants.kElevatorStage1Height) {
-      ff = ElevatorConstants.kElevatorStage2FF;
-    }
-
     motionMagicPositionControl.Position = rotations;
-    motionMagicVelocityControl.FeedForward = ff;
     m_elevatorMotor.setControl(motionMagicPositionControl);
   }
 
@@ -154,85 +145,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     return target_position < (ElevatorConstants.kElevatorSafeHeightMax);
   }
 
-  public boolean isSafeToPivot() {
-    return getCurrentMotorPosition() >= 50;
-  }
-
-  public boolean elevatorAtAlgaeScoreHeight() {
-    return getCurrentMotorPosition() >= (ElevatorConstants.kElevatorNetHeight
-        - ElevatorConstants.kElevatorTolerance);
-  }
+  // public boolean isSafeToPivot() {
+  // return getCurrentMotorPosition() >= 50;
+  // }
 
   public boolean elevatorBelowSafeTravelHeight() {
     return (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorSafeTravelHeight
         + ElevatorConstants.kElevatorTolerance));
   }
-
-  // public boolean elevatorAtCoralDropOff1Height() {
-  // return ((getCurrentMotorPosition() >=
-  // (ElevatorConstants.kElevatorCoralDropOff1Height
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <=
-  // (ElevatorConstants.kElevatorCoralDropOff1Height
-  // + ElevatorConstants.kElevatorTolerance)));
-  // }
-
-  // public boolean elevatorAtCoralDropOff2Height() {
-  // return ((getCurrentMotorPosition() >=
-  // (ElevatorConstants.kElevatorCoralDropOff2Height
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <=
-  // (ElevatorConstants.kElevatorCoralDropOff2Height
-  // + ElevatorConstants.kElevatorTolerance)));
-  // }
-
-  // public boolean elevatorAtCoralDropOff3Height() {
-  // return ((getCurrentMotorPosition() >=
-  // (ElevatorConstants.kElevatorCoralDropOff3Height
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <=
-  // (ElevatorConstants.kElevatorCoralDropOff3Height
-  // + ElevatorConstants.kElevatorTolerance)));
-  // }
-
-  // public boolean elevatorAtCoralDropOff4Height() {
-  // return ((getCurrentMotorPosition() >=
-  // (ElevatorConstants.kElevatorCoralDropOff4Height
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <=
-  // (ElevatorConstants.kElevatorCoralDropOff4Height
-  // + ElevatorConstants.kElevatorTolerance)));
-  // }
-
-  // public boolean elevatorAtAlgaeReefL2(boolean yellow) {
-  // if (!yellow) {
-  // return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef2Height
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2Height
-  // + ElevatorConstants.kElevatorTolerance)));
-  // } else {
-  // return ((getCurrentMotorPosition() >=
-  // (ElevatorConstants.kElevatorReef2FlipHeight
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef2FlipHeight
-  // + ElevatorConstants.kElevatorTolerance)));
-  // }
-  // }
-
-  // public boolean elevatorAtAlgaeReefL3(boolean yellow) {
-  // if (!yellow) {
-  // return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorReef3Height
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3Height
-  // + ElevatorConstants.kElevatorTolerance)));
-  // } else {
-  // return ((getCurrentMotorPosition() >=
-  // (ElevatorConstants.kElevatorReef3FlipHeight
-  // - ElevatorConstants.kElevatorTolerance))
-  // && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorReef3FlipHeight
-  // + ElevatorConstants.kElevatorTolerance)));
-  // }
-  // }
 
   public double minConflictHeight(Rotation2d target_angle) {
     var deg = Math.abs(target_angle.getDegrees());
@@ -250,6 +170,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean inDangerZone() {
+
     return targetInDangerZone(getCurrentMotorPosition());
   }
 
@@ -259,12 +180,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void periodic() {
     // display encoder readings on dashboard
-    if (TuningModeConstants.kElevatorTuning) {
-      SmartDashboard.putNumber("current Elevator Position", getCurrentMotorPosition());
-    }
+    // if (TuningModeConstants.kElevatorTuning) {
+    SmartDashboard.putNumber("current Elevator Position", getCurrentMotorPosition());
+    // }
     SmartDashboard.putBoolean("top LS hit", topLimitSwitch.get());
-    SmartDashboard.putBoolean("bottom LS hit", bottomLimitSwitch.get());
+    // SmartDashboard.putBoolean("bottom LS hit", bottomLimitSwitch.get());
     SmartDashboard.putBoolean("zero LS hit", zeroLimitSwitch.get());
+    SmartDashboard.putBoolean("Elevator in Danger Zone", inDangerZone());
+    SmartDashboard.putBoolean("Elevator Below Safe Travel Height", elevatorBelowSafeTravelHeight());
 
     if (TUNING_MODE) {
     }

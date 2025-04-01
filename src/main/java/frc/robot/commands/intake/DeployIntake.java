@@ -9,6 +9,7 @@ public class DeployIntake extends Command {
     private final Rotation2d m_targetAngle = IntakeConstants.kIntakeOutAngle;
     private final IntakeSubsystem m_intake;
     private final Rotation2d tolerance = IntakeConstants.kIntakeTolerance;
+    // private boolean isFinished = false;
 
     public DeployIntake(IntakeSubsystem intake) {
         this.m_intake = intake;
@@ -17,6 +18,11 @@ public class DeployIntake extends Command {
 
     @Override
     public void initialize() {
+        // this.isFinished = false;
+        if (this.m_intake.getAnyLightSensor()) {
+            // this.isFinished = true;
+            return;
+        }
         m_intake.setDeployRotation(m_targetAngle);
         m_intake.enableRollers();
     }
