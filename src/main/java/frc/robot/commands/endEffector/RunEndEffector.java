@@ -31,12 +31,12 @@ public class RunEndEffector extends Command {
     public void execute() {
         if (this.m_eject) {
             // wait for the end effector current to be low
-            if (this.m_end.getCurrent() < EndConstants.kEndEffectCurrentLimit) {
+            if (this.m_end.getCurrent() < EndConstants.kEndEffectCurrentLimitEject) {
                 this.isFinished = true;
             }
         } else {
             // wait for the end effector current to be high
-            if (this.m_end.getCurrent() > EndConstants.kEndEffectCurrentLimit) {
+            if (this.m_end.getCurrent() > EndConstants.kEndEffectCurrentLimitHandOff) {
                 this.isFinished = true;
             }
         }
@@ -45,5 +45,10 @@ public class RunEndEffector extends Command {
     @Override
     public boolean isFinished() {
         return this.isFinished;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        this.m_end.stop();
     }
 }

@@ -27,14 +27,17 @@ public final class ElevatorConstants {
     public static double kElevatorHomeHeight = 45;
     public static double kElevatorAutoTravelHeight = 64;
     public static double kElevatorAlgaeHoldHeight = 47;
-    public static double kElevatorCoralHandoffHeight = 42.5;
+    public static double kElevatorCoralHandoffHeight = 40;
     // public static double kElevatorCoralPickupAlternateHeight = 20;
     // public static double kElevatorCoralPickupHigher = 25;
     // public static double kElevatorCoralPickupAltHigher = 20;
-    public static double kElevatorCoralDropOff1Height = 20; // 17
-    public static double kElevatorCoralDropOff2Height = 30; // 47 * ropeAdjustmentFactor + kElevatorAdjustment
-    public static double kElevatorCoralDropOff3Height = 40; // 75 * ropeAdjustmentFactor + kElevatorAdjustment
-    public static double kElevatorCoralDropOff4Height = 50; // changed from 130
+    public static double kElevatorCoralDropOff1Height = 30; // 17
+    public static double kElevatorCoralDropOff2Height = 10; // 47 * ropeAdjustmentFactor + kElevatorAdjustment
+    public static double kElevatorCoralScore2Height = 7;
+    public static double kElevatorCoralDropOff3Height = 20; // 75 * ropeAdjustmentFactor + kElevatorAdjustment
+    public static double kElevatorCoralScore3Height = 15;
+    public static double kElevatorCoralDropOff4Height = 55; // changed from 130
+    public static double kElevatorCoralScore4Height = 45;
     // Drop off 4 was 130 before but 120 seems to be our max height
     // public static double kElevatorAlgaePickUpFloorHeight = 19;
     public static double kElevatorAlgaeReef2Height = 40;
@@ -52,7 +55,7 @@ public final class ElevatorConstants {
     public static final double kElevatorMax = 60; // 108 hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 45;
+    public static final double kElevatorSafeHeightMax = 40;
     public static final double kElevatorSafeHeightMin = 10;
 
     // The maximum height that the robot can safely travel at

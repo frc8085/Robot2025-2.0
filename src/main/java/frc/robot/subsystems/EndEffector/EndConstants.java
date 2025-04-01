@@ -2,7 +2,7 @@ package frc.robot.subsystems.EndEffector;
 
 public final class EndConstants {
     public static final int EndEffectCurrentLimit = 40;
-    public static final double kEndEffectSpeed = 0.6;
+    public static final double kEndEffectSpeed = 0.75;
     public static final double kEndEffectSlowSpeed = .5;
 
     // open loop motor values
@@ -22,6 +22,8 @@ public final class EndConstants {
     public static int kIRPort = 3;
 
     // Current Limit for Coral Stall
-    public static double kEndEffectCurrentLimit = 10;
+    public static double kEndEffectCurrentLimitIdle = 15;
+    public static double kEndEffectCurrentLimitHandOff = 50;
+    public static double kEndEffectCurrentLimitEject = 20;
 
 }

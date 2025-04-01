@@ -129,12 +129,25 @@ public final class Constants {
       // coral dropoff happens on both sides
       CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff1), true),
+
       CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff2And3), true),
+
+      CoralScore2(ElevatorConstants.kElevatorCoralScore2Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralScore2And3), true),
+      
       CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff2And3), true),
+
+      CoralScore3(ElevatorConstants.kElevatorCoralScore3Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralScore2And3), true),
+
       CoralDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff4), true),
+
+      CoralScore4(ElevatorConstants.kElevatorCoralScore4Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralScore4), true),
+
       CoralHandoff(ElevatorConstants.kElevatorCoralHandoffHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup), true),
 

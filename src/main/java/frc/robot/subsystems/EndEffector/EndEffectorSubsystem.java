@@ -62,7 +62,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   /* Give us a state when the note is in robot */
   public boolean coralInRobot() {
-    return this.getCurrent() > EndConstants.kEndEffectCurrentLimit;
+    return this.getCurrent() > EndConstants.kEndEffectCurrentLimitIdle;
   }
 
   public void pickup() {
@@ -70,7 +70,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    this.m_endMotor.set(0.0);
+    this.m_endMotor.set(0.05);
   }
 
   public void eject() {
@@ -83,9 +83,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   public void periodic() {
     // Put Indicator on Dashboard that a Note is in the Robot
-    if (Constants.TuningModeConstants.kCoralTuning) {
-      // SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
-    }
+    // if (Constants.TuningModeConstants.kCoralTuning) {
+    // SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
+    SmartDashboard.putNumber("End Effector Current", this.getCurrent());
+    // }
   }
 
 }

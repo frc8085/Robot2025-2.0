@@ -80,6 +80,10 @@ public class IntakeSubsystem extends SubsystemBase {
         return getLeftLightSensor() || getRightLightSensor();
     }
 
+    public boolean hasCoralCentered() {
+        return getLeftLightSensor() && getRightLightSensor();
+    }
+
     public Rotation2d getDeployRotation() {
         deployPosition.refresh();
         return Rotation2d.fromRotations(deployPosition.getValueAsDouble());

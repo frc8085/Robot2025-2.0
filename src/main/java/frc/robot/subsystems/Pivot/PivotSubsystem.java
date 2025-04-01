@@ -157,11 +157,11 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-        SmartDashboard.putNumber("Pivot Arm Angle", getCurrentRotation().getDegrees());
+        SmartDashboard.putNumber("Pivot Arm Angle motor", getCurrentRotation().getRotations());
         SmartDashboard.putBoolean("Pivot Arm in Danger Zone", inDangerZone());
         // if (TuningModeConstants.kPivotTuning) {
-        // SmartDashboard.putNumber("Pivot Arm Angle",
-        // motorPosToAngle(getCurrentPosition()).getDegrees());
+        SmartDashboard.putNumber("Pivot Arm Angle",
+                getCurrentRotation().getDegrees());
         // // SmartDashboard.putNumber("CancoderReading", getCurrentEncoderPosition());
         // // SmartDashboard.putNumber("Motor Position", getCurrentPosition());
         // }

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
@@ -49,12 +50,14 @@ public class Windmill extends Command {
                 this.targetHeight = windmillState.getElevatorHeight();
         }
 
-        // public void finish() {
-        // this.finished = true;
-        // }
+        public void finish() {
+                this.finished = true;
+        }
 
         @Override
         public void initialize() {
+
+                this.finished = false;
 
                 // check if elevator is currently below the safe pivot arm movement height (i.e.
                 // danger zone)
@@ -99,7 +102,7 @@ public class Windmill extends Command {
                                                         new Pivot(pivotSubsystem, targetAngle)));
                 }
                 // if elevator starts outside the danger zone and ends in the danger zone, then
-                // turn the pivot and lower the elevator to the safe height and then finish
+                // turn the pivot and set the elevator to the safe height and then finish
                 // lowering the elevator once the pivot is clear
                 else if (!elevatorInDangerZone && elevatorEndInDangerZone) {
                         commands.addCommands(
@@ -136,21 +139,26 @@ public class Windmill extends Command {
 
                 }
 
-                CommandScheduler.getInstance().schedule(new SequentialCommandGroup(commands
-                // new InstantCommand(() -> this.finish())
-                ));
+                commands.addCommands(
+                                new InstantCommand(() -> this.finish()));
+
+                // CommandScheduler.getInstance().schedule(new SequentialCommandGroup(commands
+                // // new InstantCommand(() -> this.finish())
+                // ));
+                commands.schedule();
 
         }
 
         @Override
         public boolean isFinished() {
-                return true;
+                return this.finished;
         }
 
         @Override
         public void end(boolean interrupted) {
-                if (interrupted) {
-                        this.finished = true;
-                }
+                // if (interrupted) {
+                // this.finished = true;
+                // }
+                this.finished = true;
         }
 }
