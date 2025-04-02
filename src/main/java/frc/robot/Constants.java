@@ -117,25 +117,18 @@ public final class Constants {
       Climb(ElevatorConstants.kElevatorStage1Height, Rotation2d.fromDegrees(PivotArmConstants.kPivotClimb)),
       LimelightYellowTarget(ElevatorConstants.kElevatorHomeHeight, Rotation2d.fromDegrees(74)),
       AlgaeHoldHeight(ElevatorConstants.kElevatorAlgaeHoldHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotHome)),
-      // CoralPickup(ElevatorConstants.kElevatorCoralPickupHeight,
-      // Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
-      // CoralPickupAlternate(ElevatorConstants.kElevatorCoralPickupAlternateHeight,
-      // Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
-      // CoralPickupHigher(ElevatorConstants.kElevatorCoralPickupHigher,
-      // Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
-      // CoralPickupAltHigher(ElevatorConstants.kElevatorCoralPickupAltHigher,
-      // Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup)),
       AutoTravel(ElevatorConstants.kElevatorAutoTravelHeight, Rotation2d.fromDegrees(PivotArmConstants.kPivotHome)),
+
       // coral dropoff happens on both sides
-      CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height,
-          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff1), true),
+      // CoralDropOff1(ElevatorConstants.kElevatorCoralDropOff1Height,
+      // Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff1), true),
 
       CoralDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff2And3), true),
 
       CoralScore2(ElevatorConstants.kElevatorCoralScore2Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralScore2And3), true),
-      
+
       CoralDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralDropOff2And3), true),
 

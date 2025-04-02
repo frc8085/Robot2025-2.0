@@ -70,7 +70,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    this.m_endMotor.set(0.05);
+    this.m_endMotor.set(0.0);
   }
 
   public void eject() {
@@ -78,7 +78,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void drop() {
-    this.m_endMotor.set(EndConstants.kEndEffectSlowSpeed);
+    this.m_endMotor.set(-EndConstants.kEndEffectSlowSpeed);
   }
 
   public void periodic() {

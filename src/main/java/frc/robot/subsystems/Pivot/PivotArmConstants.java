@@ -18,16 +18,16 @@ public final class PivotArmConstants {
 
     public static final double kPivotCancoderOffset = 0.456543;
 
-    public static final double kPivotArmP = 7; // 0.7
+    public static final double kPivotArmP = 12; // 7
     public static final double kPivotArmI = 0; // 0.0
-    public static final double kPivotArmD = 0; // 0.1
-    public static final double kPivotArmS = 0.0;
-    public static final double kPivotArmV = 0.3; // 0.2
-    public static final double kPivotArmA = 0.015; // 0.015
-    public static final double kPivotArmFF = 0.354;
-    public static final double kPivotArmG = 0;
+    public static final double kPivotArmD = 0; // 0
+    public static final double kPivotArmS = 0.35;
+    public static final double kPivotArmV = .75; // 0.3
+    public static final double kPivotArmA = 0; // 0.015
+    public static final double kPivotArmFF = .5; // .354
+    public static final double kPivotArmG = 0; // 0
 
-    public static final double kPivotArmGravityV = 0.284;
+    public static final double kPivotArmGravityV = 0;
 
     public static double kPivotArmMMVelo = 80;
     public static double kPivotArmMMAcc = 80;
@@ -45,16 +45,16 @@ public final class PivotArmConstants {
     public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-35);
 
     // the Tolerance for pivot command motion
-    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(5);
+    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(8);
     public static final double kPivotToleranceRotations = kPivotTolerance.getRotations();
 
     // Pivot Angles for different states
-    public static final double kPivotHome = 0;
+    public static final double kPivotHome = 10;
     public static final double kPivotClimb = 90;
-    public static final double kPivotCoralPickup = 0;
-    public static final double kPivotCoralDropOff1 = -45;
-    public static final double kPivotCoralDropOff2And3 = 205;
-    public static final double kPivotCoralScore2And3 = 220;
+    public static final double kPivotCoralPickup = 2;
+    // public static final double kPivotCoralDropOff1 = -45;
+    public static final double kPivotCoralDropOff2And3 = 228;
+    public static final double kPivotCoralScore2And3 = 245;
     public static final double kPivotCoralDropOff4 = 225;
     public static final double kPivotCoralScore4 = 240;
     // public static final double kPivotAlgaePickUpFloor = 116;

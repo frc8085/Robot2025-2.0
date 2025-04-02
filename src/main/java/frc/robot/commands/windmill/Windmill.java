@@ -16,6 +16,7 @@ import frc.robot.commands.windmill.elevator.*;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
+import frc.robot.States.WindmillStates;
 
 public class Windmill extends Command {
 
@@ -23,22 +24,28 @@ public class Windmill extends Command {
         Rotation2d targetAngle;
         ElevatorSubsystem elevatorSubsystem;
         PivotSubsystem pivotSubsystem;
+        // WindmillStates windmillStates = new WindmillStates();
 
         boolean finished = false;
 
-        public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, double targetHeight,
-                        Rotation2d targetAngle) {
+        // private Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem
+        // pivotSubsystem, double targetHeight,
+        // Rotation2d targetAngle) {
 
-                this.elevatorSubsystem = elevatorSubsystem;
-                this.pivotSubsystem = pivotSubsystem;
-                this.targetAngle = targetAngle;
-                this.targetHeight = targetHeight;
-        }
+        // this.elevatorSubsystem = elevatorSubsystem;
+        // this.pivotSubsystem = pivotSubsystem;
+        // this.targetAngle = targetAngle;
+        // this.targetHeight = targetHeight;
+        // }
 
         // if the same elevator/arm position can be used on both sides of the robot,
         // then set the pivot arm angle as the mirror when on the right (intake) side
         public Windmill(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, WindmillState windmillState,
                         boolean mirrored) {
+
+                // windmillStates.setWindmillState(windmillState);
+                // windmillStates.setMirrored(mirrored);
+
                 var rotation_target = windmillState.getPivotArmAngle();
                 if (mirrored && windmillState.canMirror()) {
                         // mirror the windmill pivot arm if possible (flip around the -90 degree angle)

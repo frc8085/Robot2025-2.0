@@ -10,6 +10,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -39,6 +40,8 @@ public class PivotSubsystem extends SubsystemBase {
 
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
+    private boolean closedLoop = true;
+
     public PivotSubsystem() {
 
         /* Configure CANcoder to zero the magnet appropriately */
@@ -55,6 +58,7 @@ public class PivotSubsystem extends SubsystemBase {
         slot0Configs.kS = PivotArmConstants.kPivotArmS;
         slot0Configs.kV = PivotArmConstants.kPivotArmV;
         slot0Configs.kA = PivotArmConstants.kPivotArmA;
+        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
 
         // new stuff for Synced Cancoder
         m_pivotMotorConfig.Feedback.FeedbackRemoteSensorID = m_pivotEncoder.getDeviceID();
@@ -124,11 +128,17 @@ public class PivotSubsystem extends SubsystemBase {
         }
 
         motionMagicPositionControl.Position = angleToMotorPos(angle);
-        motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
-                * PivotArmConstants.kPivotArmFF;
+        // motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
+        // * PivotArmConstants.kPivotArmFF;
+        this.closedLoop = true;
         m_pivotMotor.setControl(motionMagicPositionControl);
         SmartDashboard.putNumber("rotation2d value", angle.getRotations());
 
+    }
+
+    public double getCalculatedMotorFF() {
+        double angle = getCurrentRotation().getRadians();
+        return Math.sin(angle) * PivotArmConstants.kPivotArmFF;
     }
 
     public double getCurrentPosition() {
@@ -165,19 +175,30 @@ public class PivotSubsystem extends SubsystemBase {
         // // SmartDashboard.putNumber("CancoderReading", getCurrentEncoderPosition());
         // // SmartDashboard.putNumber("Motor Position", getCurrentPosition());
         // }
+        if (this.closedLoop) {
+            SmartDashboard.putNumber("Pivot Arm FF", getCalculatedMotorFF());
 
+            this.m_pivotMotor.setControl(motionMagicPositionControl.withFeedForward(getCalculatedMotorFF()));
+        }
     }
 
     public void start() {
+        this.closedLoop = false;
         m_pivotMotor.set(PivotArmConstants.kPivotArmSpeed);
     }
 
     public void reverse() {
+        this.closedLoop = false;
         m_pivotMotor.set(-PivotArmConstants.kPivotArmSpeed);
     }
 
     public void stop() {
+        this.closedLoop = false;
         m_pivotMotor.set(0);
+    }
+
+    public boolean reefMirrored() {
+        return getCurrentRotation().getDegrees() < 0;
     }
 
     // checks whether the pivot arm is in the danger zone for the elevator at target
@@ -198,6 +219,10 @@ public class PivotSubsystem extends SubsystemBase {
 
     public boolean inDangerZone() {
         return targetInDangerZone(getCurrentRotation());
+    }
+
+    public boolean newSafePivotAngle(Rotation2d targetAngle) {
+        return (targetAngle.getDegrees() < -90) && (targetAngle.getDegrees() > -180);
     }
 
     public boolean willPivotThroughDangerZone(Rotation2d targetAngle) {

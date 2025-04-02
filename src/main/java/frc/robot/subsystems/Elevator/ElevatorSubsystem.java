@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.States.DriveState;
+import frc.robot.commands.states.ScoreReef.ReefLevel;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -126,7 +127,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void zero() {
     m_elevatorMotor.setPosition(
-        ElevatorConstants.kElevatorStage1Height);
+        ElevatorConstants.kElevatorZero);
   }
 
   // read the current elevator encoder position
@@ -143,6 +144,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean targetInDangerZone(double target_position) {
     return target_position < (ElevatorConstants.kElevatorSafeHeightMax);
+  }
+
+  public ReefLevel getReefLevel() {
+    double currentHeight = getCurrentMotorPosition();
+    if (currentHeight < ElevatorConstants.kElevatorSafeHeightMin - ElevatorConstants.kElevatorTolerance) {
+      return ReefLevel.One;
+    } else if ((currentHeight > ElevatorConstants.kElevatorCoralDropOff2Height - ElevatorConstants.kElevatorTolerance)
+        &&
+        (currentHeight < ElevatorConstants.kElevatorCoralDropOff2Height + ElevatorConstants.kElevatorTolerance)) {
+      return ReefLevel.Two;
+    } else if ((currentHeight > ElevatorConstants.kElevatorCoralDropOff3Height - ElevatorConstants.kElevatorTolerance)
+        &&
+        (currentHeight < ElevatorConstants.kElevatorCoralDropOff3Height + ElevatorConstants.kElevatorTolerance)) {
+      return ReefLevel.Three;
+    } else if ((currentHeight > ElevatorConstants.kElevatorCoralDropOff4Height
+        - ElevatorConstants.kElevatorTolerance)) {
+      return ReefLevel.Four;
+    } else {
+      return ReefLevel.None;
+    }
   }
 
   // public boolean isSafeToPivot() {
@@ -172,6 +193,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean inDangerZone() {
 
     return targetInDangerZone(getCurrentMotorPosition());
+  }
+
+  public boolean checkIfBelowHomeHeight(double target_position) {
+    return (target_position < ElevatorConstants.kElevatorHomeHeight);
+
+  }
+
+  public boolean belowHomeHeight() {
+    return checkIfBelowHomeHeight(getCurrentMotorPosition());
   }
 
   public boolean atTarget(double tolerance_rotations) {

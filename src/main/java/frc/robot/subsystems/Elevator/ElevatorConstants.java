@@ -24,20 +24,20 @@ public final class ElevatorConstants {
     public static double kElevatorAdjustment = -3;
     // Elevator Heights for different states
     public static double ropeAdjustmentFactor = .93;
-    public static double kElevatorHomeHeight = 45;
+    public static double kElevatorHomeHeight = 50; // New Height
     public static double kElevatorAutoTravelHeight = 64;
     public static double kElevatorAlgaeHoldHeight = 47;
-    public static double kElevatorCoralHandoffHeight = 40;
+    public static double kElevatorCoralHandoffHeight = 45; // New Height
     // public static double kElevatorCoralPickupAlternateHeight = 20;
     // public static double kElevatorCoralPickupHigher = 25;
     // public static double kElevatorCoralPickupAltHigher = 20;
-    public static double kElevatorCoralDropOff1Height = 30; // 17
-    public static double kElevatorCoralDropOff2Height = 10; // 47 * ropeAdjustmentFactor + kElevatorAdjustment
-    public static double kElevatorCoralScore2Height = 7;
-    public static double kElevatorCoralDropOff3Height = 20; // 75 * ropeAdjustmentFactor + kElevatorAdjustment
-    public static double kElevatorCoralScore3Height = 15;
-    public static double kElevatorCoralDropOff4Height = 55; // changed from 130
-    public static double kElevatorCoralScore4Height = 45;
+    // public static double kElevatorCoralDropOff1Height = 30; // Not needed
+    public static double kElevatorCoralDropOff2Height = 10; // // New Height - Checked
+    public static double kElevatorCoralScore2Height = 10; // New Height - Checked
+    public static double kElevatorCoralDropOff3Height = 28; // New Drop Off Height - Checked
+    public static double kElevatorCoralScore3Height = 28; // New Height - Checked
+    public static double kElevatorCoralDropOff4Height = 65; // New Drop Off Height - Checked
+    public static double kElevatorCoralScore4Height = 55; // New Height
     // Drop off 4 was 130 before but 120 seems to be our max height
     // public static double kElevatorAlgaePickUpFloorHeight = 19;
     public static double kElevatorAlgaeReef2Height = 40;
@@ -49,13 +49,14 @@ public final class ElevatorConstants {
 
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
-    public static final double kElevatorMin = 0; // adjusting for climber
-    public static final double kElevatorZero = 20;
-    public static final double kElevatorStage1Height = 20; // zero position value
-    public static final double kElevatorMax = 60; // 108 hard max
+    public static final double kElevatorMin = 0; // adjusting for climber - can only go to this position if pivot is at
+                                                 // 70
+    public static final double kElevatorZero = 25; // zero position value
+    public static final double kElevatorStage1Height = 20;
+    public static final double kElevatorMax = 70; // hard max
 
     /// The minimum height of the elevator that the pivot arm can swing through
-    public static final double kElevatorSafeHeightMax = 40;
+    public static final double kElevatorSafeHeightMax = kElevatorHomeHeight;
     public static final double kElevatorSafeHeightMin = 10;
 
     // The maximum height that the robot can safely travel at
@@ -68,5 +69,5 @@ public final class ElevatorConstants {
     public static final double kElevatorMinTravelHeight = 80;
 
     // the Elevator tolerance
-    public static final double kElevatorTolerance = 5;
+    public static final double kElevatorTolerance = 3;
 }

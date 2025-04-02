@@ -26,7 +26,7 @@ public final class IntakeConstants {
     public static final int kLeftLightSensorDIO = 4;
     public static final int kRightLightSensorDIO = 5;
 
-    public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(35);
+    public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(36);
     public static final Rotation2d kIntakeEjectAngle = Rotation2d.fromRotations(28);
     public static final Rotation2d kIntakeOutAngle = Rotation2d.fromRotations(0);
 

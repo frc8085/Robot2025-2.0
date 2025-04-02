@@ -1,10 +1,10 @@
 package frc.robot.commands.states;
 
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,10 +19,10 @@ import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.commands.endEffector.RunEndEffector;
 
-
 public class ScoreReef extends Command {
 
     public static enum ReefLevel {
+        None,
         One,
         Two,
         Three,
@@ -32,44 +32,44 @@ public class ScoreReef extends Command {
     private ElevatorSubsystem elevatorSubsystem;
     private PivotSubsystem pivotSubsystem;
     private EndEffectorSubsystem endEffectorSubsystem;
-    private ReefLevel reefLevel;
-    private boolean mirrored;
 
-    ScoreReef(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem, EndEffectorSubsystem endEffectorSubsystem, ReefLevel level, boolean mirrored) {
+    public ScoreReef(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
+            EndEffectorSubsystem endEffectorSubsystem) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.pivotSubsystem = pivotSubsystem;
         this.endEffectorSubsystem = endEffectorSubsystem;
-        this.reefLevel = level;
-        this.mirrored = mirrored;
     }
 
     @Override
     public void initialize() {
         // get current hight and pivot angle
-        double currentElevatorHeight = elevatorSubsystem.getCurrentMotorPosition();
-        Rotation2d currentPivotAngle = pivotSubsystem.getCurrentRotation();
 
         ParallelCommandGroup commands = new ParallelCommandGroup();
 
-        switch (this.reefLevel) {
-            case One:
-                commands.addCommands(
-                    new RunEndEffector(this.endEffectorSubsystem, mirrored)
-                );
-                break;
-            case Two:
-                commands.addCommands(
-                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore2, mirrored)
-                );
-            case Three:
-                commands.addCommands(
-                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore3, mirrored)
-                );
-            case Four:
-                commands.addCommands(
-                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore4, mirrored)
-                );
-                break;
+        SequentialCommandGroup eject = new SequentialCommandGroup(
+                new InstantCommand(() -> this.endEffectorSubsystem.drop()),
+                new WaitCommand(0.5),
+                new InstantCommand(() -> this.endEffectorSubsystem.stop()));
+
+        ReefLevel reefLevel = elevatorSubsystem.getReefLevel();
+
+        boolean mirrored = pivotSubsystem.reefMirrored();
+
+        if (reefLevel == ReefLevel.None) {
+            commands.addCommands(
+                    eject);
+        } else if (reefLevel == ReefLevel.Two) {
+            commands.addCommands(
+                    eject,
+                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore2, mirrored));
+        } else if (reefLevel == ReefLevel.Three) {
+            commands.addCommands(
+                    eject,
+                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore3, mirrored));
+        } else if (reefLevel == ReefLevel.Four) {
+            commands.addCommands(
+                    eject,
+                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore4, mirrored));
         }
 
         commands.schedule();
