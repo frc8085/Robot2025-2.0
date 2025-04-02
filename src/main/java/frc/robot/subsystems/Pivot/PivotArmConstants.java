@@ -49,9 +49,9 @@ public final class PivotArmConstants {
     public static final double kPivotToleranceRotations = kPivotTolerance.getRotations();
 
     // Pivot Angles for different states
-    public static final double kPivotHome = 10;
+    public static final double kPivotHome = 20;
     public static final double kPivotClimb = 90;
-    public static final double kPivotCoralPickup = 2;
+    public static final double kPivotCoralPickup = -2;
     // public static final double kPivotCoralDropOff1 = -45;
     public static final double kPivotCoralDropOff2And3 = 228;
     public static final double kPivotCoralScore2And3 = 245;

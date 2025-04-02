@@ -31,6 +31,7 @@ import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.states.ToCoralDropOff;
 import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.commands.states.ScoreReef;
+import frc.robot.commands.states.TestHandoff;
 
 public class IO {
 
@@ -70,6 +71,7 @@ public class IO {
                 // final Trigger algaeGround = Keymap.Layout.operatorDownButton;
                 // final Trigger algaeReef2 = Keymap.Layout.operatorRightButton;
                 final Trigger coralHandOff = Keymap.Layout.operatorUpButton;
+                final Trigger coralEject = Keymap.Layout.operatorDownButton;
                 // final Trigger algaeProcessor = Keymap.Layout.operatorLeftButton;
                 final Trigger coralDropOff4 = Keymap.Layout.operatorYButton;
                 final Trigger coralDropOff3 = Keymap.Layout.operatorXButton;
@@ -206,8 +208,15 @@ public class IO {
                 // WindmillState.Home, false));
 
                 coralHandOff.onTrue(
-                                new Handoff(robotContainer.intake,
+                                new TestHandoff(robotContainer.elevator, robotContainer.pivot, robotContainer.intake,
                                                 robotContainer.endEffector));
+
+                coralEject
+                                .onTrue(new ScoreReef(robotContainer.elevator,
+                                                robotContainer.pivot, robotContainer.endEffector))
+                                .debounce(0.5).onFalse(new Windmill(robotContainer.elevator,
+                                                robotContainer.pivot,
+                                                WindmillState.Home, false));
 
                 toggleClimber.toggleOnTrue(new ConditionalCommand(
                                 new DeployClimb(robotContainer.climber),

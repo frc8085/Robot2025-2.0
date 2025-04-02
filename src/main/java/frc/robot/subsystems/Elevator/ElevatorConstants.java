@@ -27,7 +27,7 @@ public final class ElevatorConstants {
     public static double kElevatorHomeHeight = 50; // New Height
     public static double kElevatorAutoTravelHeight = 64;
     public static double kElevatorAlgaeHoldHeight = 47;
-    public static double kElevatorCoralHandoffHeight = 45; // New Height
+    public static double kElevatorCoralHandoffHeight = 44; // New Height
     // public static double kElevatorCoralPickupAlternateHeight = 20;
     // public static double kElevatorCoralPickupHigher = 25;
     // public static double kElevatorCoralPickupAltHigher = 20;

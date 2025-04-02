@@ -55,7 +55,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
 
   public boolean ElevatorRaiseLimitHit() {
-    return topLimitSwitch.get();
+    // return topLimitSwitch.get();
+    return false;
   }
 
   public boolean ElevatorZeroLimitHit() {
