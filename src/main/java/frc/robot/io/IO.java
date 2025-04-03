@@ -3,6 +3,7 @@ package frc.robot.io;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -31,6 +32,7 @@ import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.states.ToCoralDropOff;
 import frc.robot.commands.states.ToHomeCommand;
 import frc.robot.commands.states.ScoreReef;
+import frc.robot.commands.states.TestAlgae;
 import frc.robot.commands.states.TestHandoff;
 
 public class IO {
@@ -77,6 +79,8 @@ public class IO {
                 final Trigger coralDropOff3 = Keymap.Layout.operatorXButton;
                 final Trigger coralDropOff2 = Keymap.Layout.operatorBButton;
                 final Trigger coralDropOff1 = Keymap.Layout.operatorAButton;
+                final Trigger algaePickup3 = Keymap.Layout.operatorRightButton;
+                final Trigger intakeHalf = Keymap.Layout.operatorLeftButton;
 
                 // Set Left Joystick for manual elevator/pivot movement
                 final Trigger raiseElevator = Keymap.Controllers.operatorController.axisLessThan(1, -0.25);
@@ -86,7 +90,8 @@ public class IO {
 
                 // Initialization
                 // Zero elevator - carriage must be below stage 1 or it will zero where it is
-                zeroElevator.onTrue(new ZeroElevator(robotContainer.elevator));
+                zeroElevator.onTrue(new ParallelCommandGroup(new ZeroElevator(robotContainer.elevator),
+                                new InstantCommand(robotContainer.intake::zeroIntake)));
                 // zeroArm.onTrue(new ZeroElevator(robotContainer.elevator));
                 // zeroArm.and(altButtonOperator)
                 // .onTrue(new InitializePivotAndElevator(robotContainer.pivot,
@@ -117,6 +122,10 @@ public class IO {
                 // SwerveDriveTeleopRoboRelativeSlow(robotContainer.drivetrain)).toggleOnFalse(
                 // new SwerveDriveTeleop(robotContainer.drivetrain));
 
+                intakeHalf.onTrue(
+                                new InstantCommand(() -> robotContainer.intake
+                                                .setDeployRotation(Rotation2d.fromRotations(18)),
+                                                robotContainer.intake));
                 intakeCoral.onTrue(new DeployIntake(robotContainer.intake)
                 // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
                 )
@@ -217,7 +226,8 @@ public class IO {
                                 .debounce(0.5).onFalse(new Windmill(robotContainer.elevator,
                                                 robotContainer.pivot,
                                                 WindmillState.Home, false));
-
+                algaePickup3.onTrue(new TestAlgae(robotContainer.elevator, robotContainer.pivot,
+                                robotContainer.endEffector));
                 toggleClimber.toggleOnTrue(new ConditionalCommand(
                                 new DeployClimb(robotContainer.climber),
                                 new RetractClimb(robotContainer.climber),
@@ -232,12 +242,12 @@ public class IO {
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(),
                                                 robotContainer.climber));
 
-                // toggleClimber.toggleOnTrue(new ConditionalCommand(
-                // new LockPivotAndElevatorCommand(robotContainer.elevator,
-                // robotContainer.pivot).withTimeout(15)
-                // .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                // new ToHomeCommand(robotContainer.elevator, robotContainer.pivot),
-                // robotContainer.climber::climberAtHomePosition));
+                toggleClimber.toggleOnTrue(new ConditionalCommand(
+                                new LockPivotAndElevatorCommand(robotContainer.elevator,
+                                                robotContainer.pivot, robotContainer.intake).withTimeout(15)
+                                                .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot),
+                                robotContainer.climber::climberAtHomePosition));
 
                 pivotClockwise
                                 .onTrue(new InstantCommand(robotContainer.pivot::start, robotContainer.pivot))

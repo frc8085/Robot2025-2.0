@@ -7,10 +7,16 @@ public final class IntakeConstants {
     public static final int kIntakeDeployCanId = 27;
     public static final int kIntakeOuterRollerCanId = 28;
     public static final int kIntakeInnerRollerCanId = 29;
+    public static final int kIntakeDeployCanCoderCanId = 17;
+    public static final double kCanCoderOffset = -0.003174;
 
     public static final double kIntakeSpeed = 1;
-    public static final double kIntakeHandoffSpeed = 0.6;
-    public static final double kIntakeInnerSpeed = 1;
+    public static final double kIntakeHandoffSpeed = 1;
+    public static final double kIntakeInnerSpeed = .45;
+    public static final double kIntakeRestingSpeed = .2;
+
+    public static final double kIntakeDeployGearRatio = 48 / 1.0; // this is not used other than for zeroing with
+                                                                  // cancoder
 
     public static final double kIntakeDeployP = 5; // 0.7
     public static final double kIntakeDeployI = 0; // 0.0

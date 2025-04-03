@@ -14,7 +14,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -40,14 +40,18 @@ public class PivotSubsystem extends SubsystemBase {
 
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
-    private boolean closedLoop = true;
+    private boolean closedLoop = false;
+
+    private PIDController m_pidController = new PIDController(0.1, 0, 0.001);
+
+    private Rotation2d m_targetAngle = new Rotation2d(0);
 
     public PivotSubsystem() {
 
         /* Configure CANcoder to zero the magnet appropriately */
         m_pivotEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         m_pivotEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        m_pivotEncoderConfig.MagnetSensor.MagnetOffset = PivotArmConstants.kPivotCancoderOffset;
+        m_pivotEncoderConfig.MagnetSensor.MagnetOffset = PivotArmConstants.kPivotCancoderVerticalOffset;
         m_pivotEncoder.getConfigurator().apply(m_pivotEncoderConfig);
 
         var slot0Configs = new Slot0Configs();
@@ -92,6 +96,14 @@ public class PivotSubsystem extends SubsystemBase {
 
     }
 
+    // public void initializePivot() {
+    // // read motor encoder rotation, get offset from 0
+    // double rot = this.getCurrentRotation().getRotations();
+    // System.err.println("Pivot Arm Encoder Rotations: " + rot);
+    // // set the motor encoder to 180 + offset
+    // this.m_pivotMotor.setPosition(0.5 + rot); // 0.5 is the offset
+    // }
+
     // public boolean pivotAtCoral4DropOffAngle() {
     // return ((getCurrentRotation().getDegrees() <=
     // (PivotArmConstants.kPivotCoralDropOff4
@@ -127,12 +139,15 @@ public class PivotSubsystem extends SubsystemBase {
             angle = PivotArmConstants.kPivotArmMaxManual;
         }
 
-        motionMagicPositionControl.Position = angleToMotorPos(angle);
+        // motionMagicPositionControl.Position = angleToMotorPos(angle);
         // motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
         // * PivotArmConstants.kPivotArmFF;
         this.closedLoop = true;
-        m_pivotMotor.setControl(motionMagicPositionControl);
-        SmartDashboard.putNumber("rotation2d value", angle.getRotations());
+
+        this.m_targetAngle = angle;
+
+        // m_pivotMotor.setControl(motionMagicPositionControl);
+        // SmartDashboard.putNumber("rotation2d value", angle.getRotations());
 
     }
 
@@ -143,13 +158,13 @@ public class PivotSubsystem extends SubsystemBase {
 
     public double getCurrentPosition() {
         pivotArmPosition.refresh();
-        return pivotArmPosition.getValueAsDouble();
+        return pivotArmPosition.getValueAsDouble() + 0.5; // +180 to get the correct angle
     }
 
-    public double getCurrentEncoderPosition() {
-        pivotEncoderPosition.refresh();
-        return pivotEncoderPosition.getValueAsDouble();
-    }
+    // public double getCurrentEncoderPosition() {
+    // pivotEncoderPosition.refresh();
+    // return pivotEncoderPosition.getValueAsDouble();
+    // }
 
     public double getCurrentVelocity() {
         pivotArmVelocity.refresh();
@@ -169,6 +184,7 @@ public class PivotSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Pivot Arm Angle motor", getCurrentRotation().getRotations());
         SmartDashboard.putBoolean("Pivot Arm in Danger Zone", inDangerZone());
+        SmartDashboard.putBoolean("Pivot at Home Angle", pivotAtHomeAngle());
         // if (TuningModeConstants.kPivotTuning) {
         SmartDashboard.putNumber("Pivot Arm Angle",
                 getCurrentRotation().getDegrees());
@@ -176,9 +192,24 @@ public class PivotSubsystem extends SubsystemBase {
         // // SmartDashboard.putNumber("Motor Position", getCurrentPosition());
         // }
         if (this.closedLoop) {
-            SmartDashboard.putNumber("Pivot Arm FF", getCalculatedMotorFF());
+            // SmartDashboard.putNumber("Pivot Arm FF", getCalculatedMotorFF());
 
-            this.m_pivotMotor.setControl(motionMagicPositionControl.withFeedForward(getCalculatedMotorFF()));
+            // this.m_pivotMotor.setControl(motionMagicPositionControl.withFeedForward(getCalculatedMotorFF()));
+
+            double pivotVoltage = this.m_pidController.calculate(this.getCurrentRotation().getDegrees(),
+                    this.m_targetAngle.getDegrees());
+
+            if (pivotVoltage > 3) {
+                pivotVoltage = 3;
+            } else if (pivotVoltage < -3) {
+                pivotVoltage = -3;
+            }
+
+            double feedforward = Math.sin(this.getCurrentRotation().getRadians()) * PivotArmConstants.kPivotArmFF;
+
+            pivotVoltage += feedforward;
+
+            this.m_pivotMotor.setVoltage(pivotVoltage);
         }
     }
 
@@ -243,6 +274,12 @@ public class PivotSubsystem extends SubsystemBase {
         }
 
         return result;
+    }
+
+    public boolean pivotAtHomeAngle() {
+        int tolerance = 5;
+        return ((getCurrentRotation().getDegrees() < (PivotArmConstants.kPivotHome + tolerance))
+                && (getCurrentRotation().getDegrees() > (PivotArmConstants.kPivotHome - tolerance)));
     }
 
     public void holdPivotArm() {

@@ -16,6 +16,7 @@ public final class PivotArmConstants {
     public static final double kPivotMotorSensorToMechanismRatio = 3.0;
     public static final double kPivotMotorRotorToSensorRatio = 9.0;
 
+    public static final double kPivotCancoderVerticalOffset = -.032471;// + .5;
     public static final double kPivotCancoderOffset = 0.456543;
 
     public static final double kPivotArmP = 12; // 7
@@ -24,7 +25,7 @@ public final class PivotArmConstants {
     public static final double kPivotArmS = 0.35;
     public static final double kPivotArmV = .75; // 0.3
     public static final double kPivotArmA = 0; // 0.015
-    public static final double kPivotArmFF = .5; // .354
+    public static final double kPivotArmFF = .375; // .354
     public static final double kPivotArmG = 0; // 0
 
     public static final double kPivotArmGravityV = 0;
@@ -45,20 +46,20 @@ public final class PivotArmConstants {
     public static final Rotation2d kPivotArmSwingThroughMin = Rotation2d.fromDegrees(-35);
 
     // the Tolerance for pivot command motion
-    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(8);
+    public static final Rotation2d kPivotTolerance = Rotation2d.fromDegrees(10);
     public static final double kPivotToleranceRotations = kPivotTolerance.getRotations();
 
     // Pivot Angles for different states
-    public static final double kPivotHome = 20;
+    public static final double kPivotHome = 0;
     public static final double kPivotClimb = 90;
-    public static final double kPivotCoralPickup = -2;
+    public static final double kPivotCoralPickup = 0;
     // public static final double kPivotCoralDropOff1 = -45;
     public static final double kPivotCoralDropOff2And3 = 228;
     public static final double kPivotCoralScore2And3 = 245;
     public static final double kPivotCoralDropOff4 = 225;
     public static final double kPivotCoralScore4 = 240;
     // public static final double kPivotAlgaePickUpFloor = 116;
-    public static final double kPivotAlgaeReef = 180;
+    public static final double kPivotAlgaeReef = 90;
     // public static final double kPivotAlgaePickUpFloorFlip = 90;
     // public static final double kPivotReef2Flip = -35;
     // public static final double kPivotReef3Flip = -25;

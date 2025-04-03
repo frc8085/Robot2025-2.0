@@ -76,6 +76,8 @@ public class Windmill extends Command {
 
                 SequentialCommandGroup commands = new SequentialCommandGroup();
 
+                commands.addCommands(new PrintCommand("Starting Windmill"));
+
                 // logging
                 if (TuningModeConstants.kElevatorTuning) {
 
@@ -95,6 +97,7 @@ public class Windmill extends Command {
 
                 if (!pivotWillSwingThrough) {
                         commands.addCommands(
+                                        new PrintCommand("pivot will not swing"),
                                         new ParallelCommandGroup(
                                                         new Elevator(elevatorSubsystem, targetHeight),
                                                         new Pivot(pivotSubsystem, targetAngle)));
@@ -104,6 +107,7 @@ public class Windmill extends Command {
                 // pivot together
                 else if (!elevatorInDangerZone && !elevatorEndInDangerZone) {
                         commands.addCommands(
+                                        new PrintCommand("no danger"),
                                         new ParallelCommandGroup(
                                                         new Elevator(elevatorSubsystem, targetHeight),
                                                         new Pivot(pivotSubsystem, targetAngle)));
@@ -113,6 +117,7 @@ public class Windmill extends Command {
                 // lowering the elevator once the pivot is clear
                 else if (!elevatorInDangerZone && elevatorEndInDangerZone) {
                         commands.addCommands(
+                                        new PrintCommand("Ends in Danger"),
                                         new ParallelCommandGroup(
                                                         new Pivot(pivotSubsystem, targetAngle),
                                                         new Elevator(elevatorSubsystem,
@@ -126,6 +131,7 @@ public class Windmill extends Command {
 
                 else if (elevatorInDangerZone && elevatorEndInDangerZone) {
                         commands.addCommands(
+                                        new PrintCommand("starts and ends in danger"),
                                         new SequentialCommandGroup(
                                                         new Elevator(elevatorSubsystem,
                                                                         ElevatorConstants.kElevatorSafeHeightMax),
@@ -139,6 +145,7 @@ public class Windmill extends Command {
 
                 else {
                         commands.addCommands(
+                                        new PrintCommand("does not end in danger"),
                                         new SequentialCommandGroup(
                                                         new Elevator(elevatorSubsystem, targetHeight),
                                                         new WaitUntilCommand(() -> !elevatorSubsystem.inDangerZone()),
@@ -146,8 +153,9 @@ public class Windmill extends Command {
 
                 }
 
-                commands.addCommands(
-                                new InstantCommand(() -> this.finish()));
+                // commands.addCommands(
+                // new PrintCommand("Windmill is finished"),
+                // new InstantCommand(() -> this.finish()));
 
                 // CommandScheduler.getInstance().schedule(new SequentialCommandGroup(commands
                 // // new InstantCommand(() -> this.finish())
@@ -156,9 +164,14 @@ public class Windmill extends Command {
 
         }
 
+        // @Override
+        // public boolean isFinished() {
+        // return this.finished;
+        // }
+
         @Override
         public boolean isFinished() {
-                return this.finished;
+                return true;
         }
 
         @Override

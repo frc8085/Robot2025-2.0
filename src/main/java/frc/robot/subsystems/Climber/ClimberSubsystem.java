@@ -40,7 +40,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public boolean climberAtHomePosition() {
 
-        return !climberLimitSwitch.get();
+        return climberLimitSwitch.get();
 
     }
 

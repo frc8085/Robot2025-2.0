@@ -29,7 +29,7 @@ public class ToCoralDropOff extends SequentialCommandGroup {
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                                 WindmillState.CoralHandoff, false),
                                                 new WaitCommand(0.2),
-                                                new Handoff(intakeSubsystem, endEffectorSubsystem)),
+                                                new Handoff(intakeSubsystem, pivotSubsystem, endEffectorSubsystem)),
                                                 new WaitCommand(0),
                                                 () -> intakeSubsystem.hasCoralCentered()));
                 if (yellow) {

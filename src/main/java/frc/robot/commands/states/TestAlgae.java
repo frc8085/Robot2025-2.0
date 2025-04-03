@@ -15,19 +15,18 @@ import frc.robot.subsystems.EndEffector.EndEffectorSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.commands.intake.RetractIntake;
 import frc.robot.Constants.Windmill.WindmillState;
+import frc.robot.commands.endEffector.Algae;
 import frc.robot.commands.endEffector.Handoff;
 
-public class TestHandoff extends SequentialCommandGroup {
-        public TestHandoff(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
-                        IntakeSubsystem intakeSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+public class TestAlgae extends SequentialCommandGroup {
+        public TestAlgae(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
+                        EndEffectorSubsystem endEffectorSubsystem) {
                 addCommands(
-                                new ConditionalCommand(new SequentialCommandGroup(
-                                                new PrintCommand("Performing Coral Handoff"),
+                                new SequentialCommandGroup(
+                                                new PrintCommand("Performing Algae Pickup"),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.CoralHandoff, false),
-                                                new PrintCommand("Finished Move"),
-                                                new Handoff(intakeSubsystem, pivotSubsystem, endEffectorSubsystem)),
-                                                new WaitCommand(0),
-                                                () -> intakeSubsystem.hasCoralCentered()));
+                                                                WindmillState.AlgaePickUpReef3, false),
+                                                new PrintCommand("Move to Reef3"),
+                                                new Algae(endEffectorSubsystem)));
         }
 }

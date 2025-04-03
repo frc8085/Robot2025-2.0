@@ -1,12 +1,14 @@
 package frc.robot.subsystems.Intake;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TuningModeConstants;
+import frc.robot.subsystems.Pivot.PivotArmConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -40,9 +43,18 @@ public class IntakeSubsystem extends SubsystemBase {
     DigitalInput rightLightSensor = new DigitalInput(IntakeConstants.kRightLightSensorDIO);// The gyro sensor
     // private final Pigeon2 m_pivotGyro = new CANcoder()
 
+    private CANcoder m_intakeEncoder = new CANcoder(IntakeConstants.kIntakeDeployCanCoderCanId);
+
+    CANcoderConfiguration m_intakeEncoderConfig = new CANcoderConfiguration();
+
     private MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0);
 
     public IntakeSubsystem() {
+
+        m_intakeEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        m_intakeEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        m_intakeEncoderConfig.MagnetSensor.MagnetOffset = IntakeConstants.kCanCoderOffset;
+        m_intakeEncoder.getConfigurator().apply(m_intakeEncoderConfig);
 
         var slot0Configs = new Slot0Configs();
         slot0Configs.kP = IntakeConstants.kIntakeDeployP;
@@ -89,6 +101,26 @@ public class IntakeSubsystem extends SubsystemBase {
         return Rotation2d.fromRotations(deployPosition.getValueAsDouble());
     }
 
+    public double getCanCoderMotorPosition() {
+        double canPosition = this.m_intakeEncoder.getAbsolutePosition().getValueAsDouble();
+
+        double offsetPosition = canPosition * IntakeConstants.kIntakeDeployGearRatio;
+
+        // get the current motor position
+        double motorPosition = IntakeConstants.kIntakeInAngle.getRotations();
+
+        double currentMotorPosition = motorPosition + offsetPosition;
+
+        return currentMotorPosition;
+    }
+
+    public void zeroIntake() {
+        double currentMotorPosition = getCanCoderMotorPosition();
+
+        // set the motor to the current motor position
+        this.m_deployMotor.setPosition(currentMotorPosition);
+    }
+
     public void setDeployRotation(Rotation2d rotation) {
         motionMagicPositionControl.Position = rotation.getRotations();
         m_deployMotor.setControl(motionMagicPositionControl);
@@ -111,6 +143,10 @@ public class IntakeSubsystem extends SubsystemBase {
         m_innerRoller.set(speed);
     }
 
+    public void enableOuterRollers() {
+        this.setOuterRollerSpeed(IntakeConstants.kIntakeSpeed);
+    }
+
     public void enableRollers() {
         this.setInnerRollerSpeed(-IntakeConstants.kIntakeInnerSpeed);
         this.setOuterRollerSpeed(IntakeConstants.kIntakeSpeed);
@@ -121,9 +157,18 @@ public class IntakeSubsystem extends SubsystemBase {
         this.setOuterRollerSpeed(0);
     }
 
+    public void idleRollers() {
+        this.setInnerRollerSpeed(-IntakeConstants.kIntakeRestingSpeed);
+    }
+
     public void ejectRollers() {
         // this.setInnerRollerSpeed(-IntakeConstants.kIntakeInnerSpeed);
         this.setOuterRollerSpeed(-IntakeConstants.kIntakeSpeed);
+    }
+
+    public void ejectHandoffRollers() {
+        // this.setInnerRollerSpeed(-IntakeConstants.kIntakeInnerSpeed);
+        this.setOuterRollerSpeed(-IntakeConstants.kIntakeHandoffSpeed);
     }
 
     public void periodic() {
@@ -134,6 +179,9 @@ public class IntakeSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("hasCoral", this.getAnyLightSensor());
             SmartDashboard.putBoolean("leftCoral", this.getLeftLightSensor());
             SmartDashboard.putBoolean("rightCoral", this.getRightLightSensor());
+            SmartDashboard.putNumber("Intake Cancoder Position",
+                    m_intakeEncoder.getAbsolutePosition().getValueAsDouble());
+            SmartDashboard.putNumber("Intake Motor Position", this.getCanCoderMotorPosition());
             // SmartDashboard.putNumber("current Gyro Roll", getPivotArmAngle());
         }
     }

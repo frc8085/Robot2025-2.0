@@ -62,7 +62,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   /* Give us a state when the note is in robot */
   public boolean coralInRobot() {
-    return this.getCurrent() > EndConstants.kEndEffectCurrentLimitIdle;
+    // return this.getCurrent() > EndConstants.kEndEffectCurrentLimitIdle;
+    return false;
   }
 
   public void pickup() {
@@ -71,6 +72,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   public void stop() {
     this.m_endMotor.set(0.0);
+  }
+
+  public void holdCoral() {
+    this.m_endMotor.set(.25);
   }
 
   public void eject() {

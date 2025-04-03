@@ -11,5 +11,5 @@ public final class ClimberConstants {
     public static double kWinchFF = 0;
     public static double kWinchMinOutput = 0;
     public static double kWinchMaxOutput = 1;
-    public static double kWinchDeployPosition = 150;
+    public static double kWinchDeployPosition = 114;
 }
