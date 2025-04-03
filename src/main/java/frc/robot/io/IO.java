@@ -170,9 +170,15 @@ public class IO {
                 scoreCoral
                                 .onTrue(new ScoreReef(robotContainer.elevator,
                                                 robotContainer.pivot, robotContainer.endEffector))
-                                .debounce(0.5).onFalse(new Windmill(robotContainer.elevator,
+                                .debounce(0.5).onFalse(new ConditionalCommand(new Windmill(robotContainer.elevator,
                                                 robotContainer.pivot,
-                                                WindmillState.Home, false));
+                                                WindmillState.CoralScoreHome, true),
+                                                new Windmill(robotContainer.elevator,
+                                                                robotContainer.pivot,
+                                                                WindmillState.CoralScoreHome, false),
+                                                robotContainer.pivot::reefMirrored)
+                                                .andThen(new WaitCommand(2.5))
+                                                .andThen(new InstantCommand(robotContainer.endEffector::stop)));
 
                 coralDropOff2.and(scoreLeft).onTrue(
                                 new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,

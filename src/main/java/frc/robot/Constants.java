@@ -144,6 +144,9 @@ public final class Constants {
       CoralHandoff(ElevatorConstants.kElevatorCoralHandoffHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup), true),
 
+      CoralScoreHome(ElevatorConstants.kElevatorCoralScoreHomeHeight,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralScoreHome), true),
+
       // AlgaeProcessor(ElevatorConstants.kElevatorAlgaePickUpFloorHeight,
       // Rotation2d.fromDegrees(PivotArmConstants.kPivotAlgaeProcessor)),
 

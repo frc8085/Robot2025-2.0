@@ -47,6 +47,8 @@ public final class ElevatorConstants {
     // public static double kElevatorReef3FlipHeight = 45;
     public static double kElevatorNetHeight = 99; // changed from 120
 
+    public static double kElevatorCoralScoreHomeHeight = 10;
+
     // Determine what actual height values these are and/or what encoder readings
     // Stage Height refers to top of stage value
     public static final double kElevatorMin = 0; // adjusting for climber - can only go to this position if pivot is at

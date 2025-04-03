@@ -47,9 +47,11 @@ public class ScoreReef extends Command {
         ParallelCommandGroup commands = new ParallelCommandGroup();
 
         SequentialCommandGroup eject = new SequentialCommandGroup(
-                new InstantCommand(() -> this.endEffectorSubsystem.drop()),
-                new WaitCommand(0.5),
-                new InstantCommand(() -> this.endEffectorSubsystem.stop()));
+                new WaitCommand(0.2),
+                new InstantCommand(() -> this.endEffectorSubsystem.drop())
+        // new WaitCommand(0.5),
+        // new InstantCommand(() -> this.endEffectorSubsystem.stop())
+        );
 
         ReefLevel reefLevel = elevatorSubsystem.getReefLevel();
 

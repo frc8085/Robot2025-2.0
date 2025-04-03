@@ -42,7 +42,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     private boolean closedLoop = false;
 
-    private PIDController m_pidController = new PIDController(0.1, 0, 0.001);
+    private PIDController m_pidController = new PIDController(0.2, 0, 0.005);
 
     private Rotation2d m_targetAngle = new Rotation2d(0);
 
