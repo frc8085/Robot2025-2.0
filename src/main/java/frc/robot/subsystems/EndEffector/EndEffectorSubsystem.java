@@ -67,7 +67,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void pickup() {
-    this.m_endMotor.set(kSpeed);
+    this.m_endMotor.set(-kSpeed);
   }
 
   public void stop() {
@@ -75,15 +75,15 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void holdCoral() {
-    this.m_endMotor.set(.25);
+    this.m_endMotor.set(-.25);
   }
 
   public void eject() {
-    this.m_endMotor.set(-kSpeed);
+    this.m_endMotor.set(kSpeed);
   }
 
   public void drop() {
-    this.m_endMotor.set(-EndConstants.kEndEffectSlowSpeed);
+    this.m_endMotor.set(EndConstants.kEndEffectSlowSpeed);
   }
 
   public void periodic() {

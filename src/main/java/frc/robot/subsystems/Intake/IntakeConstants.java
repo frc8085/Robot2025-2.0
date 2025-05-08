@@ -32,9 +32,9 @@ public final class IntakeConstants {
     public static final int kLeftLightSensorDIO = 4;
     public static final int kRightLightSensorDIO = 5;
 
-    public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(36.5);
+    public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(38.5);
     public static final Rotation2d kIntakeEjectAngle = Rotation2d.fromRotations(28);
-    public static final Rotation2d kIntakeOutAngle = Rotation2d.fromRotations(0);
+    public static final Rotation2d kIntakeOutAngle = Rotation2d.fromRotations(4);
 
     public static final Rotation2d kIntakeTolerance = Rotation2d.fromDegrees(15);
 }
