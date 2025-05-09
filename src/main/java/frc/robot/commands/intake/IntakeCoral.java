@@ -49,11 +49,6 @@ public class IntakeCoral extends Command {
     }
 
     @Override
-    public void periodic() {
-
-    }
-
-    @Override
     public boolean isFinished() {
         return true;
     }

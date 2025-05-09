@@ -75,7 +75,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void holdCoral() {
-    this.m_endMotor.set(-.25);
+    this.m_endMotor.set(-.1);
   }
 
   public void eject() {

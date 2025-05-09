@@ -18,35 +18,19 @@ public class PickupCoral extends Command {
         addRequirements(intake);
     }
 
-    public void finish() {
-        this.isFinished = true;
-    }
-
     @Override
     public void initialize() {
 
         this.isFinished = false;
-
-        boolean coralCentered = m_intake.hasCoralCentered();
-        boolean hasCoral = m_intake.getAnyLightSensor();
-
-        SequentialCommandGroup commands = new SequentialCommandGroup();
-
-        commands.addCommands(new PrintCommand("Starting IntakeCoral"));
-
-        if (coralCentered) {
-            commands.addCommands(new PrintCommand("Coral Centered"));
+        if (m_intake.hasCoralCentered()){
+            System.out.println("Coral Already Centered");
             this.isFinished = true;
-        } else if (hasCoral) {
-            commands.addCommands(
-                    new PrintCommand("Has Coral"),
-                    new CenterCoral(m_intake));
+        } else if (m_intake.getAnyLightSensor()) {
+            return;
         } else {
-            commands.addCommands(
-                    new PrintCommand("Deploy Intake"),
-                    new DeployIntake(m_intake));
+            m_intake.setDeployRotation(IntakeConstants.kIntakeOutAngle);
+            m_intake.enableOuterRollers();    
         }
-        commands.schedule();
     }
 
     @Override
@@ -57,7 +41,11 @@ public class PickupCoral extends Command {
             System.out.println("Coral Centered");
             this.isFinished = true;
         } else if (m_intake.getAnyLightSensor()) {
-            new CenterCoral(m_intake);
+            m_intake.setDeployRotation(IntakeConstants.kIntakeInAngle);
+            m_intake.disableOuterRollers();
+            m_intake.idleRollers();
+        } else {
+return;
         }
     }
 
@@ -69,5 +57,6 @@ public class PickupCoral extends Command {
     @Override
     public void end(boolean interrupted) {
         m_intake.disableRollers();
+        m_intake.setDeployRotation(IntakeConstants.kIntakeInAngle);
     }
 }

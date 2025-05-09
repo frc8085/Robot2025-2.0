@@ -8,12 +8,12 @@ public final class IntakeConstants {
     public static final int kIntakeOuterRollerCanId = 28;
     public static final int kIntakeInnerRollerCanId = 29;
     public static final int kIntakeDeployCanCoderCanId = 17;
-    public static final double kCanCoderOffset = -0.003174;
+    public static final double kCanCoderOffset = -0.083984;
 
     public static final double kIntakeSpeed = 1;
     public static final double kIntakeHandoffSpeed = 1;
     public static final double kIntakeInnerSpeed = .3;
-    public static final double kIntakeRestingSpeed = .2;
+    public static final double kIntakeRestingSpeed = .4;
 
     public static final double kIntakeDeployGearRatio = 48 / 1.0; // this is not used other than for zeroing with
                                                                   // cancoder
@@ -32,7 +32,7 @@ public final class IntakeConstants {
     public static final int kLeftLightSensorDIO = 4;
     public static final int kRightLightSensorDIO = 5;
 
-    public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(38.5);
+    public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(40);
     public static final Rotation2d kIntakeEjectAngle = Rotation2d.fromRotations(28);
     public static final Rotation2d kIntakeOutAngle = Rotation2d.fromRotations(4);
 

@@ -27,6 +27,6 @@ public class Handoff extends SequentialCommandGroup {
                                 new PrintCommand("Handoff 3"),
                                 new EjectHandoffCoral(intakeSubsystem),
                                 new PrintCommand("Handoff 4"),
-                                new InstantCommand(() -> endEffectorSubsystem.holdCoral()));
+                                new InstantCommand(() -> endEffectorSubsystem.stop()));
         }
 }
