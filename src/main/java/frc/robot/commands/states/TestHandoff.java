@@ -26,6 +26,7 @@ public class TestHandoff extends SequentialCommandGroup {
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                                 WindmillState.CoralHandoff, false),
                                                 new PrintCommand("Finished Move"),
+                                                new WaitCommand(1),
                                                 new Handoff(intakeSubsystem, pivotSubsystem, endEffectorSubsystem)),
                                                 new WaitCommand(0),
                                                 () -> intakeSubsystem.hasCoralCentered()));

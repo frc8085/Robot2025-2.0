@@ -42,7 +42,7 @@ public class ScoreReef extends Command {
 
     @Override
     public void initialize() {
-        // get current hight and pivot angle
+        // get current height and pivot angle
 
         ParallelCommandGroup commands = new ParallelCommandGroup();
 

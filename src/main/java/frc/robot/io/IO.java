@@ -26,7 +26,6 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.endEffector.*;
 import frc.robot.commands.windmill.elevator.*;
 import frc.robot.commands.windmill.pivot.Pivot;
-import frc.robot.commands.windmill.LockPivotAndElevatorCommand;
 import frc.robot.Constants.Windmill.WindmillState;
 
 import frc.robot.commands.states.ToCoralDropOff;
@@ -126,7 +125,12 @@ public class IO {
                                 new InstantCommand(() -> robotContainer.intake
                                                 .setDeployRotation(Rotation2d.fromRotations(18)),
                                                 robotContainer.intake));
-                intakeCoral.onTrue(new PickupCoral(robotContainer.intake)
+                intakeCoral.onTrue(new SequentialCommandGroup(
+                                new Windmill(robotContainer.elevator, robotContainer.pivot,
+                                                WindmillState.Home,
+                                                false),
+                                new InstantCommand(() -> robotContainer.endEffector.stop()),
+                                new PickupCoral(robotContainer.intake))
                 // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
                 ).onFalse(new RetractIntake(robotContainer.intake)
                 // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
@@ -212,8 +216,11 @@ public class IO {
 
                 coralEject.onTrue(new ScoreReef(robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.endEffector)).debounce(0.5)
-                                .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot, WindmillState.Home,
-                                                false));
+                                .onFalse(new SequentialCommandGroup(
+                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
+                                                                WindmillState.Home,
+                                                                false),
+                                                new InstantCommand(() -> robotContainer.endEffector.stop())));
                 algaePickup3.onTrue(new TestAlgae(robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.endEffector));
                 toggleClimber.toggleOnTrue(new ConditionalCommand(new DeployClimb(robotContainer.climber),

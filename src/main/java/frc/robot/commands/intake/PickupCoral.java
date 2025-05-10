@@ -22,14 +22,14 @@ public class PickupCoral extends Command {
     public void initialize() {
 
         this.isFinished = false;
-        if (m_intake.hasCoralCentered()){
+        if (m_intake.hasCoralCentered()) {
             System.out.println("Coral Already Centered");
             this.isFinished = true;
         } else if (m_intake.getAnyLightSensor()) {
             return;
         } else {
             m_intake.setDeployRotation(IntakeConstants.kIntakeOutAngle);
-            m_intake.enableOuterRollers();    
+            m_intake.enableOuterRollers();
         }
     }
 
@@ -45,7 +45,7 @@ public class PickupCoral extends Command {
             m_intake.disableOuterRollers();
             m_intake.idleRollers();
         } else {
-return;
+            return;
         }
     }
 
