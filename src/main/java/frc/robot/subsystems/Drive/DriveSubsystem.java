@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.States.DriveState;
 import frc.robot.subsystems.Limelight.LimelightHelpers;
 import frc.robot.subsystems.Limelight.LimelightHelpers.PoseEstimate;
@@ -76,7 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
   public Field2d field = new Field2d();
 
   // Copied from 6616 - PID Controller for orientation to supplied angle
-  // private final PIDController orientationController;
+  private final PIDController orientationController;
 
   // Odometry class for tracking robot pose
   // SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
@@ -100,44 +101,40 @@ public class DriveSubsystem extends SubsystemBase {
     try {
       config = RobotConfig.fromGUISettings();
 
-      // // Configure AutoBuilder last
-      // AutoBuilder.configure(
-      // this::getPose, // Robot pose supplier
-      // this::resetOdometry, // Method to reset odometry (will be called if your auto
-      // has a starting pose)
-      // this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
-      // RELATIVE
-      // (speeds, feedforwards) ->
+      // Configure AutoBuilder last
+      AutoBuilder.configure(
+          this::getPose, // Robot pose supplier
+          this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          (speeds, feedforwards) ->
 
-      // driveRobotRelative(speeds), // Method that will drive the robot given ROBOT
-      // RELATIVE ChassisSpeeds. Also
-      // // optionally outputs individual module feedforwards
-      // AutoConstants.PP_CONTROLLER,
-      // config, // The robot configuration
-      // () -> {
-      // // Boolean supplier that controls when the path will be mirrored for the red
-      // // alliance
-      // // This will flip the path being followed to the red side of the field.
-      // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also
+                                      // optionally outputs individual module feedforwards
+          AutoConstants.PP_CONTROLLER,
+          config, // The robot configuration
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red
+            // alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-      // var alliance = DriverStation.getAlliance();
-      // if (alliance.isPresent()) {
-      // return alliance.get() == DriverStation.Alliance.Red;
-      // }
-      // return false;
-      // },
-      // this // Reference to this subsystem to set requirements
-      // );
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
+      );
     } catch (Exception e) {
       // Handle exception as needed
       e.printStackTrace();
     }
 
-    // // from 6616
-    // orientationController = new PIDController(AutoConstants.ANGLE_PID.kP,
-    // AutoConstants.ANGLE_PID.kI,
-    // AutoConstants.ANGLE_PID.kD);
-    // orientationController.enableContinuousInput(-180, 180);
+    // from 6616
+    orientationController = new PIDController(AutoConstants.ANGLE_PID.kP, AutoConstants.ANGLE_PID.kI,
+        AutoConstants.ANGLE_PID.kD);
+    orientationController.enableContinuousInput(-180, 180);
 
     SmartDashboard.putBoolean("useMegatag2", true);
 

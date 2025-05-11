@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.Drive.DriveSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffector.EndEffectorSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
+import frc.robot.subsystems.Limelight.LimelightSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -37,40 +39,17 @@ public class RobotContainer {
 
         public final PivotSubsystem pivot = new PivotSubsystem();
         public final DriveSubsystem drivetrain = new DriveSubsystem();
-        // public final CoralSubsystem coral = new CoralSubsystem();
         public final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
         public final ElevatorSubsystem elevator = new ElevatorSubsystem();
         public final ClimberSubsystem climber = new ClimberSubsystem();
         // public final AlgaeSubsystem algae = new AlgaeSubsystem();
-        // public final LimelightSubsystem limelight = new LimelightSubsystem();
+        public final LimelightSubsystem limelight = new LimelightSubsystem();
         public final IntakeSubsystem intake = new IntakeSubsystem();
 
         // private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
 
         private final Field2d field;
-
-        // Register Named Commands for PathPlanner
-        // private void configureAutoCommands() {
-        // NamedCommands.registerCommand("InitializePE",
-        // new InitializePivotAndElevator(this.pivot, this.elevator));
-        // NamedCommands.registerCommand("WaitUntilElevatorSafePosition",
-        // new AutoWaitUntilElevatorBelowSafeTravelHeight(this.elevator));
-        // NamedCommands.registerCommand("AutoAlgaeL2",
-        // new AutoRemoveAndShootAlgaeL2(this.elevator, this.pivot, this.algae,
-        // this.coral));
-        // NamedCommands.registerCommand("AutoAlgaeNetBlue",
-        // new AutoScoreAlgaeNetBlue(this.algae, this.elevator, this.pivot,
-        // this.coral));
-        // NamedCommands.registerCommand("AutoBCoral4",
-        // new ScoreCoralL4WithWheelLock(this.elevator, this.pivot, this.coral,
-        // this.drivetrain, false));
-        // NamedCommands.registerCommand("AutoToHome", new
-        // AutoToHomeCommand(this.elevator, pivot));
-        // NamedCommands.registerCommand("AutoCoralSource",
-        // new AutoCoralPickup(this.elevator, this.pivot, this.coral));
-
-        // }
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -79,22 +58,25 @@ public class RobotContainer {
                 // Configure the button bindings
                 configureButtonBindings();
 
-                // Register Named Commands for Pathplanner
-                // configureAutoCommands();
-
                 // Configure default commands
                 this.drivetrain.setDefaultCommand(
                                 // IMPLEMENT DEFAULT COMMAND
                                 new SwerveDriveTeleop(this.drivetrain));
 
-                // Another option that allows you to specify the default auto by its name
+                // // Another option that allows you to specify the default auto by its name
                 // autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
+                // autoChooser.addOption("CenterBarge",
+                // new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator,
+                // this.endEffector,
+                // this.intake));
 
                 // SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 field = new Field2d();
                 SmartDashboard.putData("Field", field);
 
+                DataLogManager.start();
+                DataLogManager.logNetworkTables(true);
         }
 
         /**
@@ -138,5 +120,4 @@ public class RobotContainer {
         // driverControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
         // operatorControllerRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
         // }
-
 }
