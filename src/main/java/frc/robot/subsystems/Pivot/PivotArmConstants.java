@@ -58,6 +58,10 @@ public final class PivotArmConstants {
     public static final double kPivotCoralScore2And3 = 235;
     public static final double kPivotCoralDropOff4 = 215;
     public static final double kPivotCoralScore4 = 235;
+    public static final double kPivotCoralLeftDropOff2And3 = -140;
+    public static final double kPivotCoralLeftScore2And3 = -125;
+    public static final double kPivotCoralLeftDropOff4 = -135;
+    public static final double kPivotCoralLeftScore4 = -125;
     // public static final double kPivotAlgaePickUpFloor = 116;
     public static final double kPivotAlgaeReef = 90;
     // public static final double kPivotAlgaePickUpFloorFlip = 90;
@@ -69,5 +73,5 @@ public final class PivotArmConstants {
     public static final double kPivotAlgaeProcessor = 108;
 
     public static final double kPivotCoralScoreHome = 180;
-    public static final double kPivotTravel = -179;
+    public static final double kPivotTravel = -180;
 }

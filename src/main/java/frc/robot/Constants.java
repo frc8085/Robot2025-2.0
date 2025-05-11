@@ -141,6 +141,24 @@ public final class Constants {
       CoralScore4(ElevatorConstants.kElevatorCoralScore4Height,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralScore4), true),
 
+      CoralLeftDropOff2(ElevatorConstants.kElevatorCoralDropOff2Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralLeftDropOff2And3), false),
+
+      CoralLeftScore2(ElevatorConstants.kElevatorCoralScore2Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralLeftScore2And3), false),
+
+      CoralLeftDropOff3(ElevatorConstants.kElevatorCoralDropOff3Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralLeftDropOff2And3), false),
+
+      CoralLeftScore3(ElevatorConstants.kElevatorCoralScore3Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralLeftScore2And3), false),
+
+      CoralLeftDropOff4(ElevatorConstants.kElevatorCoralDropOff4Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralLeftDropOff4), false),
+
+      CoralLeftScore4(ElevatorConstants.kElevatorCoralScore4Height,
+          Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralLeftScore4), false),
+
       CoralHandoff(ElevatorConstants.kElevatorCoralHandoffHeight,
           Rotation2d.fromDegrees(PivotArmConstants.kPivotCoralPickup), true),
 

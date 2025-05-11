@@ -11,9 +11,7 @@ import frc.robot.subsystems.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffector.EndEffectorSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
-import frc.robot.commands.intake.RetractIntake;
 import frc.robot.Constants.Windmill.WindmillState;
-import frc.robot.commands.endEffector.Handoff;
 
 public class ToCoralDropOff extends SequentialCommandGroup {
         public ToCoralDropOff(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
