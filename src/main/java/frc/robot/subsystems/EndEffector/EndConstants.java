@@ -3,7 +3,7 @@ package frc.robot.subsystems.EndEffector;
 public final class EndConstants {
     public static final int EndEffectCurrentLimit = 40;
     public static final double kEndEffectSpeed = 0.75;
-    public static final double kEndEffectSlowSpeed = .15;
+    public static final double kEndEffectSlowSpeed = .3;
 
     // open loop motor values
     public static double kEndEffectMinOutput = -0.25;

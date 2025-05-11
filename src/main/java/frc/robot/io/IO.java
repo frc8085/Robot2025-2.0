@@ -26,6 +26,7 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.endEffector.*;
 import frc.robot.commands.windmill.elevator.*;
 import frc.robot.commands.windmill.pivot.Pivot;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.Constants.Windmill.WindmillState;
 
 import frc.robot.commands.states.ToCoralDropOff;
@@ -136,17 +137,21 @@ public class IO {
                 // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
                 );
 
+                scoreLeft.onTrue(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                                WindmillState.Home,
+                                false));
+
                 dumpCoral.onTrue(new DumpCoral(robotContainer.intake))
                                 .onFalse(new RetractIntake(robotContainer.intake));
 
-                coralDropOff1.onTrue(new Pivot(robotContainer.pivot,
-                                Rotation2d.fromDegrees(0)));
-                coralDropOff2.onTrue(new Pivot(robotContainer.pivot,
-                                Rotation2d.fromDegrees(90)));
-                coralDropOff3.onTrue(new Pivot(robotContainer.pivot,
-                                Rotation2d.fromDegrees(180)));
-                coralDropOff4.onTrue(new Pivot(robotContainer.pivot,
-                                Rotation2d.fromDegrees(270)));
+                // coralDropOff1.onTrue(new Pivot(robotContainer.pivot,
+                // Rotation2d.fromDegrees(0)));
+                // coralDropOff2.onTrue(new Pivot(robotContainer.pivot,
+                // Rotation2d.fromDegrees(90)));
+                // coralDropOff3.onTrue(new Pivot(robotContainer.pivot,
+                // Rotation2d.fromDegrees(180)));
+                // coralDropOff4.onTrue(new Pivot(robotContainer.pivot,
+                // Rotation2d.fromDegrees(270)));
 
                 // coralDropOff1.and(scoreLeft).onTrue(
                 // new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
@@ -172,42 +177,59 @@ public class IO {
 
                 scoreCoral.onTrue(new ScoreReef(
                                 robotContainer.elevator, robotContainer.pivot, robotContainer.endEffector))
-                                .debounce(0.5)
                                 .onFalse(new ConditionalCommand(
-                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                                WindmillState.CoralScoreHome, true),
-                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                                WindmillState.CoralScoreHome, false),
-                                                robotContainer.pivot::reefMirrored).andThen(new WaitCommand(2.5))
+                                                new SequentialCommandGroup(new WaitCommand(.5),
+                                                                new Windmill(robotContainer.elevator,
+                                                                                robotContainer.pivot,
+                                                                                WindmillState.CoralScoreHome, true)),
+                                                new SequentialCommandGroup(new WaitCommand(.5),
+                                                                new Windmill(robotContainer.elevator,
+                                                                                robotContainer.pivot,
+                                                                                WindmillState.CoralScoreHome, false)),
+                                                robotContainer.pivot::reefMirrored).andThen(new WaitCommand(2))
                                                 .andThen(new InstantCommand(robotContainer.endEffector::stop)));
 
-                coralDropOff2.and(scoreLeft).onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.intake, robotContainer.endEffector, WindmillState.CoralDropOff2, false));
+                // coralDropOff2.and(scoreLeft).onTrue(new
+                // ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake, robotContainer.endEffector,
+                // WindmillState.CoralDropOff2, false));
+                // // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // // WindmillState.Home, false));
+
+                coralDropOff2.onTrue(new SequentialCommandGroup(
+                                new Elevator(robotContainer.elevator, ElevatorConstants.kElevatorCoralDropOff2Height),
+                                new WaitUntilCommand(() -> robotContainer.elevator.elevatorAtCoralDropOff2Height()),
+                                new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                                                robotContainer.intake, robotContainer.endEffector,
+                                                WindmillState.CoralDropOff2, true)));
                 // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
                 // WindmillState.Home, false));
 
-                coralDropOff2.and(scoreRight).onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.intake, robotContainer.endEffector, WindmillState.CoralDropOff2, true));
-                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
-                // WindmillState.Home, false));
+                // coralDropOff3.and(scoreLeft).onTrue(new
+                // ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake, robotContainer.endEffector,
+                // WindmillState.CoralDropOff3, false));
+                // // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // // WindmillState.Home, false));
 
-                coralDropOff3.and(scoreLeft).onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.intake, robotContainer.endEffector, WindmillState.CoralDropOff3, false));
-                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
-                // WindmillState.Home, false));
-
-                coralDropOff3.and(scoreRight).onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                coralDropOff3.onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.intake, robotContainer.endEffector, WindmillState.CoralDropOff3, true));
                 // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
                 // WindmillState.Home, false));
 
-                coralDropOff4.and(scoreLeft).onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.intake, robotContainer.endEffector, WindmillState.CoralDropOff4, false));
-                // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
-                // WindmillState.Home, false));
+                // coralDropOff4.and(scoreLeft).onTrue(new
+                // ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                // robotContainer.intake, robotContainer.endEffector,
+                // WindmillState.CoralDropOff4, false));
+                // // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // // WindmillState.Home, false));
 
-                coralDropOff4.and(scoreRight).onTrue(new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.intake, robotContainer.endEffector, WindmillState.CoralDropOff4, true));
+                coralDropOff4.onTrue(new SequentialCommandGroup(
+                                new Elevator(robotContainer.elevator, ElevatorConstants.kElevatorCoralDropOff4Height),
+                                new WaitUntilCommand(() -> robotContainer.elevator.elevatorAtCoralDropOff4Height()),
+                                new ToCoralDropOff(robotContainer.elevator, robotContainer.pivot,
+                                                robotContainer.intake, robotContainer.endEffector,
+                                                WindmillState.CoralDropOff4, true)));
                 // .onFalse(new Windmill(robotContainer.elevator, robotContainer.pivot,
                 // WindmillState.Home, false));
 

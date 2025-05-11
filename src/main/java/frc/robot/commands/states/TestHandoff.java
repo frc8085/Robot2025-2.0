@@ -21,13 +21,18 @@ public class TestHandoff extends SequentialCommandGroup {
         public TestHandoff(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
                         IntakeSubsystem intakeSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
                 addCommands(
-                                new ConditionalCommand(new SequentialCommandGroup(
-                                                new PrintCommand("Performing Coral Handoff"),
-                                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.CoralHandoff, false),
-                                                new PrintCommand("Finished Move"),
-                                                new WaitCommand(1),
-                                                new Handoff(intakeSubsystem, pivotSubsystem, endEffectorSubsystem)),
+                                new ConditionalCommand(
+                                                new SequentialCommandGroup(
+                                                                new PrintCommand("Performing Coral Handoff"),
+                                                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                                                WindmillState.CoralHandoff, false),
+                                                                new PrintCommand("Finished Move"),
+                                                                new WaitCommand(1),
+                                                                new Handoff(intakeSubsystem, pivotSubsystem,
+                                                                                endEffectorSubsystem),
+                                                                new WaitCommand(1),
+                                                                new Windmill(elevatorSubsystem, pivotSubsystem,
+                                                                                WindmillState.CoralScoreTravel, false)),
                                                 new WaitCommand(0),
                                                 () -> intakeSubsystem.hasCoralCentered()));
         }

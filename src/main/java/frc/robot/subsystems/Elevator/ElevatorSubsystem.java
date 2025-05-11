@@ -150,7 +150,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ReefLevel getReefLevel() {
     double currentHeight = getCurrentMotorPosition();
     if (currentHeight < ElevatorConstants.kElevatorSafeHeightMin - ElevatorConstants.kElevatorTolerance) {
-      return ReefLevel.One;
+      return ReefLevel.Two;
     } else if ((currentHeight > ElevatorConstants.kElevatorCoralDropOff2Height - ElevatorConstants.kElevatorTolerance)
         &&
         (currentHeight < ElevatorConstants.kElevatorCoralDropOff2Height + ElevatorConstants.kElevatorTolerance)) {
@@ -174,6 +174,48 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean elevatorBelowSafeTravelHeight() {
     return (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorSafeTravelHeight
         + ElevatorConstants.kElevatorTolerance));
+  }
+
+  public boolean elevatorAtCoralDropOff4Height() {
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff4Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff4Height
+            + ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralDropOff3Height() {
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff3Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff3Height
+            + ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralDropOff2Height() {
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff2Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralDropOff2Height
+            + ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralScore4Height() {
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralScore4Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralScore4Height
+            + ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralScore3Height() {
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralScore3Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralScore3Height
+            + ElevatorConstants.kElevatorTolerance)));
+  }
+
+  public boolean elevatorAtCoralScore2Height() {
+    return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralScore2Height
+        - ElevatorConstants.kElevatorTolerance))
+        && (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralScore2Height
+            + ElevatorConstants.kElevatorTolerance)));
   }
 
   public double minConflictHeight(Rotation2d target_angle) {

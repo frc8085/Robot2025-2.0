@@ -41,6 +41,7 @@ public class PivotSubsystem extends SubsystemBase {
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
     private boolean closedLoop = false;
+    private boolean closedLoopSlow = false;
 
     private PIDController m_pidController = new PIDController(0.2, 0, 0.005);
 
@@ -130,6 +131,16 @@ public class PivotSubsystem extends SubsystemBase {
         this.setPosManual(angle);
     }
 
+    public void setPosAlt(Rotation2d angle) {
+        if (angle.getRotations() < PivotArmConstants.kPivotArmMin.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMin;
+        } else if (angle.getRotations() > PivotArmConstants.kPivotArmMax.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMax;
+        }
+        this.setPosManualAlt(angle);
+
+    }
+
     // WARNING: NO BOUNDS ON THIS FUNCTION, ONLY MANUAL USE ONLY, NOT FOR COMMANDS
     public void setPosManual(Rotation2d angle) {
 
@@ -143,11 +154,24 @@ public class PivotSubsystem extends SubsystemBase {
         // motionMagicPositionControl.FeedForward = Math.sin(angle.getRadians())
         // * PivotArmConstants.kPivotArmFF;
         this.closedLoop = true;
-
+        this.closedLoopSlow = false;
         this.m_targetAngle = angle;
 
         // m_pivotMotor.setControl(motionMagicPositionControl);
         // SmartDashboard.putNumber("rotation2d value", angle.getRotations());
+
+    }
+
+    public void setPosManualAlt(Rotation2d angle) {
+        if (angle.getRotations() < PivotArmConstants.kPivotArmMinManual.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMinManual;
+        } else if (angle.getRotations() > PivotArmConstants.kPivotArmMaxManual.getRotations()) {
+            angle = PivotArmConstants.kPivotArmMaxManual;
+        }
+
+        this.closedLoop = false;
+        this.closedLoopSlow = true;
+        this.m_targetAngle = angle;
 
     }
 
@@ -211,20 +235,40 @@ public class PivotSubsystem extends SubsystemBase {
 
             this.m_pivotMotor.setVoltage(pivotVoltage);
         }
+        if (this.closedLoopSlow) {
+            double pivotVoltage = this.m_pidController.calculate(this.getCurrentRotation().getDegrees(),
+                    this.m_targetAngle.getDegrees());
+
+            if (pivotVoltage > 1.25) {
+                pivotVoltage = 1.25;
+            } else if (pivotVoltage < -1.25) {
+                pivotVoltage = -1.25;
+            }
+
+            double feedforward = Math.sin(this.getCurrentRotation().getRadians()) * PivotArmConstants.kPivotArmFF;
+
+            pivotVoltage += feedforward;
+
+            this.m_pivotMotor.setVoltage(pivotVoltage);
+
+        }
     }
 
     public void start() {
         this.closedLoop = false;
+        this.closedLoopSlow = false;
         m_pivotMotor.set(PivotArmConstants.kPivotArmSpeed);
     }
 
     public void reverse() {
         this.closedLoop = false;
+        this.closedLoopSlow = false;
         m_pivotMotor.set(-PivotArmConstants.kPivotArmSpeed);
     }
 
     public void stop() {
         this.closedLoop = false;
+        this.closedLoopSlow = false;
         m_pivotMotor.set(0);
     }
 

@@ -175,7 +175,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void ejectRollers() {
         // this.setInnerRollerSpeed(-IntakeConstants.kIntakeInnerSpeed);
-        this.setOuterRollerSpeed(-IntakeConstants.kIntakeSpeed);
+        this.setOuterRollerSpeed(-IntakeConstants.kIntakeEjectSpeed);
     }
 
     public void ejectHandoffRollers() {

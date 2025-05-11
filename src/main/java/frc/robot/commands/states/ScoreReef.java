@@ -14,6 +14,7 @@ import frc.robot.subsystems.EndEffector.EndEffectorSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.commands.windmill.Windmill;
+import frc.robot.commands.windmill.WindmillSlow;
 import frc.robot.Constants.TuningModeConstants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -47,9 +48,9 @@ public class ScoreReef extends Command {
         ParallelCommandGroup commands = new ParallelCommandGroup();
 
         SequentialCommandGroup eject = new SequentialCommandGroup(
-                new WaitCommand(0.2),
+                new WaitCommand(.1),
                 new InstantCommand(() -> this.endEffectorSubsystem.drop())
-        // new WaitCommand(0.5),
+        // new WaitCommand(0.5)
         // new InstantCommand(() -> this.endEffectorSubsystem.stop())
         );
 
@@ -62,16 +63,16 @@ public class ScoreReef extends Command {
                     eject);
         } else if (reefLevel == ReefLevel.Two) {
             commands.addCommands(
-                    eject,
-                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore2, mirrored));
+                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore2, mirrored),
+                    eject);
         } else if (reefLevel == ReefLevel.Three) {
             commands.addCommands(
-                    eject,
-                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore3, mirrored));
+                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore3, mirrored),
+                    eject);
         } else if (reefLevel == ReefLevel.Four) {
             commands.addCommands(
-                    eject,
-                    new Windmill(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore4, mirrored));
+                    new WindmillSlow(this.elevatorSubsystem, this.pivotSubsystem, WindmillState.CoralScore4, mirrored),
+                    eject);
         }
 
         commands.schedule();

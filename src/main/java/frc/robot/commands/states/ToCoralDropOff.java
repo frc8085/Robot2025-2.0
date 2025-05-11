@@ -22,14 +22,11 @@ public class ToCoralDropOff extends SequentialCommandGroup {
                 addCommands(
                                 new ConditionalCommand(new SequentialCommandGroup(
                                                 new PrintCommand("Performing Coral Handoff"),
-                                                // new ParallelCommandGroup(
-                                                // new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                // WindmillState.CoralHandoff, false),
-                                                // new RetractIntake(intakeSubsystem)),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                                 WindmillState.CoralHandoff, false),
                                                 new WaitCommand(0.2),
-                                                new Handoff(intakeSubsystem, pivotSubsystem, endEffectorSubsystem)),
+                                                new TestHandoff(elevatorSubsystem, pivotSubsystem, intakeSubsystem,
+                                                                endEffectorSubsystem)),
                                                 new WaitCommand(0),
                                                 () -> intakeSubsystem.hasCoralCentered()));
                 if (yellow) {
