@@ -33,10 +33,10 @@ public final class ElevatorConstants {
     // public static double kElevatorCoralPickupAltHigher = 20;
     // public static double kElevatorCoralDropOff1Height = 30; // Not needed
     public static double kElevatorCoralDropOff2Height = -2; // // New Height - Checked
-    public static double kElevatorCoralScore2Height = -5; // New Height - Checked
+    public static double kElevatorCoralScore2Height = -7; // New Height - Checked
     public static double kElevatorCoralDropOff3Height = 26; // New Drop Off Height - Checked
-    public static double kElevatorCoralScore3Height = 23; // New Height - Checked
-    public static double kElevatorCoralDropOff4Height = 70; // New Drop Off Height - Checked
+    public static double kElevatorCoralScore3Height = 20; // New Height - Checked
+    public static double kElevatorCoralDropOff4Height = 67; // New Drop Off Height - Checked
     public static double kElevatorCoralScore4Height = 55; // New Height
     // Drop off 4 was 130 before but 120 seems to be our max height
     // public static double kElevatorAlgaePickUpFloorHeight = 19;

@@ -273,7 +273,7 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public boolean reefMirrored() {
-        return getCurrentRotation().getDegrees() < 0;
+        return getCurrentRotation().getDegrees() < -180;
     }
 
     // checks whether the pivot arm is in the danger zone for the elevator at target

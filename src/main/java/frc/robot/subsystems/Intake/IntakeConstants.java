@@ -36,6 +36,7 @@ public final class IntakeConstants {
     public static final Rotation2d kIntakeInAngle = Rotation2d.fromRotations(39);
     public static final Rotation2d kIntakeEjectAngle = Rotation2d.fromRotations(28);
     public static final Rotation2d kIntakeOutAngle = Rotation2d.fromRotations(2);
+    public static final Rotation2d kIntakeScoreAngle = Rotation2d.fromRotations(30);
 
     public static final Rotation2d kIntakeTolerance = Rotation2d.fromDegrees(15);
 }
