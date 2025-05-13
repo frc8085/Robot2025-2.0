@@ -2,11 +2,13 @@ package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
+import frc.robot.commands.intake.PickupCoral;
 import frc.robot.commands.states.ScoreReef;
 import frc.robot.commands.states.ToCoralDropOff;
 import frc.robot.commands.windmill.Windmill;
@@ -30,10 +32,8 @@ public class ChoreoAutoCenterBarge extends SequentialCommandGroup {
                         IntakeSubsystem intakeSubsystem) {
 
                 Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("CenterBargeToReef21");
-                // Optional<Trajectory<SwerveSample>> path2 =
-                // Choreo.loadTrajectory("Reef21ToScoreBarge");
-                // Optional<Trajectory<SwerveSample>> path3 =
-                // Choreo.loadTrajectory("ScoreBargeToReef20");
+                Optional<Trajectory<SwerveSample>> path2 = Choreo.loadTrajectory("Reef21ToSource");
+                Optional<Trajectory<SwerveSample>> path3 = Choreo.loadTrajectory("SourceToReef17L");
                 // Optional<Trajectory<SwerveSample>> path4 =
                 // Choreo.loadTrajectory("Reef20ToScoreBarge");
                 // Optional<Trajectory<SwerveSample>> path5 =
@@ -52,7 +52,12 @@ public class ChoreoAutoCenterBarge extends SequentialCommandGroup {
                                                 new ScoreReef(elevatorSubsystem, pivotSubsystem, endEffectorSubsystem,
                                                                 intakeSubsystem),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.CoralScoreHome, true)));
+                                                                WindmillState.CoralScoreHome, true),
+                                                new ParallelRaceGroup(
+                                                                new PickupCoral(intakeSubsystem),
+                                                                new SwerveDriveChoreoFollow(driveSubsystem, path2,
+                                                                                false)),
+                                                new SwerveDriveChoreoFollow(driveSubsystem, path3, false)));
 
         }
 }

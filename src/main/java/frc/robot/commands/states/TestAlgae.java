@@ -25,7 +25,7 @@ public class TestAlgae extends SequentialCommandGroup {
                                 new SequentialCommandGroup(
                                                 new PrintCommand("Performing Algae Pickup"),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.AlgaePickUpReef3, false),
+                                                                WindmillState.AlgaePickUpReef2, false),
                                                 new PrintCommand("Move to Reef3"),
                                                 new Algae(endEffectorSubsystem)));
         }

@@ -40,7 +40,7 @@ public final class ElevatorConstants {
     public static double kElevatorCoralScore4Height = 55; // New Height
     // Drop off 4 was 130 before but 120 seems to be our max height
     // public static double kElevatorAlgaePickUpFloorHeight = 19;
-    public static double kElevatorAlgaeReef2Height = 20;
+    public static double kElevatorAlgaeReef2Height = 26;
     public static double kElevatorAlgaeReef3Height = 56;
     // public static double kElevatorAlgaePickUpFloorFlipHeight = 19;
     // public static double kElevatorReef2FlipHeight = 25;

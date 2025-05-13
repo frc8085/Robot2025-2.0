@@ -15,7 +15,7 @@ public class Algae extends SequentialCommandGroup {
                 addCommands(
 
                                 new PrintCommand("Handoff 1"),
-                                new InstantCommand(() -> endEffectorSubsystem.pickup()),
+                                new InstantCommand(() -> endEffectorSubsystem.eject()),
                                 new WaitCommand(2),
                                 new PrintCommand("Handoff 2"),
                                 new InstantCommand(() -> endEffectorSubsystem.stop()));
