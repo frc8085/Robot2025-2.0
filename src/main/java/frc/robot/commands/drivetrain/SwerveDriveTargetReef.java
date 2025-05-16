@@ -79,7 +79,7 @@ public class SwerveDriveTargetReef extends Command {
         double angleYellow = this.boundAngle(rotationYellow.getDegrees());
 
         // TODO: fix rotation yellow, currently set to blue only
-        newRelativePose = new Pose2d(newRelativePose.getTranslation(), rotationBlue);
+        newRelativePose = new Pose2d(newRelativePose.getTranslation(), rotationYellow);
 
         // if (Math.abs(currentAngle - angleBlue) < Math.abs(currentAngle -
         // angleYellow)) {
@@ -117,6 +117,8 @@ public class SwerveDriveTargetReef extends Command {
     @Override
     public void execute() {
         // run the Pid controllers using the targetpose we generated earlier
+        double forwardOffset = 0;
+        double rightOffset = 0.1;
 
         // use the current pose of the robot as the input
         Pose2d currentPose = this.driveSubsystem.getPose();
@@ -132,8 +134,8 @@ public class SwerveDriveTargetReef extends Command {
         double speedVal = Math.sqrt(vx * vx + vy * vy);
         // double forward = vx / speedVal;
 
-        double forward = 0;
-        double right = 0;
+        double forward = 0 + forwardOffset;
+        double right = 0 + rightOffset;
         if (Math.abs(this.rotPid.getError()) < 7) {
             forward = vx;
             // double right = vy / speedVal;

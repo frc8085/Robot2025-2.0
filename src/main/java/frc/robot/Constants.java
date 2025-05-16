@@ -84,8 +84,8 @@ public final class Constants {
     public static final double REEF_APRILTAG_HEIGHT = 0.324;
 
     // X offset, Y offset, Rotation offset
-    public static final double leftYOffset = 0;
-    public static final double rightYOffset = -0.25;
+    public static final double leftYOffset = 0.1125;
+    public static final double rightYOffset = -0.1375;
     // for offsets, x positive is backwards from the apriltag, y positive is to the
     // right of the apriltag
     // so for example, and x of 1 and a y of 1 would be 1 meter back and 1 meter to

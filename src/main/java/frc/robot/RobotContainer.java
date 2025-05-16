@@ -46,7 +46,7 @@ public class RobotContainer {
         public final LimelightSubsystem limelight = new LimelightSubsystem();
         public final IntakeSubsystem intake = new IntakeSubsystem();
 
-        // private final SendableChooser<Command> autoChooser;
+        private final SendableChooser<Command> autoChooser;
         protected SendableChooser<Alliance> allianceColor = new SendableChooser<>();
 
         private final Field2d field;
@@ -63,14 +63,18 @@ public class RobotContainer {
                                 // IMPLEMENT DEFAULT COMMAND
                                 new SwerveDriveTeleop(this.drivetrain));
 
-                // // Another option that allows you to specify the default auto by its name
-                // autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
-                // autoChooser.addOption("CenterBarge",
-                // new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator,
-                // this.endEffector,
-                // this.intake));
+                // Another option that allows you to specify the default auto by its name
+                autoChooser = AutoBuilder.buildAutoChooser("CenterBarge");
+                autoChooser.addOption("CenterBarge",
+                                new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator,
+                                                this.endEffector,
+                                                this.intake));
+                autoChooser.addOption("CenterL1", new ChoreoL1(this.drivetrain, this.pivot, this.elevator,
+                                this.endEffector, this.intake));
+                autoChooser.addOption("OppoBarge", new ChoreoOppo(this.drivetrain, this.pivot, this.elevator,
+                                this.endEffector, this.intake));
 
-                // SmartDashboard.putData("Auto Chooser", autoChooser);
+                SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 field = new Field2d();
                 SmartDashboard.putData("Field", field);
@@ -102,9 +106,9 @@ public class RobotContainer {
          *
          * @return the command to run in autonomous
          */
-        // public Command getAutonomousCommand() {
-        // return autoChooser.getSelected();
-        // }
+        public Command getAutonomousCommand() {
+                return autoChooser.getSelected();
+        }
 
         // public Command rumbleDriverCommand() {
         // return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(2).finallyDo(()

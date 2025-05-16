@@ -18,14 +18,14 @@ import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.endEffector.Algae;
 import frc.robot.commands.endEffector.Handoff;
 
-public class TestAlgae extends SequentialCommandGroup {
-        public TestAlgae(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
+public class DeAlgaeReef3 extends SequentialCommandGroup {
+        public DeAlgaeReef3(ElevatorSubsystem elevatorSubsystem, PivotSubsystem pivotSubsystem,
                         EndEffectorSubsystem endEffectorSubsystem) {
                 addCommands(
                                 new SequentialCommandGroup(
                                                 new PrintCommand("Performing Algae Pickup"),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.AlgaePickUpReef2, false),
+                                                                WindmillState.AlgaePickUpReef3, false),
                                                 new PrintCommand("Move to Reef3"),
                                                 new Algae(endEffectorSubsystem)));
         }

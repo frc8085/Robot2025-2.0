@@ -3,13 +3,16 @@ package frc.robot.commands.autoCommands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
 import frc.robot.commands.intake.PickupCoral;
 import frc.robot.commands.states.ScoreReef;
+import frc.robot.commands.states.TestHandoff;
 import frc.robot.commands.states.ToCoralDropOff;
 import frc.robot.commands.windmill.Windmill;
 import frc.robot.commands.windmill.elevator.ZeroElevator;
@@ -26,13 +29,13 @@ import choreo.trajectory.Trajectory;
 
 import java.util.Optional;
 
-public class ChoreoAutoCenterBarge extends SequentialCommandGroup {
-        public ChoreoAutoCenterBarge(DriveSubsystem driveSubsystem, PivotSubsystem pivotSubsystem,
+public class ChoreoOppo extends SequentialCommandGroup {
+        public ChoreoOppo(DriveSubsystem driveSubsystem, PivotSubsystem pivotSubsystem,
                         ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem,
                         IntakeSubsystem intakeSubsystem) {
 
-                Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("CenterBargeToReef21");
-                Optional<Trajectory<SwerveSample>> path2 = Choreo.loadTrajectory("Reef21ToSource");
+                Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("OppoBargeToReef22");
+                Optional<Trajectory<SwerveSample>> path2 = Choreo.loadTrajectory("Reef22ToSource");
                 Optional<Trajectory<SwerveSample>> path3 = Choreo.loadTrajectory("SourceToReef17L");
                 // Optional<Trajectory<SwerveSample>> path4 =
                 // Choreo.loadTrajectory("Reef20ToScoreBarge");
@@ -52,14 +55,19 @@ public class ChoreoAutoCenterBarge extends SequentialCommandGroup {
                                                                                 WindmillState.CoralDropOff4, true)),
                                                 new ScoreReef(elevatorSubsystem, pivotSubsystem, endEffectorSubsystem,
                                                                 intakeSubsystem),
+                                                new WaitCommand(.5),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.CoralScoreHome, true)
-                                // new ParallelRaceGroup(
-                                // new PickupCoral(intakeSubsystem),
-                                // new SwerveDriveChoreoFollow(driveSubsystem, path2,
-                                // false)),
-                                // new SwerveDriveChoreoFollow(driveSubsystem, path3, false)));
-                                ));
+                                                                WindmillState.CoralScoreHome, true),
+                                                new ParallelRaceGroup(
+                                                                new PickupCoral(intakeSubsystem),
+                                                                new SwerveDriveChoreoFollow(driveSubsystem, path2,
+                                                                                false)),
+                                                new ParallelCommandGroup(
+                                                                new SwerveDriveChoreoFollow(driveSubsystem, path3,
+                                                                                false)),
+                                                new TestHandoff(elevatorSubsystem, pivotSubsystem, intakeSubsystem,
+                                                                endEffectorSubsystem)));
+                // ));
 
         }
 }

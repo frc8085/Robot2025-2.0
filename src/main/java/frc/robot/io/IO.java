@@ -33,8 +33,9 @@ import frc.robot.Constants.Windmill.WindmillState;
 
 import frc.robot.commands.states.ToCoralDropOff;
 import frc.robot.commands.states.ToHomeCommand;
+import frc.robot.commands.states.DeAlgaeReef2;
+import frc.robot.commands.states.DeAlgaeReef3;
 import frc.robot.commands.states.ScoreReef;
-import frc.robot.commands.states.TestAlgae;
 import frc.robot.commands.states.TestHandoff;
 
 public class IO {
@@ -56,7 +57,7 @@ public class IO {
 
                 // Driver operations
                 final Trigger scoreCoral = Keymap.Layout.driverAButton;
-                final Trigger pickUpCoral = Keymap.Layout.driverLeftTriggerButton;
+                final Trigger pickupCoral = Keymap.Layout.operatorDownButton;
                 final Trigger ejectAlgae = Keymap.Layout.driverYButton;
                 final Trigger shootAlgaeNetBlue = Keymap.Layout.driverLeftBumper;
                 // final Trigger left = Keymap.Layout.driverDownButton;
@@ -68,21 +69,22 @@ public class IO {
 
                 // Operator Controls
                 final Trigger intakeCoral = Keymap.Layout.operatorRightTriggerButton;
-                final Trigger dumpCoral = Keymap.Layout.operatorLeftTriggerButton;
+                final Trigger dumpCoral = Keymap.Layout.driverLeftTriggerButton;
+                final Trigger altdumpCoral = Keymap.Layout.operatorLeftTriggerButton;
                 final Trigger toggleClimber = Keymap.Layout.operatorBackButton;
 
                 // Operator Set Position Controls
                 // final Trigger algaeGround = Keymap.Layout.operatorDownButton;
-                // final Trigger algaeReef2 = Keymap.Layout.operatorRightButton;
+                final Trigger algaeReef2 = Keymap.Layout.operatorRightButton;
                 final Trigger coralHandOff = Keymap.Layout.operatorUpButton;
-                final Trigger coralEject = Keymap.Layout.operatorDownButton;
+                // final Trigger coralEject = Keymap.Layout.operatorDownButton;
                 // final Trigger algaeProcessor = Keymap.Layout.operatorLeftButton;
                 final Trigger coralDropOff4 = Keymap.Layout.operatorYButton;
                 final Trigger coralDropOff3 = Keymap.Layout.operatorXButton;
                 final Trigger coralDropOff2 = Keymap.Layout.operatorBButton;
                 final Trigger coralDropOff1 = Keymap.Layout.operatorAButton;
-                final Trigger algaePickup3 = Keymap.Layout.operatorRightButton;
-                final Trigger intakeHalf = Keymap.Layout.operatorLeftButton;
+                final Trigger algaeReef3 = Keymap.Layout.operatorLeftButton;
+                // final Trigger intakeHalf = Keymap.Layout.operatorLeftButton;
 
                 // Set Left Joystick for manual elevator/pivot movement
                 final Trigger raiseElevator = Keymap.Controllers.operatorController.axisLessThan(1, -0.25);
@@ -124,10 +126,10 @@ public class IO {
                 // SwerveDriveTeleopRoboRelativeSlow(robotContainer.drivetrain)).toggleOnFalse(
                 // new SwerveDriveTeleop(robotContainer.drivetrain));
 
-                intakeHalf.onTrue(
-                                new InstantCommand(() -> robotContainer.intake
-                                                .setDeployRotation(Rotation2d.fromRotations(18)),
-                                                robotContainer.intake));
+                // intakeHalf.onTrue(
+                // new InstantCommand(() -> robotContainer.intake
+                // .setDeployRotation(Rotation2d.fromRotations(18)),
+                // robotContainer.intake));
                 intakeCoral.onTrue(new SequentialCommandGroup(
                                 new Windmill(robotContainer.elevator, robotContainer.pivot,
                                                 WindmillState.Home,
@@ -139,7 +141,11 @@ public class IO {
                 // .andThen(new Handoff(robotContainer.intake, robotContainer.endEffector))
                 );
 
+                pickupCoral.whileTrue(new RunCommand(robotContainer.endEffector::pickup))
+                                .onFalse(new InstantCommand(robotContainer.endEffector::stop));
                 dumpCoral.onTrue(new DumpCoral(robotContainer.intake))
+                                .onFalse(new RetractIntake(robotContainer.intake));
+                altdumpCoral.onTrue(new DumpCoral(robotContainer.intake))
                                 .onFalse(new RetractIntake(robotContainer.intake));
 
                 // coralDropOff1.onTrue(new Pivot(robotContainer.pivot,
@@ -185,7 +191,7 @@ public class IO {
                                                                 new Windmill(robotContainer.elevator,
                                                                                 robotContainer.pivot,
                                                                                 WindmillState.CoralScoreHome, true)),
-                                                robotContainer.pivot::reefMirrored).andThen(new WaitCommand(1))
+                                                robotContainer.pivot::reefMirrored).andThen(new WaitCommand(.25))
                                                 .andThen(new ParallelCommandGroup(
                                                                 new InstantCommand(robotContainer.endEffector::stop),
                                                                 new Windmill(robotContainer.elevator,
@@ -254,14 +260,17 @@ public class IO {
                 coralHandOff.onTrue(new TestHandoff(robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.intake, robotContainer.endEffector));
 
-                coralEject.onTrue(new ScoreReef(robotContainer.elevator, robotContainer.pivot,
-                                robotContainer.endEffector, robotContainer.intake)).debounce(0.5)
-                                .onFalse(new SequentialCommandGroup(
-                                                new Windmill(robotContainer.elevator, robotContainer.pivot,
-                                                                WindmillState.Home,
-                                                                false),
-                                                new InstantCommand(() -> robotContainer.endEffector.stop())));
-                algaePickup3.onTrue(new TestAlgae(robotContainer.elevator, robotContainer.pivot,
+                // coralEject.onTrue(new ScoreReef(robotContainer.elevator,
+                // robotContainer.pivot,
+                // robotContainer.endEffector, robotContainer.intake)).debounce(0.5)
+                // .onFalse(new SequentialCommandGroup(
+                // new Windmill(robotContainer.elevator, robotContainer.pivot,
+                // WindmillState.Home,
+                // false),
+                // new InstantCommand(() -> robotContainer.endEffector.stop())));
+                algaeReef3.onTrue(new DeAlgaeReef3(robotContainer.elevator, robotContainer.pivot,
+                                robotContainer.endEffector));
+                algaeReef2.onTrue(new DeAlgaeReef2(robotContainer.elevator, robotContainer.pivot,
                                 robotContainer.endEffector));
                 toggleClimber.toggleOnTrue(new ConditionalCommand(new DeployClimb(robotContainer.climber),
                                 new RetractClimb(robotContainer.climber),

@@ -182,7 +182,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     public double getCurrentPosition() {
         pivotArmPosition.refresh();
-        return pivotArmPosition.getValueAsDouble() + 0.5; // +180 to get the correct angle
+        return pivotArmPosition.getValueAsDouble() - 0.5; // +180 to get the correct angle
     }
 
     // public double getCurrentEncoderPosition() {
