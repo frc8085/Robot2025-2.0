@@ -282,10 +282,11 @@ public class IO {
                                 .onFalse(new RunCommand(() -> robotContainer.climber.stop(), robotContainer.climber));
 
                 toggleClimber.toggleOnTrue(new ConditionalCommand(
-                                new LockPivotAndElevatorCommand(robotContainer.elevator, robotContainer.pivot,
+                                new LockPivotAndElevator(robotContainer.elevator, robotContainer.pivot,
                                                 robotContainer.intake).withTimeout(15)
                                                 .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                                new ToHomeCommand(robotContainer.elevator, robotContainer.pivot),
+                                new LockPivotAndElevator(robotContainer.elevator, robotContainer.pivot,
+                                                robotContainer.intake),
                                 robotContainer.climber::climberAtHomePosition));
 
                 pivotClockwise.onTrue(new InstantCommand(robotContainer.pivot::start, robotContainer.pivot)).onFalse(

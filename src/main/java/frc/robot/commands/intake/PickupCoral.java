@@ -42,7 +42,7 @@ public class PickupCoral extends Command {
             this.isFinished = true;
         } else if (m_intake.getAnyLightSensor()) {
             m_intake.setDeployRotation(IntakeConstants.kIntakeInAngle);
-            m_intake.disableOuterRollers();
+            m_intake.idleOuterRollers();
             m_intake.idleRollers();
         } else {
             return;

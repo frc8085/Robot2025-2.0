@@ -326,6 +326,12 @@ public class PivotSubsystem extends SubsystemBase {
                 && (getCurrentRotation().getDegrees() > (PivotArmConstants.kPivotHome - tolerance)));
     }
 
+    public boolean pivotAtL2() {
+        int tolerance = 5;
+        return ((getCurrentRotation().getDegrees() < (-220 + tolerance))
+                && (getCurrentRotation().getDegrees() > (-220 - tolerance)));
+    }
+
     public void holdPivotArm() {
         Rotation2d targetAngle = getCurrentRotation();
         setPos(targetAngle);

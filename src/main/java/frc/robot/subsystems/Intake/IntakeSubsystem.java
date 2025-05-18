@@ -147,6 +147,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.setOuterRollerSpeed(IntakeConstants.kIntakeSpeed);
     }
 
+    public void idleOuterRollers() {
+        this.setOuterRollerSpeed(0.1);
+    }
+
     public void disableOuterRollers() {
         this.setOuterRollerSpeed(0);
     }

@@ -9,12 +9,12 @@ import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 
-public class LockPivotAndElevatorCommand extends Command {
+public class LockPivotAndElevator extends Command {
     ElevatorSubsystem elevatorSubsystem;
     PivotSubsystem pivotSubsystem;
     IntakeSubsystem intakeSubsystem;
 
-    public LockPivotAndElevatorCommand(ElevatorSubsystem elevatorSubsystem,
+    public LockPivotAndElevator(ElevatorSubsystem elevatorSubsystem,
             PivotSubsystem pivotSubsystem, IntakeSubsystem intakeSubsystem) {
 
         this.elevatorSubsystem = elevatorSubsystem;
