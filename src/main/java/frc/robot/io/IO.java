@@ -59,14 +59,13 @@ public class IO {
                 final Trigger scoreCoral = Keymap.Layout.driverAButton;
                 final Trigger pickupCoral = Keymap.Layout.operatorDownButton;
                 final Trigger ejectAlgae = Keymap.Layout.driverYButton;
-                final Trigger lockWheels = Keymap.Layout.driverXButton;
+                final Trigger lockWheels = Keymap.Layout.driverBackButton;
                 final Trigger shootAlgaeNetBlue = Keymap.Layout.driverLeftBumper;
                 // final Trigger left = Keymap.Layout.driverDownButton;
                 // final Trigger right = Keymap.Layout.driverUpButton;
                 final Trigger gorobotrelative = Keymap.Controllers.driverController.leftStick();
                 final Trigger raiseClimber = Keymap.Layout.driverRightButton;
                 final Trigger lowerClimber = Keymap.Layout.driverLeftButton;
-                final Trigger goSlow = Keymap.Layout.driverBackButton;
 
                 // Operator Controls
                 final Trigger intakeCoral = Keymap.Layout.operatorRightTriggerButton;
