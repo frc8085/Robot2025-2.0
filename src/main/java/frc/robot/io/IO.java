@@ -59,6 +59,7 @@ public class IO {
                 final Trigger scoreCoral = Keymap.Layout.driverAButton;
                 final Trigger pickupCoral = Keymap.Layout.operatorDownButton;
                 final Trigger ejectAlgae = Keymap.Layout.driverYButton;
+                final Trigger lockWheels = Keymap.Layout.driverXButton;
                 final Trigger shootAlgaeNetBlue = Keymap.Layout.driverLeftBumper;
                 // final Trigger left = Keymap.Layout.driverDownButton;
                 // final Trigger right = Keymap.Layout.driverUpButton;
@@ -304,5 +305,6 @@ public class IO {
                 lowerElevator.whileTrue(new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator))
                                 .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
                                                 robotContainer.elevator));
+                lockWheels.onTrue(new InstantCommand(robotContainer.drivetrain::lock, robotContainer.drivetrain));
         }
 }
