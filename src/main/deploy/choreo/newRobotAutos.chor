@@ -4,7 +4,36 @@
  "type":"Swerve",
  "variables":{
   "expressions":{},
-  "poses":{}
+  "poses":{
+   "Reef17":{
+    "x":{
+     "exp":"3.7 m",
+     "val":3.7
+    },
+    "y":{
+     "exp":"2.95 m",
+     "val":2.95
+    },
+    "heading":{
+     "exp":"150 deg",
+     "val":2.6179938779914944
+    }
+   },
+   "Reef222":{
+    "x":{
+     "exp":"5 m",
+     "val":5.0
+    },
+    "y":{
+     "exp":"2.8 m",
+     "val":2.8
+    },
+    "heading":{
+     "exp":"210 deg",
+     "val":3.665191429188092
+    }
+   }
+  }
  },
  "config":{
   "frontLeft":{

@@ -317,7 +317,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void zeroMoveUp() {
 
     // Go slower when we are zeroing
-    m_elevatorMotor.set(.15);
+    m_elevatorMotor.set(.25);
   }
 
   public void moveUp() {

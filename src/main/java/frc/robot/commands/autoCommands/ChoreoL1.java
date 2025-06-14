@@ -35,12 +35,13 @@ public class ChoreoL1 extends SequentialCommandGroup {
                 Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("CenterL1");
                 addCommands(
                                 new SequentialCommandGroup(
-                                                new ParallelCommandGroup(new ZeroElevator(elevatorSubsystem),
-                                                                new InstantCommand(intakeSubsystem::zeroIntake)),
+
+                                                new InstantCommand(intakeSubsystem::zeroIntake),
 
                                                 new SwerveDriveChoreoFollow(driveSubsystem, path1,
                                                                 true),
-                                                new DumpCoral(intakeSubsystem)
+                                                new DumpCoral(intakeSubsystem),
+                                                new ZeroElevator(elevatorSubsystem)
                                 // new ParallelRaceGroup(
                                 // new PickupCoral(intakeSubsystem),
                                 // new SwerveDriveChoreoFollow(driveSubsystem, path2,

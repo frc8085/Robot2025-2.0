@@ -6,7 +6,9 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
@@ -64,9 +66,21 @@ public class ChoreoOppo extends SequentialCommandGroup {
                                                                                 false)),
                                                 new ParallelCommandGroup(
                                                                 new SwerveDriveChoreoFollow(driveSubsystem, path3,
-                                                                                false)),
-                                                new TestHandoff(elevatorSubsystem, pivotSubsystem, intakeSubsystem,
-                                                                endEffectorSubsystem)));
+                                                                                false),
+                                                                new SequentialCommandGroup(
+                                                                                new WaitUntilCommand(
+                                                                                                intakeSubsystem::hasCoralCentered),
+                                                                                new TestHandoff(elevatorSubsystem,
+                                                                                                pivotSubsystem,
+                                                                                                intakeSubsystem,
+                                                                                                endEffectorSubsystem),
+                                                                                new ToCoralDropOff(
+                                                                                                elevatorSubsystem,
+                                                                                                pivotSubsystem,
+                                                                                                intakeSubsystem,
+                                                                                                endEffectorSubsystem,
+                                                                                                WindmillState.CoralDropOff4,
+                                                                                                true)))));
                 // ));
 
         }

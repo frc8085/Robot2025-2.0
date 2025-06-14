@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
@@ -52,6 +53,7 @@ public class ChoreoAutoCenterBarge extends SequentialCommandGroup {
                                                                                 WindmillState.CoralDropOff4, true)),
                                                 new ScoreReef(elevatorSubsystem, pivotSubsystem, endEffectorSubsystem,
                                                                 intakeSubsystem),
+                                                new WaitCommand(.5),
                                                 new Windmill(elevatorSubsystem, pivotSubsystem,
                                                                 WindmillState.CoralScoreHome, true)
                                 // new ParallelRaceGroup(

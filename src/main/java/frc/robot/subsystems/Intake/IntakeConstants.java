@@ -13,7 +13,7 @@ public final class IntakeConstants {
     public static final double kIntakeSpeed = 1;
     public static final double kIntakeHandoffSpeed = 1;
     public static final double kIntakeInnerSpeed = .3;
-    public static final double kIntakeRestingSpeed = .4;
+    public static final double kIntakeRestingSpeed = .55;
     public static final double kIntakeEjectSpeed = .875;
 
     public static final double kIntakeDeployGearRatio = 48 / 1.0; // this is not used other than for zeroing with

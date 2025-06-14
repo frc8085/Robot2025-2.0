@@ -73,6 +73,8 @@ public class RobotContainer {
                                 this.endEffector, this.intake));
                 autoChooser.addOption("OppoBarge", new ChoreoOppo(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
+                autoChooser.addOption("OppoBarge2", new ChoreoOppo2(this.drivetrain, this.pivot, this.elevator,
+                                this.endEffector, this.intake));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 

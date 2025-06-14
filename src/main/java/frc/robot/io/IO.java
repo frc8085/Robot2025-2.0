@@ -304,6 +304,6 @@ public class IO {
                 lowerElevator.whileTrue(new InstantCommand(robotContainer.elevator::moveDown, robotContainer.elevator))
                                 .onFalse(new InstantCommand(robotContainer.elevator::holdHeight,
                                                 robotContainer.elevator));
-                lockWheels.onTrue(new InstantCommand(robotContainer.drivetrain::lock, robotContainer.drivetrain));
+                lockWheels.whileTrue(new RunCommand(robotContainer.drivetrain::lock, robotContainer.drivetrain));
         }
 }
