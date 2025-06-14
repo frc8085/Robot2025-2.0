@@ -16,7 +16,7 @@ public final class PivotArmConstants {
     public static final double kPivotMotorSensorToMechanismRatio = 3.0;
     public static final double kPivotMotorRotorToSensorRatio = 9.0;
 
-    public static final double kPivotCancoderVerticalOffset = -.077393;// -0.032471, -.039795
+    public static final double kPivotCancoderVerticalOffset = -0.199707;// -0.032471, -.039795
     public static final double kPivotCancoderOffset = 0.456543;
 
     public static final double kPivotArmP = 12; // 7
