@@ -176,6 +176,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         + ElevatorConstants.kElevatorTolerance));
   }
 
+  public boolean elevatorAtHandoff() {
+    return (getCurrentMotorPosition() <= (ElevatorConstants.kElevatorCoralHandoffHeight
+        + ElevatorConstants.kElevatorTolerance));
+  }
+
   public boolean elevatorAtCoralDropOff4Height() {
     return ((getCurrentMotorPosition() >= (ElevatorConstants.kElevatorCoralDropOff4Height
         - ElevatorConstants.kElevatorTolerance))
@@ -317,7 +322,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void zeroMoveUp() {
 
     // Go slower when we are zeroing
-    m_elevatorMotor.set(.25);
+    m_elevatorMotor.set(.2);
   }
 
   public void moveUp() {

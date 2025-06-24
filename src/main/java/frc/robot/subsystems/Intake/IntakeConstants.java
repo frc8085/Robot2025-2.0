@@ -8,7 +8,7 @@ public final class IntakeConstants {
     public static final int kIntakeOuterRollerCanId = 28;
     public static final int kIntakeInnerRollerCanId = 29;
     public static final int kIntakeDeployCanCoderCanId = 17;
-    public static final double kCanCoderOffset = -0.056;
+    public static final double kCanCoderOffset = -0.076; // -0.056 //smaller number raises the intake
 
     public static final double kIntakeSpeed = 1;
     public static final double kIntakeHandoffSpeed = 1;

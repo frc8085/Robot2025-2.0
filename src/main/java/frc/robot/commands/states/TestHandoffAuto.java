@@ -29,6 +29,7 @@ public class TestHandoffAuto extends SequentialCommandGroup {
                                                                 new PrintCommand("Finished Move"),
                                                                 new WaitCommand(2),
                                                                 new Handoff(intakeSubsystem, pivotSubsystem,
+                                                                                elevatorSubsystem,
                                                                                 endEffectorSubsystem),
                                                                 // new WaitCommand(0),
                                                                 new Windmill(elevatorSubsystem, pivotSubsystem,

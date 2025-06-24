@@ -57,8 +57,10 @@ public class ChoreoOppo2 extends SequentialCommandGroup {
                                                                 new InstantCommand(intakeSubsystem::zeroIntake)),
                                                 new ZeroElevator(elevatorSubsystem),
                                                 new ParallelCommandGroup(
-                                                                new SwerveDriveChoreoFollow(driveSubsystem, path1,
-                                                                                false),
+                                                                new SequentialCommandGroup(new WaitCommand(0.5),
+                                                                                new SwerveDriveChoreoFollow(
+                                                                                                driveSubsystem, path1,
+                                                                                                false)),
                                                                 new ToCoralDropOff(elevatorSubsystem, pivotSubsystem,
                                                                                 intakeSubsystem,
                                                                                 endEffectorSubsystem,
@@ -100,28 +102,30 @@ public class ChoreoOppo2 extends SequentialCommandGroup {
                                                                                 // coral is centered
                                                                                 // new WaitUntilCommand(
                                                                                 // intakeSubsystem::hasCoralCentered),
-                                                                                new WaitCommand(1.25),
-                                                                                new TestHandoff(elevatorSubsystem,
-                                                                                                pivotSubsystem,
-                                                                                                intakeSubsystem,
-                                                                                                endEffectorSubsystem))),
-                                                new ToCoralDropOff(
-                                                                elevatorSubsystem,
-                                                                pivotSubsystem,
-                                                                intakeSubsystem,
-                                                                endEffectorSubsystem,
-                                                                WindmillState.CoralDropOff4,
-                                                                true),
-                                                new WaitCommand(2.5), // 2 seconds wait to get to position, 0.5 seconds
-                                                                      // to wait for wobble
-                                                new ScoreReef(elevatorSubsystem,
-                                                                pivotSubsystem,
-                                                                endEffectorSubsystem,
-                                                                intakeSubsystem),
-                                                new WaitCommand(.5),
-                                                new SwerveDriveChoreoFollow(
-                                                                driveSubsystem, path4,
-                                                                false)));
-
+                                                                                new WaitCommand(1.25)),
+                                                                // new TestHandoff(elevatorSubsystem,
+                                                                // pivotSubsystem,
+                                                                // intakeSubsystem,
+                                                                // endEffectorSubsystem))
+                                                                // )),
+                                                                // new ToCoralDropOff(
+                                                                // elevatorSubsystem,
+                                                                // pivotSubsystem,
+                                                                // intakeSubsystem,
+                                                                // endEffectorSubsystem,
+                                                                // WindmillState.CoralDropOff4,
+                                                                // true),
+                                                                // new WaitCommand(2.5), // 2 seconds wait to get to
+                                                                // position, 0.5 seconds
+                                                                // // to wait for wobble
+                                                                // new ScoreReef(elevatorSubsystem,
+                                                                // pivotSubsystem,
+                                                                // endEffectorSubsystem,
+                                                                // intakeSubsystem),
+                                                                // new WaitCommand(.5),
+                                                                new SwerveDriveChoreoFollow(
+                                                                                driveSubsystem, path4,
+                                                                                false))));
+                // ))));
         }
 }
