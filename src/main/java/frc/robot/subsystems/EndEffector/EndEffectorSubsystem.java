@@ -15,12 +15,12 @@ import frc.robot.subsystems.Coral.CoralConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 
 public class EndEffectorSubsystem extends SubsystemBase {
 
   // import motor id
-  private final SparkMax m_endMotor = new SparkMax(CoralConstants.kCoralCanId,
+  private final SparkFlex m_endMotor = new SparkFlex(CoralConstants.kCoralCanId,
       MotorDefaultsConstants.NeoMotorType);
 
   private double kSpeed = EndConstants.kEndEffectSpeed;

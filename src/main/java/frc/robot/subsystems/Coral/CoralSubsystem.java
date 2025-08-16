@@ -13,12 +13,12 @@ import frc.robot.Constants.MotorDefaultsConstants;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 
 public class CoralSubsystem extends SubsystemBase {
 
   // import motor id
-  private final SparkMax m_coralMotor = new SparkMax(CoralConstants.kCoralCanId,
+  private final SparkFlex m_coralMotor = new SparkFlex(CoralConstants.kCoralCanId,
       MotorDefaultsConstants.NeoVortexMotorType);
 
   private double kSpeed = CoralConstants.kCoralSpeed;
