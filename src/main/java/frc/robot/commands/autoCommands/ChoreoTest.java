@@ -2,6 +2,7 @@ package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Windmill.WindmillState;
 import frc.robot.commands.drivetrain.SwerveDriveChoreoFollow;
+import frc.robot.commands.intake.DumpCoral;
 import frc.robot.commands.intake.PickupCoral;
 import frc.robot.commands.states.ScoreReef;
 import frc.robot.commands.states.TestHandoff;
@@ -31,57 +33,48 @@ import choreo.trajectory.Trajectory;
 
 import java.util.Optional;
 
-public class ChoreoOppo extends SequentialCommandGroup {
-        public ChoreoOppo(DriveSubsystem driveSubsystem, PivotSubsystem pivotSubsystem,
+public class ChoreoTest extends SequentialCommandGroup {
+        public ChoreoTest(DriveSubsystem driveSubsystem, PivotSubsystem pivotSubsystem,
                         ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem,
                         IntakeSubsystem intakeSubsystem) {
 
-                Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("OppoBargeToReef22");
-                Optional<Trajectory<SwerveSample>> path2 = Choreo.loadTrajectory("Reef22ToSource");
-                Optional<Trajectory<SwerveSample>> path3 = Choreo.loadTrajectory("SourceToReef17L");
-                // Optional<Trajectory<SwerveSample>> path4 =
-                // Choreo.loadTrajectory("Reef20ToScoreBarge");
-                // Optional<Trajectory<SwerveSample>> path5 =
-                // Choreo.loadTrajectory("ScoreBargeToSource");
+              //pivot arm up                  
+              //1) Start at barge
+              //2) Drive to L1
+              //3) Drop off Coral at L1
+              //4) Drive to new coral
+              //   Drop intake
+              //   drive into coral
+              //6) drive back to L1
+              //7) drop off coral at L1
+              //8) repeat steps 4-7
+
+              Optional<Trajectory<SwerveSample>> path1 = Choreo.loadTrajectory("");
+              Optional<Trajectory<SwerveSample>> path2 = Choreo.loadTrajectory("");
+
 
                 addCommands(
                                 new SequentialCommandGroup(
-                                                new ParallelCommandGroup(new ZeroElevator(elevatorSubsystem),
-                                                                new InstantCommand(intakeSubsystem::zeroIntake)),
-                                                new ParallelCommandGroup(
-                                                                new SwerveDriveChoreoFollow(driveSubsystem, path1,
-                                                                                true),
-                                                                new ToCoralDropOff(elevatorSubsystem, pivotSubsystem,
-                                                                                intakeSubsystem,
-                                                                                endEffectorSubsystem,
-                                                                                WindmillState.CoralDropOff4, true)),
-                                                new ScoreReef(elevatorSubsystem, pivotSubsystem, endEffectorSubsystem,
-                                                                intakeSubsystem),
-                                                new WaitCommand(.5),
-                                                new Windmill(elevatorSubsystem, pivotSubsystem,
-                                                                WindmillState.CoralScoreHome, true),
+                                        new SwerveDriveChoreoFollow(driveSubsystem, path1, isScheduled()), // Barge to L1
+                                        new DumpCoral(intakeSubsystem),
+                                        new ParallelCommandGroup(
+                                                new SwerveDriveChoreoFollow(driveSubsystem, path2, isScheduled()), // L1 to Pickup
                                                 new ParallelRaceGroup(
-                                                                new PickupCoral(intakeSubsystem),
-                                                                new SwerveDriveChoreoFollow(driveSubsystem, path2,
-                                                                                false)),
-                                                new ParallelCommandGroup(
-                                                                new SwerveDriveChoreoFollow(driveSubsystem, path3,
-                                                                                false),
-                                                                new SequentialCommandGroup(
-                                                                                new WaitUntilCommand(
-                                                                                                intakeSubsystem::hasCoralCentered),
-                                                                                new TestHandoff(elevatorSubsystem,
-                                                                                                pivotSubsystem,
-                                                                                                intakeSubsystem,
-                                                                                                endEffectorSubsystem),
-                                                                                new ToCoralDropOff(
-                                                                                                elevatorSubsystem,
-                                                                                                pivotSubsystem,
-                                                                                                intakeSubsystem,
-                                                                                                endEffectorSubsystem,
-                                                                                                WindmillState.CoralDropOff4,
-                                                                                                true)))));
-                // ));
+                                                        new PickupCoral(intakeSubsystem),
+                                                        new WaitCommand(2)
+                                                )
+                                        ),
+                                        new DumpCoral(intakeSubsystem),
+                                        new ParallelCommandGroup(
+                                                new SwerveDriveChoreoFollow(driveSubsystem, path2, isScheduled()), // L1 to Pickup (repeated)
+                                                new ParallelRaceGroup(
+                                                        new PickupCoral(intakeSubsystem),
+                                                        new WaitCommand(2)
+                                                )
+                                        ),
+                                        new DumpCoral(intakeSubsystem),
+                                        new ParallelCommandGroup(new ZeroElevator(elevatorSubsystem),
+                                                                new InstantCommand(intakeSubsystem::zeroIntake))));
 
         }
 }
