@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -69,12 +68,16 @@ public class RobotContainer {
                                 new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator,
                                                 this.endEffector,
                                                 this.intake));
-                autoChooser.addOption("CenterL1", new ChoreoL1(this.drivetrain, this.pivot, this.elevator,
+                autoChooser.addOption("CenterL1", new ChoreoCenterL1(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
                 autoChooser.addOption("OppoBarge", new ChoreoOppo(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
-                autoChooser.addOption("OppoBarge2", new ChoreoOppo2(this.drivetrain, this.pivot, this.elevator,
+                autoChooser.addOption("OppoBargeL1Slow", new ChoreoOppoL1Slow(this.drivetrain,
+                                this.pivot, this.elevator,
                                 this.endEffector, this.intake));
+                autoChooser.addOption("OppoBargeL1Fast",
+                                new ChoreoOppoL1Fast(this.drivetrain, this.pivot, this.elevator,
+                                                this.endEffector, this.intake));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 

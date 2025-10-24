@@ -27,8 +27,8 @@ import choreo.trajectory.Trajectory;
 
 import java.util.Optional;
 
-public class ChoreoL1 extends SequentialCommandGroup {
-        public ChoreoL1(DriveSubsystem driveSubsystem, PivotSubsystem pivotSubsystem,
+public class ChoreoCenterL1 extends SequentialCommandGroup {
+        public ChoreoCenterL1(DriveSubsystem driveSubsystem, PivotSubsystem pivotSubsystem,
                         ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem,
                         IntakeSubsystem intakeSubsystem) {
 
