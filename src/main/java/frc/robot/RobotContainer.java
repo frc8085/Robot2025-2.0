@@ -63,21 +63,23 @@ public class RobotContainer {
                                 new SwerveDriveTeleop(this.drivetrain));
 
                 // Another option that allows you to specify the default auto by its name
-                autoChooser = AutoBuilder.buildAutoChooser("CenterBarge");
-                autoChooser.addOption("CenterBarge",
-                                new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator,
+                autoChooser = AutoBuilder.buildAutoChooser("CenterL4Barge");
+                autoChooser.addOption("CenterL4Barge",
+                                new ChoreoCenterL4(this.drivetrain, this.pivot, this.elevator,
                                                 this.endEffector,
                                                 this.intake));
                 autoChooser.addOption("CenterL1", new ChoreoCenterL1(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
-                autoChooser.addOption("OppoBarge", new ChoreoOppo(this.drivetrain, this.pivot, this.elevator,
+                autoChooser.addOption("OppoL4Barge", new ChoreoOppoL4(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
-                autoChooser.addOption("OppoBargeL1Slow", new ChoreoOppoL1Slow(this.drivetrain,
+                autoChooser.addOption("OppoL1Slow", new ChoreoOppoL1Slow(this.drivetrain,
                                 this.pivot, this.elevator,
                                 this.endEffector, this.intake));
-                autoChooser.addOption("OppoBargeL1Fast",
+                autoChooser.addOption("OppoL1Fast",
                                 new ChoreoOppoL1Fast(this.drivetrain, this.pivot, this.elevator,
                                                 this.endEffector, this.intake));
+                autoChooser.addOption("OwnL1Fast", new ChoreoOwnL1Fast(this.drivetrain, this.pivot, this.elevator, this.endEffector, this.intake));
+                
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
