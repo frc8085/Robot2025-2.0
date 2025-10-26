@@ -65,12 +65,12 @@ public class RobotContainer {
                 // Another option that allows you to specify the default auto by its name
                 autoChooser = AutoBuilder.buildAutoChooser("CenterBarge");
                 autoChooser.addOption("CenterBarge",
-                                new ChoreoAutoCenterBarge(this.drivetrain, this.pivot, this.elevator,
+                                new ChoreoCenterL4(this.drivetrain, this.pivot, this.elevator,
                                                 this.endEffector,
                                                 this.intake));
                 autoChooser.addOption("CenterL1", new ChoreoCenterL1(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
-                autoChooser.addOption("OppoBarge", new ChoreoOppo(this.drivetrain, this.pivot, this.elevator,
+                autoChooser.addOption("OppoBarge", new ChoreoOppoL4(this.drivetrain, this.pivot, this.elevator,
                                 this.endEffector, this.intake));
                 autoChooser.addOption("OppoBargeL1Slow", new ChoreoOppoL1Slow(this.drivetrain,
                                 this.pivot, this.elevator,
